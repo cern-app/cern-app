@@ -309,20 +309,32 @@
    if (!downloader) {//We did not start download for this image yet.
       NSArray * const articles = (NSArray *)bulletins[indexPath.row];
       assert(articles.count > 0 && "startIconDownloadForIndexPath, no articles for issue found");
-      MWFeedItem * const article = (MWFeedItem *)articles[0];//select the first one.
-      assert(article.image == nil && "startIconDownloadForIndexPath:, image was loaded already");
       
-      NSString * body = article.content;
-      if (!body)
-         body = article.summary;
-      
-      if (body) {
-         if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
-            downloader = [[ImageDownloader alloc] initWithURLString : urlString];
-            downloader.indexPathInTableView = indexPath;
-            downloader.delegate = self;
-            [self.imageDownloaders setObject : downloader forKey : indexPath];
-            [downloader startDownload];//Power on.
+      for (MWFeedItem *article in articles) {
+         //If we are here, this means we do not have a thumbnail
+         //yet, but in principle, some of articles in this issue
+         //can have an image downloaded already (I had an
+         //an assert here).
+         if (article.image) {
+            //
+            [thumbnails setObject : article.image forKey : indexPath];
+            [self.tableView reloadRowsAtIndexPaths : @[indexPath] withRowAnimation : UITableViewRowAnimationNone];
+            break;
+         } else {
+            NSString * body = article.content;
+            if (!body)
+               body = article.summary;
+            
+            if (body) {
+               if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+                  downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+                  downloader.indexPathInTableView = indexPath;
+                  downloader.delegate = self;
+                  [self.imageDownloaders setObject : downloader forKey : indexPath];
+                  [downloader startDownload];//Power on.
+                  break;
+               }
+            }
          }
       }
    }
