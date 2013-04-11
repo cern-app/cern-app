@@ -145,7 +145,7 @@
 		7069F33116C11517006BC78B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7069F33016C11517006BC78B /* Settings.bundle */; };
 		7069F76516C14D6D006BC78B /* OverlayView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7069F76216C14D6D006BC78B /* OverlayView.mm */; };
 		7069F76616C14D6D006BC78B /* PictureButtonView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7069F76416C14D6D006BC78B /* PictureButtonView.mm */; };
-		7072B32A1714699700515DA8 /* BulletinIssueTileView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7072B3291714699700515DA8 /* BulletinIssueTileView.m */; };
+		7072B32A1714699700515DA8 /* BulletinIssueTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7072B3291714699700515DA8 /* BulletinIssueTileView.mm */; };
 		70767DC716CE8F4D00164516 /* MWFeedParserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */; };
 		70767DC916CE922D00164516 /* MWPhotoBrowserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */; };
 		707B137C169AEB6300180E02 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B137A169AEB6300180E02 /* AppDelegate.mm */; };
@@ -215,6 +215,7 @@
 		70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */; };
 		70E69AC1170EC2D700384523 /* ArticleiPadCSS.css in Resources */ = {isa = PBXBuildFile; fileRef = 70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */; };
 		70E69AC4170EE81F00384523 /* FeedCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E69AC2170EE81F00384523 /* FeedCache.mm */; };
+		70F5FA1D1716F9ED005A7934 /* BulletinPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70F5FA1C1716F9ED005A7934 /* BulletinPageView.mm */; };
 		70FDADCE16CE604200933383 /* cern_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 70FDADCD16CE604200933383 /* cern_info.png */; };
 		70FDADD016CE615600933383 /* credits.png in Resources */ = {isa = PBXBuildFile; fileRef = 70FDADCF16CE615600933383 /* credits.png */; };
 		E1830BCA15744B9F003F16E2 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E1830BC915744B9F003F16E2 /* libxml2.dylib */; };
@@ -412,7 +413,7 @@
 		7069F76416C14D6D006BC78B /* PictureButtonView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureButtonView.mm; sourceTree = "<group>"; };
 		7072B3271713F72F00515DA8 /* TiledPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiledPage.h; sourceTree = "<group>"; };
 		7072B3281714699700515DA8 /* BulletinIssueTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTileView.h; sourceTree = "<group>"; };
-		7072B3291714699700515DA8 /* BulletinIssueTileView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BulletinIssueTileView.m; sourceTree = "<group>"; };
+		7072B3291714699700515DA8 /* BulletinIssueTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTileView.mm; sourceTree = "<group>"; };
 		70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWFeedParserLicense.txt; sourceTree = "<group>"; };
 		70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWPhotoBrowserLicense.txt; sourceTree = "<group>"; };
 		707B1379169AEB6300180E02 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -530,6 +531,8 @@
 		70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = ArticleiPadCSS.css; sourceTree = "<group>"; };
 		70E69AC2170EE81F00384523 /* FeedCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedCache.mm; sourceTree = "<group>"; };
 		70E69AC3170EE81F00384523 /* FeedCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCache.h; sourceTree = "<group>"; };
+		70F5FA1B1716F9ED005A7934 /* BulletinPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinPageView.h; sourceTree = "<group>"; };
+		70F5FA1C1716F9ED005A7934 /* BulletinPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinPageView.mm; sourceTree = "<group>"; };
 		70FDADCD16CE604200933383 /* cern_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_info.png; sourceTree = "<group>"; };
 		70FDADCF16CE615600933383 /* credits.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = credits.png; sourceTree = "<group>"; };
 		E15CC7B81593E9E40016CC95 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
@@ -1100,7 +1103,9 @@
 				70D98B1516F76564003C42E7 /* FeedItemTileView.h */,
 				70D98B1616F76565003C42E7 /* FeedItemTileView.mm */,
 				7072B3281714699700515DA8 /* BulletinIssueTileView.h */,
-				7072B3291714699700515DA8 /* BulletinIssueTileView.m */,
+				7072B3291714699700515DA8 /* BulletinIssueTileView.mm */,
+				70F5FA1B1716F9ED005A7934 /* BulletinPageView.h */,
+				70F5FA1C1716F9ED005A7934 /* BulletinPageView.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1430,7 +1435,8 @@
 				70D98B1716F76565003C42E7 /* FeedItemTileView.mm in Sources */,
 				70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */,
 				70E69AC4170EE81F00384523 /* FeedCache.mm in Sources */,
-				7072B32A1714699700515DA8 /* BulletinIssueTileView.m in Sources */,
+				7072B32A1714699700515DA8 /* BulletinIssueTileView.mm in Sources */,
+				70F5FA1D1716F9ED005A7934 /* BulletinPageView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
