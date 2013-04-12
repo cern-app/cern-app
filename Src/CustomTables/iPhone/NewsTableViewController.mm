@@ -281,23 +281,14 @@
 
    const NSInteger row = indexPath.row;
 
-   if (usingCache) {
-      assert(row >= 0 && row < feedCache.count);
+   NSArray * const articles = usingCache ? feedCache : allArticles;
+   assert(row >= 0 && row < articles.count && "tableView:cellForRowAtIndexPath:, row is out of bounds");
 
-      NSManagedObject * const feedItem = (NSManagedObject *)feedCache[row];
-      [cell setCellData : [feedItem valueForKey : @"itemTitle"] source : [feedItem valueForKey : @"itemLink"]
-                          image : nil imageOnTheRight : NO date : (NSDate *)[feedItem valueForKey : @"itemDate"]];
-   } else {
-      assert(row >= 0 && row < allArticles.count);
+   MWFeedItem * const article = (MWFeedItem *)articles[row];
+   [cell setCellData : article imageOnTheRight : (indexPath.row % 4) == 3];
 
-      MWFeedItem * const article = (MWFeedItem *)allArticles[row];
-      assert(article != nil && "tableView:cellForRowAtIndexPath:, article was not found");
-
-      [cell setCellData : article imageOnTheRight : (indexPath.row % 4) == 3];
-
-      if (!article.image)
-         [self startIconDownloadForIndexPath : indexPath];
-   }
+   if (!usingCache && !article.image)
+      [self startIconDownloadForIndexPath : indexPath];
 
    return cell;
 }
@@ -309,22 +300,12 @@
 
    assert(indexPath != nil && "tableView:heightForRowAtIndexPath:, parameter 'indexPath' is nil");
 
+   NSArray * const articles = usingCache ? feedCache : allArticles;
    const NSInteger row = indexPath.row;
+   assert(row >= 0 && row < articles.count && "tableView:heightForRowAtIndexPath:, indexPath.row is out of bounds");
 
-   if (usingCache) {
-      assert(row >= 0 && row < feedCache.count && "tableView:heightForRowAtIndexPath:, indexPath.row is out of bounds");
-
-      NSManagedObject * const feedItem = (NSManagedObject *)feedCache[row];
-      return [NewsTableViewCell calculateCellHeightForText : [feedItem valueForKey : @"itemTitle"]
-                                source : [feedItem valueForKey : @"itemLink"]
-                                image : nil
-                                imageOnTheRight : NO];
-   } else {
-      assert(row >= 0 && row < allArticles.count && "tableView:heightForRowAtIndexPath:, indexPath.row is out of bounds");
-
-      MWFeedItem * const article = (MWFeedItem *)allArticles[row];
-      return [NewsTableViewCell calculateCellHeightForData : article imageOnTheRight : (indexPath.row % 4) == 3];
-   }
+   MWFeedItem * const article = (MWFeedItem *)articles[row];
+   return [NewsTableViewCell calculateCellHeightForData : article imageOnTheRight : (indexPath.row % 4) == 3];
 }
 
 #pragma mark - RSSAggregatorDelegate methods
@@ -395,35 +376,19 @@
    ArticleDetailViewController * const viewController = [mainStoryboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailViewControllerID];
    const NSUInteger row = indexPath.row;
 
-   if (usingCache) {
-      if (row >= feedCache.count)
-         return;
+   NSArray * const articles = usingCache ? feedCache : allArticles;
+   if (row >= articles.count)//Ooops, cell was tapped while refreshing???
+      return;
 
-      NSManagedObject * const feedItem = (NSManagedObject *)feedCache[row];
-      [viewController setLink : (NSString *)[feedItem valueForKey : @"itemLink"]
-                      title : (NSString *)[feedItem valueForKey : @"itemTitle"]];
-      viewController.navigationItem.title = @"";
-      
-      viewController.canUseReadability = !isTwitterFeed;
-      //
-      viewController.articleID = [feedStoreID stringByAppendingString : (NSString *)[feedItem valueForKey : @"itemTitle"]];
-      //
-      [self.navigationController pushViewController : viewController animated : YES];
-   } else {
-      if (row >= allArticles.count)//Ooops, cell was tapped while refreshing???
-         return;
+   MWFeedItem * const feedItem = (MWFeedItem *)articles[row];
+   [viewController setContentForArticle : feedItem];
+   viewController.navigationItem.title = @"";
 
-      MWFeedItem * const feedItem = (MWFeedItem *)allArticles[row];
+   if (feedItem.title && feedStoreID)
+      viewController.articleID = [feedStoreID stringByAppendingString : feedItem.title];
 
-      [viewController setContentForArticle : feedItem];
-      viewController.navigationItem.title = @"";
-
-      if (feedItem.title && feedStoreID)
-         viewController.articleID = [feedStoreID stringByAppendingString : feedItem.title];
-
-      viewController.canUseReadability = !isTwitterFeed;
-      [self.navigationController pushViewController : viewController animated : YES];
-   }
+   viewController.canUseReadability = !isTwitterFeed;
+   [self.navigationController pushViewController : viewController animated : YES];
 
    [tableView deselectRowAtIndexPath : indexPath animated : NO];
 }
