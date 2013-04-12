@@ -12,11 +12,8 @@ namespace CernAPP {
 //________________________________________________________________________________________
 NSArray *ReadFeedCache(NSString *feedStoreID)
 {
-   //TODO: well, feeds are always sorted so this function also sorts cache,
-   //not simply reads (despite of its name).
-
    assert(feedStoreID != nil && "ReadFeedCache, parameter 'feedStoreID' is nil");
-
+ 
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    
    if (NSManagedObjectContext * const context = appDelegate.managedObjectContext) {
@@ -33,7 +30,7 @@ NSArray *ReadFeedCache(NSString *feedStoreID)
 
       if (!error) {
          if (objects.count) {
-            NSArray *sortedData = [objects sortedArrayUsingComparator : ^ NSComparisonResult(id a, id b)
+            NSArray *feedCache = [objects sortedArrayUsingComparator : ^ NSComparisonResult(id a, id b)
                                   {
                                      NSManagedObject * const left = (NSManagedObject *)a;
                                      NSManagedObject * const right = (NSManagedObject *)b;
@@ -45,20 +42,6 @@ NSArray *ReadFeedCache(NSString *feedStoreID)
                                      return cmp;
                                   }
                                  ];
-            NSMutableArray *feedCache = [[NSMutableArray alloc] init];
-            for (NSManagedObject *entry in sortedData) {
-               MWFeedItem *const newItem = [[MWFeedItem alloc] init];
-               newItem.link = (NSString *)[entry valueForKey : @"itemLink"];
-               newItem.title = (NSString *)[entry valueForKey : @"itemTitle"];
-               if (!newItem.title)
-                  newItem.title = @"No title ...";//????
-               newItem.summary = (NSString *)[entry valueForKey : @"itemSummary"];
-               newItem.image = nil;//TODO: cache images.
-               newItem.imageCut = 0;
-               newItem.wideImageOnTop = false;
-               [feedCache addObject : newItem];
-            }
-            
             return feedCache;
          }
       }
