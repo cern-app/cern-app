@@ -504,11 +504,9 @@ using CernAPP::ControllerMode;
          [weekData addObject : article];
       }
       
-      for (unsigned i = 0; i < 10; ++i) {
-   //   [allArticles addObject : weekData];
-   //   [allArticles addObject : weekData];
-   //   [allArticles addObject : weekData];
-      }
+      [allArticles addObject : weekData];
+
+      //TODO: add more weekData to test bulletin with multiple pages.
    }
 }
 

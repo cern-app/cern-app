@@ -160,9 +160,10 @@ const CGFloat tileShift = 0.2f;
    const CGPoint pageCenter = self.center;
 
    for (BulletinIssueTileView *tile in tiles) {
-      CGPoint tileCenter = tile.center;
+      CGPoint tileCenter = [self convertPoint : tile.center toView : self.superview];
       tileCenter.x += tileShift * (tileCenter.x - pageCenter.x);
       tileCenter.y += tileShift * (tileCenter.y - pageCenter.y);
+      tileCenter = [self.superview convertPoint : tileCenter toView : self];
       tile.center = tileCenter;
    }
 }
@@ -173,17 +174,17 @@ const CGFloat tileShift = 0.2f;
   if (tiles.count == 1)
       return;
 
-   const CGPoint pageCenter = self.layer.position;
+   const CGPoint pageCenter = self.center;
 
    NSUInteger index = 0;
    for (BulletinIssueTileView *tile in tiles) {
-      const CGPoint tileCenter = tile.layer.position;
-
-      const CGPoint endPoint = CGPointMake((tileCenter.x + tileShift * pageCenter.x) / (1.f + tileShift),
-                                           (tileCenter.y + tileShift * pageCenter.y) / (1.f + tileShift));
-
+      CGPoint tileCenter = tile.center;
+      tileCenter = [self convertPoint : tileCenter toView : self.superview];
+      CGPoint endPoint = CGPointMake((tileCenter.x + tileShift * pageCenter.x) / (1.f + tileShift),
+                                     (tileCenter.y + tileShift * pageCenter.y) / (1.f + tileShift));
+      endPoint = [self.superview convertPoint : endPoint toView : self];
       CABasicAnimation * const animation = [CABasicAnimation animationWithKeyPath : @"position"];
-      animation.fromValue = [NSValue valueWithCGPoint : tileCenter];
+      animation.fromValue = [NSValue valueWithCGPoint : tile.center];
       animation.toValue = [NSValue valueWithCGPoint : endPoint];
       animation.beginTime = start;
       [animation setTimingFunction : [CAMediaTimingFunction functionWithControlPoints : 0.6f : 1.5f : 0.8f : 0.8f]];
