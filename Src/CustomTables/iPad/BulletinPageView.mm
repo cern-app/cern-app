@@ -15,6 +15,8 @@
    NSMutableArray *tiles;
 }
 
+const CGFloat tileShift = 0.2f;
+
 @synthesize pageNumber, pageRange;
 
 //________________________________________________________________________________________
@@ -159,8 +161,8 @@
 
    for (BulletinIssueTileView *tile in tiles) {
       CGPoint tileCenter = tile.center;
-      tileCenter.x += 0.2f * (tileCenter.x - pageCenter.x);
-      tileCenter.y += 0.2f * (tileCenter.y - pageCenter.y);
+      tileCenter.x += tileShift * (tileCenter.x - pageCenter.x);
+      tileCenter.y += tileShift * (tileCenter.y - pageCenter.y);
       [tile setCenter : tileCenter];
    }
 }
@@ -177,8 +179,8 @@
    for (BulletinIssueTileView *tile in tiles) {
       const CGPoint tileCenter = tile.layer.position;
 
-      CGPoint endPoint = CGPointMake((tileCenter.x + 0.2f * pageCenter.x) / 1.2f,
-                                     (tileCenter.y + 0.2f * pageCenter.y) / 1.2f);
+      const CGPoint endPoint = CGPointMake((tileCenter.x + 0.2f * pageCenter.x) / (1.f + tileShift),
+                                           (tileCenter.y + 0.2f * pageCenter.y) / (1.f + tileShift));
 
       CABasicAnimation * const animation = [CABasicAnimation animationWithKeyPath : @"position"];
       animation.fromValue = [NSValue valueWithCGPoint : tileCenter];
