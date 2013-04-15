@@ -267,7 +267,6 @@ using CernAPP::ControllerMode;
 - (void) allFeedsDidLoadForAggregator : (RSSAggregator *) anAggregator
 {
 #pragma unused(anAggregator)
-
    assert(mode != ControllerMode::bulletinIssueView &&
           "allFeedsDidLoadForAggregator:, wrong controller's mode");
 
@@ -304,6 +303,7 @@ using CernAPP::ControllerMode;
 - (void) aggregator : (RSSAggregator *) aggregator didFailWithError : (NSString *) errorDescription
 {
    //TODO: error handling.
+   NSLog(@"fail!");
 }
 
 //________________________________________________________________________________________

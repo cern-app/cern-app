@@ -126,21 +126,21 @@ const CGFloat tileShift = 0.2f;
    
    if (frame.size.width > frame.size.height) {
       if (tiles.count == 2) {
-         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width / 2, frame.size.height);
-         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width / 2, 0.f, frame.size.width / 2, frame.size.height);
+         ((UIView *)tiles[0]).frame = CGRectMake(4.f, 4.f, frame.size.width / 2 - 8.f, frame.size.height - 8.f);
+         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width / 2 + 4.f, 4.f, frame.size.width / 2 - 8.f, frame.size.height - 8.f);
       } else {
-         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width * 0.6f, frame.size.height);
-         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width * 0.6, 0.f, frame.size.width * 0.4f, frame.size.height * 0.5f);
-         ((UIView *)tiles[2]).frame = CGRectMake(frame.size.width * 0.6, frame.size.height * 0.5f, frame.size.width * 0.4f, frame.size.height * 0.5f);
+         ((UIView *)tiles[0]).frame = CGRectMake(4.f, 4.f, frame.size.width * 0.6f - 8.f, frame.size.height - 8.f);
+         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width * 0.6 + 4.f, 4.f, frame.size.width * 0.4f - 8.f, frame.size.height * 0.5f - 8.f);
+         ((UIView *)tiles[2]).frame = CGRectMake(frame.size.width * 0.6 + 4.f, frame.size.height * 0.5f + 4.f, frame.size.width * 0.4f - 8.f, frame.size.height * 0.5f - 8.f);
       }
    } else {
       if (tiles.count == 2) {
-         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width, frame.size.height / 2);
-         ((UIView *)tiles[1]).frame = CGRectMake(0.f, frame.size.height / 2, frame.size.width, frame.size.height / 2);
+         ((UIView *)tiles[0]).frame = CGRectMake(4.f, 4.f, frame.size.width - 8.f, frame.size.height / 2 - 8.f);
+         ((UIView *)tiles[1]).frame = CGRectMake(4.f, frame.size.height / 2 + 4.f, frame.size.width - 8.f, frame.size.height / 2 - 8.f);
       } else {
-         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width, frame.size.height * 0.6f);
-         ((UIView *)tiles[1]).frame = CGRectMake(0.f, frame.size.height * 0.6f, frame.size.width / 2, frame.size.height * 0.4f);
-         ((UIView *)tiles[2]).frame = CGRectMake(frame.size.width / 2, frame.size.height * 0.6f, frame.size.width / 2, frame.size.height * 0.4f);
+         ((UIView *)tiles[0]).frame = CGRectMake(4.f, 4.f, frame.size.width - 8.f, frame.size.height * 0.6f - 8.f);
+         ((UIView *)tiles[1]).frame = CGRectMake(4.f, 4.f + frame.size.height * 0.6f, frame.size.width / 2 - 8.f, frame.size.height * 0.4f - 8.f);
+         ((UIView *)tiles[2]).frame = CGRectMake(4.f + frame.size.width / 2, 4.f + frame.size.height * 0.6f, frame.size.width / 2 - 8.f, frame.size.height * 0.4f - 8.f);
       }
    }
    
@@ -153,6 +153,9 @@ const CGFloat tileShift = 0.2f;
 - (void) explodeTiles : (UIInterfaceOrientation) orientation
 {
    assert(tiles.count <= 3 && "explodeTiles, unexpected number of tiles");
+   
+   //TODO: test! is center always correct and can I always use it to do these calculations?
+   //If not, it's easy (I think) to use view's frames to do the same job.
    
    if (tiles.count == 1)//No animation for this case, since tile occupies the whole page.
       return;
@@ -173,6 +176,9 @@ const CGFloat tileShift = 0.2f;
 {
   if (tiles.count == 1)
       return;
+
+   //TODO: test! is center always correct and can I always use it to do these calculations?
+   //If not, it's easy (I think) to use view's frames to do the same job.
 
    const CGPoint pageCenter = self.center;
 
