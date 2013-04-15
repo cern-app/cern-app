@@ -140,7 +140,7 @@ const CGFloat tileShift = 0.2f;
       } else {
          ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width, frame.size.height * 0.6f);
          ((UIView *)tiles[1]).frame = CGRectMake(0.f, frame.size.height * 0.6f, frame.size.width / 2, frame.size.height * 0.4f);
-         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width / 2, frame.size.height * 0.6f, frame.size.width / 2, frame.size.height * 0.4f);
+         ((UIView *)tiles[2]).frame = CGRectMake(frame.size.width / 2, frame.size.height * 0.6f, frame.size.width / 2, frame.size.height * 0.4f);
       }
    }
    
@@ -163,7 +163,7 @@ const CGFloat tileShift = 0.2f;
       CGPoint tileCenter = tile.center;
       tileCenter.x += tileShift * (tileCenter.x - pageCenter.x);
       tileCenter.y += tileShift * (tileCenter.y - pageCenter.y);
-      [tile setCenter : tileCenter];
+      tile.center = tileCenter;
    }
 }
 
@@ -179,8 +179,8 @@ const CGFloat tileShift = 0.2f;
    for (BulletinIssueTileView *tile in tiles) {
       const CGPoint tileCenter = tile.layer.position;
 
-      const CGPoint endPoint = CGPointMake((tileCenter.x + 0.2f * pageCenter.x) / (1.f + tileShift),
-                                           (tileCenter.y + 0.2f * pageCenter.y) / (1.f + tileShift));
+      const CGPoint endPoint = CGPointMake((tileCenter.x + tileShift * pageCenter.x) / (1.f + tileShift),
+                                           (tileCenter.y + tileShift * pageCenter.y) / (1.f + tileShift));
 
       CABasicAnimation * const animation = [CABasicAnimation animationWithKeyPath : @"position"];
       animation.fromValue = [NSValue valueWithCGPoint : tileCenter];

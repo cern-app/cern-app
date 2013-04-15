@@ -504,7 +504,11 @@ using CernAPP::ControllerMode;
          [weekData addObject : article];
       }
       
-      [allArticles addObject : weekData];
+      for (unsigned i = 0; i < 10; ++i) {
+   //   [allArticles addObject : weekData];
+   //   [allArticles addObject : weekData];
+   //   [allArticles addObject : weekData];
+      }
    }
 }
 
