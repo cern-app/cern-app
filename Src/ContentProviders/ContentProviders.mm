@@ -540,23 +540,27 @@ using CernAPP::ControllerMode;
 
    using namespace CernAPP;
    
+   MenuNavigationController *navController = nil;
+   
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      //TODO!!!
-      return;
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
+                                                                                   TableNavigationControllerNewsID];
+      assert([navController.topViewController isKindOfClass : [FeedTileViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+      FeedTileViewController * const nt = (FeedTileViewController *)navController.topViewController;
+      nt.feedStoreID = @"CERN_Bulletin";
+      nt.mode = ControllerMode::bulletinView;
+      [nt.aggregator addFeedForURL : [NSURL URLWithString : url]];
+   } else {
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : BulletinTableViewControllerID];
+      //Set the Url here.
+      assert([navController.topViewController isKindOfClass : [BulletinTableViewController class]] &&
+             "loadControllerTo:, top view controller expected to be a BulletinTableViewController");
+      BulletinTableViewController * const bc = (BulletinTableViewController *)navController.topViewController;
+      [bc.aggregator addFeedForURL : [NSURL URLWithString : url]];
    }
    
-   MenuNavigationController * const navController =
-         (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : BulletinTableViewControllerID];
- 
-   //Set the Url here.
-   assert([navController.topViewController isKindOfClass : [BulletinTableViewController class]] &&
-          "loadControllerTo:, top view controller expected to be a BulletinTableViewController");
- 
    navController.topViewController.navigationItem.title = @"Bulletin";
-   
-   
-   BulletinTableViewController * const bc = (BulletinTableViewController *)navController.topViewController;
-   [bc.aggregator addFeedForURL : [NSURL URLWithString : url]];
 
    if (controller.slidingViewController.topViewController)
       CancelConnections(controller.slidingViewController.topViewController);
@@ -567,7 +571,6 @@ using CernAPP::ControllerMode;
       controller.slidingViewController.topViewController.view.frame = frame;
       [controller.slidingViewController resetTopView];
    }];
-
 }
 
 @end

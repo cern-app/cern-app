@@ -107,7 +107,11 @@ using CernAPP::ControllerMode;
       if (mode != ControllerMode::bulletinIssueView) {
          if ((feedCache = CernAPP::ReadFeedCache(feedStoreID))) {
             //Set the data from the cache at the beginning!
-            allArticles = CernAPP::ConvertFeedCache(feedCache);
+            NSMutableArray * const cachedArticles = CernAPP::ConvertFeedCache(feedCache);
+            if (mode == ControllerMode::bulletinView)
+               [self sortArticlesIntoIssues : cachedArticles];
+            else
+               allArticles = cachedArticles;
             [self setPagesData];
          }
       }
@@ -260,13 +264,15 @@ using CernAPP::ControllerMode;
    assert(mode != ControllerMode::bulletinIssueView &&
           "allFeedsDidLoadForAggregator:, wrong controller's mode");
 
-   allArticles = [aggregator.allArticles mutableCopy];
-   
-   
    //In this mode we always write a cache into the storage.
    assert(feedStoreID.length && "allFeedDidLoadForAggregator:, feedStoreID is invalid");
-   CernAPP::WriteFeedCache(feedStoreID, feedCache, allArticles);
+   CernAPP::WriteFeedCache(feedStoreID, feedCache, aggregator.allArticles);
 
+   if (mode == ControllerMode::bulletinView)
+      [self sortArticlesIntoIssues : aggregator.allArticles];
+   else
+      allArticles = [aggregator.allArticles mutableCopy];
+   
    if (feedCache) {
       feedCache = nil;
       //We were using cache and had a spinner in a nav bar (while loading a new data).
@@ -277,9 +283,11 @@ using CernAPP::ControllerMode;
    self.navigationItem.rightBarButtonItem.enabled = YES;
    
    //Let's define an image layout for a tile.
-   for (MWFeedItem *item in allArticles) {
-      item.wideImageOnTop = std::rand() % 2;
-      item.imageCut = std::rand() % 4;
+   if (mode != ControllerMode::bulletinView) {
+      for (MWFeedItem *item in allArticles) {
+         item.wideImageOnTop = std::rand() % 2;
+         item.imageCut = std::rand() % 4;
+      }
    }
    
    [self setPagesData];
@@ -313,7 +321,7 @@ using CernAPP::ControllerMode;
       CernAPP::ShowErrorHUD(self, @"No network");
       return;
    }//If we do not have connection, but have articles,
-    //the network error will be reported by the RSS aggregator.
+    //the network error will be reported by the RSS aggregator. (TODO: check this!)
 
    [noConnectionHUD hide : YES];
 
@@ -447,6 +455,53 @@ using CernAPP::ControllerMode;
 #pragma mark - Aux.
 
 //________________________________________________________________________________________
+- (void) sortArticlesIntoIssues : (NSArray *) articles
+{
+   assert(articles != nil && "sortArticlesIntoIssues:, parameter 'articles' is nil");
+   assert(mode == ControllerMode::bulletinView && "sortArticlesIntoIssues:, wrong controller's mode");
+
+   if (articles.count) {
+      if (allArticles)
+         [allArticles removeAllObjects];
+      else
+         allArticles = [[NSMutableArray alloc] init];
+   
+      NSMutableArray *weekData = [[NSMutableArray alloc] init];
+      MWFeedItem * const firstArticle = [articles objectAtIndex : 0];
+      firstArticle.subsetIndex = 0;
+      [weekData addObject : firstArticle];
+   
+      NSCalendar * const calendar = [NSCalendar currentCalendar];
+      const NSUInteger requiredComponents = NSWeekCalendarUnit | NSYearCalendarUnit;
+
+      NSDateComponents *dateComponents = [calendar components : requiredComponents fromDate : firstArticle.date];
+      NSInteger currentWeek = dateComponents.week;
+      NSInteger currentYear = dateComponents.year;
+   
+      for (NSUInteger i = 1, e = articles.count; i < e; ++i) {
+         MWFeedItem * const article = (MWFeedItem *)articles[i];
+         dateComponents = [calendar components : requiredComponents fromDate : article.date];
+
+         if (dateComponents.year != currentYear || dateComponents.week != currentWeek) {
+            [allArticles addObject : weekData];
+            currentWeek = dateComponents.week;
+            currentYear = dateComponents.year;
+            weekData = [[NSMutableArray alloc] init];
+         }
+         
+         //Set special parameters for a tiled page view.
+         article.wideImageOnTop = std::rand() % 2;
+         article.imageCut = std::rand() % 4;
+         //
+         article.subsetIndex = allArticles.count;
+         [weekData addObject : article];
+      }
+      
+      [allArticles addObject : weekData];
+   }
+}
+
+//________________________________________________________________________________________
 - (void) removeAllPages
 {
    if (leftPage.superview)
@@ -461,39 +516,38 @@ using CernAPP::ControllerMode;
 - (void) setPagesData
 {
    //Let's define an image layout for a tile.
-   for (MWFeedItem *item in allArticles) {
-      item.wideImageOnTop = std::rand() % 2;
-      item.imageCut = std::rand() % 4;
+   
+   if (mode != CernAPP::ControllerMode::bulletinView) {
+      for (MWFeedItem *item in allArticles) {
+         item.wideImageOnTop = std::rand() % 2;
+         item.imageCut = std::rand() % 4;
+      }
    }
    
-   if (mode == CernAPP::ControllerMode::bulletinView) {
-   
-   } else {
-      if ((nPages = [self numberOfPages])) {
-         //Let's create tiled view now.
-         UIView<TiledPage> * pages[3] = {};
-         if (nPages <= 3)
-            pages[0] = leftPage, pages[1] = currPage, pages[2] = rightPage;
-         else
-            pages[0] = currPage, pages[1] = rightPage, pages[2] = leftPage;
+   if ((nPages = [self numberOfPages])) {
+      //Let's create tiled view now.
+      UIView<TiledPage> * pages[3] = {};
+      if (nPages <= 3)
+         pages[0] = leftPage, pages[1] = currPage, pages[2] = rightPage;
+      else
+         pages[0] = currPage, pages[1] = rightPage, pages[2] = leftPage;
 
-         for (NSUInteger pageIndex = 0, currentItem = 0, e = std::min((int)nPages, 3); pageIndex < e; ++pageIndex) {
-            UIView<TiledPage> * const page = pages[pageIndex];
-            page.pageNumber = pageIndex;
-            currentItem += [page setPageItems : allArticles startingFrom : currentItem];
-            if (!page.superview)
-               [scrollView addSubview : page];
-         }
-         
-         [self layoutPages : YES];
-         [scrollView setContentOffset : CGPointMake(0.f, 0.f)];
-         
-         //The first page is visible now, let's download ... IMAGES NOW!!! :)
-         if (!feedCache)
-            [self loadImagesForVisiblePage];
-      } else
-         [self removeAllPages];
-   }
+      for (NSUInteger pageIndex = 0, currentItem = 0, e = std::min((int)nPages, 3); pageIndex < e; ++pageIndex) {
+         UIView<TiledPage> * const page = pages[pageIndex];
+         page.pageNumber = pageIndex;
+         currentItem += [page setPageItems : allArticles startingFrom : currentItem];
+         if (!page.superview)
+            [scrollView addSubview : page];
+      }
+      
+      [self layoutPages : YES];
+      [scrollView setContentOffset : CGPointMake(0.f, 0.f)];
+      
+      //The first page is visible now, let's download ... IMAGES NOW!!! :)
+      if (!feedCache)
+         [self loadImagesForVisiblePage];
+   } else
+      [self removeAllPages];
 }
 
 //________________________________________________________________________________________
@@ -612,6 +666,9 @@ using CernAPP::ControllerMode;
 - (void) loadImagesForVisiblePage
 {
    assert(feedCache == nil && "loadImagesForVisiblePage, images loaded while cache is in use");
+   
+   if (mode == CernAPP::ControllerMode::bulletinView)//TODO!!!
+      return;
 
    const NSUInteger visiblePage = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
 

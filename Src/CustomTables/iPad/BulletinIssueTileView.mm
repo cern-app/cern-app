@@ -68,13 +68,20 @@ const CGFloat imageHeight = 0.7f;
    //Text frame?
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+#pragma mark - Debug code.
+
+//________________________________________________________________________________________
+- (void) drawRect : (CGRect)rect
 {
-    // Drawing code
+   // Drawing code
+   CGContextRef ctx = UIGraphicsGetCurrentContext();
+   CGContextSetRGBStrokeColor(ctx, 0.f, 0.f, 0.f ,1.f);
+   
+   CGContextBeginPath(ctx);
+   CGContextMoveToPoint(ctx, 0.f, 0.f);
+   CGContextAddLineToPoint(ctx, rect.size.width, rect.size.height);
+   CGContextStrokePath(ctx);
 }
-*/
+
 
 @end

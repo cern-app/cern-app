@@ -20,9 +20,6 @@
 
 - (NSUInteger) setPageItems : (NSArray *) feedItems startingFrom : (NSUInteger) index;
 
-@optional
-- (NSUInteger) setPageItemsFromCache : (NSArray *) cache startingFrom : (NSUInteger) index;
-
 @required
 @property (nonatomic, readonly) NSRange pageRange;
 

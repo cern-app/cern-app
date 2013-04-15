@@ -19,7 +19,6 @@
 + (NSRange) suggestRangeBackward : (NSArray *) items endingWith : (NSUInteger) index;
 
 - (NSUInteger) setPageItems : (NSArray *) feedItems startingFrom : (NSUInteger) index;
-- (NSUInteger) setPageItemsFromCache : (NSArray *) cache startingFrom : (NSUInteger) index;
 
 @property (nonatomic, readonly) NSRange pageRange;
 

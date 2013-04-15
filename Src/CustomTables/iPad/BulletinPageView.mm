@@ -15,17 +15,6 @@
 
 @synthesize pageNumber, pageRange;
 
-/*
-@property (nonatomic) NSUInteger pageNumber;
-
-//The next two methods are imposed by "infinite scroll view" with tiled pages :(
-
-
-@property (nonatomic, readonly) NSRange pageRange;
-
-
-*/
-
 //________________________________________________________________________________________
 + (NSRange) suggestRangeForward : (NSArray *) items startingFrom : (NSUInteger) index
 {
@@ -91,13 +80,6 @@
 }
 
 //________________________________________________________________________________________
-- (NSUInteger) setPageItemsFromCache : (NSArray *) cache startingFrom : (NSUInteger) index
-{
-   //TODO: to make this work, after cached data was read, I have to create the corresponding MWFeedItems and sort them using the date.
-   return [self setPageItems:cache startingFrom : index];
-}
-
-//________________________________________________________________________________________
 - (void) setThumbnail : (UIImage *) thumbnailImage forTile : (NSUInteger) tileIndex
 {
    assert(thumbnailImage != nil && "setThumbnail:forTile:, parameter 'thumbnailImge' is nil");
@@ -123,7 +105,31 @@
 //________________________________________________________________________________________
 - (void) layoutTiles
 {
+   assert(tiles.count <= 3 && "layoutTiles, unexpected number of tiles");
+
    //Depending on orientation and the pageRange, layout the slides.
+   CGRect frame = self.frame;
+   frame.origin = CGPoint();
+   
+   if (tiles.count == 1) {
+      UIView * const tile = (UIView *)tiles[0];
+      tile.frame = frame;
+      [tile setNeedsDisplay];
+      return;
+   }
+   
+   if (frame.size.width > frame.size.height) {
+      if (tiles.count == 2) {
+         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width / 2, frame.size.height);
+         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width / 2, 0.f, frame.size.width / 2, frame.size.height);
+      } else {
+         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width * 0.6f, frame.size.height);
+         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width * 0.6, 0.f, frame.size.width * 0.4f, frame.size.height * 0.5f);
+         ((UIView *)tiles[2]).frame = CGRectMake(frame.size.width * 0.6, frame.size.height * 0.5f, frame.size.width * 0.4f, frame.size.height * 0.5f);
+      }
+   } else {
+   
+   }
 }
 
 //Animations:
@@ -135,6 +141,20 @@
 //________________________________________________________________________________________
 - (void) collectTilesAnimatedForOrientation : (UIInterfaceOrientation) orientation from : (CFTimeInterval) start withDuration : (CFTimeInterval) duration
 {
+   const CGRect frame = self.frame;
+   
+   if (frame.size.width > frame.size.height) {
+      if (tiles.count == 2) {
+         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width / 2, frame.size.height);
+         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width / 2, 0.f, frame.size.width / 2, frame.size.height);
+      } else {
+         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width * 0.6f, frame.size.height);
+         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width * 0.6, 0.f, frame.size.width * 0.4f, frame.size.height * 0.5f);
+         ((UIView *)tiles[2]).frame = CGRectMake(frame.size.width * 0.6, frame.size.height * 0.5f, frame.size.width * 0.4f, frame.size.height * 0.5f);
+      }
+   } else {
+   
+   }
 }
 
 @end
