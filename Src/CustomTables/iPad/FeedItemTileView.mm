@@ -163,37 +163,6 @@ bool IsWideImage(UIImage *image)
 }
 
 //________________________________________________________________________________________
-- (void) setTileTitle : (NSString *) aTitle summary : (NSString *) aSummary date : (NSDate *) date link : (NSString *) aLink
-{
-   assert(aLink != nil && "setTileTitle:summary:date:link:, parameter 'link' is nil");
-
-   title = [[NSMutableAttributedString alloc] initWithString : aTitle ? [aTitle stringByConvertingHTMLToPlainText] : @"No title ... "];
-
-   NSDateFormatter * const dateFormatter = [[NSDateFormatter alloc] init];
-   [dateFormatter setDateFormat:@"d MMM. yyyy"];
-   infoLabel.text = [dateFormatter stringFromDate : date ? date : [NSDate date]];
-   
-   summary = aSummary ? [aSummary stringByConvertingHTMLToPlainText] : @"";
-
-   [self setAttributedTextFromSummary];
-   [self setStringAttributes];
-
-   //create a fake feed item.
-   feedItem = [[MWFeedItem alloc] init];
-   feedItem.link = aLink;
-   feedItem.title = aTitle ? aTitle : @"No title ...";
-   feedItem.summary = summary;
-   feedItem.image = nil;//TODO: cache images.
-   feedItem.imageCut = 0;
-   feedItem.wideImageOnTop = false;
-   //
-
-   thumbnailView.image = nil;//TODO: cache images also.
-   imageCut = 0;
-   wideImageOnTop = false;
-}
-
-//________________________________________________________________________________________
 - (void) setAttributedTextFromSummary
 {
    //Modify summary:
@@ -451,35 +420,12 @@ bool IsWideImage(UIImage *image)
 - (void) showArticle
 {
    [[NSNotificationCenter defaultCenter] postNotificationName : CernAPP::tileSelectionNotification object : feedItem];
-/*   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName : @"iPad" bundle : nil];
-   ArticleDetailViewController * const viewController = [mainStoryboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailViewControllerID];
-   [viewController setContentForArticle : feedItem];
-   viewController.navigationItem.title = @"";
-[      [self.navigationController pushViewController : viewController animated : YES];
-   }
-  */
 }
 
 #pragma mark - text rendering.
 //________________________________________________________________________________________
 - (void) drawRect : (CGRect) rect
 {
-  /* [super drawRect : rect];
-   
-   CGContextRef ctx = UIGraphicsGetCurrentContext();
-
-   CGContextSetRGBStrokeColor(ctx, 0.f, 0.f, 0.f, 1.f);
-
-   CGContextSetTextMatrix(ctx, CGAffineTransformIdentity);
-   CGContextTranslateCTM(ctx, 0, rect.size.height);
-   CGContextScaleCTM(ctx, 1.f, -1.f);
-
-   if (titleFrame)
-      CTFrameDraw(titleFrame, ctx);
-   
-   if (textFrame)
-      CTFrameDraw(textFrame, ctx);*/
-
    [super drawRect : rect];
    
    CGContextRef ctx = UIGraphicsGetCurrentContext();

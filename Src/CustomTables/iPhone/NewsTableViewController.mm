@@ -123,7 +123,8 @@
       firstViewDidAppear = NO;
       //read a cache?
       if (canUseCache && feedStoreID) {
-         feedCache = CernAPP::ReadFeedCache(feedStoreID);
+         if ((feedCache = CernAPP::ReadFeedCache(feedStoreID)))
+            allArticles = CernAPP::ConvertFeedCache(feedCache);
          usingCache = feedCache != nil;
       }
       //May be, we have a cache already.
@@ -258,11 +259,7 @@
 - (NSInteger) tableView : (UITableView *) tableView numberOfRowsInSection : (NSInteger) section
 {
 #pragma unused(tableView, section)
-   // Return the number of rows in the section.
-   if (usingCache)
-      return feedCache.count;
-   else
-      return allArticles.count;
+   return allArticles.count;
 }
 
 //________________________________________________________________________________________
@@ -280,23 +277,15 @@
 
    const NSInteger row = indexPath.row;
 
-   if (usingCache) {
-      assert(row >= 0 && row < feedCache.count);
+   assert(row >= 0 && row < allArticles.count);
 
-      NSManagedObject * const feedItem = (NSManagedObject *)feedCache[row];
-      [cell setCellData : [feedItem valueForKey : @"itemTitle"] source : [feedItem valueForKey : @"itemLink"]
-                          image : nil imageOnTheRight : NO date : (NSDate *)[feedItem valueForKey : @"itemDate"]];
-   } else {
-      assert(row >= 0 && row < allArticles.count);
+   MWFeedItem * const article = (MWFeedItem *)allArticles[row];
+   assert(article != nil && "tableView:cellForRowAtIndexPath:, article was not found");
 
-      MWFeedItem * const article = (MWFeedItem *)allArticles[row];
-      assert(article != nil && "tableView:cellForRowAtIndexPath:, article was not found");
+   [cell setCellData : article imageOnTheRight : (indexPath.row % 4) == 3];
 
-      [cell setCellData : article imageOnTheRight : (indexPath.row % 4) == 3];
-
-      if (!article.image)
-         [self startIconDownloadForIndexPath : indexPath];
-   }
+   if (!usingCache && !article.image)
+      [self startIconDownloadForIndexPath : indexPath];
 
    return cell;
 }
@@ -310,20 +299,10 @@
 
    const NSInteger row = indexPath.row;
 
-   if (usingCache) {
-      assert(row >= 0 && row < feedCache.count && "tableView:heightForRowAtIndexPath:, indexPath.row is out of bounds");
+   assert(row >= 0 && row < allArticles.count && "tableView:heightForRowAtIndexPath:, indexPath.row is out of bounds");
 
-      NSManagedObject * const feedItem = (NSManagedObject *)feedCache[row];
-      return [NewsTableViewCell calculateCellHeightForText : [feedItem valueForKey : @"itemTitle"]
-                                source : [feedItem valueForKey : @"itemLink"]
-                                image : nil
-                                imageOnTheRight : NO];
-   } else {
-      assert(row >= 0 && row < allArticles.count && "tableView:heightForRowAtIndexPath:, indexPath.row is out of bounds");
-
-      MWFeedItem * const article = (MWFeedItem *)allArticles[row];
-      return [NewsTableViewCell calculateCellHeightForData : article imageOnTheRight : (indexPath.row % 4) == 3];
-   }
+   MWFeedItem * const article = (MWFeedItem *)allArticles[row];
+   return [NewsTableViewCell calculateCellHeightForData : article imageOnTheRight : (indexPath.row % 4) == 3];
 }
 
 #pragma mark - RSSAggregatorDelegate methods
@@ -353,7 +332,7 @@
 
    [self hideActivityIndicators];
 
-   if (usingCache || allArticles.count) {
+   if (allArticles.count) {
       //We have either cache, or articles from the previous parse.
       //Do not use HUD (which hides the table's contents), just
       //show an alert.
@@ -372,7 +351,7 @@
    //Show an alert message.
    CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
 
-   if (!usingCache && !allArticles.count)
+   if (!allArticles.count)
       [self showErrorHUD];
 }
 
@@ -390,39 +369,22 @@
    if (self.navigationController.topViewController != self)
       return;
 
+   const NSUInteger row = indexPath.row;
+   if (row >= allArticles.count)//Ooops, cell was tapped while refreshing???
+      return;
+
+   MWFeedItem * const feedItem = (MWFeedItem *)allArticles[row];
+
    UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName : @"iPhone" bundle : nil];
    ArticleDetailViewController * const viewController = [mainStoryboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailViewControllerID];
-   const NSUInteger row = indexPath.row;
+   [viewController setContentForArticle : feedItem];
+   viewController.navigationItem.title = @"";
 
-   if (usingCache) {
-      if (row >= feedCache.count)
-         return;
+   if (feedItem.title && feedStoreID)
+      viewController.articleID = [feedStoreID stringByAppendingString : feedItem.title];
 
-      NSManagedObject * const feedItem = (NSManagedObject *)feedCache[row];
-      [viewController setLink : (NSString *)[feedItem valueForKey : @"itemLink"]
-                      title : (NSString *)[feedItem valueForKey : @"itemTitle"]];
-      viewController.navigationItem.title = @"";
-      
-      viewController.canUseReadability = !isTwitterFeed;
-      //
-      viewController.articleID = [feedStoreID stringByAppendingString : (NSString *)[feedItem valueForKey : @"itemTitle"]];
-      //
-      [self.navigationController pushViewController : viewController animated : YES];
-   } else {
-      if (row >= allArticles.count)//Ooops, cell was tapped while refreshing???
-         return;
-
-      MWFeedItem * const feedItem = (MWFeedItem *)allArticles[row];
-
-      [viewController setContentForArticle : feedItem];
-      viewController.navigationItem.title = @"";
-
-      if (feedItem.title && feedStoreID)
-         viewController.articleID = [feedStoreID stringByAppendingString : feedItem.title];
-
-      viewController.canUseReadability = !isTwitterFeed;
-      [self.navigationController pushViewController : viewController animated : YES];
-   }
+   viewController.canUseReadability = !isTwitterFeed;
+   [self.navigationController pushViewController : viewController animated : YES];
 
    [tableView deselectRowAtIndexPath : indexPath animated : NO];
 }

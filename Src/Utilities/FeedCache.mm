@@ -26,11 +26,21 @@ NSArray *ReadFeedCache(NSString *feedStoreID)
       [request setPredicate : pred];
 
       NSError *error = nil;
-      NSArray * const objects = [context executeFetchRequest : request error : &error];
+      NSArray * const feedCache = [context executeFetchRequest : request error : &error];
 
-      if (!error) {
-         if (objects.count) {
-            NSArray *feedCache = [objects sortedArrayUsingComparator : ^ NSComparisonResult(id a, id b)
+      if (!error && feedCache.count)
+         return feedCache;
+   }
+
+   return nil;
+}
+
+//________________________________________________________________________________________
+NSMutableArray *ConvertFeedCache(NSArray *feedCache)
+{
+   assert(feedCache.count != 0 && "ConvertFeedCache, parameter 'feedCache' is either nil or an empty array");
+
+   NSArray *sorted = [feedCache sortedArrayUsingComparator : ^ NSComparisonResult(id a, id b)
                                   {
                                      NSManagedObject * const left = (NSManagedObject *)a;
                                      NSManagedObject * const right = (NSManagedObject *)b;
@@ -41,13 +51,24 @@ NSArray *ReadFeedCache(NSString *feedStoreID)
                                         return NSOrderedAscending;
                                      return cmp;
                                   }
-                                 ];
-            return feedCache;
-         }
-      }
+                     ];
+
+   NSMutableArray * const articles = [[NSMutableArray alloc] init];
+   
+   for (NSManagedObject *cacheEntry in sorted) {
+      MWFeedItem * const newItem = [[MWFeedItem alloc] init];
+      newItem.title = (NSString *)[cacheEntry valueForKey : @"itemTitle"];
+      newItem.link = (NSString *)[cacheEntry valueForKey : @"itemLink"]; 
+      newItem.date = (NSDate *)[cacheEntry valueForKey : @"itemDate"];
+
+      //I do not use the 'summary' on iPhone.
+      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+         newItem.summary = (NSString *)[cacheEntry valueForKey : @"itemSummary"];
+
+      [articles addObject : newItem];
    }
 
-   return nil;
+   return articles;
 }
 
 //________________________________________________________________________________________

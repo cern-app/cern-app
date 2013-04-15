@@ -107,7 +107,8 @@ using CernAPP::ControllerMode;
       if (mode != ControllerMode::bulletinIssueView) {
          if ((feedCache = CernAPP::ReadFeedCache(feedStoreID))) {
             //Set the data from the cache at the beginning!
-            [self setPagesDataFromCache];
+            allArticles = CernAPP::ConvertFeedCache(feedCache);
+            [self setPagesData];
          }
       }
 
@@ -306,14 +307,13 @@ using CernAPP::ControllerMode;
    //Stop any image download if we have any.
    [self cancelAllImageDownloaders];
 
-   if (!aggregator.hasConnection) {
+   if (!aggregator.hasConnection && !allArticles.count) {
       //Network problems, we can not reload
       //and do not have any previous data to show.
-      if (!feedCache && !allArticles.count) {
-         CernAPP::ShowErrorHUD(self, @"No network");
-         return;
-      }
-   }
+      CernAPP::ShowErrorHUD(self, @"No network");
+      return;
+   }//If we do not have connection, but have articles,
+    //the network error will be reported by the RSS aggregator.
 
    [noConnectionHUD hide : YES];
 
@@ -321,7 +321,7 @@ using CernAPP::ControllerMode;
       self.navigationItem.rightBarButtonItem.enabled = NO;
       CernAPP::ShowSpinner(self);
    } else {
-      [self addNavBarSpinner];
+      [self addNavBarSpinner];//A spinner will replace a button in a navigation bar
       [self layoutPages : YES];
    }
 
@@ -460,8 +460,6 @@ using CernAPP::ControllerMode;
 //________________________________________________________________________________________
 - (void) setPagesData
 {
-   assert(feedCache == nil && "setPagesData, feedCache is not nil");
-
    //Let's define an image layout for a tile.
    for (MWFeedItem *item in allArticles) {
       item.wideImageOnTop = std::rand() % 2;
@@ -491,44 +489,10 @@ using CernAPP::ControllerMode;
          [scrollView setContentOffset : CGPointMake(0.f, 0.f)];
          
          //The first page is visible now, let's download ... IMAGES NOW!!! :)
-         [self loadImagesForVisiblePage];
+         if (!feedCache)
+            [self loadImagesForVisiblePage];
       } else
          [self removeAllPages];
-   }
-}
-
-//________________________________________________________________________________________
-- (void) setPagesDataFromCache
-{
-   assert(mode != ControllerMode::bulletinIssueView &&
-          "setPagesFromCache, can not use cache in this mode");
-   assert(feedCache != nil && "setPagesFromCache, feedCache is nil");
-
-   //At the moment, I'm using simple layout - 6 items per page.
-   if ((nPages = [self numberOfPages])) {
-      //Let's create tiled view now.
-      UIView<TiledPage> *pages[3] = {};
-      if (nPages <= 3)
-         pages[0] = leftPage, pages[1] = currPage, pages[2] = rightPage;
-      else
-         pages[0] = currPage, pages[1] = rightPage, pages[2] = leftPage;
-
-      for (NSUInteger pageIndex = 0, e = std::min((int)nPages, 3), currItem = 0; pageIndex < e; ++pageIndex) {
-         UIView<TiledPage> * const page = pages[pageIndex];
-         page.pageNumber = pageIndex;
-         currItem += [page setPageItemsFromCache : feedCache startingFrom : currItem];
-         if (!page.superview)
-            [scrollView addSubview : page];
-      }
-      
-      [self layoutPages : YES];
-      [scrollView setContentOffset : CGPointMake(0.f, 0.f)];
-
-      //I do not load images for cached feed items,
-      //later I'll cache images.
-   } else {
-      //Impossible - cache read returns nil if no data was found.
-      assert(0 && "setPagesDataFromCache, empty cache");
    }
 }
 
@@ -559,10 +523,7 @@ using CernAPP::ControllerMode;
          frame.origin.x = currPage.frame.origin.x + frame.size.width;
          rightPage.frame = frame;
          //Set the data now.
-         if (!feedCache) {
-            [rightPage setPageItems : allArticles startingFrom : currPage.pageRange.location + currPage.pageRange.length];
-         } else
-            [rightPage setPageItemsFromCache:feedCache startingFrom : currPage.pageRange.location + currPage.pageRange.length];
+         [rightPage setPageItems : allArticles startingFrom : currPage.pageRange.location + currPage.pageRange.length];
          
          [rightPage layoutTiles];
       } 
@@ -583,13 +544,8 @@ using CernAPP::ControllerMode;
          frame.origin.x = currPage.frame.origin.x - frame.size.width;
          leftPage.frame = frame;
          //Set the data now.
-         if (!feedCache) {
-            const NSRange range = [leftPage.class suggestRangeBackward : allArticles endingWith : currPage.pageRange.location];
-            [leftPage setPageItems : allArticles startingFrom : range.location];
-         } else {
-            const NSRange range = [leftPage.class suggestRangeBackward : feedCache endingWith : currPage.pageRange.location];
-            [leftPage setPageItemsFromCache : feedCache startingFrom : range.location];
-         }
+         const NSRange range = [leftPage.class suggestRangeBackward : allArticles endingWith : currPage.pageRange.location];
+         [leftPage setPageItems : allArticles startingFrom : range.location];
 
          [leftPage layoutTiles];
       }
@@ -631,22 +587,11 @@ using CernAPP::ControllerMode;
 //________________________________________________________________________________________
 - (NSUInteger) numberOfPages
 {
-   if (feedCache) {
-      //Cache can be used only by feed tile view or bulletin view (issues as tiles).
-      assert(mode != ControllerMode::bulletinIssueView && "numberOfPages, wrong controller mode");
-
-      if (mode == ControllerMode::feedView) {
-         return [self numberOfPagesForData : feedCache];
-      } else {
-         //Bulletin issues as tiles.
-         return 0;//TODO!
-      }
-   } else {
-      if (mode == ControllerMode::feedView) {
-         return [self numberOfPagesForData : allArticles];
-      } else {
-         return 0;//TODO!
-      }
+   if (mode == ControllerMode::feedView)
+      return [self numberOfPagesForData : allArticles];
+   else {
+      //Bulletin issues as tiles.
+      return 0;//TODO!
    }
 }
 
@@ -657,13 +602,8 @@ using CernAPP::ControllerMode;
    
    //Ugly, inefficient, but .. we never have a huge number of pages :)
    NSRange range = {};
-   if (feedCache) {
-      for (NSUInteger i = 0; i <= page; ++i)
-         range = [leftPage.class suggestRangeForward : feedCache startingFrom : range.location + range.length];
-   } else {
-      for (NSUInteger i = 0; i <= page; ++i)
-         range = [leftPage.class suggestRangeForward : allArticles startingFrom : range.location + range.length];
-   }
+   for (NSUInteger i = 0; i <= page; ++i)
+      range = [leftPage.class suggestRangeForward : allArticles startingFrom : range.location + range.length];
    
    return range;
 }

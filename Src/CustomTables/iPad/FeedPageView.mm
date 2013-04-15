@@ -92,40 +92,6 @@ const NSUInteger tilesOnPage = 6;
 }
 
 //________________________________________________________________________________________
-- (NSUInteger) setPageItemsFromCache : (NSArray *) feedCache startingFrom : (NSUInteger) index
-{
-   assert(feedCache != nil && "setPageItemsFromCache:startingFrom:, parameter 'cache' is nil");
-   assert(index < feedCache.count && "setPageItemsFromCache:startingFrom:, parameter 'index' is out of bounds");
-   
-   //A bit of ugly copy paste here :)
-   if (tiles) {
-      for (FeedItemTileView *v in tiles)
-         [v removeFromSuperview];
-      [tiles removeAllObjects];
-   } else
-      tiles = [[NSMutableArray alloc] init];
-
-   const NSUInteger endOfRange = std::min(feedCache.count, index + tilesOnPage);
-
-   for (NSUInteger i = index; i < endOfRange; ++i) {
-      FeedItemTileView *newTile = [[FeedItemTileView alloc] initWithFrame : CGRect()];
-      NSManagedObject * const feedItem = (NSManagedObject *)feedCache[i];
-      
-      [newTile setTileTitle : (NSString *)[feedItem valueForKey : @"itemTitle"]
-               summary : (NSString *)[feedItem valueForKey : @"itemSummary"]
-               date : (NSDate *)[feedItem valueForKey : @"itemDate"]
-               link : (NSString *)[feedItem valueForKey : @"itemLink"]];
-      [tiles addObject : newTile];
-      [self addSubview : newTile];
-   }
-
-   pageRange.location = index;
-   pageRange.length = endOfRange - index;
-
-   return tilesOnPage;
-}
-
-//________________________________________________________________________________________
 - (NSRange) pageRange
 {
    return pageRange;
