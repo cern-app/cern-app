@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 CERN. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "BulletinIssueTileView.h"
 #import "BulletinPageView.h"
 
@@ -61,8 +63,11 @@
    //Items in the 'items' array are arrays with MWFeedItems sorted by the date.
    if (!tiles)
       tiles = [[NSMutableArray alloc] init];
-   else
+   else {
+      for (BulletinIssueTileView *tile in tiles)
+         [tile removeFromSuperview];
       [tiles removeAllObjects];
+   }
    
    pageRange = [BulletinPageView suggestRangeForward : items startingFrom : index];
 
@@ -127,32 +132,65 @@
          ((UIView *)tiles[2]).frame = CGRectMake(frame.size.width * 0.6, frame.size.height * 0.5f, frame.size.width * 0.4f, frame.size.height * 0.5f);
       }
    } else {
-   
+      if (tiles.count == 2) {
+         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width, frame.size.height / 2);
+         ((UIView *)tiles[1]).frame = CGRectMake(0.f, frame.size.height / 2, frame.size.width, frame.size.height / 2);
+      } else {
+         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width, frame.size.height * 0.6f);
+         ((UIView *)tiles[1]).frame = CGRectMake(0.f, frame.size.height * 0.6f, frame.size.width / 2, frame.size.height * 0.4f);
+         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width / 2, frame.size.height * 0.6f, frame.size.width / 2, frame.size.height * 0.4f);
+      }
    }
+   
+   for (BulletinIssueTileView *tile in tiles)
+      [tile setNeedsDisplay];
 }
 
 //Animations:
 //________________________________________________________________________________________
 - (void) explodeTiles : (UIInterfaceOrientation) orientation
 {
+   assert(tiles.count <= 3 && "explodeTiles, unexpected number of tiles");
+   
+   if (tiles.count == 1)//No animation for this case, since tile occupies the whole page.
+      return;
+
+   const CGPoint pageCenter = self.center;
+
+   for (BulletinIssueTileView *tile in tiles) {
+      CGPoint tileCenter = tile.center;
+      tileCenter.x += 0.2f * (tileCenter.x - pageCenter.x);
+      tileCenter.y += 0.2f * (tileCenter.y - pageCenter.y);
+      [tile setCenter : tileCenter];
+   }
 }
 
 //________________________________________________________________________________________
 - (void) collectTilesAnimatedForOrientation : (UIInterfaceOrientation) orientation from : (CFTimeInterval) start withDuration : (CFTimeInterval) duration
 {
-   const CGRect frame = self.frame;
-   
-   if (frame.size.width > frame.size.height) {
-      if (tiles.count == 2) {
-         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width / 2, frame.size.height);
-         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width / 2, 0.f, frame.size.width / 2, frame.size.height);
-      } else {
-         ((UIView *)tiles[0]).frame = CGRectMake(0.f, 0.f, frame.size.width * 0.6f, frame.size.height);
-         ((UIView *)tiles[1]).frame = CGRectMake(frame.size.width * 0.6, 0.f, frame.size.width * 0.4f, frame.size.height * 0.5f);
-         ((UIView *)tiles[2]).frame = CGRectMake(frame.size.width * 0.6, frame.size.height * 0.5f, frame.size.width * 0.4f, frame.size.height * 0.5f);
-      }
-   } else {
-   
+  if (tiles.count == 1)
+      return;
+
+   const CGPoint pageCenter = self.layer.position;
+
+   NSUInteger index = 0;
+   for (BulletinIssueTileView *tile in tiles) {
+      const CGPoint tileCenter = tile.layer.position;
+
+      CGPoint endPoint = CGPointMake((tileCenter.x + 0.2f * pageCenter.x) / 1.2f,
+                                     (tileCenter.y + 0.2f * pageCenter.y) / 1.2f);
+
+      CABasicAnimation * const animation = [CABasicAnimation animationWithKeyPath : @"position"];
+      animation.fromValue = [NSValue valueWithCGPoint : tileCenter];
+      animation.toValue = [NSValue valueWithCGPoint : endPoint];
+      animation.beginTime = start;
+      [animation setTimingFunction : [CAMediaTimingFunction functionWithControlPoints : 0.6f : 1.5f : 0.8f : 0.8f]];
+
+      animation.duration = duration;
+      [tile.layer addAnimation : animation forKey : [NSString stringWithFormat : @"bounce%u", index]];
+      tile.layer.position = endPoint;
+      //
+      ++index;
    }
 }
 
