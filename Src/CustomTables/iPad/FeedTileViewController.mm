@@ -9,6 +9,7 @@
 #import "FeedTileViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "ApplicationErrors.h"
+#import "BulletinPageView.h"
 #import "FeedItemTileView.h"
 #import "FeedPageView.h"
 #import "MWFeedItem.h"
@@ -85,9 +86,15 @@ using CernAPP::ControllerMode;
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
    
-   leftPage = [[FeedPageView alloc] initWithFrame : CGRect()];
-   currPage = [[FeedPageView alloc] initWithFrame : CGRect()];
-   rightPage = [[FeedPageView alloc] initWithFrame : CGRect()];
+   if (mode != CernAPP::ControllerMode::bulletinView) {
+      leftPage = [[FeedPageView alloc] initWithFrame : CGRect()];
+      currPage = [[FeedPageView alloc] initWithFrame : CGRect()];
+      rightPage = [[FeedPageView alloc] initWithFrame : CGRect()];
+   } else {
+      leftPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
+      currPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
+      rightPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
+   }
    
    scrollView.checkDragging = YES;
 }
@@ -539,10 +546,9 @@ using CernAPP::ControllerMode;
          if (!page.superview)
             [scrollView addSubview : page];
       }
-      
+
       [self layoutPages : YES];
       [scrollView setContentOffset : CGPointMake(0.f, 0.f)];
-      
       //The first page is visible now, let's download ... IMAGES NOW!!! :)
       if (!feedCache)
          [self loadImagesForVisiblePage];
@@ -641,12 +647,7 @@ using CernAPP::ControllerMode;
 //________________________________________________________________________________________
 - (NSUInteger) numberOfPages
 {
-   if (mode == ControllerMode::feedView)
-      return [self numberOfPagesForData : allArticles];
-   else {
-      //Bulletin issues as tiles.
-      return 0;//TODO!
-   }
+   return [self numberOfPagesForData : allArticles];
 }
 
 //________________________________________________________________________________________

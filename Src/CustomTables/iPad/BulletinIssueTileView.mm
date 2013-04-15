@@ -75,12 +75,18 @@ const CGFloat imageHeight = 0.7f;
 {
    // Drawing code
    CGContextRef ctx = UIGraphicsGetCurrentContext();
+
+   CGContextSetRGBFillColor(ctx, 1.f, 1.f, 1.f, 1.f);
+   CGContextFillRect(ctx, rect);
+
    CGContextSetRGBStrokeColor(ctx, 0.f, 0.f, 0.f ,1.f);
    
    CGContextBeginPath(ctx);
    CGContextMoveToPoint(ctx, 0.f, 0.f);
    CGContextAddLineToPoint(ctx, rect.size.width, rect.size.height);
    CGContextStrokePath(ctx);
+   
+
 }
 
 

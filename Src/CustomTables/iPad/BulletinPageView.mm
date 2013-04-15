@@ -59,7 +59,6 @@
    assert(index < items.count && "setPageItems:startingFrom:, parameter 'index' is out of bounds");
 
    //Items in the 'items' array are arrays with MWFeedItems sorted by the date.
-
    if (!tiles)
       tiles = [[NSMutableArray alloc] init];
    else
@@ -74,6 +73,7 @@
       //Set the image if any.
       //Set the text ('Week of xxxx : yyy articles').
       [self addSubview : newTile];
+      [tiles addObject : newTile];
    }
 
    return pageRange.length;
@@ -106,7 +106,6 @@
 - (void) layoutTiles
 {
    assert(tiles.count <= 3 && "layoutTiles, unexpected number of tiles");
-
    //Depending on orientation and the pageRange, layout the slides.
    CGRect frame = self.frame;
    frame.origin = CGPoint();
