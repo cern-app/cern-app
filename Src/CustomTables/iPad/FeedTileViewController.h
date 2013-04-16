@@ -12,6 +12,15 @@
 namespace CernAPP {
 
 enum class ControllerMode : unsigned char {
+   //TODO: instead of these modes I can have a small hierarchy:
+   //
+   //  TileViewController (does basic geometry/pages manipulation)
+   //      /                |                \
+   //   FeedTileView  BulletinTileView    BulletinIssueTileView.
+   //    feed view     feed items sorted     feed items from the
+   //                      by the date         same week, with
+   //                                            external data
+   //                                              source.
    feedView,
    bulletinView,
    bulletinIssueView

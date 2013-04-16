@@ -147,8 +147,6 @@ const NSUInteger tilesOnPage = 6;
 //________________________________________________________________________________________
 - (void) explodeTiles : (UIInterfaceOrientation) orientation
 {
-   
-
    const NSUInteger nItemsPerRow = UIInterfaceOrientationIsLandscape(orientation) ? 3 : 2;
    const NSUInteger nRows = nItemsPerRow == 3 ? 2 : 3;
 

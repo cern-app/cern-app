@@ -7,6 +7,7 @@
 #import "ECSlidingViewController.h"
 #import "NewsTableViewController.h"
 #import "FeedTileViewController.h"
+#import "BulletinIssueTileView.h"
 #import "StoryboardIdentifiers.h"
 #import "ApplicationErrors.h"
 #import "BulletinPageView.h"
@@ -14,6 +15,16 @@
 #import "FeedPageView.h"
 #import "MWFeedItem.h"
 #import "FeedCache.h"
+
+//TODO: instead of controller modes I can have a small hierarchy:
+//
+//  TileViewController (does basic geometry/pages manipulation)
+//      /                |                \
+//   FeedTileView  BulletinTileView    BulletinIssueTileView.
+//    feed view     feed items sorted     feed items from the
+//                      by the date         same week, with
+//                                            external data
+//                                              source.
 
 
 using CernAPP::ControllerMode;
@@ -303,7 +314,6 @@ using CernAPP::ControllerMode;
 - (void) aggregator : (RSSAggregator *) aggregator didFailWithError : (NSString *) errorDescription
 {
    //TODO: error handling.
-   NSLog(@"fail!");
 }
 
 //________________________________________________________________________________________
@@ -362,6 +372,41 @@ using CernAPP::ControllerMode;
 
 
 #pragma mark - ImageDownloaderDelegate.
+
+//________________________________________________________________________________________
+- (void) imageDidLoadForBulletin : (NSIndexPath *) indexPath
+{
+   assert(feedCache == nil && "imageDidLoadForBulletin:, images loaded while cache is in use");
+
+   assert(indexPath != nil && "imageDidLoadForBulletin, parameter 'indexPath' is nil");
+   const NSInteger page = indexPath.row;
+   assert(page >= 0 && page < nPages && "imageDidLoadForBulletin:, index is out of bounds");
+
+   ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath];
+   assert(downloader != nil && "imageDidLoad:, no downloader found for the given index path");
+
+   if (downloader.image) {
+      if (nPages <= 3) {
+         UIView<TiledPage> * pageToUpdate = nil;
+         if (!page)
+            pageToUpdate = leftPage;
+         else if (page == 1)
+            pageToUpdate = currPage;
+         else
+            pageToUpdate = rightPage;
+
+         [pageToUpdate setThumbnail : downloader.image forTile : indexPath.section % 6];
+      } else {
+         if (currPage.pageNumber == page)
+            [currPage setThumbnail : downloader.image forTile : indexPath.section % 6];
+      }
+   }
+   
+   [imageDownloaders removeObjectForKey : indexPath];
+   if (!imageDownloaders.count)
+      imageDownloaders = nil;
+}
+
 //________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
@@ -370,7 +415,10 @@ using CernAPP::ControllerMode;
    assert(indexPath != nil && "imageDidLoad, parameter 'indexPath' is nil");
    const NSInteger page = indexPath.row;
    assert(page >= 0 && page < nPages && "imageDidLoad:, index is out of bounds");
-   
+
+   if (mode == ControllerMode::bulletinView)
+      return [self imageDidLoadForBulletin : indexPath];
+
    MWFeedItem * const article = (MWFeedItem *)allArticles[indexPath.section];
    //We should not load any image more when once.
    assert(article.image == nil && "imageDidLoad:, image was loaded already");
@@ -420,6 +468,9 @@ using CernAPP::ControllerMode;
    //But no need to update the tableView.
    if (!imageDownloaders.count)
       imageDownloaders = nil;
+   
+   //TODO: for a bulletin, this failure does not mean we can not find any
+   //more images - we can continue on other feed items.
 }
 
 #pragma mark - Connection controller.
@@ -505,7 +556,6 @@ using CernAPP::ControllerMode;
       }
       
       [allArticles addObject : weekData];
-
       //TODO: add more weekData to test bulletin with multiple pages.
    }
 }
@@ -666,12 +716,83 @@ using CernAPP::ControllerMode;
 }
 
 //________________________________________________________________________________________
+- (void) loadImagesForVisibleBulletinPage
+{
+   assert(feedCache == nil && "loadImagesForVisibleBulletinPage, images loaded while cache is in use");
+
+   const NSUInteger visiblePageIndex = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
+   UIView<TiledPage> *visiblePage = nil;
+   if (nPages > 3)
+      visiblePage = currPage;
+   else
+      !visiblePageIndex ? visiblePage = leftPage : visiblePageIndex == 1 ? visiblePage = currPage : visiblePage = rightPage;
+
+   const CGFloat minSize = [BulletinIssueTileView minImageSize];
+   const NSRange range = visiblePage.pageRange;
+   for (NSUInteger i = range.location, e = range.location + range.length; i < e; ++i) {
+      assert(i < allArticles.count && "loadImagesForVisibleBulletinPage, invalid range for a page");
+
+      if ([visiblePage tileHasThumbnail : i - range.location])
+         continue;
+      
+      NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : visiblePageIndex inSection : i];
+      
+      if (!imageDownloaders)
+            imageDownloaders = [[NSMutableDictionary alloc] init];
+      
+      ImageDownloader *downloader = (ImageDownloader *)imageDownloaders[indexPath];
+      
+      if (downloader)//We do not touch anything, thumbnail for this tile is downloading already.
+         continue;
+
+      //No active downloader, pass 1 : check if any article already has a good image.
+
+      //Actually, I need two passes here:
+      //1. Pass one to check, if any article in an issue has a good image.
+      NSArray * const articles = (NSArray *)allArticles[i];
+      bool imageFound = false;
+      for (MWFeedItem *article in articles) {
+         if (article.image) {
+            const CGSize imSize = article.image.size;
+            if (imSize.width >= minSize && imSize.height >= minSize) {
+               imageFound = true;
+               [visiblePage setThumbnail : article.image forTile : i - range.location];
+               break;
+            }
+         }
+      }
+      
+      if (imageFound)
+         continue;
+      
+      //The second pass, try to download any thumbnail for this issue.
+      for (MWFeedItem *article in articles) {
+         if (article.image)//Image size is not good enough, skip to the next.
+            continue;
+         
+         NSString * body = article.content;
+         if (!body)
+            body = article.summary;
+
+         if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+            downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+            downloader.indexPathInTableView = indexPath;
+            downloader.delegate = self;
+            [imageDownloaders setObject : downloader forKey : indexPath];
+            [downloader startDownload];//Power on.
+            break;
+         }
+      }
+   }
+}
+
+//________________________________________________________________________________________
 - (void) loadImagesForVisiblePage
 {
    assert(feedCache == nil && "loadImagesForVisiblePage, images loaded while cache is in use");
    
    if (mode == CernAPP::ControllerMode::bulletinView)//TODO!!!
-      return;
+      return [self loadImagesForVisibleBulletinPage];
 
    const NSUInteger visiblePage = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
 

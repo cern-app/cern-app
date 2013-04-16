@@ -8,7 +8,7 @@ namespace {
 const CGFloat leftRightMargin = 0.15f;
 const CGFloat topMargin = 0.15f;
 const CGFloat imageHeight = 0.7f;
-const CGFloat textHeight = 0.3f;
+const CGFloat textHeight = 0.15f;
 
 //________________________________________________________________________________________
 bool IsWideImage(UIImage *image)
@@ -20,6 +20,14 @@ bool IsWideImage(UIImage *image)
    
    const CGSize imSize = image.size;
    return imSize.width >= 1.5 * imSize.height;
+}
+
+//________________________________________________________________________________________
+bool IsWideView(UIView *view)
+{
+   assert(view != nil && "IsWideView, parameter 'view' is nil");
+   
+   return view.frame.size.width >= 1.5 * view.frame.size.height;
 }
 
 }
@@ -34,7 +42,7 @@ bool IsWideImage(UIImage *image)
 //________________________________________________________________________________________
 + (CGFloat) minImageSize
 {
-   return 200.f;
+   return 100.f;
 }
 
 //________________________________________________________________________________________
@@ -48,7 +56,7 @@ bool IsWideImage(UIImage *image)
       
       title = [[UILabel alloc] initWithFrame : CGRect()];
       //
-      UIFont * const titleFont = [UIFont fontWithName : @"PTSans-Bold" size : 40.f];
+      UIFont * const titleFont = [UIFont fontWithName : @"PTSans-Bold" size : 30.f];
       assert(titleFont != nil && "initWithFrame:, font for a title is nil");
       title.font = titleFont;
       title.textAlignment = NSTextAlignmentCenter;
@@ -98,7 +106,7 @@ bool IsWideImage(UIImage *image)
    title.frame = [self suggestTextGeometry];
 }
 
-#pragma mark - Debug code.
+#pragma mark - Gradient fill.
 /*
 //________________________________________________________________________________________
 - (void) drawRect : (CGRect)rect
@@ -123,7 +131,28 @@ bool IsWideImage(UIImage *image)
 - (CGRect) suggestImageGeometry
 {
    //TODO.
-   return CGRect();
+   const CGFloat w = self.frame.size.width;
+   const CGFloat h = self.frame.size.height;
+   
+   if (!thumbnailView.image)
+      return CGRect();
+   
+   
+   CGRect imageRect = {};
+   if (IsWideImage(thumbnailView.image)) {
+      if (wideImageOnTopHint)
+         imageRect = CGRectMake(w * leftRightMargin, h * topMargin, w - 2 * leftRightMargin * w, imageHeight * h);
+      else
+         imageRect = CGRectMake(w * leftRightMargin, (topMargin + textHeight) * h, w - 2 * leftRightMargin * w, imageHeight * h);
+   } else if (IsWideView(self)) {
+      if (squareImageOnLeftHint)
+         imageRect = CGRectMake(w * leftRightMargin, h * topMargin, w / 2 - w * leftRightMargin, h - 2 * topMargin * h);
+      else
+         imageRect = CGRectMake(w / 2, h * topMargin, w / 2 - w * leftRightMargin, h - 2 * topMargin * h);
+   } else//Similar to wideImageOnTopHint.
+      imageRect = CGRectMake(leftRightMargin * w, topMargin * h, w - 2 * w * leftRightMargin, h * imageHeight);
+
+   return imageRect;
 }
 
 //________________________________________________________________________________________
@@ -135,15 +164,21 @@ bool IsWideImage(UIImage *image)
    if (!thumbnailView.image)
       return CGRectMake(w * leftRightMargin, h / 2 - textHeight * h / 2, w - 2 * w * leftRightMargin, textHeight * h);
 
+   CGRect textRect = {};
    if (IsWideImage(thumbnailView.image)) {
+      if (wideImageOnTopHint)
+         textRect = CGRectMake(w * leftRightMargin, h * topMargin + imageHeight * h, w - 2 * leftRightMargin * w, textHeight * h);
+      else
+         textRect = CGRectMake(w * leftRightMargin, topMargin * h, w - 2 * leftRightMargin * w, textHeight * h);
+   } else if (IsWideView(self)) {
+      if (squareImageOnLeftHint)
+         textRect = CGRectMake(w / 2 + w * leftRightMargin, h / 2 - textHeight * h / 2, w / 2 - 2 * w * leftRightMargin, textHeight * h);
+      else
+         textRect = CGRectMake(w * leftRightMargin, h / 2 - textHeight * h / 2, w / 2 - leftRightMargin * w, textHeight * h);
+   } else
+      textRect = CGRectMake(w * leftRightMargin, h * topMargin + imageHeight * h, w - 2 * leftRightMargin * w, textHeight * h);
    
-   } else if (squareImageOnLeftHint) {
-   
-   } else {
-   
-   }
-   
-   return CGRect();
+   return textRect;
 }
 
 @end

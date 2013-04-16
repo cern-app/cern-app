@@ -107,9 +107,8 @@ const CGFloat tileShift = 0.2f;
    assert(thumbnailImage != nil && "setThumbnail:forTile:, parameter 'thumbnailImge' is nil");
    assert(tileIndex < tiles.count && "setThumbnail:forTile:, parameter 'tileIndex' is out of bounds");
    
-   //
-   //
-   //
+   BulletinIssueTileView * const tile = (BulletinIssueTileView *)tiles[tileIndex];
+   [tile setThumbnailImage : thumbnailImage];
 }
 
 //________________________________________________________________________________________
@@ -117,11 +116,8 @@ const CGFloat tileShift = 0.2f;
 {
    assert(tileIndex < tiles.count && "tileHasThumbnail, parameter 'tileIndex' is out of bounds");
 
-   //
-   //
-   //
-
-   return NO;
+   BulletinIssueTileView * const tile = (BulletinIssueTileView *)tiles[tileIndex];
+   return [tile hasThumbnailImage];
 }
 
 //________________________________________________________________________________________
