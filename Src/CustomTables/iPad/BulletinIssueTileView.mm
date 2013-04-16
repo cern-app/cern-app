@@ -1,6 +1,13 @@
 #import <cassert>
 
 #import "BulletinIssueTileView.h"
+#import "FeedItemTileView.h"//TODO: move a constant (for NSNotification center) into utilities.
+
+namespace CernAPP {
+
+NSString * const bulletinIssueSelectionNotification = @"CernAPP_BulletinIssueSelectionNotification";
+
+}
 
 namespace {
 
@@ -37,7 +44,7 @@ bool IsWideView(UIView *view)
    UILabel *title;
 }
 
-@synthesize wideImageOnTopHint, squareImageOnLeftHint;
+@synthesize wideImageOnTopHint, squareImageOnLeftHint, issueNumber;
 
 //________________________________________________________________________________________
 + (CGFloat) minImageSize
@@ -64,6 +71,9 @@ bool IsWideView(UIView *view)
       [self addSubview : title];
       //
       self.backgroundColor = [UIColor whiteColor];
+      
+      UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(showBulletinIssue)];
+      [self addGestureRecognizer : tapRecognizer];
    }
 
    return self;
@@ -179,5 +189,15 @@ bool IsWideView(UIView *view)
    
    return textRect;
 }
+
+#pragma mark - Gestures.
+
+//________________________________________________________________________________________
+- (void) showBulletinIssue
+{
+   NSNumber * const num = [NSNumber numberWithUnsignedInteger : issueNumber];
+   [[NSNotificationCenter defaultCenter] postNotificationName : CernAPP::bulletinIssueSelectionNotification object : num];
+}
+
 
 @end

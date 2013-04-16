@@ -22,6 +22,6 @@
 
 namespace CernAPP {
 
-extern NSString * const tileSelectionNotification;
+extern NSString * const feedItemSelectionNotification;
 
 }

@@ -93,6 +93,7 @@ const CGFloat tileShift = 0.2f;
       
       newTile.wideImageOnTopHint = tileHints[i][0];
       newTile.squareImageOnLeftHint = tileHints[i][1];
+      newTile.issueNumber = index;
 
       [self addSubview : newTile];
       [tiles addObject : newTile];

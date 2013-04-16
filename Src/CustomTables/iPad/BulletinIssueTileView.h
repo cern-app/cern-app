@@ -15,6 +15,8 @@
 @property (nonatomic) BOOL wideImageOnTopHint;
 @property (nonatomic) BOOL squareImageOnLeftHint;
 
+@property (nonatomic) NSUInteger issueNumber;
+
 //Thumbnail sizes must be >= minImageSize.
 //Returns YES if image is big enough, otherwise NO.
 - (BOOL) setThumbnailImage : (UIImage *) thumbnail;
@@ -24,3 +26,9 @@
 - (void) layoutContents;
 
 @end
+
+namespace CernAPP {
+
+extern NSString * const bulletinIssueSelectionNotification;
+
+}

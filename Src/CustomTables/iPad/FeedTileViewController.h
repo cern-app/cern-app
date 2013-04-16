@@ -42,6 +42,10 @@ enum class ControllerMode : unsigned char {
 //ECSlidingViewController:
 - (IBAction) revealMenu : (id) sender;
 
+//TODO:
+//That's a special function to a bulletin issue view.
+- (void) setArticles : (NSArray *) articles;
+
 //RSSAggregatorDelegate:
 - (void) allFeedsDidLoadForAggregator : (RSSAggregator *) aggregator;
 - (void) aggregator : (RSSAggregator *) aggregator didFailWithError : (NSString *) errorDescription;

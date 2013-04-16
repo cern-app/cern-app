@@ -4,6 +4,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "ArticleDetailViewController.h"
+#import "BulletinTableViewController.h"
 #import "ECSlidingViewController.h"
 #import "NewsTableViewController.h"
 #import "FeedTileViewController.h"
@@ -75,9 +76,7 @@ using CernAPP::ControllerMode;
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
    if (self = [super initWithCoder : aDecoder]) {
-      [self doInitController];
-      
-      [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(articleSelected:) name : CernAPP::tileSelectionNotification object : nil];
+      [self doInitController];      
    }
 
    return self;
@@ -107,6 +106,11 @@ using CernAPP::ControllerMode;
       rightPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
    }
    
+   if (mode == ControllerMode::bulletinView)
+      [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(issueSelected:) name : CernAPP::bulletinIssueSelectionNotification object : nil];
+   else if (mode == ControllerMode::feedView)
+      [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(articleSelected:) name : CernAPP::feedItemSelectionNotification object : nil];
+   
    scrollView.checkDragging = YES;
 }
 
@@ -119,19 +123,24 @@ using CernAPP::ControllerMode;
    //created and view loaded, next time - for example, when article detailed view
    //controller is poped from the navigation stack.
 
+
    if (!viewDidAppear) {
       viewDidAppear = YES;
 
-      if (mode != ControllerMode::bulletinIssueView) {
-         if ((feedCache = CernAPP::ReadFeedCache(feedStoreID))) {
-            //Set the data from the cache at the beginning!
-            NSMutableArray * const cachedArticles = CernAPP::ConvertFeedCache(feedCache);
-            if (mode == ControllerMode::bulletinView)
-               [self sortArticlesIntoIssues : cachedArticles];
-            else
-               allArticles = cachedArticles;
-            [self setPagesData];
-         }
+      if (mode == ControllerMode::bulletinIssueView) {
+         assert(allArticles.count != 0 && "viewDidAppear:, allArticles not set");
+         return [self setPagesData];
+      }
+
+
+      if ((feedCache = CernAPP::ReadFeedCache(feedStoreID))) {
+         //Set the data from the cache at the beginning!
+         NSMutableArray * const cachedArticles = CernAPP::ConvertFeedCache(feedCache);
+         if (mode == ControllerMode::bulletinView)
+            [self sortArticlesIntoIssues : cachedArticles];
+         else
+            allArticles = cachedArticles;
+         [self setPagesData];
       }
 
       [self reloadPage];
@@ -153,9 +162,11 @@ using CernAPP::ControllerMode;
       }
    }
    
-   if (mode == ControllerMode::bulletinIssueView)
+   if (mode == ControllerMode::bulletinIssueView) {
       //No "refresh" button, it's one level up in a navigation hierarchy.
       self.navigationItem.rightBarButtonItem = nil;
+      //Set the back button title???
+   }
 }
 
 #pragma mark - Layout.
@@ -513,6 +524,17 @@ using CernAPP::ControllerMode;
 #pragma mark - Aux.
 
 //________________________________________________________________________________________
+- (void) setArticles : (NSArray *) articles
+{
+   assert(mode == ControllerMode::bulletinIssueView && "setArticles:, wrong controller mode");
+
+   assert(articles != nil && "setArticles:, parameter 'articles' is nil");
+   assert(articles.count != 0 && "setArticles:, no articles");
+   
+   allArticles = (NSMutableArray *)[articles mutableCopy];
+}
+
+//________________________________________________________________________________________
 - (void) sortArticlesIntoIssues : (NSArray *) articles
 {
    assert(articles != nil && "sortArticlesIntoIssues:, parameter 'articles' is nil");
@@ -526,7 +548,6 @@ using CernAPP::ControllerMode;
    
       NSMutableArray *weekData = [[NSMutableArray alloc] init];
       MWFeedItem * const firstArticle = [articles objectAtIndex : 0];
-      firstArticle.subsetIndex = 0;
       [weekData addObject : firstArticle];
    
       NSCalendar * const calendar = [NSCalendar currentCalendar];
@@ -551,7 +572,6 @@ using CernAPP::ControllerMode;
          article.wideImageOnTop = std::rand() % 2;
          article.imageCut = std::rand() % 4;
          //
-         article.subsetIndex = allArticles.count;
          [weekData addObject : article];
       }
       
@@ -846,6 +866,24 @@ using CernAPP::ControllerMode;
 
    viewController.canUseReadability = YES;
    [self.navigationController pushViewController : viewController animated : YES];
+}
+
+//________________________________________________________________________________________
+- (void) issueSelected : (NSNotification *) notification
+{
+   assert(notification != nil && "issueSelected:, parameter 'notification' is nil");
+   assert(mode == ControllerMode::bulletinView && "issueSelected:, wrong controller mode");
+   
+   assert([notification.object isKindOfClass : [NSNumber class]] &&
+          "articleSelected:, an object in a notification has a wrong type");
+   
+   const NSUInteger issueNumber = [(NSNumber *)notification.object unsignedIntegerValue];
+   assert(issueNumber < allArticles.count && "articleSelected:, issue number is out of bounds");
+   FeedTileViewController * const nextController = [self.storyboard instantiateViewControllerWithIdentifier : CernAPP::BulletinIssueViewControllerID];
+   nextController.mode = ControllerMode::bulletinIssueView;
+   [nextController setArticles : (NSArray *)allArticles[issueNumber]];
+   nextController.navigationItem.title = CernAPP::BulletinTitleForWeek((NSArray *)allArticles[issueNumber]);
+   [self.navigationController pushViewController : nextController animated : YES];
 }
 
 #pragma mark - UI

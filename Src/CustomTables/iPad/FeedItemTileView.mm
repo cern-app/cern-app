@@ -21,7 +21,7 @@
 
 namespace CernAPP {
 
-NSString * const tileSelectionNotification = @"CernAPP_TileSelectionNotification";
+NSString * const feedItemSelectionNotification = @"CernAPP_FeedItemSelectionNotification";
 
 }
 
@@ -419,7 +419,7 @@ bool IsWideImage(UIImage *image)
 //________________________________________________________________________________________
 - (void) showArticle
 {
-   [[NSNotificationCenter defaultCenter] postNotificationName : CernAPP::tileSelectionNotification object : feedItem];
+   [[NSNotificationCenter defaultCenter] postNotificationName : CernAPP::feedItemSelectionNotification object : feedItem];
 }
 
 #pragma mark - text rendering.
