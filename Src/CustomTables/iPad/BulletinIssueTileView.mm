@@ -5,7 +5,7 @@
 namespace {
 
 //Geometry constant, in percents of self.frame.size.
-const CGFloat leftRightMargin = 0.15f;
+const CGFloat leftRightMargin = 0.1f;
 const CGFloat topMargin = 0.15f;
 const CGFloat imageHeight = 0.7f;
 const CGFloat textHeight = 0.15f;
@@ -19,7 +19,7 @@ bool IsWideImage(UIImage *image)
    assert(image != nil && "IsWideImage, parameter 'image' is nil");
    
    const CGSize imSize = image.size;
-   return imSize.width >= 1.5 * imSize.height;
+   return imSize.width >= 1.5 * imSize.height && imSize.width > 300.f;
 }
 
 //________________________________________________________________________________________
@@ -137,7 +137,6 @@ bool IsWideView(UIView *view)
    if (!thumbnailView.image)
       return CGRect();
    
-   
    CGRect imageRect = {};
    if (IsWideImage(thumbnailView.image)) {
       if (wideImageOnTopHint)
@@ -172,7 +171,7 @@ bool IsWideView(UIView *view)
          textRect = CGRectMake(w * leftRightMargin, topMargin * h, w - 2 * leftRightMargin * w, textHeight * h);
    } else if (IsWideView(self)) {
       if (squareImageOnLeftHint)
-         textRect = CGRectMake(w / 2 + w * leftRightMargin, h / 2 - textHeight * h / 2, w / 2 - 2 * w * leftRightMargin, textHeight * h);
+         textRect = CGRectMake(w / 2, h / 2 - textHeight * h / 2, w / 2 - w * leftRightMargin, textHeight * h);
       else
          textRect = CGRectMake(w * leftRightMargin, h / 2 - textHeight * h / 2, w / 2 - leftRightMargin * w, textHeight * h);
    } else
