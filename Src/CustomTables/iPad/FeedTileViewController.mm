@@ -395,10 +395,10 @@ using CernAPP::ControllerMode;
          else
             pageToUpdate = rightPage;
 
-         [pageToUpdate setThumbnail : downloader.image forTile : indexPath.section % 6];
+         [pageToUpdate setThumbnail : downloader.image forTile : indexPath.section - pageToUpdate.pageRange.location];
       } else {
          if (currPage.pageNumber == page)
-            [currPage setThumbnail : downloader.image forTile : indexPath.section % 6];
+            [currPage setThumbnail : downloader.image forTile : indexPath.section - currPage.pageRange.location];
       }
    }
    
@@ -438,10 +438,10 @@ using CernAPP::ControllerMode;
          else
             pageToUpdate = rightPage;
 
-         [pageToUpdate setThumbnail : article.image forTile : indexPath.section % 6];
+         [pageToUpdate setThumbnail : article.image forTile : indexPath.section - pageToUpdate.pageRange.location];
       } else {
          if (currPage.pageNumber == page)
-            [currPage setThumbnail : article.image forTile : indexPath.section % 6];
+            [currPage setThumbnail : article.image forTile : indexPath.section - currPage.pageRange.location];
       }
    }
    
@@ -556,6 +556,11 @@ using CernAPP::ControllerMode;
       }
       
       [allArticles addObject : weekData];
+      [allArticles addObject : weekData];
+      [allArticles addObject : weekData];
+      [allArticles addObject : weekData];
+      [allArticles addObject : weekData];
+      [allArticles addObject : weekData];      
       //TODO: add more weekData to test bulletin with multiple pages.
    }
 }
