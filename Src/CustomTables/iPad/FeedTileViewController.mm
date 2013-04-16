@@ -556,12 +556,6 @@ using CernAPP::ControllerMode;
       }
       
       [allArticles addObject : weekData];
-      [allArticles addObject : weekData];
-      [allArticles addObject : weekData];
-      [allArticles addObject : weekData];
-      [allArticles addObject : weekData];
-      [allArticles addObject : weekData];      
-      //TODO: add more weekData to test bulletin with multiple pages.
    }
 }
 
