@@ -12,9 +12,13 @@
 
 + (CGFloat) minImageSize;
 
+@property (nonatomic) BOOL wideImageOnTopHint;
+@property (nonatomic) BOOL squareImageOnLeftHint;
+
 //Thumbnail sizes must be >= minImageSize.
 //Returns YES if image is big enough, otherwise NO.
 - (BOOL) setThumbnailImage : (UIImage *) thumbnail;
+- (BOOL) hasThumbnailImage;
 - (void) setTileText : (NSString *) text;
 
 - (void) layoutContents;

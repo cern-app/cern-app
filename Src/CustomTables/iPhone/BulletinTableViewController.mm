@@ -95,38 +95,6 @@
    [self.aggregator refreshAllFeeds];
 }
 
-#pragma mark - Aux. functions.
-
-//________________________________________________________________________________________
-- (NSString *) titleForIssue : (NSUInteger) index
-{
-   assert(index < bulletins.count && "titleForIssue:, parameter 'index' is out of bounds");
-
-   NSArray * const articles = (NSArray *)bulletins[index];
-   assert(articles.count != 0 && "titleForIssue:, not articles found");
-
-   //Set the title for a bulletin - "Week " + date of the week beginning day for this article.
-   MWFeedItem * const latestArticle = (MWFeedItem *)articles[articles.count - 1];
-
-   //Formatter to create a string representation.
-   NSDateFormatter * const dateFormatter = [[NSDateFormatter alloc] init];
-   dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-
-   //Weekday of the article's date
-   NSDateComponents * const dateComponents = [[NSCalendar currentCalendar] components : NSWeekdayCalendarUnit fromDate : latestArticle.date];
-
-   NSString *issueDateString = nil;
-   if (dateComponents.weekday > 1) {
-      NSDate * const firstDay = [latestArticle.date dateByAddingTimeInterval : -(dateComponents.weekday - 1) * 24 * 60 * 60];
-      issueDateString = [dateFormatter stringFromDate:firstDay];
-   } else {
-      issueDateString = [dateFormatter stringFromDate : latestArticle.date];
-   }
-   
-   return [NSString stringWithFormat : @"Week %@", issueDateString];
-}
-
-
 #pragma mark - UITableViewDataSource.
 
 //________________________________________________________________________________________
@@ -166,7 +134,7 @@
 
    NewsTableViewCell * const newsCell = (NewsTableViewCell *)cell;
    UIImage * const image = [thumbnails objectForKey : indexPath];
-   [newsCell setTitle : [self titleForIssue : row] image : image];
+   [newsCell setTitle : CernAPP::BulletinTitleForWeek((NSArray *)bulletins[row]) image : image];
 
    if (!image)
       [self startIconDownloadForIndexPath : indexPath];
@@ -185,7 +153,8 @@
    assert(row >= 0 && row < bulletins.count && "tableView:heightForRowAtIndexPath:, index is out of bounds");
 
    UIImage * const image = [thumbnails objectForKey : [NSNumber numberWithInteger : row]];
-   return [NewsTableViewCell calculateCellHeightWithText : [self titleForIssue : row] image : image];
+   NSString * const title = CernAPP::BulletinTitleForWeek((NSArray *)bulletins[row]);
+   return [NewsTableViewCell calculateCellHeightWithText : title image : image];
 }
 
 #pragma mark - RSSAggregatorDelegate methods
@@ -285,7 +254,7 @@
    UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName : @"iPhone" bundle : nil];
    BulletinIssueTableViewController * const vc = [mainStoryboard instantiateViewControllerWithIdentifier : CernAPP::BulletinIssueTableControllerID];
    vc.tableData = bulletins[indexPath.row];
-   vc.issueID = [self titleForIssue : indexPath.row];
+   vc.issueID = CernAPP::BulletinTitleForWeek((NSArray *)bulletins[indexPath.row]);
    [self.navigationController pushViewController : vc animated : YES];
 
    [tableView deselectRowAtIndexPath : indexPath animated : NO];
@@ -386,3 +355,32 @@
 }
 
 @end
+
+namespace CernAPP {
+
+//________________________________________________________________________________________
+NSString *BulletinTitleForWeek(NSArray *articles)
+{
+   assert(articles.count != 0 && "BulletinDateForWeek, parameter 'articles' is nil or an empty array");
+   //Set the title for a bulletin - "Week " + date of the week beginning day for this article.
+   MWFeedItem * const latestArticle = (MWFeedItem *)articles[articles.count - 1];
+
+   //Formatter to create a string representation.
+   NSDateFormatter * const dateFormatter = [[NSDateFormatter alloc] init];
+   dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+
+   //Weekday of the article's date
+   NSDateComponents * const dateComponents = [[NSCalendar currentCalendar] components : NSWeekdayCalendarUnit fromDate : latestArticle.date];
+
+   NSString *issueDateString = nil;
+   if (dateComponents.weekday > 1) {
+      NSDate * const firstDay = [latestArticle.date dateByAddingTimeInterval : -(dateComponents.weekday - 1) * 24 * 60 * 60];
+      issueDateString = [dateFormatter stringFromDate:firstDay];
+   } else {
+      issueDateString = [dateFormatter stringFromDate : latestArticle.date];
+   }
+   
+   return [NSString stringWithFormat : @"Week %@", issueDateString];
+}
+
+}

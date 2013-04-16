@@ -11,3 +11,10 @@
 @interface BulletinTableViewController : NewsTableViewController
 
 @end
+
+namespace CernAPP
+{
+
+NSString *BulletinTitleForWeek(NSArray *weekData);
+
+}

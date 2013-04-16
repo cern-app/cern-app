@@ -8,6 +8,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#import "BulletinTableViewController.h"
 #import "BulletinIssueTileView.h"
 #import "BulletinPageView.h"
 
@@ -61,6 +62,8 @@ const CGFloat tileShift = 0.2f;
 {
    assert(items != nil && "setPageItems:startingFrom:, parameter 'feedItems' is nil");
    assert(index < items.count && "setPageItems:startingFrom:, parameter 'index' is out of bounds");
+   assert(index + pageRange.length <= items.count &&
+          "setPageItems:startingFrom:, pageRange is out of bounds");
 
    //Items in the 'items' array are arrays with MWFeedItems sorted by the date.
    if (!tiles)
@@ -71,6 +74,11 @@ const CGFloat tileShift = 0.2f;
       [tiles removeAllObjects];
    }
    
+   assert(pageRange.length <= 3 && "setPageItems:startingFrom:, the page range > 3 is not supported");
+   //A primitive attempt to make a tile's layout more interesting.
+   //[0] == wideImageOnTop, [1] == squareImageOnLeft
+   const BOOL tileHints[][2] = {{YES, YES}, {NO, NO}, {YES, YES}};
+   
    pageRange = [BulletinPageView suggestRangeForward : items startingFrom : index];
 
    for (NSUInteger i = 0; i < pageRange.length; ++i, ++index) {
@@ -78,7 +86,14 @@ const CGFloat tileShift = 0.2f;
       //Create a tile.
       BulletinIssueTileView * const newTile = [[BulletinIssueTileView alloc] initWithFrame : CGRect()];
       //Set the image if any.
-      //Set the text ('Week of xxxx : yyy articles').
+      //Set the text.
+      assert([items[index] isKindOfClass:[NSArray class]] &&
+             "setPageItems:startingFrom:, array element has a wrong type");
+      [newTile setTileText : CernAPP::BulletinTitleForWeek((NSArray *)items[index])];
+      
+      newTile.wideImageOnTopHint = tileHints[i][0];
+      newTile.squareImageOnLeftHint = tileHints[i][1];
+
       [self addSubview : newTile];
       [tiles addObject : newTile];
    }
@@ -112,15 +127,15 @@ const CGFloat tileShift = 0.2f;
 //________________________________________________________________________________________
 - (void) layoutTiles
 {
-   assert(tiles.count <= 3 && "layoutTiles, unexpected number of tiles");
+   assert(tiles.count > 0 && tiles.count <= 3 && "layoutTiles, unexpected number of tiles on a page");
    //Depending on orientation and the pageRange, layout the slides.
    CGRect frame = self.frame;
    frame.origin = CGPoint();
    
    if (tiles.count == 1) {
-      UIView * const tile = (UIView *)tiles[0];
+      BulletinIssueTileView * const tile = (BulletinIssueTileView *)tiles[0];
       tile.frame = frame;
-      [tile setNeedsDisplay];
+      [tile layoutContents];
       return;
    }
    
@@ -145,7 +160,7 @@ const CGFloat tileShift = 0.2f;
    }
    
    for (BulletinIssueTileView *tile in tiles)
-      [tile setNeedsDisplay];
+      [tile layoutContents];
 }
 
 //Animations:
