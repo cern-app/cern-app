@@ -190,6 +190,7 @@
 		70B7879216B9692600048CC9 /* WebcastsGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B7879116B9692600048CC9 /* WebcastsGridViewController.mm */; };
 		70BC9A5B171E98F900BA12C1 /* TileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC9A5A171E98F900BA12C1 /* TileViewController.mm */; };
 		70BC9A5E171EBCFD00BA12C1 /* NewsFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC9A5D171EBCFD00BA12C1 /* NewsFeedViewController.mm */; };
+		70BC9A61171ECDB800BA12C1 /* BulletinFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC9A60171ECDB800BA12C1 /* BulletinFeedViewController.mm */; };
 		70BF705F16C29C80002CEDC6 /* Twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 70BF705E16C29C80002CEDC6 /* Twitter.png */; };
 		70BF706116C29DA8002CEDC6 /* Facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 70BF706016C29DA8002CEDC6 /* Facebook.png */; };
 		70BF706316C29E54002CEDC6 /* Email-01.png in Resources */ = {isa = PBXBuildFile; fileRef = 70BF706216C29E54002CEDC6 /* Email-01.png */; };
@@ -491,6 +492,8 @@
 		70BC9A5A171E98F900BA12C1 /* TileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TileViewController.mm; sourceTree = "<group>"; };
 		70BC9A5C171EBCFD00BA12C1 /* NewsFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsFeedViewController.h; sourceTree = "<group>"; };
 		70BC9A5D171EBCFD00BA12C1 /* NewsFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsFeedViewController.mm; sourceTree = "<group>"; };
+		70BC9A5F171ECDB800BA12C1 /* BulletinFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinFeedViewController.h; sourceTree = "<group>"; };
+		70BC9A60171ECDB800BA12C1 /* BulletinFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinFeedViewController.mm; sourceTree = "<group>"; };
 		70BE54AF169AFC2900A3E1B6 /* CERN-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CERN-Prefix.pch"; sourceTree = "<group>"; };
 		70BF705E16C29C80002CEDC6 /* Twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Twitter.png; sourceTree = "<group>"; };
 		70BF706016C29DA8002CEDC6 /* Facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Facebook.png; sourceTree = "<group>"; };
@@ -1116,6 +1119,8 @@
 				70BC9A5A171E98F900BA12C1 /* TileViewController.mm */,
 				70BC9A5C171EBCFD00BA12C1 /* NewsFeedViewController.h */,
 				70BC9A5D171EBCFD00BA12C1 /* NewsFeedViewController.mm */,
+				70BC9A5F171ECDB800BA12C1 /* BulletinFeedViewController.h */,
+				70BC9A60171ECDB800BA12C1 /* BulletinFeedViewController.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1449,6 +1454,7 @@
 				70F5FA1D1716F9ED005A7934 /* BulletinPageView.mm in Sources */,
 				70BC9A5B171E98F900BA12C1 /* TileViewController.mm in Sources */,
 				70BC9A5E171EBCFD00BA12C1 /* NewsFeedViewController.mm in Sources */,
+				70BC9A61171ECDB800BA12C1 /* BulletinFeedViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
