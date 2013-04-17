@@ -4,11 +4,15 @@
 
 @implementation BulletinIssueViewController
 
+#pragma mark - Lifecycle.
+
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
    return self = [super initWithCoder : aDecoder];
 }
+
+#pragma mark - Overriders for UIViewController.
 
 //________________________________________________________________________________________
 - (void) viewDidLoad
@@ -26,6 +30,14 @@
    [super viewWillAppear : animated];
    
    self.navigationItem.rightBarButtonItem = nil;
+}
+
+#pragma mark - Aux.
+
+//________________________________________________________________________________________
+- (void) setData : (NSArray *) data
+{
+   dataItems = [data mutableCopy];
 }
 
 #pragma mark - PageController.
