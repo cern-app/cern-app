@@ -67,3 +67,4 @@ enum class ControllerMode : unsigned char {
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
 @end
+

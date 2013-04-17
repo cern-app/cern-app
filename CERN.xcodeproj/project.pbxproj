@@ -188,6 +188,7 @@
 		70B7878D16B951B100048CC9 /* zoomin.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B7878B16B951B100048CC9 /* zoomin.png */; };
 		70B7878E16B951B100048CC9 /* zoomout.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B7878C16B951B100048CC9 /* zoomout.png */; };
 		70B7879216B9692600048CC9 /* WebcastsGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B7879116B9692600048CC9 /* WebcastsGridViewController.mm */; };
+		70BC9A5B171E98F900BA12C1 /* TileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC9A5A171E98F900BA12C1 /* TileViewController.mm */; };
 		70BF705F16C29C80002CEDC6 /* Twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 70BF705E16C29C80002CEDC6 /* Twitter.png */; };
 		70BF706116C29DA8002CEDC6 /* Facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 70BF706016C29DA8002CEDC6 /* Facebook.png */; };
 		70BF706316C29E54002CEDC6 /* Email-01.png in Resources */ = {isa = PBXBuildFile; fileRef = 70BF706216C29E54002CEDC6 /* Email-01.png */; };
@@ -485,6 +486,8 @@
 		70B7878C16B951B100048CC9 /* zoomout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoomout.png; sourceTree = "<group>"; };
 		70B7879016B9692600048CC9 /* WebcastsGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsGridViewController.h; sourceTree = "<group>"; };
 		70B7879116B9692600048CC9 /* WebcastsGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsGridViewController.mm; sourceTree = "<group>"; };
+		70BC9A59171E98F900BA12C1 /* TileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileViewController.h; sourceTree = "<group>"; };
+		70BC9A5A171E98F900BA12C1 /* TileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TileViewController.mm; sourceTree = "<group>"; };
 		70BE54AF169AFC2900A3E1B6 /* CERN-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CERN-Prefix.pch"; sourceTree = "<group>"; };
 		70BF705E16C29C80002CEDC6 /* Twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Twitter.png; sourceTree = "<group>"; };
 		70BF706016C29DA8002CEDC6 /* Facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Facebook.png; sourceTree = "<group>"; };
@@ -1106,6 +1109,8 @@
 				7072B3291714699700515DA8 /* BulletinIssueTileView.mm */,
 				70F5FA1B1716F9ED005A7934 /* BulletinPageView.h */,
 				70F5FA1C1716F9ED005A7934 /* BulletinPageView.mm */,
+				70BC9A59171E98F900BA12C1 /* TileViewController.h */,
+				70BC9A5A171E98F900BA12C1 /* TileViewController.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1437,6 +1442,7 @@
 				70E69AC4170EE81F00384523 /* FeedCache.mm in Sources */,
 				7072B32A1714699700515DA8 /* BulletinIssueTileView.mm in Sources */,
 				70F5FA1D1716F9ED005A7934 /* BulletinPageView.mm in Sources */,
+				70BC9A5B171E98F900BA12C1 /* TileViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
