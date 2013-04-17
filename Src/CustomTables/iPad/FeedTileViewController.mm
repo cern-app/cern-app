@@ -495,7 +495,6 @@ using CernAPP::ControllerMode;
 
 // Load images for all onscreen rows (if not done yet) when scrolling is finished
 
-
 //________________________________________________________________________________________
 - (void) scrollViewDidEndDragging : (UIScrollView *) aScrollView willDecelerate : (BOOL) decelerate
 {

@@ -11,19 +11,21 @@
 //TileViewController is responsible for geometry,
 //rotation animations, and "infinite scroll view" trick.
 
-@interface TileViewController : UIViewController {
-@private
-   IBOutlet SlideScrollView *scrollView;
+@interface TileViewController : UIViewController {  
 @protected
+   IBOutlet SlideScrollView *scrollView;
    NSMutableArray *dataItems;
+   NSUInteger nPages;
    UIView<TiledPage> *leftPage;
    UIView<TiledPage> *currPage;
    UIView<TiledPage> *rightPage;
 }
 
-//To be overriden: the page became
-//visible, do any 'lazy' load here.
-- (void) loadVisiblePageData;
+- (void) setPagesData;//To be overriden.
+- (void) loadVisiblePageData;//To be overriden.
+- (void) layoutPages : (BOOL) layoutTiles;
+- (void) adjustPages;
+- (NSRange) findItemRangeForPage : (NSUInteger) page;
 
 //ECSlidingViewController:
 - (IBAction) revealMenu : (id) sender;
