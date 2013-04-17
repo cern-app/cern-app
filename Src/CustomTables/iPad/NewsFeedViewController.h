@@ -17,6 +17,11 @@
 @interface NewsFeedViewController : TileViewController<HUDRefreshProtocol, RSSAggregatorDelegate, PageController,
                                                        ImageDownloaderDelegate, ConnectionController,
                                                        UIScrollViewDelegate>
+{
+@protected
+   NSMutableDictionary *imageDownloaders;
+   NSArray *feedCache;
+}
 
 //Aux.
 - (void) createPages;
@@ -30,6 +35,8 @@
 //HUD/GUI
 @property (nonatomic, strong) MBProgressHUD *noConnectionHUD;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
+
+- (void) hideNavBarSpinner;
 
 
 @end

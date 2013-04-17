@@ -19,10 +19,8 @@
 #import "FeedCache.h"
 
 @implementation NewsFeedViewController {
-   NSMutableDictionary *imageDownloaders;
    BOOL viewDidAppear;
- 
-   NSArray *feedCache;
+
    UIActivityIndicatorView *navBarSpinner;
 }
 
@@ -49,6 +47,12 @@
       [self doInitController];
 
    return self;
+}
+
+//________________________________________________________________________________________
+- (void) dealloc
+{
+   [[NSNotificationCenter defaultCenter] removeObserver : self];
 }
 
 #pragma mark - Overriders for UIViewController methods.
