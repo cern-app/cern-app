@@ -198,6 +198,8 @@
       
 
          //May be, we already have a downloader for this item?
+         
+         //TODO: row and section must be i and page, not page and i.
          NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : visiblePage inSection : i];//Using absolute index i, not relative (on a page).
          ImageDownloader *downloader = (ImageDownloader *)imageDownloaders[indexPath];
          
