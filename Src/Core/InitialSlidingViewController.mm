@@ -15,6 +15,7 @@
 #import "InitialSlidingViewController.h"
 #import "MenuNavigationController.h"
 #import "NewsTableViewController.h"
+#import "NewsFeedViewController.h"
 #import "FeedTileViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "GUIHelpers.h"
@@ -87,9 +88,9 @@
           "loadFirstNewsFeed:, 'Url' not found or has a wrong type");
 
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      assert([aController isKindOfClass : [FeedTileViewController class]] &&
+      assert([aController isKindOfClass : [NewsFeedViewController class]] &&
              "loadFirstNewsFeed:, controller has a wrong type");
-      FeedTileViewController * const tileController = (FeedTileViewController *)aController;
+      NewsFeedViewController * const tileController = (NewsFeedViewController *)aController;
       tileController.navigationItem.title = (NSString *)feedDict[@"Name"];
       tileController.feedStoreID = (NSString *)feedDict[@"Name"];
       //TODO: Cache ID for a feed.
@@ -122,17 +123,20 @@
 
    assert(storyboard != nil && "viewDidLoad, storyboard is nil");
 
-   MenuNavigationController * const top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
-                                                                       CernAPP::TableNavigationControllerNewsID];
+   MenuNavigationController * top = nil;
 
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+      top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
+                                                    CernAPP::TableNavigationControllerNewsID];
       assert([top.topViewController isKindOfClass : [NewsTableViewController class]] &&
              "viewDidLoad:, top view controller is either nil or has a wrong type");
       //The very first view a user see - is a news table. We create a navigation controller
       //with such a table here, also, we have to add a news feed here.
       [self loadFirstNewsFeed : (NewsTableViewController *)top.topViewController];
    } else {
-      assert([top.topViewController isKindOfClass : [FeedTileViewController class]] &&
+      top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
+                                                    CernAPP::FeedTileViewControllerID];
+      assert([top.topViewController isKindOfClass : [NewsFeedViewController class]] &&
              "viewDidLoad:, top view controller is either nil or has a wrong type");
       [self loadFirstNewsFeed : top.topViewController];
    }

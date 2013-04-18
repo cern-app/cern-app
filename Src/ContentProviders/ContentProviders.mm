@@ -2,6 +2,7 @@
 
 #import "StaticInfoScrollViewController.h"
 #import "BulletinTableViewController.h"
+#import "BulletinFeedViewController.h"
 #import "EventDisplayViewController.h"
 #import "VideosGridViewController.h"
 #import "MenuNavigationController.h"
@@ -9,6 +10,7 @@
 #import "LiveEventTableController.h"
 #import "NewsTableViewController.h"
 #import "ECSlidingViewController.h"
+#import "NewsFeedViewController.h"
 #import "FeedTileViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "AppSettingsController.h"
@@ -112,13 +114,12 @@ using CernAPP::ControllerMode;
       nt.isTwitterFeed = isTwitterFeed;
    } else if (!isTwitterFeed) {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
-                                                                                   TableNavigationControllerNewsID];
-      assert([navController.topViewController isKindOfClass : [FeedTileViewController class]] &&
+                                                                         FeedTileViewControllerID];
+      assert([navController.topViewController isKindOfClass : [NewsFeedViewController class]] &&
              "loadControllerTo:, top view controller is either nil or has a wrong type");
-      FeedTileViewController * const nt = (FeedTileViewController *)navController.topViewController;
+      NewsFeedViewController * const nt = (NewsFeedViewController *)navController.topViewController;
       nt.navigationItem.title = feedName;
       nt.feedStoreID = feedName;
-      nt.mode = ControllerMode::feedView;
       [nt.aggregator addFeedForURL : [NSURL URLWithString : feed]];
    } else {
       //twitter feed on iPad.
@@ -544,12 +545,11 @@ using CernAPP::ControllerMode;
    
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
-                                                                                   TableNavigationControllerNewsID];
-      assert([navController.topViewController isKindOfClass : [FeedTileViewController class]] &&
+                                                                         BulletinTileViewControllerID];
+      assert([navController.topViewController isKindOfClass : [BulletinFeedViewController class]] &&
              "loadControllerTo:, top view controller is either nil or has a wrong type");
-      FeedTileViewController * const nt = (FeedTileViewController *)navController.topViewController;
+      BulletinFeedViewController * const nt = (BulletinFeedViewController *)navController.topViewController;
       nt.feedStoreID = @"CERN_Bulletin";
-      nt.mode = ControllerMode::bulletinView;
       [nt.aggregator addFeedForURL : [NSURL URLWithString : url]];
    } else {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : BulletinTableViewControllerID];

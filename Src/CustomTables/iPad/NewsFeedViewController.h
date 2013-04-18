@@ -23,6 +23,9 @@
    NSArray *feedCache;
 }
 
+//Page controller.
+- (IBAction) reloadPageFromRefreshControl;
+
 //Aux.
 - (void) createPages;
 - (void) addTileTapObserver;

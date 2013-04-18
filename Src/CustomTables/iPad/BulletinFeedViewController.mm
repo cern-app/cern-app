@@ -1,7 +1,10 @@
 #import <cstdlib>
 
+#import "BulletinIssueViewController.h"
+#import "BulletinTableViewController.h"
 #import "BulletinFeedViewController.h"
 #import "NewsTableViewController.h"
+#import "StoryboardIdentifiers.h"
 #import "BulletinIssueTileView.h"
 #import "BulletinPageView.h"
 #import "MWFeedItem.h"
@@ -11,16 +14,12 @@
 
 #pragma mark - Lifecycle.
 
-- (void) doInitController
-{
-   imageDownloaders = nil;
-}
-
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
-   if (self = [super initWithCoder : aDecoder])
-      [self doInitController];
+   if (self = [super initWithCoder : aDecoder]) {
+      imageDownloaders = nil;
+   }
 
    return self;
 }
@@ -33,6 +32,7 @@
 - (void) allFeedsDidLoadForAggregator : (RSSAggregator *) anAggregator
 {
 #pragma unused(anAggregator)
+
    //In this mode we always write a cache into the storage.
    assert(self.feedStoreID.length && "allFeedDidLoadForAggregator:, feedStoreID is invalid");
    CernAPP::WriteFeedCache(self.feedStoreID, feedCache, self.aggregator.allArticles);
@@ -55,7 +55,8 @@
 //________________________________________________________________________________________
 - (void) loadVisiblePageData
 {
-   assert(feedCache == nil && "loadVisiblePageData, images loaded while cache is in use");
+   if (feedCache != nil)//Do not load images for a cache - we are refreshing the feed at the moment.
+      return;
 
    const NSUInteger visiblePageIndex = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
    UIView<TiledPage> *visiblePage = nil;
@@ -262,7 +263,18 @@
 //________________________________________________________________________________________
 - (void) bulletinIssueSelected : (NSNotification *) notification
 {
-#pragma unused(notification)
+   assert(notification != nil && "bulletinIssueSelected:, parameter 'notification' is nil");
+   assert([notification.object isKindOfClass : [NSNumber class]] &&
+          "articleSelected:, an object in a notification has a wrong type");
+   
+   const NSUInteger issueNumber = [(NSNumber *)notification.object unsignedIntegerValue];
+   assert(issueNumber < dataItems.count && "bulletinIssueSelected:, issue number is out of bounds");
+   BulletinIssueViewController * const nextController =
+                              (BulletinIssueViewController *)[self.storyboard instantiateViewControllerWithIdentifier : CernAPP::BulletinIssueViewControllerID];
+
+   [nextController setData : (NSArray *)dataItems[issueNumber]];
+   nextController.navigationItem.title = CernAPP::BulletinTitleForWeek((NSArray *)dataItems[issueNumber]);
+   [self.navigationController pushViewController : nextController animated : YES];
 }
 
 #pragma mark - Aux.

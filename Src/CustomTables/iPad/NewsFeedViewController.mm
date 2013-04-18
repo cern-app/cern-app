@@ -185,7 +185,8 @@
 //________________________________________________________________________________________
 - (void) loadVisiblePageData
 {
-   assert(feedCache == nil && "loadImagesForVisiblePage, images loaded while cache is in use");
+   if (feedCache)//We do not load images for a cached feed, since right now we are refreshing the feed.
+      return;
    
    const NSUInteger visiblePage = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
 

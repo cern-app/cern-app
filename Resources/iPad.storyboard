@@ -28,7 +28,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yqa-CF-VA2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1984" y="-2084"/>
+            <point key="canvasLocation" x="2001" y="-2084"/>
         </scene>
         <!--Article Detail View Controller-->
         <scene sceneID="PXC-fj-nKg">
@@ -62,12 +62,12 @@
                     </connections>
                 </webView>
             </objects>
-            <point key="canvasLocation" x="2919" y="-2068"/>
+            <point key="canvasLocation" x="2975" y="-2084"/>
         </scene>
         <!--Menu Navigation Controller-->
         <scene sceneID="lsm-n1-6DS">
             <objects>
-                <navigationController storyboardIdentifier="TableNavigationControllerNewsID" definesPresentationContext="YES" id="vuC-nA-Hru" customClass="MenuNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="FeedTileViewControllerID" definesPresentationContext="YES" id="vuC-nA-Hru" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="PiZ-K9-22d">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -80,10 +80,10 @@
             </objects>
             <point key="canvasLocation" x="2001" y="-910"/>
         </scene>
-        <!--Feed Tile View Controller-->
+        <!--News Feed View Controller-->
         <scene sceneID="Wzb-Ro-CJz">
             <objects>
-                <viewController id="lV2-nJ-7jY" customClass="FeedTileViewController" sceneMemberID="viewController">
+                <viewController id="lV2-nJ-7jY" customClass="NewsFeedViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zv5-z5-Gmm">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -135,12 +135,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HwP-KI-nEU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1793" y="502"/>
+            <point key="canvasLocation" x="2001" y="350"/>
         </scene>
-        <!--Feed Tile View Controller-->
+        <!--Bulletin Issue View Controller-->
         <scene sceneID="FAc-tl-leh">
             <objects>
-                <viewController storyboardIdentifier="BulletinIssueViewControllerID" id="s0v-89-ZlG" customClass="FeedTileViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BulletinIssueViewControllerID" id="s0v-89-ZlG" customClass="BulletinIssueViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AD0-rd-CiW">
                         <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -166,7 +166,66 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JNS-yb-Ht2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2713" y="507"/>
+            <point key="canvasLocation" x="2998" y="350"/>
+        </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="PXB-hP-k2n">
+            <objects>
+                <navigationController storyboardIdentifier="BulletinTileViewControllerID" definesPresentationContext="YES" id="EMI-sL-0NS" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="DpK-ej-iXd">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="L8H-w6-D96" kind="relationship" relationship="rootViewController" id="uZB-ed-4sN"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Gtu-Mw-yc4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2001" y="1505"/>
+        </scene>
+        <!--Bulletin Feed View Controller-->
+        <scene sceneID="3rd-tY-ms5">
+            <objects>
+                <viewController id="L8H-w6-D96" customClass="BulletinFeedViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="clV-C6-4KP">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2jb-cd-JYO" customClass="SlideScrollView">
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="delegate" destination="L8H-w6-D96" id="9Vg-U5-xQ7"/>
+                                </connections>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="2jb-cd-JYO" firstAttribute="trailing" secondItem="clV-C6-4KP" secondAttribute="trailing" type="default" id="YMs-Ue-3Jy"/>
+                            <constraint firstItem="2jb-cd-JYO" firstAttribute="top" secondItem="clV-C6-4KP" secondAttribute="top" type="default" id="jSF-BA-ELc"/>
+                            <constraint firstItem="2jb-cd-JYO" firstAttribute="leading" secondItem="clV-C6-4KP" secondAttribute="leading" type="default" id="kYN-kj-COY"/>
+                            <constraint firstItem="2jb-cd-JYO" firstAttribute="bottom" secondItem="clV-C6-4KP" secondAttribute="bottom" type="default" id="nLd-fj-niO"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="aKj-R0-bgS">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="ubC-yG-dVp">
+                            <connections>
+                                <action selector="revealMenu:" destination="L8H-w6-D96" id="AUA-9Z-GUa"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="D1G-Az-C5Z">
+                            <connections>
+                                <action selector="reloadPageFromRefreshControl" destination="L8H-w6-D96" id="Qge-9G-SZm"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="scrollView" destination="2jb-cd-JYO" id="3Fj-4T-mrC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Luy-Ua-1Ux" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2993" y="1505"/>
         </scene>
     </scenes>
     <resources>
@@ -180,16 +239,14 @@
                 <relationship kind="outlet" name="rdbView" candidateClass="UIWebView"/>
             </relationships>
         </class>
+        <class className="BulletinFeedViewController" superclassName="NewsFeedViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BulletinFeedViewController.h"/>
+        </class>
+        <class className="BulletinIssueViewController" superclassName="NewsFeedViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BulletinIssueViewController.h"/>
+        </class>
         <class className="ECSlidingViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ECSlidingViewController.h"/>
-        </class>
-        <class className="FeedTileViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FeedTileViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="reloadPageFromRefreshControl"/>
-                <relationship kind="action" name="revealMenu:"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="SlideScrollView"/>
-            </relationships>
         </class>
         <class className="InitialSlidingViewController" superclassName="ECSlidingViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/InitialSlidingViewController.h"/>
@@ -206,8 +263,21 @@
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
         </class>
+        <class className="NewsFeedViewController" superclassName="TileViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NewsFeedViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="reloadPageFromRefreshControl"/>
+            </relationships>
+        </class>
         <class className="SlideScrollView" superclassName="UIScrollView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SlideScrollView.h"/>
+        </class>
+        <class className="TileViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TileViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="revealMenu:"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="SlideScrollView"/>
+            </relationships>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
