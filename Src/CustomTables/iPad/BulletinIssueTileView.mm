@@ -49,7 +49,7 @@ bool IsWideView(UIView *view)
 //________________________________________________________________________________________
 + (CGFloat) minImageSize
 {
-   return 100.f;
+   return 300.f;
 }
 
 //________________________________________________________________________________________
@@ -80,18 +80,16 @@ bool IsWideView(UIView *view)
 }
 
 //________________________________________________________________________________________
-- (BOOL) setThumbnailImage : (UIImage *) thumbnail
+- (void) setThumbnailImage : (UIImage *) thumbnail
 {
    assert(thumbnail != nil && "setThumbnailImage:, parameter 'thumbnail' is nil");
 
    const CGSize imSize = thumbnail.size;
    if (imSize.width < [self.class minImageSize] || imSize.height < [self.class minImageSize])
-      return NO;
+      return;
 
    thumbnailView.image = thumbnail;
    [self layoutContents];
-   
-   return YES;
 }
 
 //________________________________________________________________________________________

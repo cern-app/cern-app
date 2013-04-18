@@ -247,7 +247,7 @@
 
    MWFeedItem * const article = (MWFeedItem *)dataItems[indexPath.section];
    //We should not load any image more when once.
-   assert(article.image == nil && "imageDidLoad:, image was loaded already");
+   //assert(article.image == nil && "imageDidLoad:, image was loaded already");
    
    ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath];
    assert(downloader != nil && "imageDidLoad:, no downloader found for the given index path");

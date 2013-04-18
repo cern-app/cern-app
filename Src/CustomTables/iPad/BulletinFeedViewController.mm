@@ -57,6 +57,8 @@
 {
    if (feedCache != nil)//Do not load images for a cache - we are refreshing the feed at the moment.
       return;
+   
+   const CGFloat minImageSize = [BulletinIssueTileView minImageSize];
 
    const NSUInteger visiblePageIndex = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
    UIView<TiledPage> *visiblePage = nil;
@@ -78,9 +80,12 @@
       bool imageFound = false;
       for (MWFeedItem *article in articles) {
          if (article.image) {
-            imageFound = true;
-            [visiblePage setThumbnail : article.image forTile : i - range.location];
-            break;
+            const CGSize imageSize = article.image.size;
+            if (imageSize.width >= minImageSize && imageSize.height >= minImageSize) {
+               imageFound = true;
+               [visiblePage setThumbnail : article.image forTile : i - range.location];
+               break;
+            }
          }
       }
 
@@ -92,6 +97,9 @@
       
       NSUInteger articleIndex = 0;
       for (MWFeedItem *article in articles) {
+         if (article.image)//We skip this image (it was checked in the first loop, but seems to be not large enough).
+            continue;
+      
          NSIndexPath * const key = [NSIndexPath indexPathForRow : i inSection : visiblePageIndex];
          ImageDownloader * downloader = (ImageDownloader *)imageDownloaders[key];
          if (downloader)//We are already downloading image for this tile.
@@ -182,17 +190,47 @@
    assert(articleIndex < articles.count && "imageDidLoad:, article index is out of bounds");
    
    NSIndexPath * const key2D = [NSIndexPath indexPathForRow : tileIndex inSection : pageIndex];
-   ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key2D];
+   ImageDownloader *downloader = (ImageDownloader *)imageDownloaders[key2D];
    assert(downloader != nil && "imageDidLoad:, downloader not found for index path");
-   MWFeedItem * const article = (MWFeedItem *)articles[articleIndex];
 
-   if (!article.image)//Yes, it can be also downloaded by the BulletinIssueViewController. Ufff.
-      article.image = downloader.image;
-
+   UIImage * const newImage = downloader.image;
    [imageDownloaders removeObjectForKey : key2D];
    
-   if (pageToUpdate)
-      [pageToUpdate setThumbnail:article.image forTile : tileIndex - pageRange.location];
+   bool imageFound = false;
+   if (newImage) {
+      MWFeedItem * const article = (MWFeedItem *)articles[articleIndex];
+      if (!article.image)//Yes, it can be also downloaded by the BulletinIssueViewController. Ufff.
+         article.image = newImage;
+
+      const CGFloat minSize = [BulletinIssueTileView minImageSize];
+      const CGSize imageSize = newImage.size;
+   
+      if (imageSize.width >= minSize && imageSize.height >= minSize) {
+         imageFound = true;
+         //Ok, we have a good image!
+         if (pageToUpdate)
+            [pageToUpdate setThumbnail : newImage forTile : tileIndex - pageRange.location];
+      }
+   }
+
+   if (!imageFound && pageToUpdate) {
+      for (NSUInteger i = articleIndex + 1, e = articles.count; i < e; ++i) {
+         MWFeedItem * const nextArticle = (MWFeedItem *)articles[i];
+         NSString * body = nextArticle.content;
+         if (!body)
+            body = nextArticle.summary;
+         
+         if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+            downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+            const NSUInteger indices[] = {pageIndex, tileIndex, i};
+            downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
+            downloader.delegate = self;
+            [imageDownloaders setObject : downloader forKey : key2D];
+            [downloader startDownload];//Power on.
+            break;
+         }
+      }
+   }
    
    if (!imageDownloaders.count)
       imageDownloaders = nil;

@@ -19,7 +19,7 @@
 
 //Thumbnail sizes must be >= minImageSize.
 //Returns YES if image is big enough, otherwise NO.
-- (BOOL) setThumbnailImage : (UIImage *) thumbnail;
+- (void) setThumbnailImage : (UIImage *) thumbnail;
 - (BOOL) hasThumbnailImage;
 - (void) setTileText : (NSString *) text;
 
