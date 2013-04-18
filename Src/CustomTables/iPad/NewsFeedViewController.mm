@@ -162,15 +162,25 @@
 }
 
 //________________________________________________________________________________________
-- (void) aggregator : (RSSAggregator *) aggregator didFailWithError : (NSString *) errorDescription
+- (void) aggregator : (RSSAggregator *) anAggregator didFailWithError : (NSString *) errorDescription
 {
-   //TODO: error handling.
+   //TODO: test this!
+   [self lostConnection : anAggregator];
 }
 
 //________________________________________________________________________________________
-- (void) lostConnection : (RSSAggregator *) aggregator
+- (void) lostConnection : (RSSAggregator *) anAggregator
 {
-   //TODO: error handling.
+#pragma unused(anAggregator)
+   //TODO: test this!
+   CernAPP::HideSpinner(self);
+   [self hideNavBarSpinner];
+   
+   CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+
+   if (!dataItems.count)
+      CernAPP::ShowErrorHUD(self, @"No network");//TODO: better error message?
+
 }
 
 #pragma mark - Overriders for TileViewController's methods.

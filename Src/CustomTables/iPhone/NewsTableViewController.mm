@@ -349,6 +349,8 @@
    
    //Reachability reported network status change, while parser was still working.
    //Show an alert message.
+   [self hideActivityIndicators];   
+   
    CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
 
    if (!allArticles.count)
