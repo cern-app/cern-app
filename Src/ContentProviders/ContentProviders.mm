@@ -11,7 +11,6 @@
 #import "NewsTableViewController.h"
 #import "ECSlidingViewController.h"
 #import "NewsFeedViewController.h"
-#import "FeedTileViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "AppSettingsController.h"
 #import "ConnectionController.h"
@@ -29,8 +28,6 @@ void CancelConnections(UIViewController *controller)
    if ([controller respondsToSelector : @selector(cancelAnyConnections)])
       [controller performSelector : @selector(cancelAnyConnections)];
 }
-
-using CernAPP::ControllerMode;
 
 }
 

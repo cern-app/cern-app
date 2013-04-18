@@ -16,7 +16,6 @@
 #import "MenuNavigationController.h"
 #import "NewsTableViewController.h"
 #import "NewsFeedViewController.h"
-#import "FeedTileViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "GUIHelpers.h"
 

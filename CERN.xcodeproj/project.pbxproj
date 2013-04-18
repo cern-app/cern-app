@@ -213,7 +213,6 @@
 		70D98B0B16F73ABA003C42E7 /* EventDisplayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B0316F73ABA003C42E7 /* EventDisplayViewController.mm */; };
 		70D98B0C16F73ABA003C42E7 /* StaticInfoItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B0516F73ABA003C42E7 /* StaticInfoItemViewController.mm */; };
 		70D98B0D16F73ABA003C42E7 /* StaticInfoScrollViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B0716F73ABA003C42E7 /* StaticInfoScrollViewController.mm */; };
-		70D98B1116F7561E003C42E7 /* FeedTileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B1016F7561E003C42E7 /* FeedTileViewController.mm */; };
 		70D98B1416F76430003C42E7 /* FeedPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B1316F76430003C42E7 /* FeedPageView.mm */; };
 		70D98B1716F76565003C42E7 /* FeedItemTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B1616F76565003C42E7 /* FeedItemTileView.mm */; };
 		70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */; };
@@ -532,8 +531,6 @@
 		70D98B0516F73ABA003C42E7 /* StaticInfoItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoItemViewController.mm; sourceTree = "<group>"; };
 		70D98B0616F73ABA003C42E7 /* StaticInfoScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoScrollViewController.h; sourceTree = "<group>"; };
 		70D98B0716F73ABA003C42E7 /* StaticInfoScrollViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoScrollViewController.mm; sourceTree = "<group>"; };
-		70D98B0F16F7561E003C42E7 /* FeedTileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedTileViewController.h; sourceTree = "<group>"; };
-		70D98B1016F7561E003C42E7 /* FeedTileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedTileViewController.mm; sourceTree = "<group>"; };
 		70D98B1216F76430003C42E7 /* FeedPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedPageView.h; sourceTree = "<group>"; };
 		70D98B1316F76430003C42E7 /* FeedPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedPageView.mm; sourceTree = "<group>"; };
 		70D98B1516F76564003C42E7 /* FeedItemTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedItemTileView.h; sourceTree = "<group>"; };
@@ -1108,8 +1105,6 @@
 		70D98B0E16F7561E003C42E7 /* iPad */ = {
 			isa = PBXGroup;
 			children = (
-				70D98B0F16F7561E003C42E7 /* FeedTileViewController.h */,
-				70D98B1016F7561E003C42E7 /* FeedTileViewController.mm */,
 				70D98B1216F76430003C42E7 /* FeedPageView.h */,
 				70D98B1316F76430003C42E7 /* FeedPageView.mm */,
 				70D98B1516F76564003C42E7 /* FeedItemTileView.h */,
@@ -1450,7 +1445,6 @@
 				70D98B0B16F73ABA003C42E7 /* EventDisplayViewController.mm in Sources */,
 				70D98B0C16F73ABA003C42E7 /* StaticInfoItemViewController.mm in Sources */,
 				70D98B0D16F73ABA003C42E7 /* StaticInfoScrollViewController.mm in Sources */,
-				70D98B1116F7561E003C42E7 /* FeedTileViewController.mm in Sources */,
 				70D98B1416F76430003C42E7 /* FeedPageView.mm in Sources */,
 				70D98B1716F76565003C42E7 /* FeedItemTileView.mm in Sources */,
 				70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */,
