@@ -219,6 +219,8 @@
 		70E69AC1170EC2D700384523 /* ArticleiPadCSS.css in Resources */ = {isa = PBXBuildFile; fileRef = 70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */; };
 		70E69AC4170EE81F00384523 /* FeedCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E69AC2170EE81F00384523 /* FeedCache.mm */; };
 		70F5FA1D1716F9ED005A7934 /* BulletinPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70F5FA1C1716F9ED005A7934 /* BulletinPageView.mm */; };
+		70FB8558172987E500F7CCBD /* AnimationDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70FB8554172987E500F7CCBD /* AnimationDelegate.mm */; };
+		70FB8559172987E500F7CCBD /* AnimationFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70FB8556172987E500F7CCBD /* AnimationFrame.mm */; };
 		70FDADCE16CE604200933383 /* cern_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 70FDADCD16CE604200933383 /* cern_info.png */; };
 		70FDADD016CE615600933383 /* credits.png in Resources */ = {isa = PBXBuildFile; fileRef = 70FDADCF16CE615600933383 /* credits.png */; };
 		E1830BCA15744B9F003F16E2 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E1830BC915744B9F003F16E2 /* libxml2.dylib */; };
@@ -542,6 +544,11 @@
 		70E69AC3170EE81F00384523 /* FeedCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCache.h; sourceTree = "<group>"; };
 		70F5FA1B1716F9ED005A7934 /* BulletinPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinPageView.h; sourceTree = "<group>"; };
 		70F5FA1C1716F9ED005A7934 /* BulletinPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinPageView.mm; sourceTree = "<group>"; };
+		70FB8553172987E500F7CCBD /* FlipAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipAnimatedView.h; sourceTree = "<group>"; };
+		70FB8554172987E500F7CCBD /* AnimationDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimationDelegate.mm; sourceTree = "<group>"; };
+		70FB8555172987E500F7CCBD /* AnimationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationDelegate.h; sourceTree = "<group>"; };
+		70FB8556172987E500F7CCBD /* AnimationFrame.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimationFrame.mm; sourceTree = "<group>"; };
+		70FB8557172987E500F7CCBD /* AnimationFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationFrame.h; sourceTree = "<group>"; };
 		70FDADCD16CE604200933383 /* cern_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_info.png; sourceTree = "<group>"; };
 		70FDADCF16CE615600933383 /* credits.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = credits.png; sourceTree = "<group>"; };
 		E15CC7B81593E9E40016CC95 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
@@ -857,6 +864,7 @@
 		707B1343169AE8C900180E02 /* ThirdPartry */ = {
 			isa = PBXGroup;
 			children = (
+				70FB8552172987CD00F7CCBD /* FlipAnimation */,
 				70501E3616B6E180002C0F48 /* CocoaAuth */,
 				41B3D9BA16B12D6000AF4463 /* MWPhotoBrowser */,
 				41B3D9CE16B12D6E00AF4463 /* SDWebImage */,
@@ -1124,6 +1132,19 @@
 			);
 			path = iPad;
 			sourceTree = "<group>";
+		};
+		70FB8552172987CD00F7CCBD /* FlipAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				70FB8553172987E500F7CCBD /* FlipAnimatedView.h */,
+				70FB8554172987E500F7CCBD /* AnimationDelegate.mm */,
+				70FB8555172987E500F7CCBD /* AnimationDelegate.h */,
+				70FB8556172987E500F7CCBD /* AnimationFrame.mm */,
+				70FB8557172987E500F7CCBD /* AnimationFrame.h */,
+			);
+			name = FlipAnimation;
+			path = Src/ThirdParty/FlipAnimation;
+			sourceTree = SOURCE_ROOT;
 		};
 		E1F7B67B156EDC7C0092367F = {
 			isa = PBXGroup;
@@ -1455,6 +1476,8 @@
 				70BC9A5E171EBCFD00BA12C1 /* NewsFeedViewController.mm in Sources */,
 				70BC9A61171ECDB800BA12C1 /* BulletinFeedViewController.mm in Sources */,
 				70BC9A64171EF6C300BA12C1 /* BulletinIssueViewController.mm in Sources */,
+				70FB8558172987E500F7CCBD /* AnimationDelegate.mm in Sources */,
+				70FB8559172987E500F7CCBD /* AnimationFrame.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
