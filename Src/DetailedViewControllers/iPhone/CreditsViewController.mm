@@ -94,11 +94,11 @@
    const NSRange captionRange = NSMakeRange(text.length, caption.length);
    NSString *version = (NSString *)[[[NSBundle mainBundle] infoDictionary] objectForKey : @"CFBundleShortVersionString"];
    if (!version)//Can this ever happen???
-      version = @"Unknown";
+      version = @"unknown";
    NSString *build = (NSString *)[[[NSBundle mainBundle] infoDictionary] objectForKey : @"CFBundleVersion"];
    if (!build)//Can this ever happen???
       build = @"unknown";
-   version = [NSString stringWithFormat:@"\tCERN.app: v. %@, build %@\n", version, build];
+   version = [NSString stringWithFormat:@"\tCERN.app: v. %@, build: %@\n", version, build];
    NSAttributedString * const versionInfo = [[NSAttributedString alloc] initWithString : version];
    const NSRange versionInfoRange = NSMakeRange(captionRange.location + captionRange.length, versionInfo.length);
    
