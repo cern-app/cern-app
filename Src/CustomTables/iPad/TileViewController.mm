@@ -312,4 +312,114 @@
 
 }
 
+#pragma mark - Not ready yet: the logic for flipboard animation and multi-pages trick.
+
+/*
+//_______________________________________________________
+- (void) viewDidLoad
+{
+   [super viewDidLoad];
+	// Do any additional setup after loading the view, typically from a nib.   
+   CGRect frame = self.view.frame;
+   frame.origin = CGPoint();
+   
+   flipView = [[FlipView alloc] initWithAnimationType : AnimationType::flipHorizontal frame : frame];
+   [self.view addSubview : flipView];
+
+   //
+   nPages = ....
+   //
+
+   if (nPages > 1) {
+      prevPage = [[PageView alloc] initWithFrame : frame];
+      [prevPage setText : 1];
+      [prevPage layoutText];
+      [flipView addPage : prevPage];
+   }
+   
+   if (nPages > 2) {
+      nextPage = [[PageView alloc] initWithFrame : frame];
+      [nextPage setText : nPages - 1];
+      [nextPage layoutText];
+      [flipView addPage : nextPage];
+   }
+
+   currPage = [[PageView alloc] initWithFrame : frame];
+   [currPage setText : 0];
+   [currPage layoutText];
+   [flipView addPage : currPage];
+   
+   //[self.view addSubview : currPage];
+      
+   flipAnimator = [[AnimationDelegate alloc] initWithSequenceType : SequenceType::controlled directionType : DirectionType::forward];
+   flipAnimator.transformView = flipView;
+   flipAnimator.controller = self;
+   flipAnimator.perspectiveDepth = 2000;
+   
+   panRegion = [[UIView alloc] initWithFrame : frame];
+   [self.view addSubview : panRegion];
+   
+   panGesture = [[UIPanGestureRecognizer alloc] initWithTarget : self action : @selector(panned:)];
+   panGesture.delegate = self;
+   panGesture.maximumNumberOfTouches = 1;
+   panGesture.minimumNumberOfTouches = 1;
+   [self.view addGestureRecognizer : panGesture];
+}
+*/
+
+/*
+//_______________________________________________________
+- (void) animationDidFinish : (int) direction
+{
+   //
+   if (nPages > 3) {
+      if (direction == -1) {
+         //We are moving to the next page (for the flip view it's "backward" though).
+         const NSUInteger pageToLoad = prevPage.pageNumber + 1 < nPages ? prevPage.pageNumber + 1 : 0;
+         //curr becomes == prev
+         //next becomes == curr
+         //prev - new page loaded.
+         PageView * const oldCurr = currPage;
+         PageView * const oldPrev = prevPage;
+         
+         [nextPage setText : pageToLoad];//The next page loaded.
+         [nextPage layoutText];
+         prevPage = nextPage;
+         nextPage = oldCurr;
+         currPage = oldPrev;
+         
+         [flipView shiftBackwardWithNewPage : prevPage];
+      } else {
+         //We are moving to the previous page (and it's "forward" for the flip view).
+         const NSUInteger pageToLoad = nextPage.pageNumber ? nextPage.pageNumber - 1 : nPages - 1;
+         //curr becomes == next
+         //prev becomes == curr
+         //next - new page loaded.
+         PageView * const oldCurr = currPage;
+         PageView * const oldNext = nextPage;
+         
+         [prevPage setText : pageToLoad];
+         [prevPage layoutText];
+         nextPage = prevPage;
+         prevPage = oldCurr;
+         currPage = oldNext;
+         
+         [flipView shiftForwardWithNewPage : nextPage];
+      }
+   } else {
+      assert(0);//TODO!!!
+   }
+   
+ //  flipView.hidden = YES;
+
+   if (!currPage.superview)
+      [self.view addSubview : currPage];
+
+   if (prevPage.superview)
+      [prevPage removeFromSuperview];
+   if (nextPage.superview)
+      [nextPage removeFromSuperview];
+}
+*/
+
 @end
