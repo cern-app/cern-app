@@ -38,7 +38,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "FlipAnimatedView.h"
+@class FlipView;
 
 namespace FlipAnimation {
 
@@ -66,7 +66,7 @@ enum class DirectionType : char {
 
 @interface AnimationDelegate : NSObject
 
-@property (nonatomic, assign) UIView<FlipAnimatedView> *transformView;
+@property (nonatomic, assign) FlipView *transformView;
 @property (nonatomic, assign) NSObject<FlipAnimatedViewController> *controller;
 
 // the duration of the next animation cycle

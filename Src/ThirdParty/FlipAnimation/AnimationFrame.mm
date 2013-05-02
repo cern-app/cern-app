@@ -61,6 +61,18 @@
 }
 
 //________________________________________________________________________________________
+- (void) dealloc
+{
+   //TODO: check if I really need this.
+
+   for (CALayer *layer in self.rootAnimationLayer.sublayers)
+      [layer removeAllAnimations];
+
+   [self.animationImages removeAllObjects];
+   self.rootAnimationLayer = nil;
+}
+
+//________________________________________________________________________________________
 - (void) sendFrameToBack : (AnimationFrame *) aFrame
 {
    assert(aFrame != nil && "sendFrameToBack:, parameter 'aFrame' is nil");

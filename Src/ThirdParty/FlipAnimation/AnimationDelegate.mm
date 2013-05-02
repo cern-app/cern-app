@@ -43,8 +43,8 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "AnimationDelegate.h"
-#import "FlipAnimatedView.h"
 #import "AnimationFrame.h"
+#import "FlipView.h"
 
 using FlipAnimation::SequenceType;
 using FlipAnimation::AnimationType;
@@ -317,6 +317,9 @@ using FlipAnimation::DirectionType;
 //________________________________________________________________________________________
 - (void) setTransformValue : (CGFloat) aValue delegating : (BOOL) bValue
 {
+   if (transformView.imageStackArray.count < 2)
+      return;
+
    currentDuration = nextDuration;
     
    const NSUInteger frameCount = [transformView.imageStackArray count];
@@ -365,7 +368,7 @@ using FlipAnimation::DirectionType;
          animationState++;
       } else if (aValue - value < 0.0f) {
          currentDirection = DirectionType::backward;
-         [transformView rearrangeLayers:currentDirection :1];
+         [transformView rearrangeLayers:currentDirection : 1];
          switch (transformView.animationType) {
          case AnimationType::flipVertical:
          case AnimationType::flipHorizontal:
