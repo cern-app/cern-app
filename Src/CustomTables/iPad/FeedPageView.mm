@@ -8,7 +8,7 @@
 #import "FeedPageView.h"
 
 const NSUInteger shiftPart = 2;
-const NSUInteger tilesOnPage = 6;
+const NSUInteger tilesOnPage = 4;
 
 @implementation FeedPageView {
    NSMutableArray *tiles;
@@ -124,11 +124,11 @@ const NSUInteger tilesOnPage = 6;
 
    //Layout tiles
    const CGRect frame = self.frame;
-   //We always place 6 tiles on the page (if we have 6).
+   //We always place 4 tiles on the page (if we have 4).
 
    //Hehe, can I, actually, use this to identify landscape orientation???
-   const NSUInteger nItemsPerRow = frame.size.width > frame.size.height ? 3 : 2;
-   const NSUInteger nRows = nItemsPerRow == 3 ? 2 : 3;
+   const NSUInteger nItemsPerRow = 2;
+   const NSUInteger nRows = 2;
    const CGFloat width = frame.size.width / nItemsPerRow;
    const CGFloat height = frame.size.height / nRows;
    
@@ -148,8 +148,10 @@ const NSUInteger tilesOnPage = 6;
 //________________________________________________________________________________________
 - (void) explodeTiles : (UIInterfaceOrientation) orientation
 {
-   const NSUInteger nItemsPerRow = UIInterfaceOrientationIsLandscape(orientation) ? 3 : 2;
-   const NSUInteger nRows = nItemsPerRow == 3 ? 2 : 3;
+#pragma unused(orientation)
+
+   const NSUInteger nItemsPerRow = 2;
+   const NSUInteger nRows = 2;
 
    const CGFloat width = self.frame.size.width / nItemsPerRow;
    const CGFloat height = self.frame.size.height / nRows;
@@ -185,8 +187,10 @@ const NSUInteger tilesOnPage = 6;
 //________________________________________________________________________________________
 - (void) collectTilesAnimatedForOrientation : (UIInterfaceOrientation) orientation from : (CFTimeInterval) start withDuration : (CFTimeInterval) duration
 {
-   const NSUInteger nItemsPerRow = UIInterfaceOrientationIsLandscape(orientation) ? 3 : 2;
-   const NSUInteger nRows = nItemsPerRow == 3 ? 2 : 3;
+#pragma unused(orientation)
+
+   const NSUInteger nItemsPerRow = 2;
+   const NSUInteger nRows = 2;
 
    const CGFloat width = self.frame.size.width / nItemsPerRow;
    const CGFloat height = self.frame.size.height / nRows;
