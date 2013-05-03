@@ -32,7 +32,7 @@
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
    if (self = [super initWithCoder : aDecoder]) {
-      [self doInitController];      
+      [self doInitController];
    }
 
    return self;
