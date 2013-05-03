@@ -85,6 +85,7 @@
    if (!viewDidAppear) {
       viewDidAppear = YES;
 
+      [self layoutPanRegion];
       [self initTilesFromCache];
       [self reloadPage];
    }

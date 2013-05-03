@@ -36,6 +36,7 @@
 - (void) loadVisiblePageData;//To be overriden.
 - (void) layoutPages : (BOOL) layoutTiles;
 - (void) layoutFlipView;
+- (void) layoutPanRegion;
 
 - (NSRange) findItemRangeForPage : (NSUInteger) page;
 
