@@ -15,8 +15,7 @@
 #import "RSSAggregator.h"
 
 @interface NewsFeedViewController : TileViewController<HUDRefreshProtocol, RSSAggregatorDelegate, PageController,
-                                                       ImageDownloaderDelegate, ConnectionController,
-                                                       UIScrollViewDelegate>
+                                                       ImageDownloaderDelegate, ConnectionController>
 {
 @protected
    NSMutableDictionary *imageDownloaders;

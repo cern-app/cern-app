@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 
+#import "AnimationDelegate.h"
 #import "SlideScrollView.h"
 #import "TiledPage.h"
 
@@ -11,20 +12,31 @@
 //TileViewController is responsible for geometry,
 //rotation animations, and "infinite scroll view" trick.
 
-@interface TileViewController : UIViewController {  
+@class AnimationDelegate;
+@class FlipView;
+
+@interface TileViewController : UIViewController<FlipAnimatedViewController> {
 @protected
-   IBOutlet SlideScrollView *scrollView;
    NSMutableArray *dataItems;
    NSUInteger nPages;
-   UIView<TiledPage> *leftPage;
+   
+   //'Previous', 'next' have the same
+   //meaning as in FlipView (if
+   //flip the page back, you go to the 'next' page).
+   UIView<TiledPage> *prevPage;
    UIView<TiledPage> *currPage;
-   UIView<TiledPage> *rightPage;
+   UIView<TiledPage> *nextPage;
+   
+   AnimationDelegate *flipAnimator;
+   FlipView *flipView;
+   UIView *panRegion;   
 }
 
 - (void) setPagesData;//To be overriden.
 - (void) loadVisiblePageData;//To be overriden.
 - (void) layoutPages : (BOOL) layoutTiles;
-- (void) adjustPages;
+- (void) layoutFlipView;
+
 - (NSRange) findItemRangeForPage : (NSUInteger) page;
 
 //ECSlidingViewController:

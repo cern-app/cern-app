@@ -84,24 +84,10 @@
         <scene sceneID="Wzb-Ro-CJz">
             <objects>
                 <viewController id="lV2-nJ-7jY" customClass="NewsFeedViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="zv5-z5-Gmm">
+                    <view key="view" contentMode="scaleToFill" id="zv5-z5-Gmm" customClass="FlipParentView">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7xi-sv-jjp" customClass="SlideScrollView">
-                                <color key="backgroundColor" red="0.82745098039999998" green="0.84313725490000002" blue="0.86274509799999999" alpha="1" colorSpace="deviceRGB"/>
-                                <connections>
-                                    <outlet property="delegate" destination="lV2-nJ-7jY" id="ac7-ll-lwJ"/>
-                                </connections>
-                            </scrollView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="7xi-sv-jjp" firstAttribute="top" secondItem="zv5-z5-Gmm" secondAttribute="top" type="default" id="8pW-Xm-p0Z"/>
-                            <constraint firstItem="7xi-sv-jjp" firstAttribute="bottom" secondItem="zv5-z5-Gmm" secondAttribute="bottom" type="default" id="IS6-kB-3aK"/>
-                            <constraint firstItem="7xi-sv-jjp" firstAttribute="trailing" secondItem="zv5-z5-Gmm" secondAttribute="trailing" type="default" id="dxd-u2-0MY"/>
-                            <constraint firstItem="7xi-sv-jjp" firstAttribute="leading" secondItem="zv5-z5-Gmm" secondAttribute="leading" type="default" id="s0B-w7-2jy"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Yxv-KD-QgN">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="j3B-Ny-EXL">
@@ -115,9 +101,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="scrollView" destination="7xi-sv-jjp" id="Ftm-wp-rNh"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ca9-H5-EO5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -231,55 +214,6 @@
     <resources>
         <image name="menu.png" width="20" height="20"/>
     </resources>
-    <classes>
-        <class className="ArticleDetailViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ArticleDetailViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="pageView" candidateClass="UIWebView"/>
-                <relationship kind="outlet" name="rdbView" candidateClass="UIWebView"/>
-            </relationships>
-        </class>
-        <class className="BulletinFeedViewController" superclassName="NewsFeedViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/BulletinFeedViewController.h"/>
-        </class>
-        <class className="BulletinIssueViewController" superclassName="NewsFeedViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/BulletinIssueViewController.h"/>
-        </class>
-        <class className="ECSlidingViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ECSlidingViewController.h"/>
-        </class>
-        <class className="InitialSlidingViewController" superclassName="ECSlidingViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/InitialSlidingViewController.h"/>
-        </class>
-        <class className="MenuNavigationController" superclassName="UINavigationController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MenuNavigationController.h"/>
-        </class>
-        <class className="MenuViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MenuViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="NewsFeedViewController" superclassName="TileViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NewsFeedViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="reloadPageFromRefreshControl"/>
-            </relationships>
-        </class>
-        <class className="SlideScrollView" superclassName="UIScrollView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SlideScrollView.h"/>
-        </class>
-        <class className="TileViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TileViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="revealMenu:"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="SlideScrollView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

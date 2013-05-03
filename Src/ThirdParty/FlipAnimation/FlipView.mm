@@ -62,6 +62,8 @@ CALayer *LayerForFrame(const CGRect &frame)
       templateWidth = aFrame.size.width;
       templateHeight = aFrame.size.height;
       self.frame = aFrame;
+      
+      self.backgroundColor = [UIColor whiteColor];
    }
 
    return self;
@@ -298,6 +300,18 @@ CALayer *LayerForFrame(const CGRect &frame)
    [self.layer addSublayer : newFrame.rootAnimationLayer];
    [self.imageStackArray addObject : oldNext];
    [self.layer addSublayer : oldNext.rootAnimationLayer];
+}
+
+//________________________________________________________________________________________
+- (void) replaceCurrentFrame : (UIView *) pageView
+{
+   assert(pageView != nil && "replaceCurrentFrame:, paramter 'pageView' is nil");
+   
+   AnimationFrame * const oldCurr = (AnimationFrame *)[self.imageStackArray lastObject];
+   [oldCurr.rootAnimationLayer removeFromSuperlayer];
+   
+   [self.imageStackArray removeLastObject];
+   [self addFrame : pageView];
 }
 
 //________________________________________________________________________________________

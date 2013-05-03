@@ -21,6 +21,7 @@ const NSUInteger tilesOnPage = 6;
 {
    if (self = [super initWithFrame : frame]) {
       //
+      self.backgroundColor = [UIColor lightGrayColor];
    }
 
    return self;

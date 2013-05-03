@@ -5,23 +5,30 @@
 
 #import "ECSlidingViewController.h"
 #import "TileViewController.h"
+#import "FlipView.h"
+
+using namespace FlipAnimation;
 
 @implementation TileViewController {
    NSUInteger pageBeforeRotation;
 
+   UIPanGestureRecognizer *panGesture;
    BOOL viewDidAppear;
 }
 
 #pragma mark - Lifecycle.
 
 //________________________________________________________________________________________
-- (void) doInitController
+- (void) doInitTileViewController
 {
    //Shared method for different "ctors".
    dataItems = nil;
-   leftPage = nil;
+   prevPage = nil;
    currPage = nil;
-   rightPage = nil;
+   nextPage = nil;
+
+   panGesture = nil;
+   panRegion = nil;
 
    nPages = 0;
    pageBeforeRotation = 0;
@@ -31,9 +38,8 @@
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
-   if (self = [super initWithCoder : aDecoder]) {
-      [self doInitController];
-   }
+   if (self = [super initWithCoder : aDecoder])
+      [self doInitTileViewController];
 
    return self;
 }
@@ -42,7 +48,26 @@
 - (void) viewDidLoad
 {
    [super viewDidLoad];
-   scrollView.checkDragging = YES;
+   //Create the flipView and the panRegion.
+   CGRect frame = self.view.frame;
+   frame.origin = CGPoint();
+   
+   flipView = [[FlipView alloc] initWithAnimationType : AnimationType::flipHorizontal frame : frame];
+   [self.view addSubview : flipView];
+
+   panRegion = [[UIView alloc] initWithFrame : frame];
+   [self.view addSubview : panRegion];
+   
+   panGesture = [[UIPanGestureRecognizer alloc] initWithTarget : self action : @selector(panned:)];
+   panGesture.maximumNumberOfTouches = 1;
+   panGesture.minimumNumberOfTouches = 1;
+   [self.view addGestureRecognizer : panGesture];
+   
+   flipAnimator = [[AnimationDelegate alloc] initWithSequenceType : SequenceType::controlled directionType : DirectionType::forward];
+   flipAnimator.transformView = flipView;
+   flipAnimator.controller = self;
+   flipAnimator.perspectiveDepth = 2000;
+  
 }
 
 //________________________________________________________________________________________
@@ -53,10 +78,14 @@
       //it can happen, that we have a wrong geometry: detail view
       //controller was pushed on a stack, we rotate a device and press
       //a 'back' button. geometry is wrong now.
+      
       if (currPage && currPage.frame.size.width) {
          const CGRect currentFrame = self.view.frame;
-         if (currentFrame.size.width != currPage.frame.size.width)
+         if (currentFrame.size.width != currPage.frame.size.width) {
             [self layoutPages : YES];
+            [self layoutFlipView];
+            [self layoutPanRegion];
+         }
       }
    }
 }
@@ -66,30 +95,26 @@
 //________________________________________________________________________________________
 - (void) setPagesData
 {
-   //Let's define an image layout for a tile.
    if ((nPages = [self numberOfPages])) {
-      //Let's create tiled view now.
-      UIView<TiledPage> * pages[3] = {};
-      if (nPages <= 3)
-         pages[0] = leftPage, pages[1] = currPage, pages[2] = rightPage;
-      else
-         pages[0] = currPage, pages[1] = rightPage, pages[2] = leftPage;
-
-      for (NSUInteger pageIndex = 0, currentItem = 0, e = std::min((int)nPages, 3); pageIndex < e; ++pageIndex) {
-         UIView<TiledPage> * const page = pages[pageIndex];
-         page.pageNumber = pageIndex;
-         currentItem += [page setPageItems : dataItems startingFrom : currentItem];
-         if (!page.superview)
-            [scrollView addSubview : page];
+      if (nPages > 1) {
+         assert(prevPage != nil && "setPagesData, prevPage is nil");
+         
+         const NSRange pageRange = [self findItemRangeForPage : 1];
+         [prevPage setPageItems : dataItems startingFrom : pageRange.location];
+         prevPage.pageNumber = 1;
       }
 
-      [self layoutPages : YES];
-      [scrollView setContentOffset : CGPointMake(0.f, 0.f)];
-      //The first page is visible now, let's download ... IMAGES NOW!!! :)
-      //TODO: in "cached" mode should do nothing.
-      [self loadVisiblePageData];
-   } else
-      [self removeAllPages];
+      if (nPages > 2) {
+         assert(nextPage != nil && "setPagesData, nextPage is nil");
+         const NSRange pageRange = [self findItemRangeForPage : nPages - 1];
+         [nextPage setPageItems : dataItems startingFrom : pageRange.location];
+         nextPage.pageNumber = nPages - 1;
+      }
+
+      assert(currPage != nil && "setPagesData, currPage is nil");
+      [currPage setPageItems : dataItems startingFrom : 0];
+      currPage.pageNumber = 0;
+   }
 }
 
 
@@ -108,103 +133,56 @@
    
    CGRect currentFrame = self.view.frame;
    currentFrame.origin = CGPoint();
-
-   if (nPages <= 3) {
-      UIView<TiledPage> * const pages[3] = {leftPage, currPage, rightPage};
-      //Do not do any magic, we have only <= 3 pages.
-      for (NSUInteger i = 0; i < nPages; ++i) {
-         pages[i].frame = currentFrame;
-         if (layoutTiles)
-            [pages[i] layoutTiles];
-         currentFrame.origin.x += currentFrame.size.width;
-      }
-   } else {
-      currentFrame.origin.x = currPage.pageNumber * currentFrame.size.width;
-      currPage.frame = currentFrame;
-      
-      CGRect leftFrame = currentFrame;
-      if (currPage.pageNumber)
-         leftFrame.origin.x -= leftFrame.size.width;
-      else
-         leftFrame.origin.x += 2 * leftFrame.size.width;
-      
-      leftPage.frame = leftFrame;
-      
-      CGRect rightFrame = currentFrame;
-      if (currPage.pageNumber + 1 < nPages)
-         rightFrame.origin.x += rightFrame.size.width;
-      else
-         rightFrame.origin.x -= 2 * rightFrame.size.width;
-      
-      rightPage.frame = rightFrame;
-      
-      if (layoutTiles) {
-         [leftPage layoutTiles];
-         [currPage layoutTiles];
-         [rightPage layoutTiles];
-      }
+   
+   if (nPages > 1) {
+      prevPage.frame = currentFrame;
+      if (layoutTiles)
+         [prevPage layoutTiles];
    }
    
-   [scrollView setContentSize : CGSizeMake(currentFrame.size.width * nPages, currentFrame.size.height)];
+   if (nPages > 2) {
+      nextPage.frame = currentFrame;
+      if (layoutTiles)
+         [nextPage layoutTiles];
+   }
+   
+   currPage.frame = currentFrame;
+   if (layoutTiles)
+      [currPage layoutTiles];
 }
 
 //________________________________________________________________________________________
-- (void) adjustPages
+- (void) layoutFlipView
 {
-   //This function is called after scroll view stops scrolling.
+   assert(flipView != nil && "layoutFlipView, flipView is nil");
 
-   assert(nPages > 3 && "adjustPages, nPages must be > 3");
+   CGRect frame = self.view.frame;
+   frame.origin = CGPoint();
    
-   const NSUInteger newCurrentPageIndex = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
-   if (newCurrentPageIndex == currPage.pageNumber)
-      return;
+   flipView.frame = frame;
+   [flipView removeAllFrames];
+   [flipView setFrameGeometry : frame.size];
    
-   if (newCurrentPageIndex > currPage.pageNumber) {
-      //We scrolled to the left.
-      //The old 'current' becomes the new 'left'.
-      //The old 'right' becomes the new 'current'.
-      //The old 'left' becomes the new 'right' and we either have to set this the page or not.
+   if (nPages > 1)
+      [flipView addFrame : prevPage];
+   
+   if (nPages > 2)
+      [flipView addFrame : nextPage];
 
-      const bool leftEdge = !currPage.pageNumber;
-      UIView<TiledPage> * const oldLeft = leftPage;
-      leftPage = currPage;
-      currPage = rightPage;
-      rightPage = oldLeft;
-
-      if (newCurrentPageIndex + 1 < nPages && !leftEdge) {
-         //Set the frame first.
-         CGRect frame = rightPage.frame;
-         frame.origin.x = currPage.frame.origin.x + frame.size.width;
-         rightPage.frame = frame;
-         //Set the data now.
-         [rightPage setPageItems : dataItems startingFrom : currPage.pageRange.location + currPage.pageRange.length];
-         [rightPage layoutTiles];
-      } 
-   } else {
-      //We scrolled to the right.
-      //The old 'current' becomes the new 'right.
-      //The old 'left' becomes the new 'current'.
-      //The old 'right' becomes the new 'left' and we either have to set this page or not.
-      
-      const bool rightEdge = currPage.pageNumber + 1 == nPages;
-      UIView<TiledPage> * const oldRight = rightPage;
-      rightPage = currPage;
-      currPage = leftPage;
-      leftPage = oldRight;
-      
-      if (newCurrentPageIndex && !rightEdge) {
-         CGRect frame = leftPage.frame;
-         frame.origin.x = currPage.frame.origin.x - frame.size.width;
-         leftPage.frame = frame;
-         //Set the data now.
-         const NSRange range = [leftPage.class suggestRangeBackward : dataItems endingWith : currPage.pageRange.location];
-         [leftPage setPageItems : dataItems startingFrom : range.location];
-         [leftPage layoutTiles];
-      }
-   }
-   
-   currPage.pageNumber = newCurrentPageIndex;
+   [flipView addFrame : currPage];
 }
+
+//________________________________________________________________________________________
+- (void) layoutPanRegion
+{
+   assert(panRegion != nil && "layoutPanRegion, panRegion is nil");
+
+   CGRect frame = self.view.frame;
+   frame.origin = CGPoint();
+
+   panRegion.frame = frame;
+}
+
 
 //________________________________________________________________________________________
 - (NSRange) findItemRangeForPage : (NSUInteger) page
@@ -214,7 +192,7 @@
    //Ugly, inefficient, but .. we never have a huge number of pages :)
    NSRange range = {};
    for (NSUInteger i = 0; i <= page; ++i)
-      range = [leftPage.class suggestRangeForward : dataItems startingFrom : range.location + range.length];
+      range = [currPage.class suggestRangeForward : dataItems startingFrom : range.location + range.length];
    
    return range;
 }
@@ -223,41 +201,26 @@
 #pragma mark - Device orientation changes.
 
 //________________________________________________________________________________________
-- (void) willRotateToInterfaceOrientation : (UIInterfaceOrientation) toInterfaceOrientation duration : (NSTimeInterval) duration
+- (BOOL) shouldAutorotate
 {
-   pageBeforeRotation = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
-}
+   //We do not rotate if flip animation is still active.
 
+   assert(flipAnimator != nil && "shouldAutorotate, flipAnimator is nil");
+   return !flipAnimator.animationLock;
+}
 
 //________________________________________________________________________________________
 - (void) willAnimateRotationToInterfaceOrientation : (UIInterfaceOrientation) toInterfaceOrientation duration : (NSTimeInterval) duration
 {
+   assert(flipAnimator.animationLock == NO &&
+          "willAnimateRotationToInterfaceOrientation:duration:, flip animation is active");
+
    if (!nPages)
       return;
 
-   [scrollView setContentOffset : CGPointMake(pageBeforeRotation * self.view.frame.size.width, 0.f) animated : NO];
-
-   if (nPages <= 3) {
-      UIView<TiledPage> * const pages[3] = {leftPage, currPage, rightPage};
-      
-      if (pageBeforeRotation)
-         pages[pageBeforeRotation - 1].hidden = YES;
-      if (pageBeforeRotation + 1 < nPages)
-         pages[pageBeforeRotation + 1].hidden = YES;
-
-      [self layoutPages : YES];
-
-      [pages[pageBeforeRotation] explodeTiles : toInterfaceOrientation];
-      [pages[pageBeforeRotation] collectTilesAnimatedForOrientation : toInterfaceOrientation from : CACurrentMediaTime() + duration withDuration : 0.5f];
-   } else {
-      leftPage.hidden = YES;
-      rightPage.hidden = YES;
-
-      [self layoutPages : YES];
-
-      [currPage explodeTiles : toInterfaceOrientation];
-      [currPage collectTilesAnimatedForOrientation : toInterfaceOrientation from : CACurrentMediaTime() + duration withDuration : 0.5f];
-   }
+   [self layoutPages : YES];
+   [currPage explodeTiles : toInterfaceOrientation];
+   [currPage collectTilesAnimatedForOrientation : toInterfaceOrientation from : CACurrentMediaTime() + duration withDuration : 0.5f];
 }
 
 //________________________________________________________________________________________
@@ -266,16 +229,8 @@
    if (!nPages)
       return;
 
-   if (nPages <= 3) {
-      UIView<TiledPage> * const pages[3] = {leftPage, currPage, rightPage};
-      if (pageBeforeRotation)
-         pages[pageBeforeRotation - 1].hidden = NO;
-      if (pageBeforeRotation + 1 < nPages)
-         pages[pageBeforeRotation + 1].hidden = NO;
-   } else {
-      leftPage.hidden = NO;
-      rightPage.hidden = NO;
-   }
+   [self layoutFlipView];
+   [self layoutPanRegion];
 }
 
 #pragma mark - Sliding view.
@@ -290,88 +245,48 @@
 //________________________________________________________________________________________
 - (void) removeAllPages
 {
-   if (leftPage.superview)
-      [leftPage removeFromSuperview];
-   if (currPage.superview)
+   if (prevPage.superview) {
+      [prevPage removeFromSuperview];
+      prevPage = nil;
+   }
+   
+   if (currPage.superview) {
       [currPage removeFromSuperview];
-   if (rightPage.superview)
-      [rightPage removeFromSuperview];
+      currPage = nil;
+   }
+   
+   if (nextPage.superview) {
+      [nextPage removeFromSuperview];
+      nextPage = nil;
+   }
 }
 
 //________________________________________________________________________________________
 - (NSUInteger) numberOfPages
 {
+   assert(currPage != nil &&
+          "numberOfPages, currPage is nil and thus the paging algorithm is unknown");
+
    NSUInteger pages = 0;
    NSRange range = {};
    while (range.location + range.length < dataItems.count) {
       ++pages;
-      range = [leftPage.class suggestRangeForward : dataItems startingFrom : range.location + range.length];
+      range = [currPage.class suggestRangeForward : dataItems startingFrom : range.location + range.length];
    }
 
    return pages;
 
 }
 
-#pragma mark - Not ready yet: the logic for flipboard animation and multi-pages trick.
+#pragma mark - Flipboard animation.
 
-/*
-//_______________________________________________________
-- (void) viewDidLoad
-{
-   [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.   
-   CGRect frame = self.view.frame;
-   frame.origin = CGPoint();
-   
-   flipView = [[FlipView alloc] initWithAnimationType : AnimationType::flipHorizontal frame : frame];
-   [self.view addSubview : flipView];
-
-   //
-   nPages = ....
-   //
-
-   if (nPages > 1) {
-      prevPage = [[PageView alloc] initWithFrame : frame];
-      [prevPage setText : 1];
-      [prevPage layoutText];
-      [flipView addPage : prevPage];
-   }
-   
-   if (nPages > 2) {
-      nextPage = [[PageView alloc] initWithFrame : frame];
-      [nextPage setText : nPages - 1];
-      [nextPage layoutText];
-      [flipView addPage : nextPage];
-   }
-
-   currPage = [[PageView alloc] initWithFrame : frame];
-   [currPage setText : 0];
-   [currPage layoutText];
-   [flipView addPage : currPage];
-   
-   //[self.view addSubview : currPage];
-      
-   flipAnimator = [[AnimationDelegate alloc] initWithSequenceType : SequenceType::controlled directionType : DirectionType::forward];
-   flipAnimator.transformView = flipView;
-   flipAnimator.controller = self;
-   flipAnimator.perspectiveDepth = 2000;
-   
-   panRegion = [[UIView alloc] initWithFrame : frame];
-   [self.view addSubview : panRegion];
-   
-   panGesture = [[UIPanGestureRecognizer alloc] initWithTarget : self action : @selector(panned:)];
-   panGesture.delegate = self;
-   panGesture.maximumNumberOfTouches = 1;
-   panGesture.minimumNumberOfTouches = 1;
-   [self.view addGestureRecognizer : panGesture];
-}
-*/
-
-/*
-//_______________________________________________________
+//________________________________________________________________________________________
 - (void) animationDidFinish : (int) direction
 {
-   //
+   assert(nPages > 1 && "animationDidFinish:, wrong number of pages");
+   
+   NSLog(@"nPages: %u", nPages);
+   
    if (nPages > 3) {
       if (direction == -1) {
          //We are moving to the next page (for the flip view it's "backward" though).
@@ -379,11 +294,14 @@
          //curr becomes == prev
          //next becomes == curr
          //prev - new page loaded.
-         PageView * const oldCurr = currPage;
-         PageView * const oldPrev = prevPage;
+         UIView<TiledPage> * const oldCurr = currPage;
+         UIView<TiledPage> * const oldPrev = prevPage;
          
-         [nextPage setText : pageToLoad];//The next page loaded.
-         [nextPage layoutText];
+         const NSRange newPageRange = [self findItemRangeForPage : pageToLoad];
+         [nextPage setPageItems : dataItems startingFrom : newPageRange.location];
+         nextPage.pageNumber = pageToLoad;
+         [nextPage layoutTiles];
+
          prevPage = nextPage;
          nextPage = oldCurr;
          currPage = oldPrev;
@@ -395,11 +313,15 @@
          //curr becomes == next
          //prev becomes == curr
          //next - new page loaded.
-         PageView * const oldCurr = currPage;
-         PageView * const oldNext = nextPage;
+         UIView<TiledPage> * const oldCurr = currPage;
+         UIView<TiledPage> * const oldNext = nextPage;
          
-         [prevPage setText : pageToLoad];
-         [prevPage layoutText];
+         const NSRange newPageRange = [self findItemRangeForPage : pageToLoad];
+         
+         [prevPage setPageItems : dataItems startingFrom : newPageRange.location];
+         prevPage.pageNumber = pageToLoad;
+         [prevPage layoutTiles];
+
          nextPage = prevPage;
          prevPage = oldCurr;
          currPage = oldNext;
@@ -407,19 +329,112 @@
          [flipView shiftForwardWithNewPage : nextPage];
       }
    } else {
-      assert(0);//TODO!!!
+      //All pages are still actual, I only have to change the ordering.
+      if (nPages == 2) {
+         UIView<TiledPage> * const oldPrev = prevPage;
+         prevPage = currPage;
+         currPage = oldPrev;
+      } else if (direction == -1) {
+         UIView<TiledPage> * const oldNext = nextPage;
+         nextPage = currPage;
+         currPage = prevPage;
+         prevPage = oldNext;
+      } else {
+         UIView<TiledPage> * const oldCurr = currPage;
+         currPage = nextPage;
+         nextPage = prevPage;
+         prevPage = oldCurr;
+      }
    }
    
- //  flipView.hidden = YES;
+   flipView.hidden = YES;
 
    if (!currPage.superview)
       [self.view addSubview : currPage];
 
-   if (prevPage.superview)
-      [prevPage removeFromSuperview];
-   if (nextPage.superview)
-      [nextPage removeFromSuperview];
+   [currPage.superview bringSubviewToFront : currPage];
+   [self loadVisiblePageData];
 }
-*/
+
+//________________________________________________________________________________________
+- (void) animationCancelled
+{
+   flipView.hidden = YES;
+
+   if (!currPage.superview)
+      [self.view addSubview : currPage];
+
+   [currPage.superview bringSubviewToFront : currPage];
+}
+
+//________________________________________________________________________________________
+- (void) panned : (UIPanGestureRecognizer *) recognizer
+{
+   assert(recognizer != nil && "panned:, parameter 'recognizer' is nil");
+   
+   //TODO: this function requires tuning to avoid different bugs with
+   //flip animation.
+
+   if (nPages <= 1)
+      return;
+
+   switch (recognizer.state) {
+   case UIGestureRecognizerStatePossible:
+      break;
+   case UIGestureRecognizerStateFailed: // cannot recognize for multi touch sequence
+      break;
+   case UIGestureRecognizerStateBegan:
+      {
+         // allow controlled flip only when touch begins within the pan region
+         if (CGRectContainsPoint(panRegion.frame, [recognizer locationInView : self.view])) {
+            if (flipAnimator.animationState == 0) {
+               flipView.hidden = NO;
+               [flipView.superview bringSubviewToFront : flipView];
+
+               [NSObject cancelPreviousPerformRequestsWithTarget : self];
+               flipAnimator.sequenceType = SequenceType::controlled;
+               flipAnimator.animationLock = YES;
+            }
+         }
+      }
+      break;
+   case UIGestureRecognizerStateChanged:
+      {
+         if (flipAnimator.animationLock) {
+            switch (flipView.animationType) {
+            case AnimationType::flipVertical:
+               {
+                  const CGFloat value = [recognizer translationInView : self.view].y;
+                  [flipAnimator setTransformValue : value delegating : NO];
+               }
+               break;
+            case AnimationType::flipHorizontal:
+               {
+                  const CGFloat value = [recognizer translationInView : self.view].x / 2.f;//2 is some arbitrary value here.
+                  [flipAnimator setTransformValue : value delegating : NO];
+               }
+               break;
+            default:
+               break;
+            }
+         }
+      }
+      break;
+   case UIGestureRecognizerStateCancelled: // cancellation touch
+      break;
+   case UIGestureRecognizerStateEnded:
+      {
+         if (flipAnimator.animationLock) {
+            // provide inertia to panning gesture
+            const CGFloat value = sqrtf(fabsf([recognizer velocityInView : self.view].x))/10.0f;
+            [flipAnimator endStateWithSpeed : value];
+         }
+      }
+      break;
+   default:
+      break;
+   }
+}
+
 
 @end

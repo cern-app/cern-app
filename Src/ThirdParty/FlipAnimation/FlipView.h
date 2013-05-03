@@ -26,9 +26,8 @@ enum class DirectionType : char;
 - (void) removeAllFrames;
 - (void) shiftBackwardWithNewPage : (UIView *) pageView;
 - (void) shiftForwardWithNewPage : (UIView *) pageView;
+- (void) replaceCurrentFrame : (UIView *) pageView;
 
-- (void)rearrangeLayers : (FlipAnimation::DirectionType) aDirectionType : (NSUInteger) step;
-
-//- (CALayer *) layerWithFrame : (CGRect) aFrame;
+- (void) rearrangeLayers : (FlipAnimation::DirectionType) aDirectionType : (NSUInteger) step;
 
 @end

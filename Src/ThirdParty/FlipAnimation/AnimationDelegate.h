@@ -62,6 +62,7 @@ enum class DirectionType : char {
 
 @protocol FlipAnimatedViewController <NSObject>
 - (void) animationDidFinish : (int) direction;
+- (void) animationCancelled;
 @end
 
 @interface AnimationDelegate : NSObject

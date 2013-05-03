@@ -541,6 +541,9 @@ void CancelConnections(UIViewController *controller)
    MenuNavigationController *navController = nil;
    
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      //TODO: remove after the flip animation is fixed in a bulletin.
+      return;
+      //
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
                                                                          BulletinTileViewControllerID];
       assert([navController.topViewController isKindOfClass : [BulletinFeedViewController class]] &&

@@ -298,12 +298,15 @@ using FlipAnimation::DirectionType;
     
    [CATransaction commit];
     
-   if (controller && [controller respondsToSelector : @selector(animationDidFinish:)]) {
+   if (controller) {
       if (currentDirection == DirectionType::forward && value == 10.f) {
-         [controller animationDidFinish : 1];
+         
+            [controller animationDidFinish : 1];
       } else if (currentDirection == DirectionType::backward && value == 10.f) {
-         [controller animationDidFinish : -1];
-      }
+         if ([controller respondsToSelector : @selector(animationDidFinish:)])
+            [controller animationDidFinish : -1];
+      } else if ([controller respondsToSelector : @selector(animationCancelled)])
+         [controller animationCancelled];
    }
     
    animationState = 0;

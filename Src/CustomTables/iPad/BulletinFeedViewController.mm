@@ -48,6 +48,7 @@
    
    self.navigationItem.rightBarButtonItem.enabled = YES;
    [self setPagesData];
+
 }
 
 #pragma mark - Overriders for TileViewController's methods.
@@ -57,7 +58,7 @@
 {
    if (feedCache != nil)//Do not load images for a cache - we are refreshing the feed at the moment.
       return;
-   
+ /*
    const CGFloat minImageSize = [BulletinIssueTileView minImageSize];
 
    const NSUInteger visiblePageIndex = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
@@ -120,7 +121,7 @@
          }
          ++articleIndex;
       }
-   }
+   }*/
 }
 
 #pragma mark - Overriders for NewsFeedViewController's methods.
@@ -128,9 +129,9 @@
 //________________________________________________________________________________________
 - (void) createPages
 {
-   leftPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
+ /*  leftPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
    currPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
-   rightPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
+   rightPage = [[BulletinPageView alloc] initWithFrame : CGRect()];*/
 }
 
 //________________________________________________________________________________________
@@ -164,7 +165,7 @@
 //________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
-   assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
+/*   assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
    assert(indexPath.length == 3 && "imageDidLoad:, parameter 'indexPath' is not a valid path");
 
    NSUInteger indices[3] = {};
@@ -233,13 +234,13 @@
    }
    
    if (!imageDownloaders.count)
-      imageDownloaders = nil;
+      imageDownloaders = nil;*/
 }
 
 //________________________________________________________________________________________
 - (void) imageDownloadFailed : (NSIndexPath *) indexPath
 {
-   assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
+/*   assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
    assert(indexPath.length == 3 && "imageDownloadFailed:, parameter 'indexPath' is not a valid path");
 
    NSUInteger indices[3] = {};
@@ -293,7 +294,7 @@
    }
    
    if (!imageDownloaders.count)
-      imageDownloaders = nil;
+      imageDownloaders = nil;*/
 }
 
 #pragma mark - User interactions.

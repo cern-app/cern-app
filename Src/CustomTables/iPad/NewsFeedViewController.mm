@@ -17,6 +17,7 @@
 #import "FeedPageView.h"
 #import "MWFeedItem.h"
 #import "FeedCache.h"
+#import "FlipView.h"
 
 @implementation NewsFeedViewController {
    BOOL viewDidAppear;
@@ -67,6 +68,9 @@
    
    [self createPages];
    [self addTileTapObserver];
+   
+   [self.view addSubview : currPage];
+   [self.view bringSubviewToFront : currPage];
 }
 
 //________________________________________________________________________________________
@@ -159,6 +163,11 @@
 
    [self setTilesLayoutHints];
    [self setPagesData];
+   
+   [self layoutPages : YES];
+   [self layoutFlipView];
+   
+   [self loadVisiblePageData];
 }
 
 //________________________________________________________________________________________
@@ -186,21 +195,12 @@
 #pragma mark - Overriders for TileViewController's methods.
 
 //________________________________________________________________________________________
-- (void) setPagesData
-{
-   [self setTilesLayoutHints];
-   [super setPagesData];
-}
-
-//________________________________________________________________________________________
 - (void) loadVisiblePageData
 {
    if (feedCache)//We do not load images for a cached feed, since right now we are refreshing the feed.
       return;
    
-   const NSUInteger visiblePage = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
-
-   const NSRange range = [self findItemRangeForPage : visiblePage];
+   const NSRange range = currPage.pageRange;
    for (NSUInteger i = range.location, e = range.location + range.length; i < e; ++i) {
       MWFeedItem * const article = (MWFeedItem *)dataItems[i];
       if (!article.image) {
@@ -211,7 +211,7 @@
          //May be, we already have a downloader for this item?
          
          //TODO: row and section must be i and page, not page and i.
-         NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : visiblePage inSection : i];//Using absolute index i, not relative (on a page).
+         NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : currPage.pageNumber inSection : i];//Using absolute index i, not relative (on a page).
          ImageDownloader *downloader = (ImageDownloader *)imageDownloaders[indexPath];
          
          if (!downloader) {
@@ -227,10 +227,12 @@
                [downloader startDownload];//Power on.
             }
          }
-      } else if (nPages > 3 && ![currPage tileHasThumbnail : i - range.location]) {
+      } else if (![currPage tileHasThumbnail : i - range.location]) {
          //Image was loaded already, but not tile's thumbnailView and
          //tile's layout has to be corrected yet.
          [currPage setThumbnail : article.image forTile : i - range.location];
+         [flipView replaceCurrentFrame : currPage];
+         //Now we have to replace an animation frame.
       }
    }
 }
@@ -255,19 +257,9 @@
    if (downloader.image) {
       article.image = downloader.image;
       //
-      if (nPages <= 3) {
-         UIView<TiledPage> * pageToUpdate = nil;
-         if (!page)
-            pageToUpdate = leftPage;
-         else if (page == 1)
-            pageToUpdate = currPage;
-         else
-            pageToUpdate = rightPage;
-
-         [pageToUpdate setThumbnail : article.image forTile : indexPath.section - pageToUpdate.pageRange.location];
-      } else {
-         if (currPage.pageNumber == page)
-            [currPage setThumbnail : article.image forTile : indexPath.section - currPage.pageRange.location];
+      if (currPage.pageNumber == page && !flipAnimator.animationLock) {
+         [currPage setThumbnail : article.image forTile : indexPath.section - currPage.pageRange.location];
+         [flipView replaceCurrentFrame : currPage];
       }
    }
    
@@ -293,35 +285,6 @@
    //But no need to update the tableView.
    if (!imageDownloaders.count)
       imageDownloaders = nil;
-}
-
-#pragma mark - UIScrollView delegate.
-
-// Load images for all onscreen rows (if not done yet) when scrolling is finished
-
-//________________________________________________________________________________________
-- (void) scrollViewDidEndDragging : (UIScrollView *) aScrollView willDecelerate : (BOOL) decelerate
-{
-#pragma unused(aScrollView)
-   //Cached feeds do not have any images.
-   if (!decelerate) {
-      if (nPages > 3)
-         [self adjustPages];
-
-      if (!feedCache)
-         [self loadVisiblePageData];
-   }
-}
-
-//________________________________________________________________________________________
-- (void) scrollViewDidEndDecelerating : (UIScrollView *) aScrollView
-{
-#pragma unused(aScrollView)
-   if (nPages > 3)
-      [self adjustPages];
-   
-   if (!feedCache)
-      [self loadVisiblePageData];
 }
 
 #pragma mark - UI
@@ -382,9 +345,9 @@
 //________________________________________________________________________________________
 - (void) createPages
 {
-   leftPage = [[FeedPageView alloc] initWithFrame : CGRect()];
+   prevPage = [[FeedPageView alloc] initWithFrame : CGRect()];
    currPage = [[FeedPageView alloc] initWithFrame : CGRect()];
-   rightPage = [[FeedPageView alloc] initWithFrame : CGRect()];
+   nextPage = [[FeedPageView alloc] initWithFrame : CGRect()];
 }
 
 //________________________________________________________________________________________
