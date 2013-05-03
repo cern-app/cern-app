@@ -285,8 +285,6 @@ using namespace FlipAnimation;
 {
    assert(nPages > 1 && "animationDidFinish:, wrong number of pages");
    
-   NSLog(@"nPages: %u", nPages);
-   
    if (nPages > 3) {
       if (direction == -1) {
          //We are moving to the next page (for the flip view it's "backward" though).
