@@ -96,6 +96,7 @@
 #pragma unused(error)
 
    assert(connection != nil && "connection:didFailWithError:, parameter 'connection' is nil");
+   assert(delegate != nil && "connectionDidFaildWithError:, delegate is nil");
 
    if (connection != imageConnection) {
       //Can this ever happen?
@@ -117,20 +118,46 @@
 {
    assert(connection != nil && "connectionDidFinishLoading:, parameter 'connection' is nil");
    assert(image == nil && "connectionDidFinishLoading:, image must be nil");
+   assert(indexPathInTableView != nil && "connectionDidFinishLoading:, indexPathInTableView is nil");
+   assert(delegate != nil && "connectionDidFinishLoadin:, delegate is nil");
    
    if (connection != imageConnection) {
       NSLog(@"imageDownloader, error: connectionDidFinishLoading:, unknown connection");
       return;
    }
-   
-   if (imageData.length)
-      image = [[UIImage alloc] initWithData : imageData];
-
-   assert(indexPathInTableView != nil && "connectionDidFinishLoading:, indexPathInTableView is nil");
-   [delegate imageDidLoad : indexPathInTableView];
 
    imageConnection = nil;
+
+   if (imageData.length) {
+      //Actually, it's not a bad idea for iPhone also, but it's just a test now.
+      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+         [self performSelectorInBackground : @selector(createUIImageInBackground) withObject : nil];
+      } else  {
+         image = [[UIImage alloc] initWithData : imageData];
+         [delegate imageDidLoad : indexPathInTableView];
+         imageData = nil;
+      }
+   }
+}
+
+//________________________________________________________________________________________
+- (void) createUIImageInBackground
+{
+   assert(image == nil && "createUIImageInBackground, image must be nil");
+   assert(imageData.length != 0 && "createUIImageInBackground, imageData is either nil or empty");
+   
+   image = [[UIImage alloc] initWithData : imageData];
    imageData = nil;
+   [self performSelectorOnMainThread : @selector(informDelegate) withObject : nil waitUntilDone : NO];
+}
+
+//________________________________________________________________________________________
+- (void) informDelegate
+{
+   assert(indexPathInTableView != nil && "informDelegate, indexPathIntableView is nil");
+   assert(delegate != nil && "informDelegate, delegate is nil");
+   
+   [delegate imageDidLoad : indexPathInTableView];
 }
 
 @end
