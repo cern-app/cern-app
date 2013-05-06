@@ -153,9 +153,11 @@
    if (imageData.length) {
       if (!delayImageCreation) {
          image = [[UIImage alloc] initWithData : imageData];
-         [delegate imageDidLoad : indexPathInTableView];
          imageData = nil;
       }
+      
+      //TODO: something with better logic.
+      [delegate imageDidLoad : indexPathInTableView];
    }
 }
 

@@ -18,7 +18,7 @@
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
    if (self = [super initWithCoder : aDecoder]) {
-      imageDownloaders = nil;
+      downloaders = nil;
    }
 
    return self;

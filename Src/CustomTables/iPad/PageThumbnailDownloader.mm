@@ -32,13 +32,13 @@ enum class ThumbnailDownloadStage : unsigned char {
    NSInvocationOperation *imageCreateOp;
 }
 
-@synthesize imageDownloaders, delegate;
+@synthesize pageNumber, imageDownloaders, delegate;
 
 //________________________________________________________________________________________
 - (id) initWithItems : (NSArray *) items
 {
    assert(items.count != 0 && "initWithItems:, parameter 'items' is either nil or is empty");
-   
+
    if (self = [super init]) {
       imageDownloaders = [[NSMutableDictionary alloc] init];
    
@@ -131,9 +131,9 @@ enum class ThumbnailDownloadStage : unsigned char {
 
    if (nCompleted + 1 == imageDownloaders.count) {
       //Create the corresponding UIImage objects.
-      ++nCompleted;
       [self createUIImages];
-   }
+   } else
+      ++nCompleted;
 }
 
 //________________________________________________________________________________________
@@ -149,7 +149,8 @@ enum class ThumbnailDownloadStage : unsigned char {
    if (nCompleted + 1 == imageDownloaders.count) {
       ++nCompleted;
       [self createUIImages];
-   }
+   } else
+      ++nCompleted;
 }
 
 //________________________________________________________________________________________
@@ -159,7 +160,7 @@ enum class ThumbnailDownloadStage : unsigned char {
    //if I create a bunch of such images on a main GUI thread, it's "blocked" and the app is non-interactive.
    //So I want to use a background thread for these operations.
    assert(stage == ThumbnailDownloadStage::dataDownload && "createImage, wrong stage");
-
+   
    stage = ThumbnailDownloadStage::imageCreation;
    nCompleted = 0;
    

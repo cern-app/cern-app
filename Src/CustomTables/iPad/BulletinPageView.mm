@@ -103,8 +103,10 @@ const CGFloat tileShift = 0.2f;
 }
 
 //________________________________________________________________________________________
-- (void) setThumbnail : (UIImage *) thumbnailImage forTile : (NSUInteger) tileIndex
+- (void) setThumbnail : (UIImage *) thumbnailImage forTile : (NSUInteger) tileIndex doLayout : (BOOL) layout
 {
+#pragma unused(layout)
+
    assert(thumbnailImage != nil && "setThumbnail:forTile:, parameter 'thumbnailImge' is nil");
    assert(tileIndex < tiles.count && "setThumbnail:forTile:, parameter 'tileIndex' is out of bounds");
    

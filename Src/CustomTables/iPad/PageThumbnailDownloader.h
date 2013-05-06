@@ -29,6 +29,7 @@
 - (BOOL) startDownload;
 - (void) cancelDownload;
 
+@property (nonatomic) NSUInteger pageNumber;
 @property (nonatomic, readonly) NSMutableDictionary *imageDownloaders;
 @property (nonatomic) __weak NSObject<PageThumbnailDownloaderDelegate> *delegate;
 

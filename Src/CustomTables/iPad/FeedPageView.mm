@@ -99,13 +99,13 @@ const NSUInteger tilesOnPage = 4;
 }
 
 //________________________________________________________________________________________
-- (void) setThumbnail : (UIImage *) thumbnailImage forTile : (NSUInteger) tileIndex
+- (void) setThumbnail : (UIImage *) thumbnailImage forTile : (NSUInteger) tileIndex doLayout : (BOOL) layout
 {
    assert(thumbnailImage != nil && "setThumbnail:forTile, parameter 'thumbnailImage' is nil");
    assert(tileIndex < tiles.count && "setThumbnail:forTile, parameter 'tileIndex' is out of range");
    
    FeedItemTileView * const tile = (FeedItemTileView *)tiles[tileIndex];
-   [tile setTileThumbnail : thumbnailImage];
+   [tile setTileThumbnail : thumbnailImage doLayout : layout];
 }
 
 //________________________________________________________________________________________

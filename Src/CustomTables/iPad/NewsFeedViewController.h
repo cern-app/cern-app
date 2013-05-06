@@ -7,6 +7,7 @@
 //
 
 
+#import "PageThumbnailDownloader.h"
 #import "PageControllerProtocol.h"
 #import "ConnectionController.h"
 #import "TileViewController.h"
@@ -15,10 +16,10 @@
 #import "RSSAggregator.h"
 
 @interface NewsFeedViewController : TileViewController<HUDRefreshProtocol, RSSAggregatorDelegate, PageController,
-                                                       ImageDownloaderDelegate, ConnectionController>
+                                                       PageThumbnailDownloaderDelegate, ConnectionController>
 {
 @protected
-   NSMutableDictionary *imageDownloaders;
+   NSMutableDictionary *downloaders;
    NSArray *feedCache;
 }
 

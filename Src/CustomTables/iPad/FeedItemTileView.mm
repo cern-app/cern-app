@@ -218,7 +218,7 @@ bool IsWideImage(UIImage *image)
 }
 
 //________________________________________________________________________________________
-- (void) setTileThumbnail : (UIImage *) image
+- (void) setTileThumbnail : (UIImage *) image doLayout : (BOOL) layout
 {
    assert(image != nil && "setTileThumbnail, parameter 'image' is nil");
    //CERN Courie's items have an image of size 1x1.
@@ -227,7 +227,8 @@ bool IsWideImage(UIImage *image)
       return;
 
    thumbnailView.image = image;
-   [self layoutTile];
+   if (layout)
+      [self layoutTile];
 }
 
 //________________________________________________________________________________________

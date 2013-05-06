@@ -15,7 +15,7 @@
 
 @property (nonatomic, readonly) NSRange pageRange;
 
-- (void) setThumbnail : (UIImage *) thumbnailImage forTile : (NSUInteger) tileIndex;
+- (void) setThumbnail : (UIImage *) thumbnailImage forTile : (NSUInteger) tileIndex doLayout : (BOOL) layout;
 - (BOOL) tileHasThumbnail : (NSUInteger) tileIndex;
 
 - (void) layoutTiles;

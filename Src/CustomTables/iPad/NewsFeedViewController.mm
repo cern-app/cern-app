@@ -18,6 +18,7 @@
 #import "MWFeedItem.h"
 #import "FeedCache.h"
 #import "FlipView.h"
+#import "KeyVal.h"
 
 @implementation NewsFeedViewController {
    BOOL viewDidAppear;
@@ -32,7 +33,7 @@
 //________________________________________________________________________________________
 - (void) doInitController
 {
-   imageDownloaders = nil;
+   downloaders = nil;
    viewDidAppear = NO;
    
    aggregator = [[RSSAggregator alloc] init];
@@ -200,44 +201,56 @@
 {
    if (feedCache)//We do not load images for a cached feed, since right now we are refreshing the feed.
       return;
+
+   if (!downloaders)
+      downloaders = [[NSMutableDictionary alloc] init];
+
+   NSNumber * const key = [NSNumber numberWithUnsignedInteger : currPage.pageNumber];
+   if (downloaders[key])
+      return;
    
+   NSMutableArray * const thumbnails = [[NSMutableArray alloc] init];
    const NSRange range = currPage.pageRange;
    for (NSUInteger i = range.location, e = range.location + range.length; i < e; ++i) {
       MWFeedItem * const article = (MWFeedItem *)dataItems[i];
       if (!article.image) {
-         if (!imageDownloaders)
-            imageDownloaders = [[NSMutableDictionary alloc] init];
-      
-
          //May be, we already have a downloader for this item?
-         
-         //TODO: row and section must be i and page, not page and i.
-         NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : currPage.pageNumber inSection : i];//Using absolute index i, not relative (on a page).
-         ImageDownloader *downloader = (ImageDownloader *)imageDownloaders[indexPath];
-         
-         if (!downloader) {
-            NSString * body = article.content;
-            if (!body)
-               body = article.summary;
+         NSString * body = article.content;
+         if (!body)
+            body = article.summary;
 
-            if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
-               downloader = [[ImageDownloader alloc] initWithURLString : urlString];
-               downloader.indexPathInTableView = indexPath;
-               downloader.delegate = self;
-               [imageDownloaders setObject : downloader forKey : indexPath];
-               [downloader startDownload];//Power on.
-            }
+         if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+            KeyVal * const newThumbnail = [[KeyVal alloc] init];
+            newThumbnail.key = [NSIndexPath indexPathForRow : i inSection : currPage.pageNumber];
+            newThumbnail.val = urlString;
+            [thumbnails addObject : newThumbnail];
          }
-      } else if (![currPage tileHasThumbnail : i - range.location]) {
-         //Image was loaded already, but not tile's thumbnailView and
-         //tile's layout has to be corrected yet.
-         [currPage setThumbnail : article.image forTile : i - range.location];
-         [flipView replaceCurrentFrame : currPage];
-         //Now we have to replace an animation frame.
       }
    }
+   
+   if (!thumbnails.count) {
+      //Let's check, if we have an image in some article, but no image in the corresponding tile.
+      bool needUpdate = false;
+      for (NSUInteger i = range.location, e = range.location + range.length; i < e; ++i) {
+         MWFeedItem * const article = (MWFeedItem *)dataItems[i];
+         if (article.image && ![currPage tileHasThumbnail : i - range.location]) {
+            needUpdate = true;
+            [currPage setThumbnail : article.image forTile : i - range.location doLayout : NO];
+         }
+      }
+      
+      if (needUpdate) {
+         [currPage layoutTiles];
+         [flipView replaceCurrentFrame : currPage];
+      }
+   } else {
+      PageThumbnailDownloader * const newDownloader = [[PageThumbnailDownloader alloc] initWithItems : thumbnails];
+      [downloaders setObject:newDownloader forKey : key];
+      newDownloader.delegate = self;
+      [newDownloader startDownload];
+   }
 }
-
+/*
 #pragma mark - ImageDownloaderDelegate.
 
 //________________________________________________________________________________________
@@ -286,6 +299,65 @@
    //But no need to update the tableView.
    if (!imageDownloaders.count)
       imageDownloaders = nil;
+}
+*/
+
+#pragma mark - PageThumbnailDownloaderDelegate
+
+//________________________________________________________________________________________
+- (void) thumbnailsDownloadDidFihish : (PageThumbnailDownloader *) thumbnailsDownloader
+{
+   assert(thumbnailsDownloader != nil &&
+          "thumbnailsDownloadDidFinish:, parameter 'thumbnailsDownloader' is nil");
+   
+   NSMutableDictionary * const imageDownloaders = thumbnailsDownloader.imageDownloaders;
+   BOOL currPageUpdated = NO;
+   const NSRange currRange = currPage.pageRange;
+   
+   NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
+   for (id key in keyEnumerator) {
+      ImageDownloader * const imageDownloader = (ImageDownloader *)imageDownloaders[key];
+
+      if (imageDownloader.image) {
+         NSIndexPath * const path = imageDownloader.indexPathInTableView;
+         assert(path != nil &&
+                "thumbnailsDownloadDidFinish:, invalid image path");
+         const NSInteger pageNumber = path.section;
+         assert(pageNumber >= 0 && pageNumber < NSInteger(nPages) &&
+                "thumbnailsDownloadDidFinish:, page index is out of bounds");
+         
+         const NSInteger articleIndex = path.row;
+         assert(articleIndex >= 0 && articleIndex < dataItems.count &&
+                "thumbnailsDownloadDidFinish:, article index is out of bounds");
+         
+         MWFeedItem * const article = (MWFeedItem *)dataItems[articleIndex];
+         article.image = imageDownloader.image;
+         
+         if (pageNumber == currPage.pageNumber && ![currPage tileHasThumbnail : articleIndex - currRange.location]) {
+            //
+            currPageUpdated = YES;
+            //Set the thumbnail but do not resize anything yet.
+            [currPage setThumbnail : imageDownloader.image forTile : articleIndex - currRange.location doLayout : NO];
+         }
+      }
+   }
+   
+   if (thumbnailsDownloader.pageNumber == currPage.pageNumber) {
+      for (NSUInteger i = currRange.location, e = i + currRange.length; i < e; ++i) {
+         MWFeedItem * const article = (MWFeedItem *)dataItems[i];
+         if (article.image && ![currPage tileHasThumbnail:i - currRange.location]) {
+            currPageUpdated = true;
+            [currPage setThumbnail : article.image forTile:i - currRange.location doLayout : NO];
+         }
+      }
+   }
+   
+   [downloaders removeObjectForKey : [NSNumber numberWithUnsignedInteger : thumbnailsDownloader.pageNumber]];
+   
+   if (currPageUpdated) {
+      [currPage layoutTiles];
+      [flipView replaceCurrentFrame : currPage];
+   }
 }
 
 #pragma mark - UI
@@ -381,14 +453,14 @@
 //________________________________________________________________________________________
 - (void) cancelAllImageDownloaders
 {
-   if (imageDownloaders && imageDownloaders.count) {
-      NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
+   if (downloaders && downloaders.count) {
+      NSEnumerator * const keyEnumerator = [downloaders keyEnumerator];
       for (id key in keyEnumerator) {
-         ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key];
+         PageThumbnailDownloader * const downloader = (PageThumbnailDownloader *)downloaders[key];
          [downloader cancelDownload];
       }
       
-      imageDownloaders = nil;
+      downloaders = nil;
    }
 }
 
