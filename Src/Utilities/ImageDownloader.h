@@ -18,6 +18,9 @@
 - (id) initWithURLString : (NSString *) url;
 - (id) initWithURL : (NSURL *) url;
 - (void) startDownload;
+- (void) startDownload : (BOOL) createUIImage;
+- (void) createUIImage;
+
 - (void) cancelDownload;
 
 @property (weak) NSObject<ImageDownloaderDelegate> * delegate;

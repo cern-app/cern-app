@@ -11,9 +11,10 @@
 //
 
 @implementation ImageDownloader {
-   NSMutableData *imageData;
    NSURLConnection *imageConnection;
+   NSMutableData *imageData;
    NSURL *url;
+   BOOL delayImageCreation;
 }
 
 @synthesize delegate, indexPathInTableView, image;
@@ -25,8 +26,12 @@
    
    if (self = [super init]) {
       url = [NSURL URLWithString : urlString];
+      if (!url)
+         return nil;//Funny, what will ARC do?
+
       imageData = nil;
       imageConnection = nil;
+      delayImageCreation = NO;
    }
    
    return self;
@@ -41,6 +46,7 @@
       url = anUrl;
       imageData = nil;
       imageConnection = nil;
+      delayImageCreation = NO;
    }
    
    return self;
@@ -60,6 +66,22 @@
    image = nil;
    imageData = [[NSMutableData alloc] init];
    imageConnection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : url] delegate : self];
+}
+
+//________________________________________________________________________________________
+- (void) startDownload : (BOOL) createUIImage
+{
+   delayImageCreation = createUIImage;
+   [self startDownload];
+}
+
+//________________________________________________________________________________________
+- (void) createUIImage
+{
+   if (imageData && imageData.length) {
+      image = [[UIImage alloc] initWithData : imageData];
+      imageData = nil;
+   }
 }
 
 //________________________________________________________________________________________
@@ -129,35 +151,12 @@
    imageConnection = nil;
 
    if (imageData.length) {
-      //Actually, it's not a bad idea for iPhone also, but it's just a test now.
-      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-         [self performSelectorInBackground : @selector(createUIImageInBackground) withObject : nil];
-      } else  {
+      if (!delayImageCreation) {
          image = [[UIImage alloc] initWithData : imageData];
          [delegate imageDidLoad : indexPathInTableView];
          imageData = nil;
       }
    }
-}
-
-//________________________________________________________________________________________
-- (void) createUIImageInBackground
-{
-   assert(image == nil && "createUIImageInBackground, image must be nil");
-   assert(imageData.length != 0 && "createUIImageInBackground, imageData is either nil or empty");
-   
-   image = [[UIImage alloc] initWithData : imageData];
-   imageData = nil;
-   [self performSelectorOnMainThread : @selector(informDelegate) withObject : nil waitUntilDone : NO];
-}
-
-//________________________________________________________________________________________
-- (void) informDelegate
-{
-   assert(indexPathInTableView != nil && "informDelegate, indexPathIntableView is nil");
-   assert(delegate != nil && "informDelegate, delegate is nil");
-   
-   [delegate imageDidLoad : indexPathInTableView];
 }
 
 @end
