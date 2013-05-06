@@ -150,15 +150,12 @@
 
    imageConnection = nil;
 
-   if (imageData.length) {
-      if (!delayImageCreation) {
-         image = [[UIImage alloc] initWithData : imageData];
-         imageData = nil;
-      }
-      
-      //TODO: something with better logic.
-      [delegate imageDidLoad : indexPathInTableView];
+   if (imageData.length && !delayImageCreation) {
+      image = [[UIImage alloc] initWithData : imageData];
+      imageData = nil;
    }
+   
+   [delegate imageDidLoad : indexPathInTableView];
 }
 
 @end

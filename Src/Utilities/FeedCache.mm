@@ -121,8 +121,7 @@ void WriteFeedCache(NSString *feedStoreID, NSArray *feedCache, NSArray *allArtic
             return;
       }
 
-      BOOL inserted = NO;
-
+      NSUInteger inserted = 0;
       for (MWFeedItem *feedItem in allArticles) {
          if (!feedItem.title || !feedItem.link)
             continue;
@@ -130,7 +129,7 @@ void WriteFeedCache(NSString *feedStoreID, NSArray *feedCache, NSArray *allArtic
          NSManagedObject * const saveFeedItem = [NSEntityDescription insertNewObjectForEntityForName : @"FeedItem"
                                                                     inManagedObjectContext : context];
          if (saveFeedItem) {
-            inserted = YES;
+            ++inserted;
             [saveFeedItem setValue : feedItem.title forKey : @"itemTitle"];
             [saveFeedItem setValue : feedItem.link forKey : @"itemLink"];
             [saveFeedItem setValue : feedStoreID forKey : @"feedName"];
@@ -145,6 +144,9 @@ void WriteFeedCache(NSString *feedStoreID, NSArray *feedCache, NSArray *allArtic
 
             [saveFeedItem setValue : summary forKey : @"itemSummary"];
          }
+         
+         if (inserted == 20)//Enough, it takes to much time :)
+            break;
       }
 
       if (inserted) {

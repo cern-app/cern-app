@@ -147,7 +147,6 @@
 - (void) allFeedsDidLoadForAggregator : (RSSAggregator *) anAggregator
 {
 #pragma unused(anAggregator)
-
    //In this mode we always write a cache into the storage.
    assert(feedStoreID.length && "allFeedDidLoadForAggregator:, feedStoreID is invalid");
    CernAPP::WriteFeedCache(feedStoreID, feedCache, aggregator.allArticles);
@@ -250,57 +249,6 @@
       [newDownloader startDownload];
    }
 }
-/*
-#pragma mark - ImageDownloaderDelegate.
-
-//________________________________________________________________________________________
-- (void) imageDidLoad : (NSIndexPath *) indexPath
-{
-   assert(feedCache == nil && "imageDidLoad:, images loaded while cache is in use");
-   assert(indexPath != nil && "imageDidLoad, parameter 'indexPath' is nil");
-   const NSInteger page = indexPath.row;
-   assert(page >= 0 && page < nPages && "imageDidLoad:, index is out of bounds");
-
-   MWFeedItem * const article = (MWFeedItem *)dataItems[indexPath.section];
-   //We should not load any image more when once.
-   //assert(article.image == nil && "imageDidLoad:, image was loaded already");
-   
-   ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath];
-   assert(downloader != nil && "imageDidLoad:, no downloader found for the given index path");
-
-   if (downloader.image) {
-      article.image = downloader.image;
-      //
-      if (currPage.pageNumber == page && !flipAnimator.animationLock) {
-         [currPage setThumbnail : article.image forTile : indexPath.section - currPage.pageRange.location];
-         [flipView replaceCurrentFrame : currPage];
-      }
-   }
-   
-   [imageDownloaders removeObjectForKey : indexPath];
-   if (!imageDownloaders.count)
-      imageDownloaders = nil;
-}
-
-//________________________________________________________________________________________
-- (void) imageDownloadFailed : (NSIndexPath *) indexPath
-{
-   assert(feedCache == nil && "imageDownloadFailed:, images loaded while cache is in use");
-   assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
-
-   const NSInteger page = indexPath.row;
-   //Even if download failed, index still must be valid.
-   assert(page >= 0 && page < nPages &&
-          "imageDownloadFailed:, index is out of bounds");
-   assert(imageDownloaders[indexPath] != nil &&
-          "imageDownloadFailed:, no downloader for the given path");
-
-   [imageDownloaders removeObjectForKey : indexPath];
-   //But no need to update the tableView.
-   if (!imageDownloaders.count)
-      imageDownloaders = nil;
-}
-*/
 
 #pragma mark - PageThumbnailDownloaderDelegate
 
@@ -333,7 +281,7 @@
          MWFeedItem * const article = (MWFeedItem *)dataItems[articleIndex];
          article.image = imageDownloader.image;
          
-         if (pageNumber == currPage.pageNumber && ![currPage tileHasThumbnail : articleIndex - currRange.location]) {
+         if (pageNumber == currPage.pageNumber && ![currPage tileHasThumbnail : articleIndex - currRange.location] && !flipAnimator.animationLock) {
             //
             currPageUpdated = YES;
             //Set the thumbnail but do not resize anything yet.
@@ -342,7 +290,7 @@
       }
    }
    
-   if (thumbnailsDownloader.pageNumber == currPage.pageNumber) {
+   if (thumbnailsDownloader.pageNumber == currPage.pageNumber && !flipAnimator.animationLock) {
       for (NSUInteger i = currRange.location, e = i + currRange.length; i < e; ++i) {
          MWFeedItem * const article = (MWFeedItem *)dataItems[i];
          if (article.image && ![currPage tileHasThumbnail:i - currRange.location]) {
