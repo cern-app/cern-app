@@ -213,7 +213,7 @@ bool IsWideImage(UIImage *image)
    [text addAttribute : NSForegroundColorAttributeName value : [UIColor darkGrayColor] range : textRange];
    //3. Alignment.
    NSMutableParagraphStyle * const textStyle = [[NSMutableParagraphStyle alloc] init];
-   [textStyle setAlignment : NSTextAlignmentNatural];//NSTextAlignmentJustified];
+   [textStyle setAlignment : NSTextAlignmentJustified];
    [text addAttribute : NSParagraphStyleAttributeName value : textStyle range : textRange];
 }
 
