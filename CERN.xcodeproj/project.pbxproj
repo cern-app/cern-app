@@ -203,6 +203,8 @@
 		70C728461732C6E300992077 /* FlipView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C728441732C6E200992077 /* FlipView.mm */; };
 		70C884A1173956D0001D98D0 /* StaticInfoPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C8849E173956D0001D98D0 /* StaticInfoPageView.mm */; };
 		70C884A2173956D0001D98D0 /* StaticInfoTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */; };
+		70C884A8173957AD001D98D0 /* StaticInfoItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A5173957AD001D98D0 /* StaticInfoItemViewController.mm */; };
+		70C884A9173957AD001D98D0 /* StaticInfoScrollViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A7173957AD001D98D0 /* StaticInfoScrollViewController.mm */; };
 		70CC55EF169EF80600292332 /* MenuNavigationController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CC55ED169EF80500292332 /* MenuNavigationController.mm */; };
 		70D190481737BF9100D2E0E7 /* PageThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D190471737BF9100D2E0E7 /* PageThumbnailDownloader.mm */; };
 		70D2629516F8948600883316 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D2629416F8948600883316 /* CoreText.framework */; };
@@ -216,8 +218,6 @@
 		70D98B0916F73ABA003C42E7 /* ArticleDetailViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AFF16F73ABA003C42E7 /* ArticleDetailViewController.mm */; };
 		70D98B0A16F73ABA003C42E7 /* CreditsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B0116F73ABA003C42E7 /* CreditsViewController.mm */; };
 		70D98B0B16F73ABA003C42E7 /* EventDisplayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B0316F73ABA003C42E7 /* EventDisplayViewController.mm */; };
-		70D98B0C16F73ABA003C42E7 /* StaticInfoItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B0516F73ABA003C42E7 /* StaticInfoItemViewController.mm */; };
-		70D98B0D16F73ABA003C42E7 /* StaticInfoScrollViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B0716F73ABA003C42E7 /* StaticInfoScrollViewController.mm */; };
 		70D98B1416F76430003C42E7 /* FeedPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B1316F76430003C42E7 /* FeedPageView.mm */; };
 		70D98B1716F76565003C42E7 /* FeedItemTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B1616F76565003C42E7 /* FeedItemTileView.mm */; };
 		70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */; };
@@ -519,6 +519,10 @@
 		70C8849E173956D0001D98D0 /* StaticInfoPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoPageView.mm; sourceTree = "<group>"; };
 		70C8849F173956D0001D98D0 /* StaticInfoTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoTileView.h; sourceTree = "<group>"; };
 		70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoTileView.mm; sourceTree = "<group>"; };
+		70C884A4173957AD001D98D0 /* StaticInfoItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoItemViewController.h; sourceTree = "<group>"; };
+		70C884A5173957AD001D98D0 /* StaticInfoItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoItemViewController.mm; sourceTree = "<group>"; };
+		70C884A6173957AD001D98D0 /* StaticInfoScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoScrollViewController.h; sourceTree = "<group>"; };
+		70C884A7173957AD001D98D0 /* StaticInfoScrollViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoScrollViewController.mm; sourceTree = "<group>"; };
 		70CC55ED169EF80500292332 /* MenuNavigationController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuNavigationController.mm; sourceTree = "<group>"; };
 		70CC55EE169EF80600292332 /* MenuNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuNavigationController.h; sourceTree = "<group>"; };
 		70D190461737BF9100D2E0E7 /* PageThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageThumbnailDownloader.h; sourceTree = "<group>"; };
@@ -544,10 +548,6 @@
 		70D98B0116F73ABA003C42E7 /* CreditsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CreditsViewController.mm; sourceTree = "<group>"; };
 		70D98B0216F73ABA003C42E7 /* EventDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDisplayViewController.h; sourceTree = "<group>"; };
 		70D98B0316F73ABA003C42E7 /* EventDisplayViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EventDisplayViewController.mm; sourceTree = "<group>"; };
-		70D98B0416F73ABA003C42E7 /* StaticInfoItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoItemViewController.h; sourceTree = "<group>"; };
-		70D98B0516F73ABA003C42E7 /* StaticInfoItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoItemViewController.mm; sourceTree = "<group>"; };
-		70D98B0616F73ABA003C42E7 /* StaticInfoScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoScrollViewController.h; sourceTree = "<group>"; };
-		70D98B0716F73ABA003C42E7 /* StaticInfoScrollViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoScrollViewController.mm; sourceTree = "<group>"; };
 		70D98B1216F76430003C42E7 /* FeedPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedPageView.h; sourceTree = "<group>"; };
 		70D98B1316F76430003C42E7 /* FeedPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedPageView.mm; sourceTree = "<group>"; };
 		70D98B1516F76564003C42E7 /* FeedItemTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedItemTileView.h; sourceTree = "<group>"; };
@@ -1092,6 +1092,7 @@
 		70C8849B173956CF001D98D0 /* StaticInfo */ = {
 			isa = PBXGroup;
 			children = (
+				70C884A3173957AD001D98D0 /* iPhone */,
 				70C8849C173956D0001D98D0 /* iPad */,
 			);
 			path = StaticInfo;
@@ -1106,6 +1107,17 @@
 				70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */,
 			);
 			path = iPad;
+			sourceTree = "<group>";
+		};
+		70C884A3173957AD001D98D0 /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				70C884A4173957AD001D98D0 /* StaticInfoItemViewController.h */,
+				70C884A5173957AD001D98D0 /* StaticInfoItemViewController.mm */,
+				70C884A6173957AD001D98D0 /* StaticInfoScrollViewController.h */,
+				70C884A7173957AD001D98D0 /* StaticInfoScrollViewController.mm */,
+			);
+			path = iPhone;
 			sourceTree = "<group>";
 		};
 		70D98AE816F73826003C42E7 /* iPhone */ = {
@@ -1138,10 +1150,6 @@
 				70D98B0116F73ABA003C42E7 /* CreditsViewController.mm */,
 				70D98B0216F73ABA003C42E7 /* EventDisplayViewController.h */,
 				70D98B0316F73ABA003C42E7 /* EventDisplayViewController.mm */,
-				70D98B0416F73ABA003C42E7 /* StaticInfoItemViewController.h */,
-				70D98B0516F73ABA003C42E7 /* StaticInfoItemViewController.mm */,
-				70D98B0616F73ABA003C42E7 /* StaticInfoScrollViewController.h */,
-				70D98B0716F73ABA003C42E7 /* StaticInfoScrollViewController.mm */,
 			);
 			path = iPhone;
 			sourceTree = "<group>";
@@ -1503,8 +1511,6 @@
 				70D98B0916F73ABA003C42E7 /* ArticleDetailViewController.mm in Sources */,
 				70D98B0A16F73ABA003C42E7 /* CreditsViewController.mm in Sources */,
 				70D98B0B16F73ABA003C42E7 /* EventDisplayViewController.mm in Sources */,
-				70D98B0C16F73ABA003C42E7 /* StaticInfoItemViewController.mm in Sources */,
-				70D98B0D16F73ABA003C42E7 /* StaticInfoScrollViewController.mm in Sources */,
 				70D98B1416F76430003C42E7 /* FeedPageView.mm in Sources */,
 				70D98B1716F76565003C42E7 /* FeedItemTileView.mm in Sources */,
 				70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */,
@@ -1522,6 +1528,8 @@
 				70D190481737BF9100D2E0E7 /* PageThumbnailDownloader.mm in Sources */,
 				70C884A1173956D0001D98D0 /* StaticInfoPageView.mm in Sources */,
 				70C884A2173956D0001D98D0 /* StaticInfoTileView.mm in Sources */,
+				70C884A8173957AD001D98D0 /* StaticInfoItemViewController.mm in Sources */,
+				70C884A9173957AD001D98D0 /* StaticInfoScrollViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
