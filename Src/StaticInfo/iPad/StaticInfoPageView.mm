@@ -1,0 +1,165 @@
+//
+//  StaticInfoPageView.m
+//  CERN
+//
+//  Created by Timur Pocheptsov on 5/7/13.
+//  Copyright (c) 2013 CERN. All rights reserved.
+//
+
+#import <algorithm>
+
+#import "StaticInfoPageView.h"
+#import "StaticInfoTileView.h"
+
+using namespace CernAPP;
+
+const NSUInteger tilesOnPage = 2;
+
+@implementation StaticInfoPageView {
+   NSMutableArray *tiles;
+}
+
+@synthesize pageNumber, pageRange;
+
+//________________________________________________________________________________________
+- (id) initWithFrame : (CGRect) frame
+{
+   if (self = [super initWithFrame : frame]) {
+      //
+      self.backgroundColor = [UIColor darkGrayColor];
+   }
+
+   return self;
+}
+
+//________________________________________________________________________________________
++ (NSRange) suggestRangeForward : (NSArray *) items startingFrom : (NSUInteger) index
+{
+   //Actually, there is no need in this function, since setPageItems:... setPageItemsFromCache:.. will
+   //find this range. Anyway, this function does not create any tile, it just defines the range.
+   //For the given '[begin', find the 'end)'
+
+   assert(items != nil && "suggestRangeForward:startingFrom:, parameter 'items' is nil");
+   assert(index < items.count && "suggestRangeForward:startingFrom:, parameter 'index' is out of bounds");
+   
+   const NSUInteger endOfRange = std::min(items.count, index + tilesOnPage);
+   
+   return NSMakeRange(index, endOfRange - index);
+}
+
+//________________________________________________________________________________________
++ (NSRange) suggestRangeBackward : (NSArray *) items endingWith : (NSUInteger) index
+{
+   //We have the 'end)', find the '[begin'.
+   
+   assert(items != nil && "suggestRangeBackward:endingWith:, parameter 'items' is nil");
+   assert(index <= items.count && "suggestRangeBackward:endingWith:, parameter 'index' is out of bounds");
+   
+   NSRange range = {};
+   
+   if (index >= tilesOnPage) {
+      range.location = index - tilesOnPage;
+      range.length = tilesOnPage;
+   } else {
+      range.location = 0;
+      range.length = index;
+   }
+   
+   return range;
+}
+
+
+//________________________________________________________________________________________
+- (NSUInteger) setPageItems : (NSArray *) items startingFrom : (NSUInteger) index
+{
+   assert(items != nil && "setPageItems:startingFrom:, parameter 'feedItems' is nil");
+   assert(index < items.count && "setPageItems:startingFrom:, parameter 'index' is out of range");
+
+   if (tiles) {
+      for (StaticInfoTileView *v in tiles)
+         [v removeFromSuperview];
+      [tiles removeAllObjects];
+   } else
+      tiles = [[NSMutableArray alloc] init];
+
+   const NSUInteger endOfRange = std::min(items.count, index + tilesOnPage);
+   
+   StaticInfoTileHint hints[tilesOnPage] = {StaticInfoTileHint::scheme1, StaticInfoTileHint::scheme2};
+
+   for (NSUInteger i = index; i < endOfRange; ++i) {
+      StaticInfoTileView * const newTile = [[StaticInfoTileView alloc] initWithFrame : CGRect()];
+      //[newTile setImage:];
+      //[newTile setTitle:];
+      //[newTile setText:];
+      newTile.layoutHint = hints[i - index];
+      [tiles addObject : newTile];
+      [self addSubview : newTile];
+   }
+
+   pageRange.location = index;
+   pageRange.length = endOfRange - index;
+
+   return tilesOnPage;
+}
+
+//________________________________________________________________________________________
+- (NSRange) pageRange
+{
+   return pageRange;
+}
+
+//________________________________________________________________________________________
+- (void) setThumbnail : (UIImage *) thumbnailImage forTile : (NSUInteger) tileIndex doLayout : (BOOL) layout
+{
+#pragma unused(thumbnailImage, tileIndex, layout)
+}
+
+//________________________________________________________________________________________
+- (BOOL) tileHasThumbnail : (NSUInteger) tileIndex
+{
+#pragma unused(tileIndex)
+   return NO;
+}
+
+//________________________________________________________________________________________
+- (void) layoutTiles
+{
+   if (!tiles.count)
+      return;
+
+   //Layout tiles
+   const CGRect frame = self.frame;
+   //We always place 4 tiles on the page (if we have 4).
+
+   //Hehe, can I, actually, use this to identify landscape orientation???
+   const NSUInteger nItemsPerRow = 2;
+   const NSUInteger nRows = 2;
+   const CGFloat width = frame.size.width / nItemsPerRow;
+   const CGFloat height = frame.size.height / nRows;
+   
+   NSUInteger index = 0;
+   for (StaticInfoTileView *tile in tiles) {
+      const CGFloat x = (index % nItemsPerRow) * width + 2.f;
+      const CGFloat y = (index / nItemsPerRow) * height + 2.f;
+      const CGRect frame = CGRectMake(x, y, width - 4.f, height - 4.f);
+
+      tile.frame = frame;
+      [tile layoutTile];
+      
+      ++index;
+   }
+}
+
+//________________________________________________________________________________________
+- (void) explodeTiles : (UIInterfaceOrientation) orientation
+{
+#pragma unused(orientation)
+}
+
+//________________________________________________________________________________________
+- (void) collectTilesAnimatedForOrientation : (UIInterfaceOrientation) orientation from : (CFTimeInterval) start withDuration : (CFTimeInterval) duration
+{
+#pragma unused(orientation, start, duration)
+}
+
+@end

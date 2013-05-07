@@ -201,6 +201,8 @@
 		70C0E948169C75F10004ED1E /* PTS56F.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70C0E947169C75F10004ED1E /* PTS56F.ttf */; };
 		70C0E94A169C85FA0004ED1E /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 70C0E949169C85FA0004ED1E /* menu.png */; };
 		70C728461732C6E300992077 /* FlipView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C728441732C6E200992077 /* FlipView.mm */; };
+		70C884A1173956D0001D98D0 /* StaticInfoPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C8849E173956D0001D98D0 /* StaticInfoPageView.mm */; };
+		70C884A2173956D0001D98D0 /* StaticInfoTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */; };
 		70CC55EF169EF80600292332 /* MenuNavigationController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CC55ED169EF80500292332 /* MenuNavigationController.mm */; };
 		70D190481737BF9100D2E0E7 /* PageThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D190471737BF9100D2E0E7 /* PageThumbnailDownloader.mm */; };
 		70D2629516F8948600883316 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D2629416F8948600883316 /* CoreText.framework */; };
@@ -513,6 +515,10 @@
 		70C0E949169C85FA0004ED1E /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
 		70C728441732C6E200992077 /* FlipView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FlipView.mm; sourceTree = "<group>"; };
 		70C728451732C6E200992077 /* FlipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipView.h; sourceTree = "<group>"; };
+		70C8849D173956D0001D98D0 /* StaticInfoPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoPageView.h; sourceTree = "<group>"; };
+		70C8849E173956D0001D98D0 /* StaticInfoPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoPageView.mm; sourceTree = "<group>"; };
+		70C8849F173956D0001D98D0 /* StaticInfoTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoTileView.h; sourceTree = "<group>"; };
+		70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoTileView.mm; sourceTree = "<group>"; };
 		70CC55ED169EF80500292332 /* MenuNavigationController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuNavigationController.mm; sourceTree = "<group>"; };
 		70CC55EE169EF80600292332 /* MenuNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuNavigationController.h; sourceTree = "<group>"; };
 		70D190461737BF9100D2E0E7 /* PageThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageThumbnailDownloader.h; sourceTree = "<group>"; };
@@ -855,6 +861,7 @@
 		707B1342169AE8C900180E02 /* Src */ = {
 			isa = PBXGroup;
 			children = (
+				70C8849B173956CF001D98D0 /* StaticInfo */,
 				70B2A74F16DBBD5200BC8657 /* Protocols */,
 				7069F76016C14D6D006BC78B /* CustomViews */,
 				709CE66516A59A3B006D524E /* Parsers */,
@@ -1080,6 +1087,25 @@
 				70BE54AF169AFC2900A3E1B6 /* CERN-Prefix.pch */,
 			);
 			path = PCH;
+			sourceTree = "<group>";
+		};
+		70C8849B173956CF001D98D0 /* StaticInfo */ = {
+			isa = PBXGroup;
+			children = (
+				70C8849C173956D0001D98D0 /* iPad */,
+			);
+			path = StaticInfo;
+			sourceTree = "<group>";
+		};
+		70C8849C173956D0001D98D0 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				70C8849D173956D0001D98D0 /* StaticInfoPageView.h */,
+				70C8849E173956D0001D98D0 /* StaticInfoPageView.mm */,
+				70C8849F173956D0001D98D0 /* StaticInfoTileView.h */,
+				70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */,
+			);
+			path = iPad;
 			sourceTree = "<group>";
 		};
 		70D98AE816F73826003C42E7 /* iPhone */ = {
@@ -1494,6 +1520,8 @@
 				70C728461732C6E300992077 /* FlipView.mm in Sources */,
 				70BCD9B31733C560000BD91B /* FlipParentView.mm in Sources */,
 				70D190481737BF9100D2E0E7 /* PageThumbnailDownloader.mm in Sources */,
+				70C884A1173956D0001D98D0 /* StaticInfoPageView.mm in Sources */,
+				70C884A2173956D0001D98D0 /* StaticInfoTileView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
