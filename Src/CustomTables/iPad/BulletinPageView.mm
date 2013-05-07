@@ -52,6 +52,8 @@ const CGFloat tileShift = 0.2f;
       // Initialization code
       pageRange = NSRange();
       tiles = [[NSMutableArray alloc] init];
+      
+      self.backgroundColor = [UIColor lightGrayColor];
    }
 
    return self;

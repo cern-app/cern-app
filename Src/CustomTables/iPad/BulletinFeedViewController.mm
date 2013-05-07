@@ -49,6 +49,10 @@
    self.navigationItem.rightBarButtonItem.enabled = YES;
    [self setPagesData];
 
+   [self layoutPages : YES];
+   [self layoutFlipView];
+
+   [self loadVisiblePageData];
 }
 
 #pragma mark - Overriders for TileViewController's methods.
@@ -129,9 +133,9 @@
 //________________________________________________________________________________________
 - (void) createPages
 {
- /*  leftPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
+   prevPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
    currPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
-   rightPage = [[BulletinPageView alloc] initWithFrame : CGRect()];*/
+   nextPage = [[BulletinPageView alloc] initWithFrame : CGRect()];
 }
 
 //________________________________________________________________________________________

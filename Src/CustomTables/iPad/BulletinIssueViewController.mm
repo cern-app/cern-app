@@ -26,7 +26,6 @@
 //________________________________________________________________________________________
 - (void) viewWillAppear : (BOOL) animated
 {
-   //TODO: find a better ("idiomatic") solution for this problem.
    [super viewWillAppear : animated];
    
    self.navigationItem.rightBarButtonItem = nil;
@@ -45,7 +44,10 @@
 //________________________________________________________________________________________
 - (void) reloadPage
 {
-   //Noop. We do not have 'refresh' at this level.
+   [self layoutPages : YES];
+   [self layoutFlipView];
+   [self layoutPanRegion];
+   [self loadVisiblePageData];
 }
 
 //________________________________________________________________________________________

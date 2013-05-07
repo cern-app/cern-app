@@ -86,8 +86,8 @@
    if (!viewDidAppear) {
       viewDidAppear = YES;
 
-      [self layoutPanRegion];
       [self initTilesFromCache];
+      [self layoutPanRegion];
       [self reloadPage];
    }
 }
@@ -119,6 +119,8 @@
    } else {
       [self addNavBarSpinner];//A spinner will replace a button in a navigation bar
       [self layoutPages : YES];
+      [self layoutFlipView];
+      [self layoutPanRegion];
    }
 
    [self.aggregator clearAllFeeds];
