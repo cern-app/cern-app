@@ -9,6 +9,7 @@
 #import "BulletinPageView.h"
 #import "MWFeedItem.h"
 #import "FeedCache.h"
+#import "FlipView.h"
 
 @implementation BulletinFeedViewController
 
@@ -62,22 +63,16 @@
 {
    if (feedCache != nil)//Do not load images for a cache - we are refreshing the feed at the moment.
       return;
- /*
+ 
    const CGFloat minImageSize = [BulletinIssueTileView minImageSize];
 
-   const NSUInteger visiblePageIndex = NSUInteger(scrollView.contentOffset.x / scrollView.frame.size.width);
-   UIView<TiledPage> *visiblePage = nil;
-   if (nPages > 3)
-      visiblePage = currPage;
-   else
-      !visiblePageIndex ? visiblePage = leftPage : visiblePageIndex == 1 ? visiblePage = currPage : visiblePage = rightPage;
-
-   const NSRange range = visiblePage.pageRange;
+   bool updateFlip = false;
+   const NSRange range = currPage.pageRange;
    for (NSUInteger i = range.location, e = range.location + range.length; i < e; ++i) {
       assert(i < dataItems.count && "loadVisiblePageData, invalid range for a page");
 
       //Does a tile have a thumbnail already?
-      if ([visiblePage tileHasThumbnail : i - range.location])
+      if ([currPage tileHasThumbnail : i - range.location])
          continue;
       
       //Check, if some article in this issue has a good image.
@@ -88,7 +83,8 @@
             const CGSize imageSize = article.image.size;
             if (imageSize.width >= minImageSize && imageSize.height >= minImageSize) {
                imageFound = true;
-               [visiblePage setThumbnail : article.image forTile : i - range.location];
+               [currPage setThumbnail : article.image forTile : i - range.location doLayout : YES];
+               updateFlip = true;
                break;
             }
          }
@@ -97,16 +93,16 @@
       if (imageFound)
          continue;
 
-      if (!imageDownloaders)
-         imageDownloaders = [[NSMutableDictionary alloc] init];      
+      if (!downloaders)//In the base class it was a dictionary with PageThumbnailDownloaders, now it's a dictionary with ImageDownloaders.
+         downloaders = [[NSMutableDictionary alloc] init];
       
       NSUInteger articleIndex = 0;
       for (MWFeedItem *article in articles) {
          if (article.image)//We skip this image (it was checked in the first loop, but seems to be not large enough).
             continue;
       
-         NSIndexPath * const key = [NSIndexPath indexPathForRow : i inSection : visiblePageIndex];
-         ImageDownloader * downloader = (ImageDownloader *)imageDownloaders[key];
+         NSIndexPath * const key = [NSIndexPath indexPathForRow : i inSection : currPage.pageNumber];
+         ImageDownloader * downloader = (ImageDownloader *)downloaders[key];
          if (downloader)//We are already downloading image for this tile.
             break;
 
@@ -116,16 +112,21 @@
          
          if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
             downloader = [[ImageDownloader alloc] initWithURLString : urlString];
-            const NSUInteger indices[] = {visiblePageIndex, i, articleIndex};
+            const NSUInteger indices[] = {currPage.pageNumber, i, articleIndex};
             downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
             downloader.delegate = self;
-            [imageDownloaders setObject : downloader forKey : key];
+            [downloaders setObject : downloader forKey : key];
             [downloader startDownload];//Power on.
             break;
          }
          ++articleIndex;
       }
-   }*/
+   }
+   
+   if (updateFlip) {
+      [currPage layoutTiles];
+      [flipView replaceCurrentFrame : currPage];
+   }
 }
 
 #pragma mark - Overriders for NewsFeedViewController's methods.
@@ -169,8 +170,10 @@
 //________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
-/*   assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
+   assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
    assert(indexPath.length == 3 && "imageDidLoad:, parameter 'indexPath' is not a valid path");
+
+   BOOL updateFlip = NO;
 
    NSUInteger indices[3] = {};
    [indexPath getIndexes : indices];
@@ -180,12 +183,6 @@
    const NSRange pageRange = [self findItemRangeForPage : pageIndex];
    assert(pageRange.location + pageRange.length <= dataItems.count &&
           "imageDidLoad:, page range is invalid");
-
-   UIView<TiledPage> *pageToUpdate = nil;
-   if (nPages <= 3)
-      pageToUpdate = !pageIndex ? leftPage : pageIndex == 1 ? currPage : rightPage;
-   else if (currPage.pageNumber == pageIndex)
-      pageToUpdate = currPage;
    
    const NSUInteger tileIndex = indices[1];
    assert(tileIndex >= pageRange.location && tileIndex < pageRange.location + pageRange.length &&
@@ -195,11 +192,11 @@
    assert(articleIndex < articles.count && "imageDidLoad:, article index is out of bounds");
    
    NSIndexPath * const key2D = [NSIndexPath indexPathForRow : tileIndex inSection : pageIndex];
-   ImageDownloader *downloader = (ImageDownloader *)imageDownloaders[key2D];
+   ImageDownloader *downloader = (ImageDownloader *)downloaders[key2D];
    assert(downloader != nil && "imageDidLoad:, downloader not found for index path");
 
    UIImage * const newImage = downloader.image;
-   [imageDownloaders removeObjectForKey : key2D];
+   [downloaders removeObjectForKey : key2D];
    
    bool imageFound = false;
    if (newImage) {
@@ -213,12 +210,14 @@
       if (imageSize.width >= minSize && imageSize.height >= minSize) {
          imageFound = true;
          //Ok, we have a good image!
-         if (pageToUpdate)
-            [pageToUpdate setThumbnail : newImage forTile : tileIndex - pageRange.location];
+         if (currPage.pageNumber == pageIndex) {
+            [currPage setThumbnail : newImage forTile : tileIndex - pageRange.location doLayout : YES];
+            updateFlip = YES;
+         }
       }
    }
 
-   if (!imageFound && pageToUpdate) {
+   if (!imageFound && currPage.pageNumber == pageIndex) {
       for (NSUInteger i = articleIndex + 1, e = articles.count; i < e; ++i) {
          MWFeedItem * const nextArticle = (MWFeedItem *)articles[i];
          NSString * body = nextArticle.content;
@@ -230,21 +229,26 @@
             const NSUInteger indices[] = {pageIndex, tileIndex, i};
             downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
             downloader.delegate = self;
-            [imageDownloaders setObject : downloader forKey : key2D];
+            [downloaders setObject : downloader forKey : key2D];
             [downloader startDownload];//Power on.
             break;
          }
       }
    }
    
-   if (!imageDownloaders.count)
-      imageDownloaders = nil;*/
+   if (!downloaders.count)
+      downloaders = nil;
+   
+   if (updateFlip) {
+      [currPage layoutTiles];
+      [flipView replaceCurrentFrame : currPage];
+   }
 }
 
 //________________________________________________________________________________________
 - (void) imageDownloadFailed : (NSIndexPath *) indexPath
 {
-/*   assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
+   assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
    assert(indexPath.length == 3 && "imageDownloadFailed:, parameter 'indexPath' is not a valid path");
 
    NSUInteger indices[3] = {};
@@ -256,12 +260,6 @@
    assert(pageRange.location + pageRange.length <= dataItems.count &&
           "imageDownloadFailed:, page range is invalid");
 
-   UIView<TiledPage> *pageToUpdate = nil;
-   if (nPages <= 3)
-      pageToUpdate = !pageIndex ? leftPage : pageIndex == 1 ? currPage : rightPage;
-   else if (currPage.pageNumber == pageIndex)
-      pageToUpdate = currPage;
-   
    const NSUInteger tileIndex = indices[1];
    assert(tileIndex >= pageRange.location && tileIndex < pageRange.location + pageRange.length &&
           "imageDownloadFailed:, tile index is out of bounds");
@@ -270,12 +268,12 @@
    assert(articleIndex < articles.count && "imageDownloadFailed:, article index is out of bounds");
    
    NSIndexPath * const key2D = [NSIndexPath indexPathForRow : tileIndex inSection : pageIndex];
-   ImageDownloader *downloader = (ImageDownloader *)imageDownloaders[key2D];
+   ImageDownloader *downloader = (ImageDownloader *)downloaders[key2D];
    assert(downloader != nil && "imageDownloadFailed:, downloader not found for index path");
 
-   [imageDownloaders removeObjectForKey : key2D];
+   [downloaders removeObjectForKey : key2D];
    
-   if (pageToUpdate) {
+   if (currPage.pageNumber == pageIndex) {
       //We still can try to load the next thumbnail.
       if (self.aggregator.hasConnection && articleIndex + 1 < articles.count) {//May be, download failed because of network problems?
          for (NSUInteger i = articleIndex + 1, e = articles.count; i < e; ++i) {
@@ -289,7 +287,7 @@
                const NSUInteger indices[] = {pageIndex, tileIndex, i};
                downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
                downloader.delegate = self;
-               [imageDownloaders setObject : downloader forKey : key2D];
+               [downloaders setObject : downloader forKey : key2D];
                [downloader startDownload];//Power on.
                break;
             }
@@ -297,8 +295,8 @@
       }
    }
    
-   if (!imageDownloaders.count)
-      imageDownloaders = nil;*/
+   if (!downloaders.count)
+      downloaders = nil;
 }
 
 #pragma mark - User interactions.

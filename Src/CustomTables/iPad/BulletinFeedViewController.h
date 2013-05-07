@@ -1,5 +1,7 @@
 #import "NewsFeedViewController.h"
 
-@interface BulletinFeedViewController : NewsFeedViewController
+#import "ImageDownloader.h"
+
+@interface BulletinFeedViewController : NewsFeedViewController<ImageDownloaderDelegate>
 
 @end
