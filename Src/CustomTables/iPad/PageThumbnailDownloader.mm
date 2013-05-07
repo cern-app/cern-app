@@ -30,6 +30,7 @@ enum class ThumbnailDownloadStage : unsigned char {
    
    NSOperationQueue *opQueue;
    NSInvocationOperation *imageCreateOp;
+   BOOL cancelled;
 }
 
 @synthesize pageNumber, imageDownloaders, delegate;
@@ -85,6 +86,8 @@ enum class ThumbnailDownloadStage : unsigned char {
    if (!imageDownloaders.count)
       return NO;
 
+   cancelled = NO;
+
    stage = ThumbnailDownloadStage::dataDownload;
    NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
    nCompleted = 0;
@@ -109,10 +112,9 @@ enum class ThumbnailDownloadStage : unsigned char {
    } else if (stage == ThumbnailDownloadStage::imageCreation) {
       //Cancel the background operation.
       [imageCreateOp cancel];
-      imageCreateOp = nil;
-      opQueue = nil;
    }
    
+   cancelled = YES;
    nCompleted = 0;
    stage = ThumbnailDownloadStage::none;
 }
@@ -122,23 +124,24 @@ enum class ThumbnailDownloadStage : unsigned char {
 //________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
-   assert(indexPath != nil && "imageDidLoad, parameter 'indexPath' is nil");
+   assert(cancelled == NO && "imageDidLoad:, operation was cancelled already");
+
+   assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
    assert(imageDownloaders[indexPath] != nil && "imageDidLoad:, unknown index path");
    assert(stage == ThumbnailDownloadStage::dataDownload &&
           "imageDidLoad:, wrong stage");
    assert(nCompleted < imageDownloaders.count &&
           "imageDidLoad:, all images loaded");
 
-   if (nCompleted + 1 == imageDownloaders.count) {
-      //Create the corresponding UIImage objects.
+   if (++nCompleted == imageDownloaders.count)
       [self createUIImages];
-   } else
-      ++nCompleted;
 }
 
 //________________________________________________________________________________________
 - (void) imageDownloadFailed : (NSIndexPath *) indexPath
 {
+   assert(cancelled == NO && "imageDownloadFailed:, operation was cancelled already");
+
    assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
    assert(imageDownloaders[indexPath] != nil && "imageDownloadFailed:, unknown index path");
    assert(stage == ThumbnailDownloadStage::dataDownload &&
@@ -146,11 +149,8 @@ enum class ThumbnailDownloadStage : unsigned char {
    assert(nCompleted < imageDownloaders.count &&
           "imageDownloadFailed:, all images loaded");
 
-   if (nCompleted + 1 == imageDownloaders.count) {
-      ++nCompleted;
+   if (++nCompleted == imageDownloaders.count)
       [self createUIImages];
-   } else
-      ++nCompleted;
 }
 
 //________________________________________________________________________________________
@@ -159,8 +159,9 @@ enum class ThumbnailDownloadStage : unsigned char {
    //Right now we do not have real thumbnails, instead, we can have a huge images (like 2000x2000),
    //if I create a bunch of such images on a main GUI thread, it's "blocked" and the app is non-interactive.
    //So I want to use a background thread for these operations.
-   assert(stage == ThumbnailDownloadStage::dataDownload && "createImage, wrong stage");
-   
+   assert(stage == ThumbnailDownloadStage::dataDownload && "createUIImages, wrong stage");
+   assert(cancelled == NO && "createUIImages, operation was cancelled");
+
    stage = ThumbnailDownloadStage::imageCreation;
    nCompleted = 0;
    
@@ -188,7 +189,10 @@ enum class ThumbnailDownloadStage : unsigned char {
 //________________________________________________________________________________________
 - (void) informDelegate
 {
-   if (delegate)
+   //This function is executed on a main GUI thread, cancelDownload (cancelled = YES)
+   //is also called on a main GUI thread (and the order is guaranteed), so it's ok
+   //to check cancelled.
+   if (delegate && !cancelled)
       [delegate thumbnailsDownloadDidFihish : self];
 }
 
