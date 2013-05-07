@@ -145,7 +145,6 @@
 		7069F33116C11517006BC78B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7069F33016C11517006BC78B /* Settings.bundle */; };
 		7069F76516C14D6D006BC78B /* OverlayView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7069F76216C14D6D006BC78B /* OverlayView.mm */; };
 		7069F76616C14D6D006BC78B /* PictureButtonView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7069F76416C14D6D006BC78B /* PictureButtonView.mm */; };
-		7072B32A1714699700515DA8 /* BulletinIssueTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7072B3291714699700515DA8 /* BulletinIssueTileView.mm */; };
 		70767DC716CE8F4D00164516 /* MWFeedParserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */; };
 		70767DC916CE922D00164516 /* MWPhotoBrowserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */; };
 		707B137C169AEB6300180E02 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B137A169AEB6300180E02 /* AppDelegate.mm */; };
@@ -188,10 +187,6 @@
 		70B7878D16B951B100048CC9 /* zoomin.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B7878B16B951B100048CC9 /* zoomin.png */; };
 		70B7878E16B951B100048CC9 /* zoomout.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B7878C16B951B100048CC9 /* zoomout.png */; };
 		70B7879216B9692600048CC9 /* WebcastsGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B7879116B9692600048CC9 /* WebcastsGridViewController.mm */; };
-		70BC9A5B171E98F900BA12C1 /* TileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC9A5A171E98F900BA12C1 /* TileViewController.mm */; };
-		70BC9A5E171EBCFD00BA12C1 /* NewsFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC9A5D171EBCFD00BA12C1 /* NewsFeedViewController.mm */; };
-		70BC9A61171ECDB800BA12C1 /* BulletinFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC9A60171ECDB800BA12C1 /* BulletinFeedViewController.mm */; };
-		70BC9A64171EF6C300BA12C1 /* BulletinIssueViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC9A63171EF6C300BA12C1 /* BulletinIssueViewController.mm */; };
 		70BCD9B31733C560000BD91B /* FlipParentView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BCD9B21733C560000BD91B /* FlipParentView.mm */; };
 		70BF705F16C29C80002CEDC6 /* Twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 70BF705E16C29C80002CEDC6 /* Twitter.png */; };
 		70BF706116C29DA8002CEDC6 /* Facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 70BF706016C29DA8002CEDC6 /* Facebook.png */; };
@@ -205,25 +200,30 @@
 		70C884A2173956D0001D98D0 /* StaticInfoTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */; };
 		70C884A8173957AD001D98D0 /* StaticInfoItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A5173957AD001D98D0 /* StaticInfoItemViewController.mm */; };
 		70C884A9173957AD001D98D0 /* StaticInfoScrollViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A7173957AD001D98D0 /* StaticInfoScrollViewController.mm */; };
+		70C884CB173958FB001D98D0 /* BulletinFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884AD173958FA001D98D0 /* BulletinFeedViewController.mm */; };
+		70C884CC173958FB001D98D0 /* BulletinIssueTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884AF173958FA001D98D0 /* BulletinIssueTileView.mm */; };
+		70C884CD173958FB001D98D0 /* BulletinIssueViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884B1173958FA001D98D0 /* BulletinIssueViewController.mm */; };
+		70C884CE173958FB001D98D0 /* BulletinPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884B3173958FA001D98D0 /* BulletinPageView.mm */; };
+		70C884CF173958FB001D98D0 /* FeedItemTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884B5173958FA001D98D0 /* FeedItemTileView.mm */; };
+		70C884D0173958FB001D98D0 /* FeedPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884B7173958FB001D98D0 /* FeedPageView.mm */; };
+		70C884D1173958FB001D98D0 /* NewsFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884B9173958FB001D98D0 /* NewsFeedViewController.mm */; };
+		70C884D2173958FB001D98D0 /* PageThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884BB173958FB001D98D0 /* PageThumbnailDownloader.mm */; };
+		70C884D3173958FB001D98D0 /* TileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884BD173958FB001D98D0 /* TileViewController.mm */; };
+		70C884D4173958FB001D98D0 /* BulletinIssueTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884C0173958FB001D98D0 /* BulletinIssueTableViewController.mm */; };
+		70C884D5173958FB001D98D0 /* BulletinTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884C2173958FB001D98D0 /* BulletinTableViewController.mm */; };
+		70C884D6173958FB001D98D0 /* CellBackgroundView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884C4173958FB001D98D0 /* CellBackgroundView.mm */; };
+		70C884D7173958FB001D98D0 /* LiveEventTableController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884C6173958FB001D98D0 /* LiveEventTableController.mm */; };
+		70C884D8173958FB001D98D0 /* NewsTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884C8173958FB001D98D0 /* NewsTableViewCell.mm */; };
+		70C884D9173958FB001D98D0 /* NewsTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884CA173958FB001D98D0 /* NewsTableViewController.mm */; };
 		70CC55EF169EF80600292332 /* MenuNavigationController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CC55ED169EF80500292332 /* MenuNavigationController.mm */; };
-		70D190481737BF9100D2E0E7 /* PageThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D190471737BF9100D2E0E7 /* PageThumbnailDownloader.mm */; };
 		70D2629516F8948600883316 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D2629416F8948600883316 /* CoreText.framework */; };
-		70D98AF516F73826003C42E7 /* BulletinIssueTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AEA16F73826003C42E7 /* BulletinIssueTableViewController.mm */; };
-		70D98AF616F73826003C42E7 /* BulletinTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AEC16F73826003C42E7 /* BulletinTableViewController.mm */; };
-		70D98AF716F73826003C42E7 /* CellBackgroundView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AEE16F73826003C42E7 /* CellBackgroundView.mm */; };
-		70D98AF816F73826003C42E7 /* LiveEventTableController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AF016F73826003C42E7 /* LiveEventTableController.mm */; };
-		70D98AF916F73826003C42E7 /* NewsTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AF216F73826003C42E7 /* NewsTableViewCell.mm */; };
-		70D98AFA16F73826003C42E7 /* NewsTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AF416F73826003C42E7 /* NewsTableViewController.mm */; };
 		70D98B0816F73ABA003C42E7 /* AppSettingsController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AFD16F73ABA003C42E7 /* AppSettingsController.mm */; };
 		70D98B0916F73ABA003C42E7 /* ArticleDetailViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AFF16F73ABA003C42E7 /* ArticleDetailViewController.mm */; };
 		70D98B0A16F73ABA003C42E7 /* CreditsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B0116F73ABA003C42E7 /* CreditsViewController.mm */; };
 		70D98B0B16F73ABA003C42E7 /* EventDisplayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B0316F73ABA003C42E7 /* EventDisplayViewController.mm */; };
-		70D98B1416F76430003C42E7 /* FeedPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B1316F76430003C42E7 /* FeedPageView.mm */; };
-		70D98B1716F76565003C42E7 /* FeedItemTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B1616F76565003C42E7 /* FeedItemTileView.mm */; };
 		70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */; };
 		70E69AC1170EC2D700384523 /* ArticleiPadCSS.css in Resources */ = {isa = PBXBuildFile; fileRef = 70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */; };
 		70E69AC4170EE81F00384523 /* FeedCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E69AC2170EE81F00384523 /* FeedCache.mm */; };
-		70F5FA1D1716F9ED005A7934 /* BulletinPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70F5FA1C1716F9ED005A7934 /* BulletinPageView.mm */; };
 		70FB8558172987E500F7CCBD /* AnimationDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70FB8554172987E500F7CCBD /* AnimationDelegate.mm */; };
 		70FB8559172987E500F7CCBD /* AnimationFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70FB8556172987E500F7CCBD /* AnimationFrame.mm */; };
 		70FDADCE16CE604200933383 /* cern_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 70FDADCD16CE604200933383 /* cern_info.png */; };
@@ -422,8 +422,6 @@
 		7069F76316C14D6D006BC78B /* PictureButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureButtonView.h; sourceTree = "<group>"; };
 		7069F76416C14D6D006BC78B /* PictureButtonView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureButtonView.mm; sourceTree = "<group>"; };
 		7072B3271713F72F00515DA8 /* TiledPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiledPage.h; sourceTree = "<group>"; };
-		7072B3281714699700515DA8 /* BulletinIssueTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTileView.h; sourceTree = "<group>"; };
-		7072B3291714699700515DA8 /* BulletinIssueTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTileView.mm; sourceTree = "<group>"; };
 		70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWFeedParserLicense.txt; sourceTree = "<group>"; };
 		70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWPhotoBrowserLicense.txt; sourceTree = "<group>"; };
 		707B1379169AEB6300180E02 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -495,14 +493,6 @@
 		70B7878C16B951B100048CC9 /* zoomout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoomout.png; sourceTree = "<group>"; };
 		70B7879016B9692600048CC9 /* WebcastsGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsGridViewController.h; sourceTree = "<group>"; };
 		70B7879116B9692600048CC9 /* WebcastsGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsGridViewController.mm; sourceTree = "<group>"; };
-		70BC9A59171E98F900BA12C1 /* TileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileViewController.h; sourceTree = "<group>"; };
-		70BC9A5A171E98F900BA12C1 /* TileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TileViewController.mm; sourceTree = "<group>"; };
-		70BC9A5C171EBCFD00BA12C1 /* NewsFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsFeedViewController.h; sourceTree = "<group>"; };
-		70BC9A5D171EBCFD00BA12C1 /* NewsFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsFeedViewController.mm; sourceTree = "<group>"; };
-		70BC9A5F171ECDB800BA12C1 /* BulletinFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinFeedViewController.h; sourceTree = "<group>"; };
-		70BC9A60171ECDB800BA12C1 /* BulletinFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinFeedViewController.mm; sourceTree = "<group>"; };
-		70BC9A62171EF6C300BA12C1 /* BulletinIssueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueViewController.h; sourceTree = "<group>"; };
-		70BC9A63171EF6C300BA12C1 /* BulletinIssueViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueViewController.mm; sourceTree = "<group>"; };
 		70BCD9B11733C560000BD91B /* FlipParentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipParentView.h; sourceTree = "<group>"; };
 		70BCD9B21733C560000BD91B /* FlipParentView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FlipParentView.mm; sourceTree = "<group>"; };
 		70BE54AF169AFC2900A3E1B6 /* CERN-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CERN-Prefix.pch"; sourceTree = "<group>"; };
@@ -523,23 +513,39 @@
 		70C884A5173957AD001D98D0 /* StaticInfoItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoItemViewController.mm; sourceTree = "<group>"; };
 		70C884A6173957AD001D98D0 /* StaticInfoScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoScrollViewController.h; sourceTree = "<group>"; };
 		70C884A7173957AD001D98D0 /* StaticInfoScrollViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoScrollViewController.mm; sourceTree = "<group>"; };
+		70C884AC173958FA001D98D0 /* BulletinFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinFeedViewController.h; sourceTree = "<group>"; };
+		70C884AD173958FA001D98D0 /* BulletinFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinFeedViewController.mm; sourceTree = "<group>"; };
+		70C884AE173958FA001D98D0 /* BulletinIssueTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTileView.h; sourceTree = "<group>"; };
+		70C884AF173958FA001D98D0 /* BulletinIssueTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTileView.mm; sourceTree = "<group>"; };
+		70C884B0173958FA001D98D0 /* BulletinIssueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueViewController.h; sourceTree = "<group>"; };
+		70C884B1173958FA001D98D0 /* BulletinIssueViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueViewController.mm; sourceTree = "<group>"; };
+		70C884B2173958FA001D98D0 /* BulletinPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinPageView.h; sourceTree = "<group>"; };
+		70C884B3173958FA001D98D0 /* BulletinPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinPageView.mm; sourceTree = "<group>"; };
+		70C884B4173958FA001D98D0 /* FeedItemTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedItemTileView.h; sourceTree = "<group>"; };
+		70C884B5173958FA001D98D0 /* FeedItemTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedItemTileView.mm; sourceTree = "<group>"; };
+		70C884B6173958FB001D98D0 /* FeedPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedPageView.h; sourceTree = "<group>"; };
+		70C884B7173958FB001D98D0 /* FeedPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedPageView.mm; sourceTree = "<group>"; };
+		70C884B8173958FB001D98D0 /* NewsFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsFeedViewController.h; sourceTree = "<group>"; };
+		70C884B9173958FB001D98D0 /* NewsFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsFeedViewController.mm; sourceTree = "<group>"; };
+		70C884BA173958FB001D98D0 /* PageThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageThumbnailDownloader.h; sourceTree = "<group>"; };
+		70C884BB173958FB001D98D0 /* PageThumbnailDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageThumbnailDownloader.mm; sourceTree = "<group>"; };
+		70C884BC173958FB001D98D0 /* TileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileViewController.h; sourceTree = "<group>"; };
+		70C884BD173958FB001D98D0 /* TileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TileViewController.mm; sourceTree = "<group>"; };
+		70C884BF173958FB001D98D0 /* BulletinIssueTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTableViewController.h; sourceTree = "<group>"; };
+		70C884C0173958FB001D98D0 /* BulletinIssueTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTableViewController.mm; sourceTree = "<group>"; };
+		70C884C1173958FB001D98D0 /* BulletinTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinTableViewController.h; sourceTree = "<group>"; };
+		70C884C2173958FB001D98D0 /* BulletinTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinTableViewController.mm; sourceTree = "<group>"; };
+		70C884C3173958FB001D98D0 /* CellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellBackgroundView.h; sourceTree = "<group>"; };
+		70C884C4173958FB001D98D0 /* CellBackgroundView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CellBackgroundView.mm; sourceTree = "<group>"; };
+		70C884C5173958FB001D98D0 /* LiveEventTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveEventTableController.h; sourceTree = "<group>"; };
+		70C884C6173958FB001D98D0 /* LiveEventTableController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LiveEventTableController.mm; sourceTree = "<group>"; };
+		70C884C7173958FB001D98D0 /* NewsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewCell.h; sourceTree = "<group>"; };
+		70C884C8173958FB001D98D0 /* NewsTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewCell.mm; sourceTree = "<group>"; };
+		70C884C9173958FB001D98D0 /* NewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewController.h; sourceTree = "<group>"; };
+		70C884CA173958FB001D98D0 /* NewsTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewController.mm; sourceTree = "<group>"; };
 		70CC55ED169EF80500292332 /* MenuNavigationController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuNavigationController.mm; sourceTree = "<group>"; };
 		70CC55EE169EF80600292332 /* MenuNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuNavigationController.h; sourceTree = "<group>"; };
-		70D190461737BF9100D2E0E7 /* PageThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageThumbnailDownloader.h; sourceTree = "<group>"; };
-		70D190471737BF9100D2E0E7 /* PageThumbnailDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageThumbnailDownloader.mm; sourceTree = "<group>"; };
 		70D2629416F8948600883316 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		70D98AE916F73826003C42E7 /* BulletinIssueTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTableViewController.h; sourceTree = "<group>"; };
-		70D98AEA16F73826003C42E7 /* BulletinIssueTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTableViewController.mm; sourceTree = "<group>"; };
-		70D98AEB16F73826003C42E7 /* BulletinTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinTableViewController.h; sourceTree = "<group>"; };
-		70D98AEC16F73826003C42E7 /* BulletinTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinTableViewController.mm; sourceTree = "<group>"; };
-		70D98AED16F73826003C42E7 /* CellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellBackgroundView.h; sourceTree = "<group>"; };
-		70D98AEE16F73826003C42E7 /* CellBackgroundView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CellBackgroundView.mm; sourceTree = "<group>"; };
-		70D98AEF16F73826003C42E7 /* LiveEventTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveEventTableController.h; sourceTree = "<group>"; };
-		70D98AF016F73826003C42E7 /* LiveEventTableController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LiveEventTableController.mm; sourceTree = "<group>"; };
-		70D98AF116F73826003C42E7 /* NewsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewCell.h; sourceTree = "<group>"; };
-		70D98AF216F73826003C42E7 /* NewsTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewCell.mm; sourceTree = "<group>"; };
-		70D98AF316F73826003C42E7 /* NewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewController.h; sourceTree = "<group>"; };
-		70D98AF416F73826003C42E7 /* NewsTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewController.mm; sourceTree = "<group>"; };
 		70D98AFC16F73ABA003C42E7 /* AppSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppSettingsController.h; sourceTree = "<group>"; };
 		70D98AFD16F73ABA003C42E7 /* AppSettingsController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppSettingsController.mm; sourceTree = "<group>"; };
 		70D98AFE16F73ABA003C42E7 /* ArticleDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticleDetailViewController.h; sourceTree = "<group>"; };
@@ -548,17 +554,11 @@
 		70D98B0116F73ABA003C42E7 /* CreditsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CreditsViewController.mm; sourceTree = "<group>"; };
 		70D98B0216F73ABA003C42E7 /* EventDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDisplayViewController.h; sourceTree = "<group>"; };
 		70D98B0316F73ABA003C42E7 /* EventDisplayViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EventDisplayViewController.mm; sourceTree = "<group>"; };
-		70D98B1216F76430003C42E7 /* FeedPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedPageView.h; sourceTree = "<group>"; };
-		70D98B1316F76430003C42E7 /* FeedPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedPageView.mm; sourceTree = "<group>"; };
-		70D98B1516F76564003C42E7 /* FeedItemTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedItemTileView.h; sourceTree = "<group>"; };
-		70D98B1616F76565003C42E7 /* FeedItemTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedItemTileView.mm; sourceTree = "<group>"; };
 		70D98B2916F786D8003C42E7 /* SlideScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideScrollView.h; sourceTree = "<group>"; };
 		70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SlideScrollView.mm; sourceTree = "<group>"; };
 		70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = ArticleiPadCSS.css; sourceTree = "<group>"; };
 		70E69AC2170EE81F00384523 /* FeedCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedCache.mm; sourceTree = "<group>"; };
 		70E69AC3170EE81F00384523 /* FeedCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCache.h; sourceTree = "<group>"; };
-		70F5FA1B1716F9ED005A7934 /* BulletinPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinPageView.h; sourceTree = "<group>"; };
-		70F5FA1C1716F9ED005A7934 /* BulletinPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinPageView.mm; sourceTree = "<group>"; };
 		70FB8554172987E500F7CCBD /* AnimationDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimationDelegate.mm; sourceTree = "<group>"; };
 		70FB8555172987E500F7CCBD /* AnimationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationDelegate.h; sourceTree = "<group>"; };
 		70FB8556172987E500F7CCBD /* AnimationFrame.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimationFrame.mm; sourceTree = "<group>"; };
@@ -861,6 +861,7 @@
 		707B1342169AE8C900180E02 /* Src */ = {
 			isa = PBXGroup;
 			children = (
+				70C884AA173958FA001D98D0 /* NewsFeeds */,
 				70C8849B173956CF001D98D0 /* StaticInfo */,
 				70B2A74F16DBBD5200BC8657 /* Protocols */,
 				7069F76016C14D6D006BC78B /* CustomViews */,
@@ -957,8 +958,6 @@
 		707B1381169AEC6F00180E02 /* CustomTables */ = {
 			isa = PBXGroup;
 			children = (
-				70D98B0E16F7561E003C42E7 /* iPad */,
-				70D98AE816F73826003C42E7 /* iPhone */,
 				70B7879016B9692600048CC9 /* WebcastsGridViewController.h */,
 				70B7879116B9692600048CC9 /* WebcastsGridViewController.mm */,
 				70221E4016B14F59007AE923 /* VideosGridViewController.mm */,
@@ -1120,21 +1119,55 @@
 			path = iPhone;
 			sourceTree = "<group>";
 		};
-		70D98AE816F73826003C42E7 /* iPhone */ = {
+		70C884AA173958FA001D98D0 /* NewsFeeds */ = {
 			isa = PBXGroup;
 			children = (
-				70D98AE916F73826003C42E7 /* BulletinIssueTableViewController.h */,
-				70D98AEA16F73826003C42E7 /* BulletinIssueTableViewController.mm */,
-				70D98AEB16F73826003C42E7 /* BulletinTableViewController.h */,
-				70D98AEC16F73826003C42E7 /* BulletinTableViewController.mm */,
-				70D98AED16F73826003C42E7 /* CellBackgroundView.h */,
-				70D98AEE16F73826003C42E7 /* CellBackgroundView.mm */,
-				70D98AEF16F73826003C42E7 /* LiveEventTableController.h */,
-				70D98AF016F73826003C42E7 /* LiveEventTableController.mm */,
-				70D98AF116F73826003C42E7 /* NewsTableViewCell.h */,
-				70D98AF216F73826003C42E7 /* NewsTableViewCell.mm */,
-				70D98AF316F73826003C42E7 /* NewsTableViewController.h */,
-				70D98AF416F73826003C42E7 /* NewsTableViewController.mm */,
+				70C884AB173958FA001D98D0 /* iPad */,
+				70C884BE173958FB001D98D0 /* iPhone */,
+			);
+			path = NewsFeeds;
+			sourceTree = "<group>";
+		};
+		70C884AB173958FA001D98D0 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				70C884AC173958FA001D98D0 /* BulletinFeedViewController.h */,
+				70C884AD173958FA001D98D0 /* BulletinFeedViewController.mm */,
+				70C884AE173958FA001D98D0 /* BulletinIssueTileView.h */,
+				70C884AF173958FA001D98D0 /* BulletinIssueTileView.mm */,
+				70C884B0173958FA001D98D0 /* BulletinIssueViewController.h */,
+				70C884B1173958FA001D98D0 /* BulletinIssueViewController.mm */,
+				70C884B2173958FA001D98D0 /* BulletinPageView.h */,
+				70C884B3173958FA001D98D0 /* BulletinPageView.mm */,
+				70C884B4173958FA001D98D0 /* FeedItemTileView.h */,
+				70C884B5173958FA001D98D0 /* FeedItemTileView.mm */,
+				70C884B6173958FB001D98D0 /* FeedPageView.h */,
+				70C884B7173958FB001D98D0 /* FeedPageView.mm */,
+				70C884B8173958FB001D98D0 /* NewsFeedViewController.h */,
+				70C884B9173958FB001D98D0 /* NewsFeedViewController.mm */,
+				70C884BA173958FB001D98D0 /* PageThumbnailDownloader.h */,
+				70C884BB173958FB001D98D0 /* PageThumbnailDownloader.mm */,
+				70C884BC173958FB001D98D0 /* TileViewController.h */,
+				70C884BD173958FB001D98D0 /* TileViewController.mm */,
+			);
+			path = iPad;
+			sourceTree = "<group>";
+		};
+		70C884BE173958FB001D98D0 /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				70C884BF173958FB001D98D0 /* BulletinIssueTableViewController.h */,
+				70C884C0173958FB001D98D0 /* BulletinIssueTableViewController.mm */,
+				70C884C1173958FB001D98D0 /* BulletinTableViewController.h */,
+				70C884C2173958FB001D98D0 /* BulletinTableViewController.mm */,
+				70C884C3173958FB001D98D0 /* CellBackgroundView.h */,
+				70C884C4173958FB001D98D0 /* CellBackgroundView.mm */,
+				70C884C5173958FB001D98D0 /* LiveEventTableController.h */,
+				70C884C6173958FB001D98D0 /* LiveEventTableController.mm */,
+				70C884C7173958FB001D98D0 /* NewsTableViewCell.h */,
+				70C884C8173958FB001D98D0 /* NewsTableViewCell.mm */,
+				70C884C9173958FB001D98D0 /* NewsTableViewController.h */,
+				70C884CA173958FB001D98D0 /* NewsTableViewController.mm */,
 			);
 			path = iPhone;
 			sourceTree = "<group>";
@@ -1152,31 +1185,6 @@
 				70D98B0316F73ABA003C42E7 /* EventDisplayViewController.mm */,
 			);
 			path = iPhone;
-			sourceTree = "<group>";
-		};
-		70D98B0E16F7561E003C42E7 /* iPad */ = {
-			isa = PBXGroup;
-			children = (
-				70D98B1216F76430003C42E7 /* FeedPageView.h */,
-				70D98B1316F76430003C42E7 /* FeedPageView.mm */,
-				70D98B1516F76564003C42E7 /* FeedItemTileView.h */,
-				70D98B1616F76565003C42E7 /* FeedItemTileView.mm */,
-				7072B3281714699700515DA8 /* BulletinIssueTileView.h */,
-				7072B3291714699700515DA8 /* BulletinIssueTileView.mm */,
-				70F5FA1B1716F9ED005A7934 /* BulletinPageView.h */,
-				70F5FA1C1716F9ED005A7934 /* BulletinPageView.mm */,
-				70BC9A59171E98F900BA12C1 /* TileViewController.h */,
-				70BC9A5A171E98F900BA12C1 /* TileViewController.mm */,
-				70BC9A5C171EBCFD00BA12C1 /* NewsFeedViewController.h */,
-				70BC9A5D171EBCFD00BA12C1 /* NewsFeedViewController.mm */,
-				70BC9A5F171ECDB800BA12C1 /* BulletinFeedViewController.h */,
-				70BC9A60171ECDB800BA12C1 /* BulletinFeedViewController.mm */,
-				70BC9A62171EF6C300BA12C1 /* BulletinIssueViewController.h */,
-				70BC9A63171EF6C300BA12C1 /* BulletinIssueViewController.mm */,
-				70D190461737BF9100D2E0E7 /* PageThumbnailDownloader.h */,
-				70D190471737BF9100D2E0E7 /* PageThumbnailDownloader.mm */,
-			);
-			path = iPad;
 			sourceTree = "<group>";
 		};
 		70FB8552172987CD00F7CCBD /* FlipAnimation */ = {
@@ -1501,35 +1509,35 @@
 				7069F76616C14D6D006BC78B /* PictureButtonView.mm in Sources */,
 				7004A14516CBB7FA0097435D /* Model.xcdatamodeld in Sources */,
 				70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */,
-				70D98AF516F73826003C42E7 /* BulletinIssueTableViewController.mm in Sources */,
-				70D98AF616F73826003C42E7 /* BulletinTableViewController.mm in Sources */,
-				70D98AF716F73826003C42E7 /* CellBackgroundView.mm in Sources */,
-				70D98AF816F73826003C42E7 /* LiveEventTableController.mm in Sources */,
-				70D98AF916F73826003C42E7 /* NewsTableViewCell.mm in Sources */,
-				70D98AFA16F73826003C42E7 /* NewsTableViewController.mm in Sources */,
 				70D98B0816F73ABA003C42E7 /* AppSettingsController.mm in Sources */,
 				70D98B0916F73ABA003C42E7 /* ArticleDetailViewController.mm in Sources */,
 				70D98B0A16F73ABA003C42E7 /* CreditsViewController.mm in Sources */,
 				70D98B0B16F73ABA003C42E7 /* EventDisplayViewController.mm in Sources */,
-				70D98B1416F76430003C42E7 /* FeedPageView.mm in Sources */,
-				70D98B1716F76565003C42E7 /* FeedItemTileView.mm in Sources */,
 				70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */,
 				70E69AC4170EE81F00384523 /* FeedCache.mm in Sources */,
-				7072B32A1714699700515DA8 /* BulletinIssueTileView.mm in Sources */,
-				70F5FA1D1716F9ED005A7934 /* BulletinPageView.mm in Sources */,
-				70BC9A5B171E98F900BA12C1 /* TileViewController.mm in Sources */,
-				70BC9A5E171EBCFD00BA12C1 /* NewsFeedViewController.mm in Sources */,
-				70BC9A61171ECDB800BA12C1 /* BulletinFeedViewController.mm in Sources */,
-				70BC9A64171EF6C300BA12C1 /* BulletinIssueViewController.mm in Sources */,
 				70FB8558172987E500F7CCBD /* AnimationDelegate.mm in Sources */,
 				70FB8559172987E500F7CCBD /* AnimationFrame.mm in Sources */,
 				70C728461732C6E300992077 /* FlipView.mm in Sources */,
 				70BCD9B31733C560000BD91B /* FlipParentView.mm in Sources */,
-				70D190481737BF9100D2E0E7 /* PageThumbnailDownloader.mm in Sources */,
 				70C884A1173956D0001D98D0 /* StaticInfoPageView.mm in Sources */,
 				70C884A2173956D0001D98D0 /* StaticInfoTileView.mm in Sources */,
 				70C884A8173957AD001D98D0 /* StaticInfoItemViewController.mm in Sources */,
 				70C884A9173957AD001D98D0 /* StaticInfoScrollViewController.mm in Sources */,
+				70C884CB173958FB001D98D0 /* BulletinFeedViewController.mm in Sources */,
+				70C884CC173958FB001D98D0 /* BulletinIssueTileView.mm in Sources */,
+				70C884CD173958FB001D98D0 /* BulletinIssueViewController.mm in Sources */,
+				70C884CE173958FB001D98D0 /* BulletinPageView.mm in Sources */,
+				70C884CF173958FB001D98D0 /* FeedItemTileView.mm in Sources */,
+				70C884D0173958FB001D98D0 /* FeedPageView.mm in Sources */,
+				70C884D1173958FB001D98D0 /* NewsFeedViewController.mm in Sources */,
+				70C884D2173958FB001D98D0 /* PageThumbnailDownloader.mm in Sources */,
+				70C884D3173958FB001D98D0 /* TileViewController.mm in Sources */,
+				70C884D4173958FB001D98D0 /* BulletinIssueTableViewController.mm in Sources */,
+				70C884D5173958FB001D98D0 /* BulletinTableViewController.mm in Sources */,
+				70C884D6173958FB001D98D0 /* CellBackgroundView.mm in Sources */,
+				70C884D7173958FB001D98D0 /* LiveEventTableController.mm in Sources */,
+				70C884D8173958FB001D98D0 /* NewsTableViewCell.mm in Sources */,
+				70C884D9173958FB001D98D0 /* NewsTableViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
