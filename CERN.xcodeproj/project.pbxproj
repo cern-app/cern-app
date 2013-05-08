@@ -107,16 +107,13 @@
 		700AF65116B9932500194E16 /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 700AF65016B9932500194E16 /* action.png */; };
 		700B978416AEB03D0006EAD3 /* ImageDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 700B978316AEB03D0006EAD3 /* ImageDownloader.mm */; };
 		700F547916396A130082B89E /* CERNLive.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700F547816396A130082B89E /* CERNLive.plist */; };
-		700FAD5D16A7068200FED28D /* PhotoSetInfoView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 700FAD5C16A7068200FED28D /* PhotoSetInfoView.mm */; };
 		701AE0FA16D26765003F6533 /* MBProgressHUDLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE0F916D26765003F6533 /* MBProgressHUDLicense.txt */; };
 		701AE0FC16D267E4003F6533 /* SDWebImageLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE0FB16D267E4003F6533 /* SDWebImageLicense.txt */; };
 		701AE0FE16D268DF003F6533 /* ECSlidingViewControllerLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE0FD16D268DF003F6533 /* ECSlidingViewControllerLicense.txt */; };
 		701AE10016D26A87003F6533 /* glyphspro_1_license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE0FF16D26A87003F6533 /* glyphspro_1_license.txt */; };
 		701AE10216D26AEE003F6533 /* glyphspro_4_license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE10116D26AEE003F6533 /* glyphspro_4_license.txt */; };
-		70221E4216B14F59007AE923 /* VideosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70221E4016B14F59007AE923 /* VideosGridViewController.mm */; };
 		70221E4416B1722B007AE923 /* videos.png in Resources */ = {isa = PBXBuildFile; fileRef = 70221E4316B1722B007AE923 /* videos.png */; };
 		702A4B7C1678E4D7005EBD1B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 702A4B7B1678E4D7005EBD1B /* SystemConfiguration.framework */; };
-		702E654616B5948000D927A9 /* WebcastsParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 702E654516B5948000D927A9 /* WebcastsParser.mm */; };
 		703FD35C161DDB4F00B8BB8C /* PTS75F.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 703FD35B161DDB4F00B8BB8C /* PTS75F.ttf */; };
 		7046DFD716A423AB00F17445 /* 18-puzzle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7046DFD616A423AB00F17445 /* 18-puzzle@2x.png */; };
 		7046DFD916A425D700F17445 /* 124-bullhorn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7046DFD816A425D700F17445 /* 124-bullhorn@2x.png */; };
@@ -170,15 +167,19 @@
 		707B13F7169AF69300180E02 /* UIImage+SquareScaledImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EE169AF69300180E02 /* UIImage+SquareScaledImage.m */; };
 		707B13FA169AF6AE00180E02 /* StoryboardIdentifiers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */; };
 		7098286616C404C500311025 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7098286516C404C500311025 /* Social.framework */; };
-		709CE66816A59A3B006D524E /* CernMediaMARCParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 709CE66716A59A3B006D524E /* CernMediaMARCParser.mm */; };
 		709CE66B16A59B11006D524E /* PhotoDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 709CE66A16A59B11006D524E /* PhotoDownloader.mm */; };
-		709CE66E16A59BE3006D524E /* PhotosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 709CE66D16A59BE3006D524E /* PhotosGridViewController.mm */; };
-		709CE67116A59C8E006D524E /* PhotoGridViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 709CE67016A59C8E006D524E /* PhotoGridViewCell.mm */; };
 		709CE6C516A5BE97006D524E /* 389-flash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C416A5BE97006D524E /* 389-flash@2x.png */; };
 		709CE6C816A5C045006D524E /* 112-group@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C716A5C045006D524E /* 112-group@2x.png */; };
 		709CE6CA16A5C287006D524E /* 180-stickynote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C916A5C287006D524E /* 180-stickynote@2x.png */; };
 		70A2533E16BBED0F00F9898A /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 70A2533D16BBED0F00F9898A /* refresh.png */; };
 		70A2534016BBEF8F00F9898A /* bookmarks.png in Resources */ = {isa = PBXBuildFile; fileRef = 70A2533F16BBEF8F00F9898A /* bookmarks.png */; };
+		70A56296173A32F600145FEC /* CernMediaMARCParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56287173A32F600145FEC /* CernMediaMARCParser.mm */; };
+		70A56297173A32F600145FEC /* WebcastsParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56289173A32F600145FEC /* WebcastsParser.mm */; };
+		70A56298173A32F600145FEC /* PhotoGridViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A5628D173A32F600145FEC /* PhotoGridViewCell.mm */; };
+		70A56299173A32F600145FEC /* PhotoSetInfoView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A5628F173A32F600145FEC /* PhotoSetInfoView.mm */; };
+		70A5629A173A32F600145FEC /* PhotosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56291173A32F600145FEC /* PhotosGridViewController.mm */; };
+		70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56293173A32F600145FEC /* VideosGridViewController.mm */; };
+		70A5629C173A32F600145FEC /* WebcastsGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56295173A32F600145FEC /* WebcastsGridViewController.mm */; };
 		70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B22F0416F9DCAA007D88EF /* action_blue.png */; };
 		70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */; };
 		70B6B0B9169DD2790058DADA /* live_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0B8169DD2790058DADA /* live_color.png */; };
@@ -186,7 +187,6 @@
 		70B6B0BE169DD6BE0058DADA /* cern_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BD169DD6BE0058DADA /* cern_logo.png */; };
 		70B7878D16B951B100048CC9 /* zoomin.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B7878B16B951B100048CC9 /* zoomin.png */; };
 		70B7878E16B951B100048CC9 /* zoomout.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B7878C16B951B100048CC9 /* zoomout.png */; };
-		70B7879216B9692600048CC9 /* WebcastsGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B7879116B9692600048CC9 /* WebcastsGridViewController.mm */; };
 		70BCD9B31733C560000BD91B /* FlipParentView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BCD9B21733C560000BD91B /* FlipParentView.mm */; };
 		70BF705F16C29C80002CEDC6 /* Twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 70BF705E16C29C80002CEDC6 /* Twitter.png */; };
 		70BF706116C29DA8002CEDC6 /* Facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 70BF706016C29DA8002CEDC6 /* Facebook.png */; };
@@ -371,19 +371,13 @@
 		700B978216AEB03D0006EAD3 /* ImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDownloader.h; sourceTree = "<group>"; };
 		700B978316AEB03D0006EAD3 /* ImageDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageDownloader.mm; sourceTree = "<group>"; };
 		700F547816396A130082B89E /* CERNLive.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CERNLive.plist; sourceTree = "<group>"; };
-		700FAD5B16A7068200FED28D /* PhotoSetInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoSetInfoView.h; sourceTree = "<group>"; };
-		700FAD5C16A7068200FED28D /* PhotoSetInfoView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoSetInfoView.mm; sourceTree = "<group>"; };
 		701AE0F916D26765003F6533 /* MBProgressHUDLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MBProgressHUDLicense.txt; sourceTree = "<group>"; };
 		701AE0FB16D267E4003F6533 /* SDWebImageLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SDWebImageLicense.txt; sourceTree = "<group>"; };
 		701AE0FD16D268DF003F6533 /* ECSlidingViewControllerLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ECSlidingViewControllerLicense.txt; sourceTree = "<group>"; };
 		701AE0FF16D26A87003F6533 /* glyphspro_1_license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glyphspro_1_license.txt; sourceTree = "<group>"; };
 		701AE10116D26AEE003F6533 /* glyphspro_4_license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glyphspro_4_license.txt; sourceTree = "<group>"; };
-		70221E4016B14F59007AE923 /* VideosGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideosGridViewController.mm; sourceTree = "<group>"; };
-		70221E4116B14F59007AE923 /* VideosGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideosGridViewController.h; sourceTree = "<group>"; };
 		70221E4316B1722B007AE923 /* videos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = videos.png; sourceTree = "<group>"; };
 		702A4B7B1678E4D7005EBD1B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		702E654416B5948000D927A9 /* WebcastsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsParser.h; sourceTree = "<group>"; };
-		702E654516B5948000D927A9 /* WebcastsParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsParser.mm; sourceTree = "<group>"; };
 		703FD35B161DDB4F00B8BB8C /* PTS75F.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PTS75F.ttf; sourceTree = "<group>"; };
 		7046DFD616A423AB00F17445 /* 18-puzzle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "18-puzzle@2x.png"; sourceTree = "<group>"; };
 		7046DFD816A425D700F17445 /* 124-bullhorn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "124-bullhorn@2x.png"; sourceTree = "<group>"; };
@@ -468,19 +462,27 @@
 		707B13F8169AF6AE00180E02 /* StoryboardIdentifiers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryboardIdentifiers.h; sourceTree = "<group>"; };
 		707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StoryboardIdentifiers.mm; sourceTree = "<group>"; };
 		7098286516C404C500311025 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
-		709CE66616A59A3B006D524E /* CernMediaMARCParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CernMediaMARCParser.h; sourceTree = "<group>"; };
-		709CE66716A59A3B006D524E /* CernMediaMARCParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CernMediaMARCParser.mm; sourceTree = "<group>"; };
 		709CE66916A59B11006D524E /* PhotoDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDownloader.h; sourceTree = "<group>"; };
 		709CE66A16A59B11006D524E /* PhotoDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoDownloader.mm; sourceTree = "<group>"; };
-		709CE66C16A59BE3006D524E /* PhotosGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosGridViewController.h; sourceTree = "<group>"; };
-		709CE66D16A59BE3006D524E /* PhotosGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotosGridViewController.mm; sourceTree = "<group>"; };
-		709CE66F16A59C8E006D524E /* PhotoGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoGridViewCell.h; sourceTree = "<group>"; };
-		709CE67016A59C8E006D524E /* PhotoGridViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoGridViewCell.mm; sourceTree = "<group>"; };
 		709CE6C416A5BE97006D524E /* 389-flash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "389-flash@2x.png"; sourceTree = "<group>"; };
 		709CE6C716A5C045006D524E /* 112-group@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "112-group@2x.png"; sourceTree = "<group>"; };
 		709CE6C916A5C287006D524E /* 180-stickynote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "180-stickynote@2x.png"; sourceTree = "<group>"; };
 		70A2533D16BBED0F00F9898A /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		70A2533F16BBEF8F00F9898A /* bookmarks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bookmarks.png; sourceTree = "<group>"; };
+		70A56286173A32F600145FEC /* CernMediaMARCParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CernMediaMARCParser.h; sourceTree = "<group>"; };
+		70A56287173A32F600145FEC /* CernMediaMARCParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CernMediaMARCParser.mm; sourceTree = "<group>"; };
+		70A56288173A32F600145FEC /* WebcastsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsParser.h; sourceTree = "<group>"; };
+		70A56289173A32F600145FEC /* WebcastsParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsParser.mm; sourceTree = "<group>"; };
+		70A5628C173A32F600145FEC /* PhotoGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoGridViewCell.h; sourceTree = "<group>"; };
+		70A5628D173A32F600145FEC /* PhotoGridViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoGridViewCell.mm; sourceTree = "<group>"; };
+		70A5628E173A32F600145FEC /* PhotoSetInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoSetInfoView.h; sourceTree = "<group>"; };
+		70A5628F173A32F600145FEC /* PhotoSetInfoView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoSetInfoView.mm; sourceTree = "<group>"; };
+		70A56290173A32F600145FEC /* PhotosGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosGridViewController.h; sourceTree = "<group>"; };
+		70A56291173A32F600145FEC /* PhotosGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotosGridViewController.mm; sourceTree = "<group>"; };
+		70A56292173A32F600145FEC /* VideosGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideosGridViewController.h; sourceTree = "<group>"; };
+		70A56293173A32F600145FEC /* VideosGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideosGridViewController.mm; sourceTree = "<group>"; };
+		70A56294173A32F600145FEC /* WebcastsGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsGridViewController.h; sourceTree = "<group>"; };
+		70A56295173A32F600145FEC /* WebcastsGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsGridViewController.mm; sourceTree = "<group>"; };
 		70B22F0416F9DCAA007D88EF /* action_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action_blue.png; sourceTree = "<group>"; };
 		70B2A75016DBBD5200BC8657 /* ConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionController.h; sourceTree = "<group>"; };
 		70B2A75116DBBD5200BC8657 /* PageControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageControllerProtocol.h; sourceTree = "<group>"; };
@@ -491,8 +493,6 @@
 		70B6B0BD169DD6BE0058DADA /* cern_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_logo.png; sourceTree = "<group>"; };
 		70B7878B16B951B100048CC9 /* zoomin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoomin.png; sourceTree = "<group>"; };
 		70B7878C16B951B100048CC9 /* zoomout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoomout.png; sourceTree = "<group>"; };
-		70B7879016B9692600048CC9 /* WebcastsGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsGridViewController.h; sourceTree = "<group>"; };
-		70B7879116B9692600048CC9 /* WebcastsGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsGridViewController.mm; sourceTree = "<group>"; };
 		70BCD9B11733C560000BD91B /* FlipParentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipParentView.h; sourceTree = "<group>"; };
 		70BCD9B21733C560000BD91B /* FlipParentView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FlipParentView.mm; sourceTree = "<group>"; };
 		70BE54AF169AFC2900A3E1B6 /* CERN-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CERN-Prefix.pch"; sourceTree = "<group>"; };
@@ -861,18 +861,17 @@
 		707B1342169AE8C900180E02 /* Src */ = {
 			isa = PBXGroup;
 			children = (
+				70A56284173A32F600145FEC /* VideosPhotosWebcasts */,
 				70C884AA173958FA001D98D0 /* NewsFeeds */,
 				70C8849B173956CF001D98D0 /* StaticInfo */,
 				70B2A74F16DBBD5200BC8657 /* Protocols */,
 				7069F76016C14D6D006BC78B /* CustomViews */,
-				709CE66516A59A3B006D524E /* Parsers */,
 				70BE54AE169AFC2900A3E1B6 /* PCH */,
 				707B13BF169AF4FA00180E02 /* RSS */,
 				707B139D169AF07D00180E02 /* Utilities */,
 				707B1396169AF01500180E02 /* DetailedViewControllers */,
 				707B138F169AEDA000180E02 /* ContentProviders */,
 				707B1388169AECE800180E02 /* Menu */,
-				707B1381169AEC6F00180E02 /* CustomTables */,
 				707B1378169AEB6300180E02 /* Core */,
 				707B1343169AE8C900180E02 /* ThirdPartry */,
 			);
@@ -953,23 +952,6 @@
 				707B137B169AEB6300180E02 /* main.mm */,
 			);
 			path = Core;
-			sourceTree = "<group>";
-		};
-		707B1381169AEC6F00180E02 /* CustomTables */ = {
-			isa = PBXGroup;
-			children = (
-				70B7879016B9692600048CC9 /* WebcastsGridViewController.h */,
-				70B7879116B9692600048CC9 /* WebcastsGridViewController.mm */,
-				70221E4016B14F59007AE923 /* VideosGridViewController.mm */,
-				70221E4116B14F59007AE923 /* VideosGridViewController.h */,
-				709CE66F16A59C8E006D524E /* PhotoGridViewCell.h */,
-				709CE67016A59C8E006D524E /* PhotoGridViewCell.mm */,
-				709CE66C16A59BE3006D524E /* PhotosGridViewController.h */,
-				709CE66D16A59BE3006D524E /* PhotosGridViewController.mm */,
-				700FAD5B16A7068200FED28D /* PhotoSetInfoView.h */,
-				700FAD5C16A7068200FED28D /* PhotoSetInfoView.mm */,
-			);
-			path = CustomTables;
 			sourceTree = "<group>";
 		};
 		707B1388169AECE800180E02 /* Menu */ = {
@@ -1057,15 +1039,49 @@
 			path = RSS;
 			sourceTree = "<group>";
 		};
-		709CE66516A59A3B006D524E /* Parsers */ = {
+		70A56284173A32F600145FEC /* VideosPhotosWebcasts */ = {
 			isa = PBXGroup;
 			children = (
-				702E654416B5948000D927A9 /* WebcastsParser.h */,
-				702E654516B5948000D927A9 /* WebcastsParser.mm */,
-				709CE66616A59A3B006D524E /* CernMediaMARCParser.h */,
-				709CE66716A59A3B006D524E /* CernMediaMARCParser.mm */,
+				70A56285173A32F600145FEC /* Parsers */,
+				70A5628A173A32F600145FEC /* ViewsAndControllers */,
+			);
+			path = VideosPhotosWebcasts;
+			sourceTree = "<group>";
+		};
+		70A56285173A32F600145FEC /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				70A56286173A32F600145FEC /* CernMediaMARCParser.h */,
+				70A56287173A32F600145FEC /* CernMediaMARCParser.mm */,
+				70A56288173A32F600145FEC /* WebcastsParser.h */,
+				70A56289173A32F600145FEC /* WebcastsParser.mm */,
 			);
 			path = Parsers;
+			sourceTree = "<group>";
+		};
+		70A5628A173A32F600145FEC /* ViewsAndControllers */ = {
+			isa = PBXGroup;
+			children = (
+				70A5628B173A32F600145FEC /* iPhone */,
+			);
+			path = ViewsAndControllers;
+			sourceTree = "<group>";
+		};
+		70A5628B173A32F600145FEC /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				70A5628C173A32F600145FEC /* PhotoGridViewCell.h */,
+				70A5628D173A32F600145FEC /* PhotoGridViewCell.mm */,
+				70A5628E173A32F600145FEC /* PhotoSetInfoView.h */,
+				70A5628F173A32F600145FEC /* PhotoSetInfoView.mm */,
+				70A56290173A32F600145FEC /* PhotosGridViewController.h */,
+				70A56291173A32F600145FEC /* PhotosGridViewController.mm */,
+				70A56292173A32F600145FEC /* VideosGridViewController.h */,
+				70A56293173A32F600145FEC /* VideosGridViewController.mm */,
+				70A56294173A32F600145FEC /* WebcastsGridViewController.h */,
+				70A56295173A32F600145FEC /* WebcastsGridViewController.mm */,
+			);
+			path = iPhone;
 			sourceTree = "<group>";
 		};
 		70B2A74F16DBBD5200BC8657 /* Protocols */ = {
@@ -1475,11 +1491,7 @@
 				707B13FA169AF6AE00180E02 /* StoryboardIdentifiers.mm in Sources */,
 				70086231169B56F2001C7BB5 /* MenuItemViews.mm in Sources */,
 				70CC55EF169EF80600292332 /* MenuNavigationController.mm in Sources */,
-				709CE66816A59A3B006D524E /* CernMediaMARCParser.mm in Sources */,
 				709CE66B16A59B11006D524E /* PhotoDownloader.mm in Sources */,
-				709CE66E16A59BE3006D524E /* PhotosGridViewController.mm in Sources */,
-				709CE67116A59C8E006D524E /* PhotoGridViewCell.mm in Sources */,
-				700FAD5D16A7068200FED28D /* PhotoSetInfoView.mm in Sources */,
 				700B978416AEB03D0006EAD3 /* ImageDownloader.mm in Sources */,
 				41B3D9C816B12D6000AF4463 /* MWCaptionView.m in Sources */,
 				41B3D9C916B12D6000AF4463 /* MWPhoto.m in Sources */,
@@ -1500,11 +1512,8 @@
 				41B3D9F916B12D9000AF4463 /* MBProgressHUD.m in Sources */,
 				41B3DA0016B12DA100AF4463 /* ECSlidingViewController.m in Sources */,
 				41B3DA0116B12DA100AF4463 /* UIImage+ImageWithUIView.m in Sources */,
-				70221E4216B14F59007AE923 /* VideosGridViewController.mm in Sources */,
-				702E654616B5948000D927A9 /* WebcastsParser.mm in Sources */,
 				70501E3C16B6E180002C0F48 /* GCOAuth.m in Sources */,
 				70501E3D16B6E180002C0F48 /* NSData+Base64.m in Sources */,
-				70B7879216B9692600048CC9 /* WebcastsGridViewController.mm in Sources */,
 				7069F76516C14D6D006BC78B /* OverlayView.mm in Sources */,
 				7069F76616C14D6D006BC78B /* PictureButtonView.mm in Sources */,
 				7004A14516CBB7FA0097435D /* Model.xcdatamodeld in Sources */,
@@ -1538,6 +1547,13 @@
 				70C884D7173958FB001D98D0 /* LiveEventTableController.mm in Sources */,
 				70C884D8173958FB001D98D0 /* NewsTableViewCell.mm in Sources */,
 				70C884D9173958FB001D98D0 /* NewsTableViewController.mm in Sources */,
+				70A56296173A32F600145FEC /* CernMediaMARCParser.mm in Sources */,
+				70A56297173A32F600145FEC /* WebcastsParser.mm in Sources */,
+				70A56298173A32F600145FEC /* PhotoGridViewCell.mm in Sources */,
+				70A56299173A32F600145FEC /* PhotoSetInfoView.mm in Sources */,
+				70A5629A173A32F600145FEC /* PhotosGridViewController.mm in Sources */,
+				70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */,
+				70A5629C173A32F600145FEC /* WebcastsGridViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
