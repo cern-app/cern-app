@@ -23,5 +23,6 @@ NSString * const WebcastsControllerID = @"WebcastsControllerID";
 NSString * const FeedTileViewControllerID = @"FeedTileViewControllerID";
 NSString * const BulletinTileViewControllerID = @"BulletinTileViewControllerID";
 NSString * const BulletinIssueViewControllerID = @"BulletinIssueViewControllerID";
+NSString * const StaticInfoTileViewControllerID = @"StaticInfoTileViewControllerID";
 
 }

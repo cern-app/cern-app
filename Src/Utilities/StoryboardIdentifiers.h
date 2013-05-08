@@ -25,5 +25,6 @@ extern NSString * const WebcastsControllerID;
 extern NSString * const FeedTileViewControllerID;
 extern NSString * const BulletinTileViewControllerID;
 extern NSString * const BulletinIssueViewControllerID;
+extern NSString * const StaticInfoTileViewControllerID;
 
 }

@@ -1,6 +1,7 @@
 #import <cassert>
 
 #import "StaticInfoScrollViewController.h"
+#import "StaticInfoTileViewController.h"
 #import "BulletinTableViewController.h"
 #import "BulletinFeedViewController.h"
 #import "EventDisplayViewController.h"
@@ -612,17 +613,29 @@ void CancelConnections(UIViewController *controller)
 
    using namespace CernAPP;
 
-   MenuNavigationController * const navController =
-                  (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
-                                                                     StaticInfoNavigationControllerID];
-
-   assert([navController.topViewController isKindOfClass : [StaticInfoScrollViewController class]] &&
-          "loadControllerTo:, top view controller is either nil or has a wrong type");
-
+   MenuNavigationController *navController = nil;
    
-   StaticInfoScrollViewController * const sc = (StaticInfoScrollViewController *)navController.topViewController;
-   sc.navigationItem.title = (NSString *)info[@"Title"];
-   sc.dataSource = (NSArray *)info[@"Items"];
+   
+   
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier:
+                                                                         StaticInfoTileViewControllerID];
+      assert([navController.topViewController isKindOfClass : [StaticInfoTileViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+      
+      StaticInfoTileViewController * const sc = (StaticInfoTileViewController *)navController.topViewController;
+      sc.navigationItem.title = @"test";
+      sc.dataSource = (NSArray *)info[@"Items"];
+   } else {
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
+                                                                         StaticInfoNavigationControllerID];
+      assert([navController.topViewController isKindOfClass : [StaticInfoScrollViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+      
+      StaticInfoScrollViewController * const sc = (StaticInfoScrollViewController *)navController.topViewController;
+      sc.navigationItem.title = (NSString *)info[@"Title"];
+      sc.dataSource = (NSArray *)info[@"Items"];
+   }
    
    if (controller.slidingViewController.topViewController)
       CancelConnections(controller.slidingViewController.topViewController);

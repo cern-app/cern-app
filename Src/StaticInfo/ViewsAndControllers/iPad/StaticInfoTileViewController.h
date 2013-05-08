@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface StaticInfoTileViewController : UIViewController
+#import "ConnectionController.h"
+#import "TileViewController.h"
+
+@interface StaticInfoTileViewController : TileViewController<ConnectionController>
+
+- (void) setDataSource : (NSArray *) data;
 
 @end

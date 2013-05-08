@@ -176,6 +176,43 @@
             </objects>
             <point key="canvasLocation" x="2993" y="1505"/>
         </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="vvo-cm-3GC">
+            <objects>
+                <navigationController storyboardIdentifier="StaticInfoTileViewControllerID" definesPresentationContext="YES" id="9OY-gO-3hz" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9p3-r5-X7e">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="VYN-P4-2db" kind="relationship" relationship="rootViewController" id="hRi-SN-fMg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a0z-C0-iuJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2031" y="2749"/>
+        </scene>
+        <!--Static Info Tile View Controller-->
+        <scene sceneID="OEk-vC-opN">
+            <objects>
+                <viewController id="VYN-P4-2db" customClass="StaticInfoTileViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AKE-Cn-cHO" customClass="FlipParentView">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="RoH-KZ-31m">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="fVp-EA-jZr">
+                            <connections>
+                                <action selector="revealMenu:" destination="VYN-P4-2db" id="gRv-yB-ItE"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="12D-Le-nGz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2930" y="2749"/>
+        </scene>
     </scenes>
     <resources>
         <image name="menu.png" width="20" height="20"/>
@@ -220,6 +257,9 @@
             <relationships>
                 <relationship kind="action" name="reloadPageFromRefreshControl"/>
             </relationships>
+        </class>
+        <class className="StaticInfoTileViewController" superclassName="TileViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/StaticInfoTileViewController.h"/>
         </class>
         <class className="TileViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TileViewController.h"/>

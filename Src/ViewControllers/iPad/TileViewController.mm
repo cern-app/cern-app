@@ -128,6 +128,7 @@ using namespace FlipAnimation;
 //________________________________________________________________________________________
 - (void) layoutPages : (BOOL) layoutTiles
 {
+   NSLog(@"layoutPages: %u", nPages);
    if (!nPages)
       return;
    
