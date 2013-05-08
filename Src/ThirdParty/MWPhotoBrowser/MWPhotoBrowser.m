@@ -521,11 +521,13 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 	_pageIndexBeforeRotation = _currentPageIndex;
 	_rotating = YES;
    
-   if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
-      [self setControlsHidden : YES animated : NO permanent : NO];
-   } else {
-      [self setControlsHidden : NO animated : NO permanent : NO];
-   }
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+      if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+         [self setControlsHidden : YES animated : NO permanent : NO];
+      } else {
+         [self setControlsHidden : NO animated : NO permanent : NO];
+      }
+   }//Do not hide on iPad.
 }
 
 //________________________________________________________________________________________

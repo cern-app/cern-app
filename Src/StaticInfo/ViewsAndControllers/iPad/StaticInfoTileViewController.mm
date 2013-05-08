@@ -92,82 +92,8 @@
 //________________________________________________________________________________________
 - (void) loadVisiblePageData
 {
-   /*
-   if (!downloaders)
-      downloaders = [[NSMutableDictionary alloc] init];
-
-   NSNumber * const key = [NSNumber numberWithUnsignedInteger : currPage.pageNumber];
-   if (downloaders[key])
-      return;
-   
-   NSMutableArray * const thumbnails = [[NSMutableArray alloc] init];
-   const NSRange range = currPage.pageRange;
-   for (NSUInteger i = range.location, e = range.location + range.length; i < e; ++i) {
-      MWFeedItem * const article = (MWFeedItem *)dataItems[i];
-      if (!article.image) {
-         //May be, we already have a downloader for this item?
-         NSString * body = article.content;
-         if (!body)
-            body = article.summary;
-
-         if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
-            KeyVal * const newThumbnail = [[KeyVal alloc] init];
-            newThumbnail.key = [NSIndexPath indexPathForRow : i inSection : currPage.pageNumber];
-            newThumbnail.val = urlString;
-            [thumbnails addObject : newThumbnail];
-         }
-      }
-   }
-   
-   if (!thumbnails.count) {
-      //Let's check, if we have an image in some article, but no image in the corresponding tile.
-      bool needUpdate = false;
-      for (NSUInteger i = range.location, e = range.location + range.length; i < e; ++i) {
-         MWFeedItem * const article = (MWFeedItem *)dataItems[i];
-         if (article.image && ![currPage tileHasThumbnail : i - range.location]) {
-            needUpdate = true;
-            [currPage setThumbnail : article.image forTile : i - range.location doLayout : NO];
-         }
-      }
-      
-      if (needUpdate) {
-         [currPage layoutTiles];
-         [flipView replaceCurrentFrame : currPage];
-      }
-   } else {
-      PageThumbnailDownloader * const newDownloader = [[PageThumbnailDownloader alloc] initWithItems : thumbnails];
-      [downloaders setObject:newDownloader forKey : key];
-      newDownloader.delegate = self;
-      [newDownloader startDownload];
-   }*/
+   //Noop at the moment.
 }
-
-#pragma mark - UI
-
-/*
-//________________________________________________________________________________________
-- (void) addNavBarSpinner
-{
-   navBarSpinner = [[UIActivityIndicatorView alloc] initWithFrame : CGRectMake(0.f, 0.f, 20.f, 20.f)];
-   UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView : navBarSpinner];
-   // Set to Left or Right
-   self.navigationItem.rightBarButtonItem = barButton;
-   [navBarSpinner startAnimating];
-}
-
-//________________________________________________________________________________________
-- (void) hideNavBarSpinner
-{
-   if (navBarSpinner) {
-      [navBarSpinner stopAnimating];
-      navBarSpinner = nil;
-      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-                                                initWithBarButtonSystemItem : UIBarButtonSystemItemRefresh
-                                                target : self action : @selector(reloadPageFromRefreshControl)];
-   }
-}
-*/
-
 
 #pragma mark - ConnectionController protocol.
 
@@ -190,7 +116,6 @@
 //________________________________________________________________________________________
 - (void) addTileTapObserver
 {
-   //TODO
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(tileSelected:) name : CernAPP::StaticInfoItemNotification object : nil];
 }
 
