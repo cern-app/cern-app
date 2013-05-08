@@ -46,7 +46,7 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
 
       //Text.
       textLabel = [[UILabel alloc] initWithFrame : CGRect()];
-      UIFont * const textFont = [UIFont fontWithName : @"PTSans-Caption" size : 18.f];
+      UIFont * const textFont = [UIFont fontWithName : @"PTSans-Caption" size : 20.f];
       assert(textFont != nil && "initWithFrame:, custom font is nil");
       textLabel.font = textFont;
       textLabel.numberOfLines = 0;
@@ -120,13 +120,13 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
                                              std::min(h - 2 * h * tileMargin - h * titleHeight, descriptionSize.height));
          textLabel.frame = textFrame;
          //Image.
-         const CGRect imageFrame = CGRectMake(w / 2 + hGap * w, h * tileMargin, w / 2 - tileMargin * w - hGap * w, textFrame.size.height + h * titleHeight);
+         const CGRect imageFrame = CGRectMake(w / 2 + hGap * w, h * tileMargin, w / 2 - tileMargin * w - hGap * w, h - 2 * h * tileMargin);
          imageView.frame = imageFrame;
       }
    } else {
       if (layoutHint == StaticInfoTileHint::scheme1) {//Image is on the top.
          //Image.
-         const CGRect imageFrame = CGRectMake(tileMargin * w, tileMargin * h, w - 2 * tileMargin * w, (h - 2 * tileMargin * h - titleHeight * h) / 2);
+         const CGRect imageFrame = CGRectMake(tileMargin * w, tileMargin * h, w - 2 * tileMargin * w, (h - 2 * tileMargin * h) / 2);
          imageView.frame = imageFrame;
          //Title.
          const CGRect titleFrame = CGRectMake(imageFrame.origin.x, imageFrame.origin.y + imageFrame.size.height, imageFrame.size.width, h * titleHeight);
@@ -134,7 +134,7 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
          //Text.
          const CGSize descriptionSize = [textLabel.text sizeWithFont : textLabel.font constrainedToSize : CGSizeMake(titleFrame.size.width, CGFLOAT_MAX)];
          const CGRect textFrame = CGRectMake(imageFrame.origin.x, titleFrame.origin.y + titleFrame.size.height,
-                                             imageFrame.size.width, std::min(imageFrame.size.height, descriptionSize.height));
+                                             imageFrame.size.width, std::min(imageFrame.size.height - titleFrame.size.height, descriptionSize.height));
          textLabel.frame = textFrame;
       } else {//Image is at the bottom.
          //
@@ -144,12 +144,12 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
          //Text.
          const CGSize descriptionSize = [textLabel.text sizeWithFont : textLabel.font constrainedToSize : CGSizeMake(titleFrame.size.width, CGFLOAT_MAX)];
          const CGRect textFrame = CGRectMake(titleFrame.origin.x, titleFrame.origin.y + titleFrame.size.height, titleFrame.size.width,
-                                             std::min((h - (titleFrame.origin.y + titleFrame.size.height) - tileMargin * h) / 2, descriptionSize.height));
+                                             std::min((h - 2 * tileMargin * h) / 2 - titleFrame.size.height, descriptionSize.height));
          textLabel.frame = textFrame;
          //Image.
          
-         const CGRect imageFrame = CGRectMake(titleFrame.origin.x, textFrame.origin.y + (h - (titleFrame.origin.y + titleFrame.size.height) - tileMargin * h) / 2,
-                                              titleFrame.size.width, (h - (titleFrame.origin.y + titleFrame.size.height) - tileMargin * h) / 2);
+         const CGRect imageFrame = CGRectMake(titleFrame.origin.x, h / 2,
+                                              titleFrame.size.width, (h - 2 * tileMargin * h) / 2);
          imageView.frame = imageFrame;
       }
    }

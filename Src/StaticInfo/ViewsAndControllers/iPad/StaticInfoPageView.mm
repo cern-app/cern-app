@@ -96,9 +96,10 @@ const CGFloat tileShift = 0.2f;
       NSDictionary * const itemDict = (NSDictionary *)items[i];
       [newTile setTitle : (NSString *)itemDict[@"Title"]];
       [newTile setText : (NSString *)itemDict[@"Description"]];
-      //[newTile setImage:];
-      //[newTile setTitle:];
-      //[newTile setText:];
+      
+      if (itemDict[@"Thumbnail"])
+         [newTile setImage:(UIImage *)itemDict[@"Thumbnail"]];
+
       newTile.layoutHint = hints[i - index];
       [tiles addObject : newTile];
       [self addSubview : newTile];
@@ -119,7 +120,15 @@ const CGFloat tileShift = 0.2f;
 //________________________________________________________________________________________
 - (void) setThumbnail : (UIImage *) thumbnailImage forTile : (NSUInteger) tileIndex doLayout : (BOOL) layout
 {
-#pragma unused(thumbnailImage, tileIndex, layout)
+#pragma unused(layout)
+   
+   assert(thumbnailImage != nil &&
+          "setThumbnail:forTile:doLayout:, parameter 'thumbnailImage' is nil");
+   assert(tileIndex < tiles.count &&
+          "setThumbnail:forTile:doLayout:, parameter 'tileIndex' is out of bounds");
+   
+   StaticInfoTileView * const tile = (StaticInfoTileView *)tiles[tileIndex];
+   [tile setImage : thumbnailImage];
 }
 
 //________________________________________________________________________________________

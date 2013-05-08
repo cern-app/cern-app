@@ -6,19 +6,24 @@
 //  Copyright (c) 2013 CERN. All rights reserved.
 //
 
+#import <algorithm>
+
 #import "StaticInfoTileViewController.h"
 #import "StaticInfoPageView.h"
 
 @implementation StaticInfoTileViewController {
    BOOL viewDidAppear;
-   NSMutableArray *images;
+
+   //NSOperationQueue *opQueue;
+   //NSInvocationOperation *imageCreateOp;
 }
 
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
-   if (self = [super initWithCoder : aDecoder])
+   if (self = [super initWithCoder : aDecoder]) {
       viewDidAppear = NO;
+   }
    
    return self;
 }
@@ -36,6 +41,13 @@
 {
    assert(data != nil && "setDataSource:, parameter 'data' is nil");
    dataItems = (NSMutableArray *)[data mutableCopy];
+   
+   dataItems = [[NSMutableArray alloc] init];
+   for (id item in data) {
+      assert([item isKindOfClass : [NSDictionary class]] &&
+             "setDataSource:, item has a wrong type");
+      [dataItems addObject : [(NSDictionary *)item mutableCopy]];
+   }
 }
 
 #pragma mark - Overriders for UIViewController methods.
@@ -65,11 +77,10 @@
 
    if (!viewDidAppear) {
       viewDidAppear = YES;
-      //Load UIImages. Setup pages.
+      [self loadImages];
       [self setPagesData];
       [self layoutPages : YES];
-    //  NSLog(@"self.view: %@", self.view);
-    //  NSLog(@"pages: %@ %@ %@", prevPage, currPage, nextPage);
+
       [self layoutFlipView];
       [self layoutPanRegion];
    }
@@ -180,6 +191,19 @@
 {
    //TODO
    //[NSNotificationCenter defaultCenter] addObserver:<#(NSObject *)#> forKeyPath:<#(NSString *)#> options:<#(NSKeyValueObservingOptions)#> context:<#(void *)#>
+}
+
+//________________________________________________________________________________________
+- (void) loadImages
+{
+   for (NSUInteger i = 0, e = dataItems.count; i < e; ++i) {
+      NSMutableDictionary * const itemDict = (NSMutableDictionary *)dataItems[i];
+      UIImage * const newImage = [UIImage imageNamed : (NSString *)itemDict[@"Image"]];
+      if (!newImage)
+         continue;
+
+      [itemDict setObject : newImage forKey : @"Thumbnail"];
+   }
 }
 
 @end
