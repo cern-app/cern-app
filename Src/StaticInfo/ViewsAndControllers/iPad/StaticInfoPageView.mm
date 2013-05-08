@@ -8,12 +8,15 @@
 
 #import <algorithm>
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "StaticInfoPageView.h"
 #import "StaticInfoTileView.h"
 
 using namespace CernAPP;
 
 const NSUInteger tilesOnPage = 2;
+const CGFloat tileShift = 0.2f;
 
 @implementation StaticInfoPageView {
    NSMutableArray *tiles;
@@ -161,12 +164,53 @@ const NSUInteger tilesOnPage = 2;
 - (void) explodeTiles : (UIInterfaceOrientation) orientation
 {
 #pragma unused(orientation)
+
+   if (tiles.count == 1)//No animation for this case, since tile occupies the whole page.
+      return;
+
+   const CGPoint pageCenter = self.center;
+
+   for (StaticInfoTileView *tile in tiles) {
+      CGPoint tileCenter = [self convertPoint : tile.center toView : self.superview];
+      tileCenter.x += tileShift * (tileCenter.x - pageCenter.x);
+      tileCenter.y += tileShift * (tileCenter.y - pageCenter.y);
+      tileCenter = [self.superview convertPoint : tileCenter toView : self];
+      tile.center = tileCenter;
+   }
+
 }
 
 //________________________________________________________________________________________
 - (void) collectTilesAnimatedForOrientation : (UIInterfaceOrientation) orientation from : (CFTimeInterval) start withDuration : (CFTimeInterval) duration
 {
-#pragma unused(orientation, start, duration)
+#pragma unused(orientation)
+   if (tiles.count == 1)
+      return;
+
+   //TODO: test! is center always correct and can I always use it to do these calculations?
+   //If not, it's easy (I think) to use view's frames to do the same job.
+
+   const CGPoint pageCenter = self.center;
+
+   NSUInteger index = 0;
+   for (StaticInfoTileView *tile in tiles) {
+      CGPoint tileCenter = tile.center;
+      tileCenter = [self convertPoint : tileCenter toView : self.superview];
+      CGPoint endPoint = CGPointMake((tileCenter.x + tileShift * pageCenter.x) / (1.f + tileShift),
+                                     (tileCenter.y + tileShift * pageCenter.y) / (1.f + tileShift));
+      endPoint = [self.superview convertPoint : endPoint toView : self];
+      CABasicAnimation * const animation = [CABasicAnimation animationWithKeyPath : @"position"];
+      animation.fromValue = [NSValue valueWithCGPoint : tile.center];
+      animation.toValue = [NSValue valueWithCGPoint : endPoint];
+      animation.beginTime = start;
+      [animation setTimingFunction : [CAMediaTimingFunction functionWithControlPoints : 0.6f : 1.5f : 0.8f : 0.8f]];
+
+      animation.duration = duration;
+      [tile.layer addAnimation : animation forKey : [NSString stringWithFormat : @"bounce%u", index]];
+      tile.layer.position = endPoint;
+      //
+      ++index;
+   }
 }
 
 @end

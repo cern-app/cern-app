@@ -408,6 +408,10 @@ void CancelConnections(UIViewController *controller)
 //________________________________________________________________________________________
 - (void) loadControllerTo : (UIViewController *) controller
 {
+   //TODO: there is not view/controller for iPad at the moment.
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+      return;
+
    using namespace CernAPP;
 
    assert(controller != nil && "loadControllerTo:, parameter controller is nil");

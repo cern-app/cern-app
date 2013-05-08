@@ -168,6 +168,8 @@ const CGFloat tileShift = 0.2f;
 //________________________________________________________________________________________
 - (void) explodeTiles : (UIInterfaceOrientation) orientation
 {
+#pragma unused(orientation)
+
    assert(tiles.count <= 3 && "explodeTiles, unexpected number of tiles");
    
    //TODO: test! is center always correct and can I always use it to do these calculations?
@@ -190,6 +192,8 @@ const CGFloat tileShift = 0.2f;
 //________________________________________________________________________________________
 - (void) collectTilesAnimatedForOrientation : (UIInterfaceOrientation) orientation from : (CFTimeInterval) start withDuration : (CFTimeInterval) duration
 {
+#pragma unused(orientation)
+
   if (tiles.count == 1)
       return;
 
