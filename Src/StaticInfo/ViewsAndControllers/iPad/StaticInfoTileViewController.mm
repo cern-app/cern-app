@@ -101,7 +101,7 @@
       [currPage setPageItems : dataItems startingFrom : 0];
       currPage.pageNumber = 0;
    }*/
-   NSLog(@"setPagesData");
+   //NSLog(@"setPagesData");
 }
 
 //________________________________________________________________________________________
