@@ -188,13 +188,18 @@
 		70A562CD173A35C300145FEC /* FeedPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B4173A35C300145FEC /* FeedPageView.mm */; };
 		70A562CE173A35C300145FEC /* NewsFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B6173A35C300145FEC /* NewsFeedViewController.mm */; };
 		70A562CF173A35C300145FEC /* PageThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B8173A35C300145FEC /* PageThumbnailDownloader.mm */; };
-		70A562D0173A35C300145FEC /* TileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562BA173A35C300145FEC /* TileViewController.mm */; };
 		70A562D1173A35C300145FEC /* BulletinIssueTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562BD173A35C300145FEC /* BulletinIssueTableViewController.mm */; };
 		70A562D2173A35C300145FEC /* BulletinTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562BF173A35C300145FEC /* BulletinTableViewController.mm */; };
 		70A562D3173A35C300145FEC /* CellBackgroundView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C1173A35C300145FEC /* CellBackgroundView.mm */; };
 		70A562D4173A35C300145FEC /* LiveEventTableController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C3173A35C300145FEC /* LiveEventTableController.mm */; };
 		70A562D5173A35C300145FEC /* NewsTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C5173A35C300145FEC /* NewsTableViewCell.mm */; };
 		70A562D6173A35C300145FEC /* NewsTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C7173A35C300145FEC /* NewsTableViewController.mm */; };
+		70A562DE173A37AA00145FEC /* TileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562DD173A37AA00145FEC /* TileViewController.mm */; };
+		70A562EC173A382A00145FEC /* StaticInfoPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562E2173A382A00145FEC /* StaticInfoPageView.mm */; };
+		70A562ED173A382A00145FEC /* StaticInfoTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562E4173A382A00145FEC /* StaticInfoTileView.mm */; };
+		70A562EE173A382A00145FEC /* StaticInfoTileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562E6173A382A00145FEC /* StaticInfoTileViewController.mm */; };
+		70A562EF173A382A00145FEC /* StaticInfoItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562E9173A382A00145FEC /* StaticInfoItemViewController.mm */; };
+		70A562F0173A382A00145FEC /* StaticInfoScrollViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562EB173A382A00145FEC /* StaticInfoScrollViewController.mm */; };
 		70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B22F0416F9DCAA007D88EF /* action_blue.png */; };
 		70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */; };
 		70B6B0B9169DD2790058DADA /* live_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0B8169DD2790058DADA /* live_color.png */; };
@@ -211,10 +216,6 @@
 		70C0E948169C75F10004ED1E /* PTS56F.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70C0E947169C75F10004ED1E /* PTS56F.ttf */; };
 		70C0E94A169C85FA0004ED1E /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 70C0E949169C85FA0004ED1E /* menu.png */; };
 		70C728461732C6E300992077 /* FlipView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C728441732C6E200992077 /* FlipView.mm */; };
-		70C884A1173956D0001D98D0 /* StaticInfoPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C8849E173956D0001D98D0 /* StaticInfoPageView.mm */; };
-		70C884A2173956D0001D98D0 /* StaticInfoTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */; };
-		70C884A8173957AD001D98D0 /* StaticInfoItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A5173957AD001D98D0 /* StaticInfoItemViewController.mm */; };
-		70C884A9173957AD001D98D0 /* StaticInfoScrollViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A7173957AD001D98D0 /* StaticInfoScrollViewController.mm */; };
 		70CC55EF169EF80600292332 /* MenuNavigationController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CC55ED169EF80500292332 /* MenuNavigationController.mm */; };
 		70D2629516F8948600883316 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D2629416F8948600883316 /* CoreText.framework */; };
 		70D98B0816F73ABA003C42E7 /* AppSettingsController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AFD16F73ABA003C42E7 /* AppSettingsController.mm */; };
@@ -499,8 +500,6 @@
 		70A562B6173A35C300145FEC /* NewsFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsFeedViewController.mm; sourceTree = "<group>"; };
 		70A562B7173A35C300145FEC /* PageThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageThumbnailDownloader.h; sourceTree = "<group>"; };
 		70A562B8173A35C300145FEC /* PageThumbnailDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageThumbnailDownloader.mm; sourceTree = "<group>"; };
-		70A562B9173A35C300145FEC /* TileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileViewController.h; sourceTree = "<group>"; };
-		70A562BA173A35C300145FEC /* TileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TileViewController.mm; sourceTree = "<group>"; };
 		70A562BC173A35C300145FEC /* BulletinIssueTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTableViewController.h; sourceTree = "<group>"; };
 		70A562BD173A35C300145FEC /* BulletinIssueTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTableViewController.mm; sourceTree = "<group>"; };
 		70A562BE173A35C300145FEC /* BulletinTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinTableViewController.h; sourceTree = "<group>"; };
@@ -513,6 +512,18 @@
 		70A562C5173A35C300145FEC /* NewsTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewCell.mm; sourceTree = "<group>"; };
 		70A562C6173A35C300145FEC /* NewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewController.h; sourceTree = "<group>"; };
 		70A562C7173A35C300145FEC /* NewsTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewController.mm; sourceTree = "<group>"; };
+		70A562DC173A37AA00145FEC /* TileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileViewController.h; sourceTree = "<group>"; };
+		70A562DD173A37AA00145FEC /* TileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TileViewController.mm; sourceTree = "<group>"; };
+		70A562E1173A382A00145FEC /* StaticInfoPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoPageView.h; sourceTree = "<group>"; };
+		70A562E2173A382A00145FEC /* StaticInfoPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoPageView.mm; sourceTree = "<group>"; };
+		70A562E3173A382A00145FEC /* StaticInfoTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoTileView.h; sourceTree = "<group>"; };
+		70A562E4173A382A00145FEC /* StaticInfoTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoTileView.mm; sourceTree = "<group>"; };
+		70A562E5173A382A00145FEC /* StaticInfoTileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoTileViewController.h; sourceTree = "<group>"; };
+		70A562E6173A382A00145FEC /* StaticInfoTileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoTileViewController.mm; sourceTree = "<group>"; };
+		70A562E8173A382A00145FEC /* StaticInfoItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoItemViewController.h; sourceTree = "<group>"; };
+		70A562E9173A382A00145FEC /* StaticInfoItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoItemViewController.mm; sourceTree = "<group>"; };
+		70A562EA173A382A00145FEC /* StaticInfoScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoScrollViewController.h; sourceTree = "<group>"; };
+		70A562EB173A382A00145FEC /* StaticInfoScrollViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoScrollViewController.mm; sourceTree = "<group>"; };
 		70B22F0416F9DCAA007D88EF /* action_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action_blue.png; sourceTree = "<group>"; };
 		70B2A75016DBBD5200BC8657 /* ConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionController.h; sourceTree = "<group>"; };
 		70B2A75116DBBD5200BC8657 /* PageControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageControllerProtocol.h; sourceTree = "<group>"; };
@@ -535,14 +546,6 @@
 		70C0E949169C85FA0004ED1E /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
 		70C728441732C6E200992077 /* FlipView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FlipView.mm; sourceTree = "<group>"; };
 		70C728451732C6E200992077 /* FlipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipView.h; sourceTree = "<group>"; };
-		70C8849D173956D0001D98D0 /* StaticInfoPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoPageView.h; sourceTree = "<group>"; };
-		70C8849E173956D0001D98D0 /* StaticInfoPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoPageView.mm; sourceTree = "<group>"; };
-		70C8849F173956D0001D98D0 /* StaticInfoTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoTileView.h; sourceTree = "<group>"; };
-		70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoTileView.mm; sourceTree = "<group>"; };
-		70C884A4173957AD001D98D0 /* StaticInfoItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoItemViewController.h; sourceTree = "<group>"; };
-		70C884A5173957AD001D98D0 /* StaticInfoItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoItemViewController.mm; sourceTree = "<group>"; };
-		70C884A6173957AD001D98D0 /* StaticInfoScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoScrollViewController.h; sourceTree = "<group>"; };
-		70C884A7173957AD001D98D0 /* StaticInfoScrollViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoScrollViewController.mm; sourceTree = "<group>"; };
 		70CC55ED169EF80500292332 /* MenuNavigationController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuNavigationController.mm; sourceTree = "<group>"; };
 		70CC55EE169EF80600292332 /* MenuNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuNavigationController.h; sourceTree = "<group>"; };
 		70D2629416F8948600883316 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -861,6 +864,7 @@
 		707B1342169AE8C900180E02 /* Src */ = {
 			isa = PBXGroup;
 			children = (
+				70A562DA173A37AA00145FEC /* ViewControllers */,
 				70A56284173A32F600145FEC /* VideosPhotosWebcasts */,
 				70C884AA173958FA001D98D0 /* NewsFeeds */,
 				70C8849B173956CF001D98D0 /* StaticInfo */,
@@ -1111,8 +1115,6 @@
 				70A562B6173A35C300145FEC /* NewsFeedViewController.mm */,
 				70A562B7173A35C300145FEC /* PageThumbnailDownloader.h */,
 				70A562B8173A35C300145FEC /* PageThumbnailDownloader.mm */,
-				70A562B9173A35C300145FEC /* TileViewController.h */,
-				70A562BA173A35C300145FEC /* TileViewController.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1132,6 +1134,56 @@
 				70A562C5173A35C300145FEC /* NewsTableViewCell.mm */,
 				70A562C6173A35C300145FEC /* NewsTableViewController.h */,
 				70A562C7173A35C300145FEC /* NewsTableViewController.mm */,
+			);
+			path = iPhone;
+			sourceTree = "<group>";
+		};
+		70A562DA173A37AA00145FEC /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				70A562DB173A37AA00145FEC /* iPad */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		70A562DB173A37AA00145FEC /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				70A562DC173A37AA00145FEC /* TileViewController.h */,
+				70A562DD173A37AA00145FEC /* TileViewController.mm */,
+			);
+			path = iPad;
+			sourceTree = "<group>";
+		};
+		70A562DF173A382A00145FEC /* ViewsAndControllers */ = {
+			isa = PBXGroup;
+			children = (
+				70A562E0173A382A00145FEC /* iPad */,
+				70A562E7173A382A00145FEC /* iPhone */,
+			);
+			path = ViewsAndControllers;
+			sourceTree = "<group>";
+		};
+		70A562E0173A382A00145FEC /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				70A562E1173A382A00145FEC /* StaticInfoPageView.h */,
+				70A562E2173A382A00145FEC /* StaticInfoPageView.mm */,
+				70A562E3173A382A00145FEC /* StaticInfoTileView.h */,
+				70A562E4173A382A00145FEC /* StaticInfoTileView.mm */,
+				70A562E5173A382A00145FEC /* StaticInfoTileViewController.h */,
+				70A562E6173A382A00145FEC /* StaticInfoTileViewController.mm */,
+			);
+			path = iPad;
+			sourceTree = "<group>";
+		};
+		70A562E7173A382A00145FEC /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				70A562E8173A382A00145FEC /* StaticInfoItemViewController.h */,
+				70A562E9173A382A00145FEC /* StaticInfoItemViewController.mm */,
+				70A562EA173A382A00145FEC /* StaticInfoScrollViewController.h */,
+				70A562EB173A382A00145FEC /* StaticInfoScrollViewController.mm */,
 			);
 			path = iPhone;
 			sourceTree = "<group>";
@@ -1159,32 +1211,9 @@
 		70C8849B173956CF001D98D0 /* StaticInfo */ = {
 			isa = PBXGroup;
 			children = (
-				70C884A3173957AD001D98D0 /* iPhone */,
-				70C8849C173956D0001D98D0 /* iPad */,
+				70A562DF173A382A00145FEC /* ViewsAndControllers */,
 			);
 			path = StaticInfo;
-			sourceTree = "<group>";
-		};
-		70C8849C173956D0001D98D0 /* iPad */ = {
-			isa = PBXGroup;
-			children = (
-				70C8849D173956D0001D98D0 /* StaticInfoPageView.h */,
-				70C8849E173956D0001D98D0 /* StaticInfoPageView.mm */,
-				70C8849F173956D0001D98D0 /* StaticInfoTileView.h */,
-				70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */,
-			);
-			path = iPad;
-			sourceTree = "<group>";
-		};
-		70C884A3173957AD001D98D0 /* iPhone */ = {
-			isa = PBXGroup;
-			children = (
-				70C884A4173957AD001D98D0 /* StaticInfoItemViewController.h */,
-				70C884A5173957AD001D98D0 /* StaticInfoItemViewController.mm */,
-				70C884A6173957AD001D98D0 /* StaticInfoScrollViewController.h */,
-				70C884A7173957AD001D98D0 /* StaticInfoScrollViewController.mm */,
-			);
-			path = iPhone;
 			sourceTree = "<group>";
 		};
 		70C884AA173958FA001D98D0 /* NewsFeeds */ = {
@@ -1533,10 +1562,6 @@
 				70FB8559172987E500F7CCBD /* AnimationFrame.mm in Sources */,
 				70C728461732C6E300992077 /* FlipView.mm in Sources */,
 				70BCD9B31733C560000BD91B /* FlipParentView.mm in Sources */,
-				70C884A1173956D0001D98D0 /* StaticInfoPageView.mm in Sources */,
-				70C884A2173956D0001D98D0 /* StaticInfoTileView.mm in Sources */,
-				70C884A8173957AD001D98D0 /* StaticInfoItemViewController.mm in Sources */,
-				70C884A9173957AD001D98D0 /* StaticInfoScrollViewController.mm in Sources */,
 				70A56296173A32F600145FEC /* CernMediaMARCParser.mm in Sources */,
 				70A56297173A32F600145FEC /* WebcastsParser.mm in Sources */,
 				70A56298173A32F600145FEC /* PhotoGridViewCell.mm in Sources */,
@@ -1555,13 +1580,18 @@
 				70A562CD173A35C300145FEC /* FeedPageView.mm in Sources */,
 				70A562CE173A35C300145FEC /* NewsFeedViewController.mm in Sources */,
 				70A562CF173A35C300145FEC /* PageThumbnailDownloader.mm in Sources */,
-				70A562D0173A35C300145FEC /* TileViewController.mm in Sources */,
 				70A562D1173A35C300145FEC /* BulletinIssueTableViewController.mm in Sources */,
 				70A562D2173A35C300145FEC /* BulletinTableViewController.mm in Sources */,
 				70A562D3173A35C300145FEC /* CellBackgroundView.mm in Sources */,
 				70A562D4173A35C300145FEC /* LiveEventTableController.mm in Sources */,
 				70A562D5173A35C300145FEC /* NewsTableViewCell.mm in Sources */,
 				70A562D6173A35C300145FEC /* NewsTableViewController.mm in Sources */,
+				70A562DE173A37AA00145FEC /* TileViewController.mm in Sources */,
+				70A562EC173A382A00145FEC /* StaticInfoPageView.mm in Sources */,
+				70A562ED173A382A00145FEC /* StaticInfoTileView.mm in Sources */,
+				70A562EE173A382A00145FEC /* StaticInfoTileViewController.mm in Sources */,
+				70A562EF173A382A00145FEC /* StaticInfoItemViewController.mm in Sources */,
+				70A562F0173A382A00145FEC /* StaticInfoScrollViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
