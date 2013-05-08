@@ -80,8 +80,38 @@
       viewDidAppear = YES;
       [self loadImages];
       [self setPagesData];
+      
       [self layoutPages : YES];
+      [self layoutFlipView];
+      [self layoutPanRegion];
+   }
+}
 
+//________________________________________________________________________________________
+- (void) viewWillAppear : (BOOL) animated
+{
+   [super viewWillAppear : animated];
+   
+   //Many thanks to Apple for this UGLY UGLY problem: after MWPhotoBrowser was presented/dismissed, geometry
+   //can be WRONG if device was rotated to a different orientation, while browser opened.
+   //Many thanks! Always think different! DIFFERENT! DIFFERENT! THINK! APPLE!
+
+   if (nPages) {
+      const CGRect currFrame = self.view.frame;
+      const UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+      if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
+         if (currFrame.size.width < currFrame.size.height) {
+            //Nice! Thank you, Apple's engineers!
+            self.view.frame = CGRectMake(0.f, 0.f, 1024.f, 704.f);
+         }
+      } else {
+         if (currFrame.size.width > currFrame.size.height) {
+            //Nice! Thank you, Apple's engineers!
+            self.view.frame = CGRectMake(0.f, 0.f, 768.f, 960.f);
+         }
+      }
+
+      [self layoutPages : YES];
       [self layoutFlipView];
       [self layoutPanRegion];
    }
