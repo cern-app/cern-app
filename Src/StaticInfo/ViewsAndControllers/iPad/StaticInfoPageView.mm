@@ -91,6 +91,7 @@ const CGFloat tileShift = 0.2f;
 
    for (NSUInteger i = index; i < endOfRange; ++i) {
       StaticInfoTileView * const newTile = [[StaticInfoTileView alloc] initWithFrame : CGRect()];
+      newTile.itemIndex = i;
       assert([items[i] isKindOfClass : [NSDictionary class]] &&
              "setPageItems:startingFrom:, item has a wrong type");
       NSDictionary * const itemDict = (NSDictionary *)items[i];

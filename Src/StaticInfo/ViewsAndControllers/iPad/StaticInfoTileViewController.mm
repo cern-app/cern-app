@@ -9,11 +9,12 @@
 #import <algorithm>
 
 #import "StaticInfoTileViewController.h"
+#import "StaticInfoTileView.h"
 #import "StaticInfoPageView.h"
 
 @implementation StaticInfoTileViewController {
    BOOL viewDidAppear;
-
+   NSUInteger selectedItem;
    //NSOperationQueue *opQueue;
    //NSInvocationOperation *imageCreateOp;
 }
@@ -21,10 +22,9 @@
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
-   if (self = [super initWithCoder : aDecoder]) {
+   if (self = [super initWithCoder : aDecoder])
       viewDidAppear = NO;
-   }
-   
+
    return self;
 }
 
@@ -58,6 +58,7 @@
    [super viewDidLoad];
    
    [self createPages];
+   [self addTileTapObserver];
    
    [self.view addSubview : currPage];
    [self.view bringSubviewToFront : currPage];
@@ -190,7 +191,7 @@
 - (void) addTileTapObserver
 {
    //TODO
-   //[NSNotificationCenter defaultCenter] addObserver:<#(NSObject *)#> forKeyPath:<#(NSString *)#> options:<#(NSKeyValueObservingOptions)#> context:<#(void *)#>
+   [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(tileSelected:) name : CernAPP::StaticInfoItemNotification object : nil];
 }
 
 //________________________________________________________________________________________
@@ -204,6 +205,43 @@
 
       [itemDict setObject : newImage forKey : @"Thumbnail"];
    }
+}
+
+#pragma mark - User interactions.
+
+//________________________________________________________________________________________
+- (void) tileSelected : (NSNotification *) notification
+{
+   assert(notification != nil && "tileSelected:, parameter 'notification' is nil");
+   assert([notification.object isKindOfClass : [NSNumber class]] &&
+          "tileSelected:, notification.object has a wrong type");
+
+   selectedItem = [(NSNumber *)notification.object unsignedIntegerValue];
+   assert(selectedItem < dataItems.count && "tileSelected:, index is out of bounds");
+   
+   MWPhotoBrowser * const browser = [[MWPhotoBrowser alloc] initWithDelegate : self];
+   UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController : browser];
+   navigationController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+   [self presentViewController : navigationController animated : YES completion : nil];
+}
+
+#pragma mark - MWPhotoBrowserDelegate methods
+
+//________________________________________________________________________________________
+- (NSUInteger) numberOfPhotosInPhotoBrowser : (MWPhotoBrowser *) photoBrowser
+{
+   return 1;
+}
+
+//________________________________________________________________________________________
+- (MWPhoto *) photoBrowser : (MWPhotoBrowser *) photoBrowser photoAtIndex : (NSUInteger) index
+{
+   assert(((NSDictionary *)dataItems[selectedItem])[@"Thumbnail"] != nil &&
+          "photoBrowser:photoAtIndex:, no image found");
+   assert(selectedItem < dataItems.count &&
+          "photoBrowser:photoAtIndex:, selected item is out of bounds");
+   NSDictionary * const itemDict = (NSDictionary *)dataItems[selectedItem];
+   return [MWPhoto photoWithImage : (UIImage *)itemDict[@"Thumbnail"]];
 }
 
 @end

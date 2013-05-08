@@ -10,8 +10,9 @@
 
 #import "ConnectionController.h"
 #import "TileViewController.h"
+#import "MWPhotoBrowser.h"
 
-@interface StaticInfoTileViewController : TileViewController<ConnectionController>
+@interface StaticInfoTileViewController : TileViewController<ConnectionController, MWPhotoBrowserDelegate>
 
 - (void) setDataSource : (NSArray *) data;
 

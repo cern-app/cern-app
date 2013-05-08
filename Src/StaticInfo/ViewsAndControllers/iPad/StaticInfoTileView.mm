@@ -11,6 +11,12 @@
 
 #import "StaticInfoTileView.h"
 
+namespace CernAPP {
+
+NSString * const StaticInfoItemNotification = @"CERN_APP_StaticInfoItemNotification";
+
+}
+
 using namespace CernAPP;
 
 //C++ constants have internal linkage.
@@ -24,7 +30,7 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
    UILabel *textLabel;
 }
 
-@synthesize layoutHint;
+@synthesize layoutHint, itemIndex;
 
 //________________________________________________________________________________________
 - (id) initWithFrame : (CGRect) frame
@@ -56,6 +62,9 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
       layoutHint = StaticInfoTileHint::none;
       
       self.backgroundColor = [UIColor colorWithRed : 0.85f green : 0.85f blue : 0.85f alpha : 1.f];
+      
+      UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(handleTap:)];
+      [self addGestureRecognizer : tapRecognizer];
    }
 
    return self;
@@ -152,6 +161,18 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
                                               titleFrame.size.width, (h - 2 * tileMargin * h) / 2);
          imageView.frame = imageFrame;
       }
+   }
+}
+
+//________________________________________________________________________________________
+- (void) handleTap : (UITapGestureRecognizer *) tapRecognizer
+{
+   assert(tapRecognizer != nil && "handleTap:, parameter 'tapRecognizer' is nil");
+   
+   // If the photo was tapped, display it fullscreen
+   if (CGRectContainsPoint(imageView.frame, [tapRecognizer locationInView : self])) {
+      NSNumber * const value = [NSNumber numberWithUnsignedInteger : itemIndex];
+      [[NSNotificationCenter defaultCenter] postNotificationName : StaticInfoItemNotification object : value];
    }
 }
 

@@ -86,12 +86,9 @@
    const CGPoint touchLocation = [recognizer locationInView : self.view];
    // If the photo was tapped, display it fullscreen
    if (CGRectContainsPoint(imageView.frame, touchLocation)) {
-   
-
       MWPhotoBrowser * const browser = [[MWPhotoBrowser alloc] initWithDelegate : self];
       UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController : browser];
       navigationController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-
       [self presentViewController : navigationController animated : YES completion : nil];
    }
 }
@@ -109,6 +106,8 @@
 {
    return [MWPhoto photoWithImage : [UIImage imageNamed : [staticInfo objectForKey : @"Image"]]];
 }
+
+#pragma mark - Interface orientation.
 
 //________________________________________________________________________________________
 - (BOOL) shouldAutorotate

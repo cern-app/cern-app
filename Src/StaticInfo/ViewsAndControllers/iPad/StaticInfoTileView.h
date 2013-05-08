@@ -16,9 +16,13 @@ enum class StaticInfoTileHint : char {
    scheme2 //image is on the right or at the bottom.
 };
 
+extern NSString * const StaticInfoItemNotification;
+
 }
 
 @interface StaticInfoTileView : UIView
+
+@property (nonatomic) NSUInteger itemIndex;
 
 - (void) setImage : (UIImage *) image;
 - (void) setTitle : (NSString *) title;
