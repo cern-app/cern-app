@@ -15,7 +15,7 @@
 #import "StoryboardIdentifiers.h"
 #import "AppSettingsController.h"
 #import "ConnectionController.h"
-
+#import "ApplicationErrors.h"//TODO: remove when all controllers are activated.
 #import "ContentProviders.h"
 #import "KeyVal.h"
 
@@ -121,6 +121,8 @@ void CancelConnections(UIViewController *controller)
       [nt.aggregator addFeedForURL : [NSURL URLWithString : feed]];
    } else {
       //twitter feed on iPad.
+      //TODO: there is not view/controller for iPad at the moment.
+      ShowErrorAlert(@"Not implemented", @"Close");
       return;//TODO: need a new view/controller for this.
    }
 
@@ -182,6 +184,12 @@ void CancelConnections(UIViewController *controller)
    assert(controller != nil && "loadControllerTo:, parameter 'controller' is nil");
    
    using namespace CernAPP;
+   
+   //TODO: there is not view/controller for iPad at the moment.
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      ShowErrorAlert(@"Not implemented", @"Close");
+      return;
+   }
    
    MenuNavigationController * const navController =
          (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotoGridControllerNavID];
@@ -408,11 +416,13 @@ void CancelConnections(UIViewController *controller)
 //________________________________________________________________________________________
 - (void) loadControllerTo : (UIViewController *) controller
 {
-   //TODO: there is not view/controller for iPad at the moment.
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-      return;
-
    using namespace CernAPP;
+
+   //TODO: there is not view/controller for iPad at the moment.
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      ShowErrorAlert(@"Not implemented", @"Close");
+      return;
+   }
 
    assert(controller != nil && "loadControllerTo:, parameter controller is nil");
    
@@ -694,6 +704,12 @@ void CancelConnections(UIViewController *controller)
    assert(controller != nil && "loadControllerTo:, parameter 'controller' is nil");
    
    using namespace CernAPP;
+   
+      //TODO: there is not view/controller for iPad at the moment.
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      ShowErrorAlert(@"Not implemented", @"Close");
+      return;
+   }
 
    MenuNavigationController * const navController =
                   (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
@@ -764,6 +780,12 @@ void CancelConnections(UIViewController *controller)
    
    using namespace CernAPP;
    
+      //TODO: there is not view/controller for iPad at the moment.
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      ShowErrorAlert(@"Not implemented", @"Close");
+      return;
+   }
+   
    AppSettingsController * const appSettingscontroller =
             (AppSettingsController *)[controller.storyboard instantiateViewControllerWithIdentifier : controllerID];
 
@@ -812,6 +834,12 @@ void CancelConnections(UIViewController *controller)
 //________________________________________________________________________________________
 - (void) loadControllerTo : (UIViewController *) controller
 {
+   //TODO: there is not view/controller for iPad at the moment.
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      CernAPP::ShowErrorAlert(@"Not implemented", @"Close");
+      return;
+   }
+
    assert(controller != nil && "loadControllerTo:, parameter 'controller' is nil");
    
    MenuNavigationController *navController = [controller.storyboard instantiateViewControllerWithIdentifier : controllerID];
