@@ -74,7 +74,7 @@ const NSUInteger tilesOnPage = 2;
 {
    assert(items != nil && "setPageItems:startingFrom:, parameter 'feedItems' is nil");
    assert(index < items.count && "setPageItems:startingFrom:, parameter 'index' is out of range");
-
+   
    if (tiles) {
       for (StaticInfoTileView *v in tiles)
          [v removeFromSuperview];
@@ -88,6 +88,11 @@ const NSUInteger tilesOnPage = 2;
 
    for (NSUInteger i = index; i < endOfRange; ++i) {
       StaticInfoTileView * const newTile = [[StaticInfoTileView alloc] initWithFrame : CGRect()];
+      assert([items[i] isKindOfClass : [NSDictionary class]] &&
+             "setPageItems:startingFrom:, item has a wrong type");
+      NSDictionary * const itemDict = (NSDictionary *)items[i];
+      [newTile setTitle : (NSString *)itemDict[@"Title"]];
+      [newTile setText : (NSString *)itemDict[@"Description"]];
       //[newTile setImage:];
       //[newTile setTitle:];
       //[newTile setText:];
@@ -129,11 +134,13 @@ const NSUInteger tilesOnPage = 2;
 
    //Layout tiles
    const CGRect frame = self.frame;
-   //We always place 4 tiles on the page (if we have 4).
 
-   //Hehe, can I, actually, use this to identify landscape orientation???
-   const NSUInteger nItemsPerRow = 2;
-   const NSUInteger nRows = 2;
+   NSUInteger nItemsPerRow = frame.size.width > frame.size.height ? 2 : 1;
+   NSUInteger nRows = nItemsPerRow == 2 ? 1 : 2;
+   
+   if (tiles.count == 1)
+      nItemsPerRow = 1, nRows = 1;
+   
    const CGFloat width = frame.size.width / nItemsPerRow;
    const CGFloat height = frame.size.height / nRows;
    

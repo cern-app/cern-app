@@ -615,8 +615,6 @@ void CancelConnections(UIViewController *controller)
 
    MenuNavigationController *navController = nil;
    
-   
-   
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier:
                                                                          StaticInfoTileViewControllerID];
@@ -625,6 +623,7 @@ void CancelConnections(UIViewController *controller)
       
       StaticInfoTileViewController * const sc = (StaticInfoTileViewController *)navController.topViewController;
       sc.navigationItem.title = @"test";
+      sc.navigationItem.title = (NSString *)info[@"Title"];      
       sc.dataSource = (NSArray *)info[@"Items"];
    } else {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :

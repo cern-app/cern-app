@@ -78,33 +78,6 @@
 #pragma mark - Overriders for TileViewController's methods.
 
 //________________________________________________________________________________________
-- (void) setPagesData
-{
-   [super setPagesData];
- /*  if ((nPages = [self numberOfPages])) {
-      if (nPages > 1) {
-         assert(prevPage != nil && "setPagesData, prevPage is nil");
-         
-         const NSRange pageRange = [self findItemRangeForPage : 1];
-         [prevPage setPageItems : dataItems startingFrom : pageRange.location];
-         prevPage.pageNumber = 1;
-      }
-
-      if (nPages > 2) {
-         assert(nextPage != nil && "setPagesData, nextPage is nil");
-         const NSRange pageRange = [self findItemRangeForPage : nPages - 1];
-         [nextPage setPageItems : dataItems startingFrom : pageRange.location];
-         nextPage.pageNumber = nPages - 1;
-      }
-
-      assert(currPage != nil && "setPagesData, currPage is nil");
-      [currPage setPageItems : dataItems startingFrom : 0];
-      currPage.pageNumber = 0;
-   }*/
-   //NSLog(@"setPagesData");
-}
-
-//________________________________________________________________________________________
 - (void) loadVisiblePageData
 {
    /*

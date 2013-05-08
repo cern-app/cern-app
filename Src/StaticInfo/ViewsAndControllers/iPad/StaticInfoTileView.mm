@@ -13,7 +13,7 @@
 using namespace CernAPP;
 
 //C++ constants have internal linkage.
-const CGFloat tileMargin = 0.1f;//10%
+const CGFloat tileMargin = 0.04f;//10%
 const CGFloat titleHeight = 0.15f;
 const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
 
@@ -36,18 +36,20 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
       
       //Title.
       titleLabel = [[UILabel alloc] initWithFrame:CGRect()];
-      UIFont * const titleFont = [UIFont fontWithName : @"PTSans-Bold" size : 24.f];
+      UIFont * const titleFont = [UIFont fontWithName : @"PTSans-Bold" size : 26.f];
       assert(titleFont != nil && "initWithFrame:, custom font is nil");
       titleLabel.font = titleFont;
-      titleLabel.numberOfLines = 1;
+      titleLabel.numberOfLines = 0;
+      titleLabel.backgroundColor = [UIColor clearColor];
       [self addSubview : titleLabel];
 
       //Text.
       textLabel = [[UILabel alloc] initWithFrame : CGRect()];
-      UIFont * const textFont = [UIFont fontWithName : @"PTSans-Caption" size : 16.f];
+      UIFont * const textFont = [UIFont fontWithName : @"PTSans-Caption" size : 18.f];
       assert(textFont != nil && "initWithFrame:, custom font is nil");
       textLabel.font = textFont;
       textLabel.numberOfLines = 0;
+      textLabel.backgroundColor = [UIColor clearColor];
       [self addSubview : textLabel];
 
       layoutHint = StaticInfoTileHint::none;
@@ -93,7 +95,7 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
    if (w > h) {
       if (layoutHint == StaticInfoTileHint::scheme1) {//Image is on the left.
          //Image.
-         const CGRect imageFrame = CGRectMake(w * tileMargin, h * tileMargin, w - 2 * w * tileMargin, h - 2 * h * tileMargin);
+         const CGRect imageFrame = CGRectMake(w * tileMargin, h * tileMargin, (w - 2 * w * tileMargin) / 2, h - 2 * h * tileMargin);
          imageView.frame = imageFrame;
          //Title.
          const CGRect titleFrame = CGRectMake(imageFrame.origin.x + imageFrame.size.width + w * hGap, h * tileMargin,
