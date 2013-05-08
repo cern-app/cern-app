@@ -153,9 +153,6 @@
 		707B1395169AEDA000180E02 /* Experiments.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B1393169AEDA000180E02 /* Experiments.mm */; };
 		707B13A0169AF07D00180E02 /* GUIHelpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B139F169AF07D00180E02 /* GUIHelpers.mm */; };
 		707B13AD169AF1E500180E02 /* ApplicationErrors.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13AC169AF1E500180E02 /* ApplicationErrors.mm */; };
-		707B13C6169AF4FA00180E02 /* RSSAggregator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13C1169AF4FA00180E02 /* RSSAggregator.mm */; };
-		707B13C7169AF4FA00180E02 /* RSSArticle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13C3169AF4FA00180E02 /* RSSArticle.mm */; };
-		707B13C8169AF4FA00180E02 /* RSSFeed.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13C5169AF4FA00180E02 /* RSSFeed.mm */; };
 		707B13EF169AF69300180E02 /* DeviceCheck.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13DE169AF69300180E02 /* DeviceCheck.mm */; };
 		707B13F0169AF69300180E02 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13E0169AF69300180E02 /* GTMNSString+HTML.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		707B13F1169AF69300180E02 /* KeyVal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13E2169AF69300180E02 /* KeyVal.mm */; };
@@ -180,6 +177,24 @@
 		70A5629A173A32F600145FEC /* PhotosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56291173A32F600145FEC /* PhotosGridViewController.mm */; };
 		70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56293173A32F600145FEC /* VideosGridViewController.mm */; };
 		70A5629C173A32F600145FEC /* WebcastsGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56295173A32F600145FEC /* WebcastsGridViewController.mm */; };
+		70A562A4173A35BB00145FEC /* RSSAggregator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A5629F173A35BB00145FEC /* RSSAggregator.mm */; };
+		70A562A5173A35BB00145FEC /* RSSArticle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562A1173A35BB00145FEC /* RSSArticle.mm */; };
+		70A562A6173A35BB00145FEC /* RSSFeed.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562A3173A35BB00145FEC /* RSSFeed.mm */; };
+		70A562C8173A35C300145FEC /* BulletinFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AA173A35C300145FEC /* BulletinFeedViewController.mm */; };
+		70A562C9173A35C300145FEC /* BulletinIssueTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AC173A35C300145FEC /* BulletinIssueTileView.mm */; };
+		70A562CA173A35C300145FEC /* BulletinIssueViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AE173A35C300145FEC /* BulletinIssueViewController.mm */; };
+		70A562CB173A35C300145FEC /* BulletinPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B0173A35C300145FEC /* BulletinPageView.mm */; };
+		70A562CC173A35C300145FEC /* FeedItemTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B2173A35C300145FEC /* FeedItemTileView.mm */; };
+		70A562CD173A35C300145FEC /* FeedPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B4173A35C300145FEC /* FeedPageView.mm */; };
+		70A562CE173A35C300145FEC /* NewsFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B6173A35C300145FEC /* NewsFeedViewController.mm */; };
+		70A562CF173A35C300145FEC /* PageThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B8173A35C300145FEC /* PageThumbnailDownloader.mm */; };
+		70A562D0173A35C300145FEC /* TileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562BA173A35C300145FEC /* TileViewController.mm */; };
+		70A562D1173A35C300145FEC /* BulletinIssueTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562BD173A35C300145FEC /* BulletinIssueTableViewController.mm */; };
+		70A562D2173A35C300145FEC /* BulletinTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562BF173A35C300145FEC /* BulletinTableViewController.mm */; };
+		70A562D3173A35C300145FEC /* CellBackgroundView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C1173A35C300145FEC /* CellBackgroundView.mm */; };
+		70A562D4173A35C300145FEC /* LiveEventTableController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C3173A35C300145FEC /* LiveEventTableController.mm */; };
+		70A562D5173A35C300145FEC /* NewsTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C5173A35C300145FEC /* NewsTableViewCell.mm */; };
+		70A562D6173A35C300145FEC /* NewsTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C7173A35C300145FEC /* NewsTableViewController.mm */; };
 		70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B22F0416F9DCAA007D88EF /* action_blue.png */; };
 		70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */; };
 		70B6B0B9169DD2790058DADA /* live_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0B8169DD2790058DADA /* live_color.png */; };
@@ -200,21 +215,6 @@
 		70C884A2173956D0001D98D0 /* StaticInfoTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A0173956D0001D98D0 /* StaticInfoTileView.mm */; };
 		70C884A8173957AD001D98D0 /* StaticInfoItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A5173957AD001D98D0 /* StaticInfoItemViewController.mm */; };
 		70C884A9173957AD001D98D0 /* StaticInfoScrollViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884A7173957AD001D98D0 /* StaticInfoScrollViewController.mm */; };
-		70C884CB173958FB001D98D0 /* BulletinFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884AD173958FA001D98D0 /* BulletinFeedViewController.mm */; };
-		70C884CC173958FB001D98D0 /* BulletinIssueTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884AF173958FA001D98D0 /* BulletinIssueTileView.mm */; };
-		70C884CD173958FB001D98D0 /* BulletinIssueViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884B1173958FA001D98D0 /* BulletinIssueViewController.mm */; };
-		70C884CE173958FB001D98D0 /* BulletinPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884B3173958FA001D98D0 /* BulletinPageView.mm */; };
-		70C884CF173958FB001D98D0 /* FeedItemTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884B5173958FA001D98D0 /* FeedItemTileView.mm */; };
-		70C884D0173958FB001D98D0 /* FeedPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884B7173958FB001D98D0 /* FeedPageView.mm */; };
-		70C884D1173958FB001D98D0 /* NewsFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884B9173958FB001D98D0 /* NewsFeedViewController.mm */; };
-		70C884D2173958FB001D98D0 /* PageThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884BB173958FB001D98D0 /* PageThumbnailDownloader.mm */; };
-		70C884D3173958FB001D98D0 /* TileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884BD173958FB001D98D0 /* TileViewController.mm */; };
-		70C884D4173958FB001D98D0 /* BulletinIssueTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884C0173958FB001D98D0 /* BulletinIssueTableViewController.mm */; };
-		70C884D5173958FB001D98D0 /* BulletinTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884C2173958FB001D98D0 /* BulletinTableViewController.mm */; };
-		70C884D6173958FB001D98D0 /* CellBackgroundView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884C4173958FB001D98D0 /* CellBackgroundView.mm */; };
-		70C884D7173958FB001D98D0 /* LiveEventTableController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884C6173958FB001D98D0 /* LiveEventTableController.mm */; };
-		70C884D8173958FB001D98D0 /* NewsTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884C8173958FB001D98D0 /* NewsTableViewCell.mm */; };
-		70C884D9173958FB001D98D0 /* NewsTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C884CA173958FB001D98D0 /* NewsTableViewController.mm */; };
 		70CC55EF169EF80600292332 /* MenuNavigationController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CC55ED169EF80500292332 /* MenuNavigationController.mm */; };
 		70D2629516F8948600883316 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D2629416F8948600883316 /* CoreText.framework */; };
 		70D98B0816F73ABA003C42E7 /* AppSettingsController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AFD16F73ABA003C42E7 /* AppSettingsController.mm */; };
@@ -435,12 +435,6 @@
 		707B139F169AF07D00180E02 /* GUIHelpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GUIHelpers.mm; sourceTree = "<group>"; };
 		707B13AB169AF1E500180E02 /* ApplicationErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationErrors.h; sourceTree = "<group>"; };
 		707B13AC169AF1E500180E02 /* ApplicationErrors.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ApplicationErrors.mm; sourceTree = "<group>"; };
-		707B13C0169AF4FA00180E02 /* RSSAggregator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSAggregator.h; sourceTree = "<group>"; };
-		707B13C1169AF4FA00180E02 /* RSSAggregator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RSSAggregator.mm; sourceTree = "<group>"; };
-		707B13C2169AF4FA00180E02 /* RSSArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSArticle.h; sourceTree = "<group>"; };
-		707B13C3169AF4FA00180E02 /* RSSArticle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RSSArticle.mm; sourceTree = "<group>"; };
-		707B13C4169AF4FA00180E02 /* RSSFeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSFeed.h; sourceTree = "<group>"; };
-		707B13C5169AF4FA00180E02 /* RSSFeed.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RSSFeed.mm; sourceTree = "<group>"; };
 		707B13DD169AF69300180E02 /* DeviceCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceCheck.h; sourceTree = "<group>"; };
 		707B13DE169AF69300180E02 /* DeviceCheck.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeviceCheck.mm; sourceTree = "<group>"; };
 		707B13DF169AF69300180E02 /* GTMNSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSString+HTML.h"; sourceTree = "<group>"; };
@@ -483,6 +477,42 @@
 		70A56293173A32F600145FEC /* VideosGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideosGridViewController.mm; sourceTree = "<group>"; };
 		70A56294173A32F600145FEC /* WebcastsGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsGridViewController.h; sourceTree = "<group>"; };
 		70A56295173A32F600145FEC /* WebcastsGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsGridViewController.mm; sourceTree = "<group>"; };
+		70A5629E173A35BB00145FEC /* RSSAggregator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSAggregator.h; sourceTree = "<group>"; };
+		70A5629F173A35BB00145FEC /* RSSAggregator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RSSAggregator.mm; sourceTree = "<group>"; };
+		70A562A0173A35BB00145FEC /* RSSArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSArticle.h; sourceTree = "<group>"; };
+		70A562A1173A35BB00145FEC /* RSSArticle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RSSArticle.mm; sourceTree = "<group>"; };
+		70A562A2173A35BB00145FEC /* RSSFeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSFeed.h; sourceTree = "<group>"; };
+		70A562A3173A35BB00145FEC /* RSSFeed.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RSSFeed.mm; sourceTree = "<group>"; };
+		70A562A9173A35C300145FEC /* BulletinFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinFeedViewController.h; sourceTree = "<group>"; };
+		70A562AA173A35C300145FEC /* BulletinFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinFeedViewController.mm; sourceTree = "<group>"; };
+		70A562AB173A35C300145FEC /* BulletinIssueTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTileView.h; sourceTree = "<group>"; };
+		70A562AC173A35C300145FEC /* BulletinIssueTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTileView.mm; sourceTree = "<group>"; };
+		70A562AD173A35C300145FEC /* BulletinIssueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueViewController.h; sourceTree = "<group>"; };
+		70A562AE173A35C300145FEC /* BulletinIssueViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueViewController.mm; sourceTree = "<group>"; };
+		70A562AF173A35C300145FEC /* BulletinPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinPageView.h; sourceTree = "<group>"; };
+		70A562B0173A35C300145FEC /* BulletinPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinPageView.mm; sourceTree = "<group>"; };
+		70A562B1173A35C300145FEC /* FeedItemTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedItemTileView.h; sourceTree = "<group>"; };
+		70A562B2173A35C300145FEC /* FeedItemTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedItemTileView.mm; sourceTree = "<group>"; };
+		70A562B3173A35C300145FEC /* FeedPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedPageView.h; sourceTree = "<group>"; };
+		70A562B4173A35C300145FEC /* FeedPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedPageView.mm; sourceTree = "<group>"; };
+		70A562B5173A35C300145FEC /* NewsFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsFeedViewController.h; sourceTree = "<group>"; };
+		70A562B6173A35C300145FEC /* NewsFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsFeedViewController.mm; sourceTree = "<group>"; };
+		70A562B7173A35C300145FEC /* PageThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageThumbnailDownloader.h; sourceTree = "<group>"; };
+		70A562B8173A35C300145FEC /* PageThumbnailDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageThumbnailDownloader.mm; sourceTree = "<group>"; };
+		70A562B9173A35C300145FEC /* TileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileViewController.h; sourceTree = "<group>"; };
+		70A562BA173A35C300145FEC /* TileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TileViewController.mm; sourceTree = "<group>"; };
+		70A562BC173A35C300145FEC /* BulletinIssueTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTableViewController.h; sourceTree = "<group>"; };
+		70A562BD173A35C300145FEC /* BulletinIssueTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTableViewController.mm; sourceTree = "<group>"; };
+		70A562BE173A35C300145FEC /* BulletinTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinTableViewController.h; sourceTree = "<group>"; };
+		70A562BF173A35C300145FEC /* BulletinTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinTableViewController.mm; sourceTree = "<group>"; };
+		70A562C0173A35C300145FEC /* CellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellBackgroundView.h; sourceTree = "<group>"; };
+		70A562C1173A35C300145FEC /* CellBackgroundView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CellBackgroundView.mm; sourceTree = "<group>"; };
+		70A562C2173A35C300145FEC /* LiveEventTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveEventTableController.h; sourceTree = "<group>"; };
+		70A562C3173A35C300145FEC /* LiveEventTableController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LiveEventTableController.mm; sourceTree = "<group>"; };
+		70A562C4173A35C300145FEC /* NewsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewCell.h; sourceTree = "<group>"; };
+		70A562C5173A35C300145FEC /* NewsTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewCell.mm; sourceTree = "<group>"; };
+		70A562C6173A35C300145FEC /* NewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewController.h; sourceTree = "<group>"; };
+		70A562C7173A35C300145FEC /* NewsTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewController.mm; sourceTree = "<group>"; };
 		70B22F0416F9DCAA007D88EF /* action_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action_blue.png; sourceTree = "<group>"; };
 		70B2A75016DBBD5200BC8657 /* ConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionController.h; sourceTree = "<group>"; };
 		70B2A75116DBBD5200BC8657 /* PageControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageControllerProtocol.h; sourceTree = "<group>"; };
@@ -513,36 +543,6 @@
 		70C884A5173957AD001D98D0 /* StaticInfoItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoItemViewController.mm; sourceTree = "<group>"; };
 		70C884A6173957AD001D98D0 /* StaticInfoScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoScrollViewController.h; sourceTree = "<group>"; };
 		70C884A7173957AD001D98D0 /* StaticInfoScrollViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoScrollViewController.mm; sourceTree = "<group>"; };
-		70C884AC173958FA001D98D0 /* BulletinFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinFeedViewController.h; sourceTree = "<group>"; };
-		70C884AD173958FA001D98D0 /* BulletinFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinFeedViewController.mm; sourceTree = "<group>"; };
-		70C884AE173958FA001D98D0 /* BulletinIssueTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTileView.h; sourceTree = "<group>"; };
-		70C884AF173958FA001D98D0 /* BulletinIssueTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTileView.mm; sourceTree = "<group>"; };
-		70C884B0173958FA001D98D0 /* BulletinIssueViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueViewController.h; sourceTree = "<group>"; };
-		70C884B1173958FA001D98D0 /* BulletinIssueViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueViewController.mm; sourceTree = "<group>"; };
-		70C884B2173958FA001D98D0 /* BulletinPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinPageView.h; sourceTree = "<group>"; };
-		70C884B3173958FA001D98D0 /* BulletinPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinPageView.mm; sourceTree = "<group>"; };
-		70C884B4173958FA001D98D0 /* FeedItemTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedItemTileView.h; sourceTree = "<group>"; };
-		70C884B5173958FA001D98D0 /* FeedItemTileView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedItemTileView.mm; sourceTree = "<group>"; };
-		70C884B6173958FB001D98D0 /* FeedPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedPageView.h; sourceTree = "<group>"; };
-		70C884B7173958FB001D98D0 /* FeedPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedPageView.mm; sourceTree = "<group>"; };
-		70C884B8173958FB001D98D0 /* NewsFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsFeedViewController.h; sourceTree = "<group>"; };
-		70C884B9173958FB001D98D0 /* NewsFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsFeedViewController.mm; sourceTree = "<group>"; };
-		70C884BA173958FB001D98D0 /* PageThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageThumbnailDownloader.h; sourceTree = "<group>"; };
-		70C884BB173958FB001D98D0 /* PageThumbnailDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageThumbnailDownloader.mm; sourceTree = "<group>"; };
-		70C884BC173958FB001D98D0 /* TileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileViewController.h; sourceTree = "<group>"; };
-		70C884BD173958FB001D98D0 /* TileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TileViewController.mm; sourceTree = "<group>"; };
-		70C884BF173958FB001D98D0 /* BulletinIssueTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTableViewController.h; sourceTree = "<group>"; };
-		70C884C0173958FB001D98D0 /* BulletinIssueTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTableViewController.mm; sourceTree = "<group>"; };
-		70C884C1173958FB001D98D0 /* BulletinTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinTableViewController.h; sourceTree = "<group>"; };
-		70C884C2173958FB001D98D0 /* BulletinTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinTableViewController.mm; sourceTree = "<group>"; };
-		70C884C3173958FB001D98D0 /* CellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellBackgroundView.h; sourceTree = "<group>"; };
-		70C884C4173958FB001D98D0 /* CellBackgroundView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CellBackgroundView.mm; sourceTree = "<group>"; };
-		70C884C5173958FB001D98D0 /* LiveEventTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveEventTableController.h; sourceTree = "<group>"; };
-		70C884C6173958FB001D98D0 /* LiveEventTableController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LiveEventTableController.mm; sourceTree = "<group>"; };
-		70C884C7173958FB001D98D0 /* NewsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewCell.h; sourceTree = "<group>"; };
-		70C884C8173958FB001D98D0 /* NewsTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewCell.mm; sourceTree = "<group>"; };
-		70C884C9173958FB001D98D0 /* NewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewController.h; sourceTree = "<group>"; };
-		70C884CA173958FB001D98D0 /* NewsTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewController.mm; sourceTree = "<group>"; };
 		70CC55ED169EF80500292332 /* MenuNavigationController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuNavigationController.mm; sourceTree = "<group>"; };
 		70CC55EE169EF80600292332 /* MenuNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuNavigationController.h; sourceTree = "<group>"; };
 		70D2629416F8948600883316 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -867,7 +867,6 @@
 				70B2A74F16DBBD5200BC8657 /* Protocols */,
 				7069F76016C14D6D006BC78B /* CustomViews */,
 				70BE54AE169AFC2900A3E1B6 /* PCH */,
-				707B13BF169AF4FA00180E02 /* RSS */,
 				707B139D169AF07D00180E02 /* Utilities */,
 				707B1396169AF01500180E02 /* DetailedViewControllers */,
 				707B138F169AEDA000180E02 /* ContentProviders */,
@@ -1026,19 +1025,6 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		707B13BF169AF4FA00180E02 /* RSS */ = {
-			isa = PBXGroup;
-			children = (
-				707B13C0169AF4FA00180E02 /* RSSAggregator.h */,
-				707B13C1169AF4FA00180E02 /* RSSAggregator.mm */,
-				707B13C2169AF4FA00180E02 /* RSSArticle.h */,
-				707B13C3169AF4FA00180E02 /* RSSArticle.mm */,
-				707B13C4169AF4FA00180E02 /* RSSFeed.h */,
-				707B13C5169AF4FA00180E02 /* RSSFeed.mm */,
-			);
-			path = RSS;
-			sourceTree = "<group>";
-		};
 		70A56284173A32F600145FEC /* VideosPhotosWebcasts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1080,6 +1066,72 @@
 				70A56293173A32F600145FEC /* VideosGridViewController.mm */,
 				70A56294173A32F600145FEC /* WebcastsGridViewController.h */,
 				70A56295173A32F600145FEC /* WebcastsGridViewController.mm */,
+			);
+			path = iPhone;
+			sourceTree = "<group>";
+		};
+		70A5629D173A35BB00145FEC /* RSSAggregator */ = {
+			isa = PBXGroup;
+			children = (
+				70A5629E173A35BB00145FEC /* RSSAggregator.h */,
+				70A5629F173A35BB00145FEC /* RSSAggregator.mm */,
+				70A562A0173A35BB00145FEC /* RSSArticle.h */,
+				70A562A1173A35BB00145FEC /* RSSArticle.mm */,
+				70A562A2173A35BB00145FEC /* RSSFeed.h */,
+				70A562A3173A35BB00145FEC /* RSSFeed.mm */,
+			);
+			path = RSSAggregator;
+			sourceTree = "<group>";
+		};
+		70A562A7173A35C300145FEC /* ViewsAndControllers */ = {
+			isa = PBXGroup;
+			children = (
+				70A562A8173A35C300145FEC /* iPad */,
+				70A562BB173A35C300145FEC /* iPhone */,
+			);
+			path = ViewsAndControllers;
+			sourceTree = "<group>";
+		};
+		70A562A8173A35C300145FEC /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				70A562A9173A35C300145FEC /* BulletinFeedViewController.h */,
+				70A562AA173A35C300145FEC /* BulletinFeedViewController.mm */,
+				70A562AB173A35C300145FEC /* BulletinIssueTileView.h */,
+				70A562AC173A35C300145FEC /* BulletinIssueTileView.mm */,
+				70A562AD173A35C300145FEC /* BulletinIssueViewController.h */,
+				70A562AE173A35C300145FEC /* BulletinIssueViewController.mm */,
+				70A562AF173A35C300145FEC /* BulletinPageView.h */,
+				70A562B0173A35C300145FEC /* BulletinPageView.mm */,
+				70A562B1173A35C300145FEC /* FeedItemTileView.h */,
+				70A562B2173A35C300145FEC /* FeedItemTileView.mm */,
+				70A562B3173A35C300145FEC /* FeedPageView.h */,
+				70A562B4173A35C300145FEC /* FeedPageView.mm */,
+				70A562B5173A35C300145FEC /* NewsFeedViewController.h */,
+				70A562B6173A35C300145FEC /* NewsFeedViewController.mm */,
+				70A562B7173A35C300145FEC /* PageThumbnailDownloader.h */,
+				70A562B8173A35C300145FEC /* PageThumbnailDownloader.mm */,
+				70A562B9173A35C300145FEC /* TileViewController.h */,
+				70A562BA173A35C300145FEC /* TileViewController.mm */,
+			);
+			path = iPad;
+			sourceTree = "<group>";
+		};
+		70A562BB173A35C300145FEC /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				70A562BC173A35C300145FEC /* BulletinIssueTableViewController.h */,
+				70A562BD173A35C300145FEC /* BulletinIssueTableViewController.mm */,
+				70A562BE173A35C300145FEC /* BulletinTableViewController.h */,
+				70A562BF173A35C300145FEC /* BulletinTableViewController.mm */,
+				70A562C0173A35C300145FEC /* CellBackgroundView.h */,
+				70A562C1173A35C300145FEC /* CellBackgroundView.mm */,
+				70A562C2173A35C300145FEC /* LiveEventTableController.h */,
+				70A562C3173A35C300145FEC /* LiveEventTableController.mm */,
+				70A562C4173A35C300145FEC /* NewsTableViewCell.h */,
+				70A562C5173A35C300145FEC /* NewsTableViewCell.mm */,
+				70A562C6173A35C300145FEC /* NewsTableViewController.h */,
+				70A562C7173A35C300145FEC /* NewsTableViewController.mm */,
 			);
 			path = iPhone;
 			sourceTree = "<group>";
@@ -1138,54 +1190,10 @@
 		70C884AA173958FA001D98D0 /* NewsFeeds */ = {
 			isa = PBXGroup;
 			children = (
-				70C884AB173958FA001D98D0 /* iPad */,
-				70C884BE173958FB001D98D0 /* iPhone */,
+				70A562A7173A35C300145FEC /* ViewsAndControllers */,
+				70A5629D173A35BB00145FEC /* RSSAggregator */,
 			);
 			path = NewsFeeds;
-			sourceTree = "<group>";
-		};
-		70C884AB173958FA001D98D0 /* iPad */ = {
-			isa = PBXGroup;
-			children = (
-				70C884AC173958FA001D98D0 /* BulletinFeedViewController.h */,
-				70C884AD173958FA001D98D0 /* BulletinFeedViewController.mm */,
-				70C884AE173958FA001D98D0 /* BulletinIssueTileView.h */,
-				70C884AF173958FA001D98D0 /* BulletinIssueTileView.mm */,
-				70C884B0173958FA001D98D0 /* BulletinIssueViewController.h */,
-				70C884B1173958FA001D98D0 /* BulletinIssueViewController.mm */,
-				70C884B2173958FA001D98D0 /* BulletinPageView.h */,
-				70C884B3173958FA001D98D0 /* BulletinPageView.mm */,
-				70C884B4173958FA001D98D0 /* FeedItemTileView.h */,
-				70C884B5173958FA001D98D0 /* FeedItemTileView.mm */,
-				70C884B6173958FB001D98D0 /* FeedPageView.h */,
-				70C884B7173958FB001D98D0 /* FeedPageView.mm */,
-				70C884B8173958FB001D98D0 /* NewsFeedViewController.h */,
-				70C884B9173958FB001D98D0 /* NewsFeedViewController.mm */,
-				70C884BA173958FB001D98D0 /* PageThumbnailDownloader.h */,
-				70C884BB173958FB001D98D0 /* PageThumbnailDownloader.mm */,
-				70C884BC173958FB001D98D0 /* TileViewController.h */,
-				70C884BD173958FB001D98D0 /* TileViewController.mm */,
-			);
-			path = iPad;
-			sourceTree = "<group>";
-		};
-		70C884BE173958FB001D98D0 /* iPhone */ = {
-			isa = PBXGroup;
-			children = (
-				70C884BF173958FB001D98D0 /* BulletinIssueTableViewController.h */,
-				70C884C0173958FB001D98D0 /* BulletinIssueTableViewController.mm */,
-				70C884C1173958FB001D98D0 /* BulletinTableViewController.h */,
-				70C884C2173958FB001D98D0 /* BulletinTableViewController.mm */,
-				70C884C3173958FB001D98D0 /* CellBackgroundView.h */,
-				70C884C4173958FB001D98D0 /* CellBackgroundView.mm */,
-				70C884C5173958FB001D98D0 /* LiveEventTableController.h */,
-				70C884C6173958FB001D98D0 /* LiveEventTableController.mm */,
-				70C884C7173958FB001D98D0 /* NewsTableViewCell.h */,
-				70C884C8173958FB001D98D0 /* NewsTableViewCell.mm */,
-				70C884C9173958FB001D98D0 /* NewsTableViewController.h */,
-				70C884CA173958FB001D98D0 /* NewsTableViewController.mm */,
-			);
-			path = iPhone;
 			sourceTree = "<group>";
 		};
 		70D98AFB16F73ABA003C42E7 /* iPhone */ = {
@@ -1476,9 +1484,6 @@
 				707B1395169AEDA000180E02 /* Experiments.mm in Sources */,
 				707B13A0169AF07D00180E02 /* GUIHelpers.mm in Sources */,
 				707B13AD169AF1E500180E02 /* ApplicationErrors.mm in Sources */,
-				707B13C6169AF4FA00180E02 /* RSSAggregator.mm in Sources */,
-				707B13C7169AF4FA00180E02 /* RSSArticle.mm in Sources */,
-				707B13C8169AF4FA00180E02 /* RSSFeed.mm in Sources */,
 				707B13EF169AF69300180E02 /* DeviceCheck.mm in Sources */,
 				707B13F0169AF69300180E02 /* GTMNSString+HTML.m in Sources */,
 				707B13F1169AF69300180E02 /* KeyVal.mm in Sources */,
@@ -1532,21 +1537,6 @@
 				70C884A2173956D0001D98D0 /* StaticInfoTileView.mm in Sources */,
 				70C884A8173957AD001D98D0 /* StaticInfoItemViewController.mm in Sources */,
 				70C884A9173957AD001D98D0 /* StaticInfoScrollViewController.mm in Sources */,
-				70C884CB173958FB001D98D0 /* BulletinFeedViewController.mm in Sources */,
-				70C884CC173958FB001D98D0 /* BulletinIssueTileView.mm in Sources */,
-				70C884CD173958FB001D98D0 /* BulletinIssueViewController.mm in Sources */,
-				70C884CE173958FB001D98D0 /* BulletinPageView.mm in Sources */,
-				70C884CF173958FB001D98D0 /* FeedItemTileView.mm in Sources */,
-				70C884D0173958FB001D98D0 /* FeedPageView.mm in Sources */,
-				70C884D1173958FB001D98D0 /* NewsFeedViewController.mm in Sources */,
-				70C884D2173958FB001D98D0 /* PageThumbnailDownloader.mm in Sources */,
-				70C884D3173958FB001D98D0 /* TileViewController.mm in Sources */,
-				70C884D4173958FB001D98D0 /* BulletinIssueTableViewController.mm in Sources */,
-				70C884D5173958FB001D98D0 /* BulletinTableViewController.mm in Sources */,
-				70C884D6173958FB001D98D0 /* CellBackgroundView.mm in Sources */,
-				70C884D7173958FB001D98D0 /* LiveEventTableController.mm in Sources */,
-				70C884D8173958FB001D98D0 /* NewsTableViewCell.mm in Sources */,
-				70C884D9173958FB001D98D0 /* NewsTableViewController.mm in Sources */,
 				70A56296173A32F600145FEC /* CernMediaMARCParser.mm in Sources */,
 				70A56297173A32F600145FEC /* WebcastsParser.mm in Sources */,
 				70A56298173A32F600145FEC /* PhotoGridViewCell.mm in Sources */,
@@ -1554,6 +1544,24 @@
 				70A5629A173A32F600145FEC /* PhotosGridViewController.mm in Sources */,
 				70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */,
 				70A5629C173A32F600145FEC /* WebcastsGridViewController.mm in Sources */,
+				70A562A4173A35BB00145FEC /* RSSAggregator.mm in Sources */,
+				70A562A5173A35BB00145FEC /* RSSArticle.mm in Sources */,
+				70A562A6173A35BB00145FEC /* RSSFeed.mm in Sources */,
+				70A562C8173A35C300145FEC /* BulletinFeedViewController.mm in Sources */,
+				70A562C9173A35C300145FEC /* BulletinIssueTileView.mm in Sources */,
+				70A562CA173A35C300145FEC /* BulletinIssueViewController.mm in Sources */,
+				70A562CB173A35C300145FEC /* BulletinPageView.mm in Sources */,
+				70A562CC173A35C300145FEC /* FeedItemTileView.mm in Sources */,
+				70A562CD173A35C300145FEC /* FeedPageView.mm in Sources */,
+				70A562CE173A35C300145FEC /* NewsFeedViewController.mm in Sources */,
+				70A562CF173A35C300145FEC /* PageThumbnailDownloader.mm in Sources */,
+				70A562D0173A35C300145FEC /* TileViewController.mm in Sources */,
+				70A562D1173A35C300145FEC /* BulletinIssueTableViewController.mm in Sources */,
+				70A562D2173A35C300145FEC /* BulletinTableViewController.mm in Sources */,
+				70A562D3173A35C300145FEC /* CellBackgroundView.mm in Sources */,
+				70A562D4173A35C300145FEC /* LiveEventTableController.mm in Sources */,
+				70A562D5173A35C300145FEC /* NewsTableViewCell.mm in Sources */,
+				70A562D6173A35C300145FEC /* NewsTableViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
