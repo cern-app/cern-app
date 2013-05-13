@@ -64,8 +64,6 @@ const CGFloat tileShift = 0.2f;
 {
    assert(items != nil && "setPageItems:startingFrom:, parameter 'feedItems' is nil");
    assert(index < items.count && "setPageItems:startingFrom:, parameter 'index' is out of bounds");
-   assert(index + pageRange.length <= items.count &&
-          "setPageItems:startingFrom:, pageRange is out of bounds");
 
    //Items in the 'items' array are arrays with MWFeedItems sorted by the date.
    if (!tiles)
@@ -76,12 +74,12 @@ const CGFloat tileShift = 0.2f;
       [tiles removeAllObjects];
    }
    
-   assert(pageRange.length <= 3 && "setPageItems:startingFrom:, the page range > 3 is not supported");
    //A primitive attempt to make a tile's layout more interesting.
    //[0] == wideImageOnTop, [1] == squareImageOnLeft
    const BOOL tileHints[][2] = {{YES, YES}, {NO, NO}, {YES, YES}};
    
    pageRange = [BulletinPageView suggestRangeForward : items startingFrom : index];
+   assert(pageRange.length <= 3 && "setPageItems:startingFrom:, the page range > 3 is not supported");
 
    for (NSUInteger i = 0; i < pageRange.length; ++i, ++index) {
       //Using the array of MWFeedItems, find the issue's date and create a tile.

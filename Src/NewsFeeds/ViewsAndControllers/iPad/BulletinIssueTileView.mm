@@ -13,9 +13,9 @@ namespace {
 
 //Geometry constant, in percents of self.frame.size.
 const CGFloat leftRightMargin = 0.1f;
-const CGFloat topMargin = 0.15f;
+const CGFloat topMargin = 0.1f;
 const CGFloat imageHeight = 0.7f;
-const CGFloat textHeight = 0.15f;
+const CGFloat textHeight = 0.1f;
 
 //________________________________________________________________________________________
 bool IsWideImage(UIImage *image)
