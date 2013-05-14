@@ -8,6 +8,7 @@
 
 #import <cassert>
 #import <vector>
+#import <cmath>
 
 #import <CoreText/CoreText.h>
 
@@ -62,11 +63,12 @@ bool IsWideImage(UIImage *image)
    NSMutableAttributedString * title;
    
    //HTML processing:
-   NSMutableArray *authors;
-	NSCharacterSet * stopCharacters;
-	NSCharacterSet * stopCharactersNonWS;
-	NSCharacterSet * newLineAndWhitespaceCharacters;
-	NSCharacterSet * tagNameCharacters;
+   NSMutableString *authors;
+   NSString *bullet;
+	NSCharacterSet *stopCharacters;
+	NSCharacterSet *stopCharactersNonWS;
+	NSCharacterSet *newLineAndWhitespaceCharacters;
+	NSCharacterSet *tagNameCharacters;
    
    
    //Text in a tile:
@@ -101,6 +103,8 @@ bool IsWideImage(UIImage *image)
       [self addSubview : thumbnailView];
       
       self.backgroundColor = [UIColor whiteColor];
+
+      bullet = [NSString stringWithCString : "\u2022" encoding : NSUTF8StringEncoding];
       
       summary = nullptr;
       text = nullptr;
@@ -174,12 +178,9 @@ bool IsWideImage(UIImage *image)
    [dateFormatter setDateFormat:@"d MMM. yyyy"];
    infoLabel.text = [dateFormatter stringFromDate : aFeedItem.date ? aFeedItem.date : [NSDate date]];
 
-   if (authors)
-      [authors removeAllObjects];
-   else
-      authors = [[NSMutableArray alloc] init];
+   authors = [[NSMutableString alloc] init];
 
-   summary = aFeedItem.summary ? aFeedItem.summary : @"";// [aFeedItem.summary stringByConvertingHTMLToPlainText] : @"";
+   summary = aFeedItem.summary ? aFeedItem.summary : @"";
    if (summary.length)
       [self stripHtml];
 
@@ -202,7 +203,7 @@ bool IsWideImage(UIImage *image)
       NSArray *filteredArray = [parts filteredArrayUsingPredicate : noEmptyStrings];
       summary = [filteredArray componentsJoinedByString : @" "];
    }
-
+   
    if (!tokenizer) {
       tokenizer = CFStringTokenizerCreate(kCFAllocatorDefault, (CFStringRef)summary,
                                           CFRangeMake(0, summary.length),
@@ -212,7 +213,12 @@ bool IsWideImage(UIImage *image)
          NSLog(@"TileView: -setTileData: - warning, CFStringTokenizerCreate failed");
    }
    
-   [self hypenize];   
+   [self hypenize];
+   
+   //Ufff, even more string manipulations :(
+   if (authors.length)
+      summary = [NSString stringWithFormat : @"%@ %@ %@", authors, bullet, summary];
+   
    text = [[NSMutableAttributedString alloc] initWithString : summary];
 }
 
@@ -226,17 +232,27 @@ bool IsWideImage(UIImage *image)
    const NSRange titleRange = NSMakeRange(0, title.length);
    [title addAttribute : NSFontAttributeName value : titleFont range : titleRange];
    
-   //2. Text alignment.
+   //2. Title's alignment.
    NSMutableParagraphStyle * const style = [[NSMutableParagraphStyle alloc] init];
    [style setAlignment : NSTextAlignmentCenter];
    [title addAttribute : NSParagraphStyleAttributeName value : style range : titleRange];
 
    //Let's set text attributes:   
-   //1. Font.
+   //1. Fonts.
+   if (authors.length) {
+      UIFont * const authorFont = [UIFont fontWithName : @"PTSans-Bold" size : 14.f];
+      assert(authorFont != nil && "setTileData:, authorFont is nil");
+      const NSRange range = NSMakeRange(0, authors.length);
+      [text addAttribute : NSFontAttributeName value : authorFont range : range];
+      [text addAttribute : NSForegroundColorAttributeName value : [UIColor darkTextColor] range : range];
+   }
+   
    UIFont * const textFont = [UIFont fontWithName : @"PTSans-Caption" size : 14.f];
    assert(textFont != nil && "setTileData:, text's font is nil");
    textLineHeight = [textFont lineHeight];
-   const NSRange textRange = NSMakeRange(0, text.length);
+   NSRange textRange = NSMakeRange(0, text.length);
+   if (authors.length)
+      textRange = NSMakeRange(authors.length, text.length - authors.length);
    [text addAttribute : NSFontAttributeName value : textFont range : textRange];
    //2. Color
    [text addAttribute : NSForegroundColorAttributeName value : [UIColor darkGrayColor] range : textRange];
@@ -494,6 +510,7 @@ bool IsWideImage(UIImage *image)
    const CGFloat h = self.frame.size.height;
    
    CGFloat topY = 0.f;
+   const CGFloat lastLineY = titleH * h + textH * h - textLineHeight;
 
    if (!thumbnailView.image) {
       //The simplest possible case - text fills the whole tile.
@@ -522,6 +539,8 @@ bool IsWideImage(UIImage *image)
       if (CFIndex nLines = CFArrayGetCount(ctLines)) {
          assert(nLines > 0 && "drawTextInRect, array count is negative");//CFIndex is signed long, so API can return crap. :)
 
+         CGFloat ascent = 0.f, descent = 0.f, leading = 0.f;
+         
          std::vector<CGPoint> lineOrigins(nLines);
          CTFrameGetLineOrigins(textFrame, CFRangeMake(0, nLines), &lineOrigins[0]);
 
@@ -535,8 +554,22 @@ bool IsWideImage(UIImage *image)
             const CFRange cfStringRange = CTLineGetStringRange(ctLine);
             const NSRange stringRange = NSMakeRange(cfStringRange.location, cfStringRange.length);
             const UniChar lastChar = [summary characterAtIndex : stringRange.location + stringRange.length - 1];
-            
-            if (lastChar != 0xAD)
+
+            if (i + 1 == nLines) {
+               const double lineWidth = CTLineGetTypographicBounds(ctLine, &ascent, &descent, &leading);
+               const bool wideLine = std::abs(lineWidth - (w - wideImageMargin * 2 * w))  < 0.1 * w;
+               if (topY + textLineHeight > lastLineY && wideLine) {
+                  NSMutableAttributedString * const lineAttrString = [[text attributedSubstringFromRange : stringRange] mutableCopy];
+                  const NSRange replaceRange = NSMakeRange(stringRange.length - 4, 4);
+                  [lineAttrString replaceCharactersInRange : replaceRange withString : @" ..."];
+                  if (CTLineRef lineWithEllipsis = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)lineAttrString)) {
+                     CTLineDraw(lineWithEllipsis, ctx);
+                     CFRelease(lineWithEllipsis);
+                  } else
+                     CTLineDraw(ctLine, ctx);
+               } else
+                  CTLineDraw(ctLine, ctx);
+            } else if (lastChar != 0xAD)
                CTLineDraw(ctLine, ctx);
             else {
                NSMutableAttributedString * const lineAttrString = [[text attributedSubstringFromRange : stringRange] mutableCopy];
@@ -624,6 +657,105 @@ bool IsWideImage(UIImage *image)
 }
 
 #pragma mark - String pre-processing.
+
+//________________________________________________________________________________________
+- (BOOL) extractAuthorOpenTag : (NSScanner *) scanner
+{
+   assert(scanner != nil && "extractAuthorOpenTag:, parameter 'scanner' is nil");
+   
+   const NSUInteger startLocation = scanner.scanLocation;
+   
+   if ([scanner scanString : @"<" intoString : nil]) {
+      //Ok, we have some tag and now we have to check, if it's a
+      //<a href="/authors/....".
+      NSString *tagName = nil;
+      if([scanner scanCharactersFromSet : tagNameCharacters intoString : &tagName]) {
+         [scanner scanUpToString : @">" intoString : nil];
+         [scanner scanString : @">" intoString : nil];
+         
+         if ([tagName isEqual : @"a"]) {
+            const NSUInteger endLocation = scanner.scanLocation;
+            const NSRange range = [summary rangeOfString:@"/authors/" options : NSLiteralSearch
+                                   range : NSMakeRange(startLocation, endLocation - startLocation)];
+            return range.location != NSNotFound;
+         }
+      } else
+         [scanner setScanLocation : startLocation];
+   }
+   
+   return NO;
+}
+
+//________________________________________________________________________________________
+- (BOOL) extractAuthorCloseTag : (NSScanner *) scanner
+{
+   //</a>
+   assert(scanner != nil && "extractAuthorCloseTag:, parameter 'scanner' is nil");
+   
+   const NSUInteger startLocation = scanner.scanLocation;
+   
+   if (![scanner scanString:@"<" intoString : nil])
+      return NO;
+   
+   if (![scanner scanString : @"/" intoString : nil] ||
+       ![scanner scanString : @"a" intoString : nil] ||
+       ![scanner scanString : @">" intoString : nil]) {
+      [scanner setScanLocation : startLocation];
+      return NO;
+   }
+   
+   return YES;
+}
+
+//________________________________________________________________________________________
+- (void) cutOutAuthors : (NSScanner *) scanner result : (NSString *) result
+{
+   //We are here, if the first <a href="/authors/...." was found. So, at least
+   //Author_open_tag will be "parsed" here.
+   //scanner.scanLocation is at the moment points to the first symbol after the '>'
+   //(or at the end of string if we have a malformed html).
+   
+   //Authors:
+   //       Author_info (, Author_info)*
+   //Author_info:
+   //       Author_open_tag Name_info Author_close_tag
+   //Author_open_tag:
+   //       <a href="/authors/......">
+   //Name_info:
+   //       String, no '<' or '>' inside
+   //Author_close_tag:
+   //       </a>
+   
+   assert(scanner != nil && "cutOutAuthors:result:, parameter 'scanner' is nil");
+   assert(result != nil && "cutOutAuthors:result:, parameter 'result' is nil");
+   
+   while (true) {
+      if (![self extractAuthorOpenTag : scanner])//At least one time it'll return YES, otherwise we'll be never here.
+         return;
+      
+      //Now we have to extract the author's name.
+      const NSUInteger startLocation = scanner.scanLocation;
+      if ([scanner scanUpToString : @"<" intoString : nil]) {
+         const NSUInteger endLocation = scanner.scanLocation - 1;//scalLocation is 1 past '<', so I can do location - 1.
+         NSString *authorInfo = [summary substringWithRange : NSMakeRange(startLocation, endLocation - startLocation)];
+         authorInfo = [authorInfo stringByDecodingHTMLEntities];
+         assert(authors != nil && "cutOutAuthors:result:, authors array is nil");
+         if (authors.length)
+            [authors appendString : @", "];
+         [authors appendString : authorInfo];
+      } else //Something malformed - no closing tag?
+         break;
+      
+      if (![self extractAuthorCloseTag : scanner])
+         break;
+      
+      [scanner scanCharactersFromSet : newLineAndWhitespaceCharacters intoString : nil];
+      //Comma?
+      if (![scanner scanString : @"," intoString : nil])//Here we stop.
+         break;
+   }
+}
+
 //________________________________________________________________________________________
 - (void) stripHtml
 {
@@ -634,6 +766,12 @@ bool IsWideImage(UIImage *image)
    //Try to find something like this: <a href="/authors/....>Name FamilyName</a>,
    //extract 'Name FamilyName', remove tags and the text between them, also remove sequence of such tags.
    //All other html tags are just deleted.
+   
+   //Unfortunately, I have no guarantee at all, that this should work - nothing is defined formally,
+   //I can only observe the similar patterns: there can be one authors or several authors,
+   //their names are separated by commas and wrapped with <a></a> tags.
+   //As soon as the first <a href="/authors/...."> is found, I'm trying to remove as many of them
+   //as I can find in a sequence (I assume they are separated by spaces/commas only).
 
    if (!summary.length)
       return;
@@ -664,7 +802,9 @@ bool IsWideImage(UIImage *image)
 			} else {
 				// Tag - remove and replace with space unless it's
 				// a closing inline tag then dont replace with a space
-     //       const NSUInteger tagStart = scanner.scanLocation;
+            const NSUInteger startLocation = scanner.scanLocation;
+            assert(startLocation > 0 && "stripHtml, invalid startLocation");
+
 				if ([scanner scanString : @"/" intoString : nil]) {
 					// Closing tag - replace with space unless it's inline
 					tagName = nil; dontReplaceTagWithSpace = NO;
@@ -697,8 +837,18 @@ bool IsWideImage(UIImage *image)
                [scanner scanUpToString : @">" intoString : NULL];
                [scanner scanString : @">" intoString : NULL];
                //Now we can check, if it's about authors.
-//               const NSUInteger tagEnd = scanner.scanLocation;
+               const NSUInteger tagEnd = scanner.scanLocation;
+               assert(tagEnd >= startLocation && "stripHtml, bad token stream range");
                //Test the string range.
+               //TODO: check the 'options' argument and it's possible values.
+               const NSRange authorsRange = [summary rangeOfString : @"/authors/" options : NSLiteralSearch range : NSMakeRange(startLocation, tagEnd - startLocation)];
+               if (authorsRange.location != NSNotFound) {
+                  //Ok, looks like we have author(s). Extract names and remove tags/names from the summary completely.
+                  //First, to make things simple (well, at least for me) - roll back the scanner to the opening
+                  //'<'. I can do startLocation - 1 (tagStart can never be 0, otherwise  we can never be here.
+                  [scanner setScanLocation : startLocation - 1];
+                  [self cutOutAuthors : scanner result : result];
+               }
             } else {
                [scanner scanUpToString : @">" intoString : NULL];
                [scanner scanString : @">" intoString : NULL];
