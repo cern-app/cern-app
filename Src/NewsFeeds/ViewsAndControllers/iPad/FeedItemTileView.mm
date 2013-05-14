@@ -181,6 +181,9 @@ bool IsWideImage(UIImage *image)
    authors = [[NSMutableString alloc] init];
 
    summary = aFeedItem.summary ? aFeedItem.summary : @"";
+   if (aFeedItem.content && aFeedItem.content.length > summary.length)//??
+      summary = aFeedItem.content;
+   
    if (summary.length)
       [self stripHtml];
 
