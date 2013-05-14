@@ -510,18 +510,23 @@ bool IsWideImage(UIImage *image)
    const CGFloat h = self.frame.size.height;
    
    CGFloat topY = 0.f;
-   const CGFloat lastLineY = titleH * h + textH * h - textLineHeight;
+   CGFloat lastLineY = titleH * h + textH * h - textLineHeight;
+   CGFloat widthAtTheBottom = w - 2 * w * wideImageMargin;
 
    if (!thumbnailView.image) {
       //The simplest possible case - text fills the whole tile.
       topY = titleH * h;
    } else if (IsWideImage(thumbnailView.image)) {
       //Tile's top or bottom is occupied by a wide image.
-      if (wideImageOnTop)
+      if (wideImageOnTop) {
          topY = titleH * h + textH * h * 0.5f;
-      else
+      } else {
+         lastLineY = titleH * h + textH * h * 0.5f;
          topY = titleH * h;
+      }
    } else {
+      if (imageCut > 1)
+         widthAtTheBottom = w / 2 - w * wideImageMargin;
       topY = titleH * h;
    }
    
@@ -557,7 +562,7 @@ bool IsWideImage(UIImage *image)
 
             if (i + 1 == nLines) {
                const double lineWidth = CTLineGetTypographicBounds(ctLine, &ascent, &descent, &leading);
-               const bool wideLine = std::abs(lineWidth - (w - wideImageMargin * 2 * w))  < 0.1 * w;
+               const bool wideLine = std::abs(lineWidth - widthAtTheBottom)  < 0.1 * widthAtTheBottom;
                if (topY + textLineHeight > lastLineY && wideLine) {
                   NSMutableAttributedString * const lineAttrString = [[text attributedSubstringFromRange : stringRange] mutableCopy];
                   const NSRange replaceRange = NSMakeRange(stringRange.length - 4, 4);
