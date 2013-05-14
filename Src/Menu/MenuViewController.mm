@@ -960,10 +960,8 @@ using CernAPP::ItemStyle;
    
    if (inAnimation)//We still have to wait.
       [self performSelector : @selector(reloadMenuFromDictionary:) withObject : dict afterDelay : 0.5f];
-   else {
-      //NSLog(@"try to update");
+   else
       [self loadMenuContents : dict];
-   }
 }
 
 @end
