@@ -61,6 +61,14 @@ bool IsWideImage(UIImage *image)
    UIImageView *thumbnailView;
    NSMutableAttributedString * title;
    
+   //HTML processing:
+   NSMutableArray *authors;
+	NSCharacterSet * stopCharacters;
+	NSCharacterSet * stopCharactersNonWS;
+	NSCharacterSet * newLineAndWhitespaceCharacters;
+	NSCharacterSet * tagNameCharacters;
+   
+   
    //Text in a tile:
    NSString *summary;
    NSMutableAttributedString * text;//TODO: better name
@@ -121,6 +129,20 @@ bool IsWideImage(UIImage *image)
       //
       UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(showArticle)];
       [self addGestureRecognizer : tapRecognizer];
+      
+      //
+      stopCharacters = [NSCharacterSet characterSetWithCharactersInString : [NSString stringWithFormat : @"< \t\n\r%C%C%C%C",
+                                                                                                         (unsigned short)0x0085,
+                                                                                                         (unsigned short)0x000C,
+                                                                                                         (unsigned short)0x2028,
+                                                                                                         (unsigned short)0x2029]];
+      newLineAndWhitespaceCharacters = [NSCharacterSet characterSetWithCharactersInString : [NSString stringWithFormat : @" \t\n\r%C%C%C%C",
+                                                                                                                        (unsigned short)0x0085,
+                                                                                                                        (unsigned short)0x000C,
+                                                                                                                        (unsigned short)0x2028,
+                                                                                                                        (unsigned short)0x2029]];
+      tagNameCharacters = [NSCharacterSet characterSetWithCharactersInString : @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+      
    }
 
    return self;
@@ -152,7 +174,14 @@ bool IsWideImage(UIImage *image)
    [dateFormatter setDateFormat:@"d MMM. yyyy"];
    infoLabel.text = [dateFormatter stringFromDate : aFeedItem.date ? aFeedItem.date : [NSDate date]];
 
-   summary = aFeedItem.summary ? [aFeedItem.summary stringByConvertingHTMLToPlainText] : @"";
+   if (authors)
+      [authors removeAllObjects];
+   else
+      authors = [[NSMutableArray alloc] init];
+
+   summary = aFeedItem.summary ? aFeedItem.summary : @"";// [aFeedItem.summary stringByConvertingHTMLToPlainText] : @"";
+   if (summary.length)
+      [self stripHtml];
 
    [self setAttributedTextFromSummary];
    [self setStringAttributes];
@@ -165,7 +194,7 @@ bool IsWideImage(UIImage *image)
 //________________________________________________________________________________________
 - (void) setAttributedTextFromSummary
 {
-   //Modify summary:
+   //Algorithm, stripping html adds to many whitespaces which I do not need.
    if (summary.length) {
       NSCharacterSet * const whitespaces = [NSCharacterSet whitespaceCharacterSet];
       NSPredicate * const noEmptyStrings = [NSPredicate predicateWithFormat : @"SELF != ''"];
@@ -592,6 +621,105 @@ bool IsWideImage(UIImage *image)
       [hyphenized appendString : [summary substringWithRange:NSMakeRange(start, summary.length - start)]];
       summary = hyphenized;
    }
+}
+
+#pragma mark - String pre-processing.
+//________________________________________________________________________________________
+- (void) stripHtml
+{
+   //This is an extended version of NSString+HTML category from Utilities.
+   //It has not only to remove html tags, but also extracts info about authors, if any (names).
+   
+   //We have a html (summary).
+   //Try to find something like this: <a href="/authors/....>Name FamilyName</a>,
+   //extract 'Name FamilyName', remove tags and the text between them, also remove sequence of such tags.
+   //All other html tags are just deleted.
+
+   if (!summary.length)
+      return;
+
+@autoreleasepool {
+	// Scan and find all tags
+	NSMutableString * const result = [[NSMutableString alloc] initWithCapacity : summary.length];
+	NSScanner * const scanner = [[NSScanner alloc] initWithString : summary];
+	[scanner setCharactersToBeSkipped : nil];
+	[scanner setCaseSensitive : YES];
+	NSString *str = nil, *tagName = nil;
+
+	BOOL dontReplaceTagWithSpace = NO;
+	do {
+		// Scan up to the start of a tag or whitespace
+		if ([scanner scanUpToCharactersFromSet : stopCharacters intoString : &str]) {
+			[result appendString : str];
+			str = nil; // reset
+		}
+		
+		// Check if we've stopped at a tag/comment or whitespace
+		if ([scanner scanString : @"<" intoString : nil]) {
+			// Stopped at a comment or tag
+			if ([scanner scanString : @"!--" intoString : nil]) {
+				// Comment
+				[scanner scanUpToString : @"-->" intoString : nil];
+				[scanner scanString : @"-->" intoString : nil];
+			} else {
+				// Tag - remove and replace with space unless it's
+				// a closing inline tag then dont replace with a space
+     //       const NSUInteger tagStart = scanner.scanLocation;
+				if ([scanner scanString : @"/" intoString : nil]) {
+					// Closing tag - replace with space unless it's inline
+					tagName = nil; dontReplaceTagWithSpace = NO;
+					if ([scanner scanCharactersFromSet : tagNameCharacters intoString : &tagName]) {
+						tagName = [tagName lowercaseString];
+						dontReplaceTagWithSpace = ([tagName isEqualToString : @"a"] ||
+                                             [tagName isEqualToString : @"b"] ||
+                                             [tagName isEqualToString : @"i"] ||
+                                             [tagName isEqualToString : @"q"] ||
+                                             [tagName isEqualToString : @"span"] ||
+                                             [tagName isEqualToString : @"em"] ||
+                                             [tagName isEqualToString : @"strong"] ||
+                                             [tagName isEqualToString : @"cite"] ||
+                                             [tagName isEqualToString : @"abbr"] ||
+                                             [tagName isEqualToString : @"acronym"] ||
+                                             [tagName isEqualToString : @"label"]);
+					}
+					
+					// Replace tag with string unless it was an inline
+					if (!dontReplaceTagWithSpace && result.length > 0 && ![scanner isAtEnd])
+                  [result appendString : @" "];
+
+               [scanner scanUpToString : @">" intoString : nil];
+               [scanner scanString : @">" intoString : nil];
+				} else if ([scanner scanCharactersFromSet : tagNameCharacters intoString : &tagName] && [tagName isEqual : @"a"]) {
+
+               [result appendString : @" "];
+
+               // Scan past tag
+               [scanner scanUpToString : @">" intoString : NULL];
+               [scanner scanString : @">" intoString : NULL];
+               //Now we can check, if it's about authors.
+//               const NSUInteger tagEnd = scanner.scanLocation;
+               //Test the string range.
+            } else {
+               [scanner scanUpToString : @">" intoString : NULL];
+               [scanner scanString : @">" intoString : NULL];
+            }
+				
+			}
+			
+		} else {
+			
+			// Stopped at whitespace - replace all whitespace and newlines with a space
+			if ([scanner scanCharactersFromSet:newLineAndWhitespaceCharacters intoString:NULL]) {
+				if (result.length > 0 && ![scanner isAtEnd]) [result appendString:@" "]; // Dont append space to beginning or end of result
+			}
+			
+		}
+		
+	} while (![scanner isAtEnd]);
+	
+	// Decode HTML entities and return
+   summary = [result stringByDecodingHTMLEntities];
+}//pool
 }
 
 @end
