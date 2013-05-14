@@ -20,6 +20,9 @@ using CernAPP::ItemStyle;
    __weak MenuItemsGroup *newOpen;
    
    NSMutableArray *liveData;
+   
+   NSURLConnection *connection;
+   NSMutableData *menuData;
 }
 
 //________________________________________________________________________________________
@@ -433,15 +436,11 @@ using CernAPP::ItemStyle;
 }
 
 //________________________________________________________________________________________
-- (void) loadMenuContents
+- (void) loadMenuContents : (NSDictionary *) plistDict
 {
-   menuItems = [[NSMutableArray alloc] init];
+   assert(plistDict != nil && "loadMenuContents:, parameter 'plistDict' is nil");
 
-   //Read menu contents from the 'MENU.plist'.
-   //Create menu items and corresponding views.
-   NSString * const path = [[NSBundle mainBundle] pathForResource : @"MENU" ofType : @"plist"];
-   NSDictionary * const plistDict = [NSDictionary dictionaryWithContentsOfFile : path];
-   assert(plistDict != nil && "loadMenuContents, no dictionary or MENU.plist found");
+   menuItems = [[NSMutableArray alloc] init];
 
    id objBase = plistDict[@"Menu Contents"];
    assert(objBase != nil && "loadMenuContents, object for the key 'Menu Contents was not found'");
@@ -547,11 +546,21 @@ using CernAPP::ItemStyle;
    scrollView.showsVerticalScrollIndicator = NO;
    
    selectedItemView = nil;
-   [self loadMenuContents];
+   ///
+   //Read menu contents from the "built-in" 'MENU.plist'.
+   //Create menu items and corresponding views.
+   NSString * const path = [[NSBundle mainBundle] pathForResource : @"MENU" ofType : @"plist"];
+   NSDictionary * const plistDict = [NSDictionary dictionaryWithContentsOfFile : path];
+   assert(plistDict != nil && "loadMenuContents, no dictionary or MENU.plist found");
+   ///
+   [self loadMenuContents : plistDict];
    
    //Settings modifications.
-  [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
-   //
+   [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
+   
+   //TODO: We also have to subscribe for push notifications here - the 'MENU.plist' on a server can be updated.
+   
+   [self updateMenuFromServer];
 }
 
 //________________________________________________________________________________________
@@ -864,5 +873,75 @@ using CernAPP::ItemStyle;
    [self addMenuGroup : @"LIVE" withImage : [self loadItemImage : desc] forItems : menuGroups];
    [self setStateForGroup : menuItems.count - 1 from : desc];
 }
+
+#pragma mark - Update the menu using the remote MENU.plist + NSURLConnection delegate.
+//________________________________________________________________________________________
+- (void) updateMenuFromServer
+{
+   //Update the menu, using 'MENU.plist' from http://cernapp.cern.ch/MENU.plist.
+   menuData = [[NSMutableData alloc] init];
+   connection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/MENU.plist"]]
+                                                delegate : self];
+}
+
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) aConnection didReceiveData : (NSData *) data
+{
+   assert(aConnection != nil && "connection:didReceiveData:, parameter 'aConnection' is nil");
+   assert(data != nil && "connection:didReceiveData:, parameter 'data' is nil");
+   assert(menuData != nil && "connection:didReceiveData:, menuData is nil");
+   
+   if (connection != aConnection) {
+      //I do not think this can ever happen :)
+      NSLog(@"imageDownloader, error: connection:didReceiveData:, data from unknown connection");
+      return;
+   }
+   
+   [menuData appendData : data];
+}
+
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) aConnection didFailWithError : (NSError *) error
+{
+#pragma unused(error)
+
+   assert(aConnection != nil && "connection:didFailWithError:, parameter 'aConnection' is nil");
+
+   if (connection != aConnection) {
+      //Can this ever happen?
+      NSLog(@"imageDownloader, error: connection:didFaileWithError:, unknown connection");
+      return;
+   }
+
+   menuData = nil;
+   connection = nil;//Can I do this??? (I'm in a callback function now)
+}
+
+//________________________________________________________________________________________
+- (void) connectionDidFinishLoading : (NSURLConnection *) aConnection
+{
+   assert(aConnection != nil && "connectionDidFinishLoading:, parameter 'aConnection' is nil");
+   
+   if (connection != aConnection) {
+      NSLog(@"imageDownloader, error: connectionDidFinishLoading:, unknown connection");
+      return;
+   }
+
+   connection = nil;//Can I do this??? (I'm in a callback function now)
+
+   if (menuData.length) {
+      NSError *err = nil;
+      NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
+
+      id obj = [NSPropertyListSerialization propertyListWithData:menuData options:NSPropertyListImmutable format : &format error : &err];
+      if (obj && !err && [obj isKindOfClass : [NSDictionary class]]) {
+         //Reload
+         NSLog(@"got a new menu");
+      }
+   }
+   
+   menuData = nil;
+}
+
 
 @end
