@@ -257,7 +257,7 @@ using CernAPP::ItemStyle;
 {
    //This is a "TOP-level" menu group.
    //This menu group can contain only simple, non-group items.
-
+   
    assert(scrollView != nil && "loadMenuGroup:, scrollView is not loaded yet!");
    assert(desc != nil && "loadMenuGroup:, parameter 'desc' is nil");
    assert([desc[@"Category name"] isKindOfClass : [NSString class]] &&
@@ -439,8 +439,16 @@ using CernAPP::ItemStyle;
 - (void) loadMenuContents : (NSDictionary *) plistDict
 {
    assert(plistDict != nil && "loadMenuContents:, parameter 'plistDict' is nil");
-
-   menuItems = [[NSMutableArray alloc] init];
+   assert(inAnimation == NO && "loadMenuContents:, called while animation is active");
+   
+   if (menuItems && menuItems.count) {
+      for (NSObject<MenuItemProtocol> *item in menuItems)
+         [item deleteItemView];
+      [menuItems removeAllObjects];
+   } else
+      menuItems = [[NSMutableArray alloc] init];
+   
+   selectedItemView = nil;
 
    id objBase = plistDict[@"Menu Contents"];
    assert(objBase != nil && "loadMenuContents, object for the key 'Menu Contents was not found'");
@@ -904,7 +912,6 @@ using CernAPP::ItemStyle;
 - (void) connection : (NSURLConnection *) aConnection didFailWithError : (NSError *) error
 {
 #pragma unused(error)
-
    assert(aConnection != nil && "connection:didFailWithError:, parameter 'aConnection' is nil");
 
    if (connection != aConnection) {
@@ -936,12 +943,27 @@ using CernAPP::ItemStyle;
       id obj = [NSPropertyListSerialization propertyListWithData:menuData options:NSPropertyListImmutable format : &format error : &err];
       if (obj && !err && [obj isKindOfClass : [NSDictionary class]]) {
          //Reload
-         NSLog(@"got a new menu");
+         if (inAnimation)
+            [self performSelector : @selector(reloadMenuFromDictionary:) withObject : obj afterDelay : 0.5f];
+         else
+            [self reloadMenuFromDictionary : (NSDictionary *)obj];
       }
    }
    
    menuData = nil;
 }
 
+//________________________________________________________________________________________
+- (void) reloadMenuFromDictionary : (NSDictionary *) dict
+{
+   assert(dict != nil && "reloadMenuFromDictionary:, parameter 'dict' is nil");
+   
+   if (inAnimation)//We still have to wait.
+      [self performSelector : @selector(reloadMenuFromDictionary:) withObject : dict afterDelay : 0.5f];
+   else {
+      //NSLog(@"try to update");
+      [self loadMenuContents : dict];
+   }
+}
 
 @end

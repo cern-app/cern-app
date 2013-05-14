@@ -18,6 +18,7 @@
 - (UIImage *) itemImage;
 
 - (void) addMenuItemViewInto : (UIView *) parentView controller : (MenuViewController *) controller;
+- (void) deleteItemView;
 - (CGFloat) layoutItemViewWithHint : (CGRect) frameHint;
 - (CGFloat) requiredHeight;
 
@@ -44,6 +45,7 @@
 - (UIImage *) itemImage;
 
 - (void) addMenuItemViewInto : (UIView *) parentView controller : (MenuViewController *) controller;
+- (void) deleteItemView;
 - (CGFloat) layoutItemViewWithHint : (CGRect) frameHint;
 - (CGFloat) requiredHeight;
 
@@ -65,6 +67,7 @@
 - (id) initWithTitle : (NSString *) title image : (UIImage *) image items : (NSArray *) items;
 
 - (void) addMenuItemViewInto : (UIView *) parentView controller : (MenuViewController *) controller;
+- (void) deleteItemView;
 - (CGFloat) layoutItemViewWithHint : (CGRect) frameHint;
 - (CGFloat) requiredHeight;
 

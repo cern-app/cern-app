@@ -85,6 +85,13 @@ CGFloat DefaultGUIFontSize()
 }
 
 //________________________________________________________________________________________
+- (void) deleteItemView
+{
+   if (itemView)
+      [itemView removeFromSuperview];
+}
+
+//________________________________________________________________________________________
 - (CGFloat) layoutItemViewWithHint : (CGRect) hint
 {
    assert(itemView != nil && "layoutItemViewWithHint:, itemView is nil");
@@ -199,6 +206,16 @@ CGFloat DefaultGUIFontSize()
    containerView = newContainerView;
    groupView = newGroupView;
 }
+
+//________________________________________________________________________________________
+- (void) deleteItemView
+{
+   if (titleView)
+      [titleView removeFromSuperview];
+   if (containerView)
+      [containerView removeFromSuperview];//Group view and item views are children of this, nobody else reference them.
+}
+
 
 //________________________________________________________________________________________
 - (CGFloat) layoutItemViewWithHint : (CGRect) hint
@@ -374,6 +391,13 @@ CGFloat DefaultGUIFontSize()
    MenuItemView * const separatorView = [[MenuItemView alloc] initWithFrame : CGRect() item : nil style : ItemStyle::separator controller : controller];
    itemView = separatorView;
    [parentView addSubview : separatorView];
+}
+
+//________________________________________________________________________________________
+- (void) deleteItemView
+{
+   if (itemView)
+      [itemView removeFromSuperview];
 }
 
 //________________________________________________________________________________________
