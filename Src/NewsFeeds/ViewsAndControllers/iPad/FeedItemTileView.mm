@@ -230,7 +230,7 @@ bool IsWideImage(UIImage *image)
 {
    //Let's now set attributes:   
    //1. Font.
-   UIFont * const titleFont = [UIFont fontWithName : @"PTSans-Bold" size : 20.f];
+   UIFont * const titleFont = [UIFont fontWithName : @"PTSans-Bold" size : 22.f];
    assert(titleFont != nil && "setTileData:, titles' font is nil");
    const NSRange titleRange = NSMakeRange(0, title.length);
    [title addAttribute : NSFontAttributeName value : titleFont range : titleRange];
@@ -373,7 +373,7 @@ bool IsWideImage(UIImage *image)
    const CGFloat h = self.frame.size.height;
    
    //Title frame is always simple.
-   const CGRect titleRect = CGRectMake(0.f, [self translateY : titleH * h], w, h * titleH);
+   const CGRect titleRect = CGRectMake(w * wideImageMargin, [self translateY : titleH * h], w - 2 * w * wideImageMargin, h * titleH * 0.8f);
    CGPathRef titlePath = CGPathCreateWithRect(titleRect, &CGAffineTransformIdentity);
    CTFramesetterRef titleSetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)title);
    titleFrame = CTFramesetterCreateFrame(titleSetter, CFRangeMake(0, [title length]), titlePath, nullptr);
