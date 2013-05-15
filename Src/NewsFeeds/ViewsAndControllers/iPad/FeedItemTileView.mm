@@ -34,6 +34,9 @@ const CGFloat wideImageMargin = 0.08;
 const CGFloat titleH = 0.18f;
 const CGFloat footerY = 0.9f;
 const CGFloat textH = footerY - titleH;
+
+const CGFloat verticalImageTextGap = 0.03f;
+
 const CGFloat wideImageH = 0.5 * textH;
 
 const CGFloat upCutH = 0.2;
@@ -301,7 +304,8 @@ bool IsWideImage(UIImage *image)
       if (wideImageOnTop)
          textRect = CGRectMake(wideImageMargin * w, [self translateY : titleH * h + textH * h], w - 2 * wideImageMargin * w, 0.5f * h * textH);
       else
-         textRect = CGRectMake(wideImageMargin * w, [self translateY : titleH * h + 0.5f * textH * h], w - 2 * wideImageMargin * w, 0.5f * h * textH);
+         //NOTE: some space is required (vertically) between the text and image.
+         textRect = CGRectMake(wideImageMargin * w, [self translateY : titleH * h + 0.5f * textH * h], w - 2 * wideImageMargin * w, 0.5f * h * textH - verticalImageTextGap * h);
 
       return CGPathCreateWithRect(textRect, &CGAffineTransformIdentity);
       //Layout image view!
@@ -322,6 +326,7 @@ bool IsWideImage(UIImage *image)
          CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y1 + textH * 0.5 * h);
          CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y2);
          CGPathCloseSubpath(path);
+
          break;
       case 1:
          CGPathMoveToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2);
@@ -355,7 +360,7 @@ bool IsWideImage(UIImage *image)
 
          break;
       default:
-         assert(0 && "createTextPathAndLayoutImage, unknown layout");
+         assert(0 && "createTextPath, unknown layout");
          break;
       }
 
