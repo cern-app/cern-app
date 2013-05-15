@@ -34,13 +34,8 @@ const CGFloat wideImageMargin = 0.08;
 const CGFloat titleH = 0.18f;
 const CGFloat footerY = 0.9f;
 const CGFloat textH = footerY - titleH;
-
 const CGFloat verticalImageTextGap = 0.03f;
-
 const CGFloat wideImageH = 0.5 * textH;
-
-const CGFloat upCutH = 0.2;
-const CGFloat downCutH = textH - upCutH;
 
 //
 const CGFloat hyphenShift = 5.f;

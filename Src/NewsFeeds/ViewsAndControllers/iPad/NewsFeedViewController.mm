@@ -360,7 +360,8 @@
 //________________________________________________________________________________________
 - (void) cancelAnyConnections
 {
-   //TODO!!!
+   [aggregator stopAggregator];
+   [self cancelAllImageDownloaders];
 }
 
 #pragma mark - Aux. functions.

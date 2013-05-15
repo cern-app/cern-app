@@ -165,6 +165,20 @@
    //Noop: in a bulletin it's up to a page view to set hints.
 }
 
+//________________________________________________________________________________________
+- (void) cancelAllImageDownloaders
+{
+   if (downloaders && downloaders.count) {
+      NSEnumerator * const keyEnumerator = [downloaders keyEnumerator];
+      for (id key in keyEnumerator) {
+         ImageDownloader * const downloader = (ImageDownloader *)downloaders[key];
+         [downloader cancelDownload];
+      }
+      
+      downloaders = nil;
+   }
+}
+
 #pragma mark - ImageDownloaderDelegate.
 
 //________________________________________________________________________________________
