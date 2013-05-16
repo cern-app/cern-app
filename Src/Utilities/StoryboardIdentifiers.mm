@@ -24,5 +24,6 @@ NSString * const FeedTileViewControllerID = @"FeedTileViewControllerID";
 NSString * const BulletinTileViewControllerID = @"BulletinTileViewControllerID";
 NSString * const BulletinIssueViewControllerID = @"BulletinIssueViewControllerID";
 NSString * const StaticInfoTileViewControllerID = @"StaticInfoTileViewControllerID";
+NSString * const PhotosCollectionViewControllerID = @"PhotosCollectionViewControllerID";
 
 }

@@ -1,6 +1,7 @@
 #import <cassert>
 
 #import "StaticInfoScrollViewController.h"
+#import "PhotosCollectionViewController.h"
 #import "StaticInfoTileViewController.h"
 #import "BulletinTableViewController.h"
 #import "BulletinFeedViewController.h"
@@ -185,21 +186,28 @@ void CancelConnections(UIViewController *controller)
    
    using namespace CernAPP;
    
-   //TODO: there is not view/controller for iPad at the moment.
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      ShowErrorAlert(@"Not implemented", @"Close");
-      return;
+   //TODO: remove if/else part as soon as PhotosCollectionViewController is ready for both iPad/iPhone.
+   
+   MenuNavigationController *navController = nil;
+   
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotoGridControllerNavID];
+      assert([navController.topViewController isKindOfClass : [PhotosGridViewController class]] &&
+              "loadControllerTo:, top view controller is either nil or has a wrong type");
+
+      PhotosGridViewController * const topController = (PhotosGridViewController *)navController.topViewController;
+      topController.photoDownloader.url = [NSURL URLWithString : (NSString *)info[@"Url"]];
+      topController.navigationItem.title = categoryName;
+   } else {
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotosCollectionViewControllerID];
+      assert([navController.topViewController isKindOfClass : [PhotosCollectionViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+
+
+      PhotosCollectionViewController * const topController = (PhotosCollectionViewController *)navController.topViewController;
+      topController.photoDownloader.url = [NSURL URLWithString : (NSString *)info[@"Url"]];
+      topController.navigationItem.title = categoryName;
    }
-   
-   MenuNavigationController * const navController =
-         (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotoGridControllerNavID];
- 
-   assert([navController.topViewController isKindOfClass : [PhotosGridViewController class]] &&
-          "loadControllerTo:, top view controller is either nil or has a wrong type");
-   
-   PhotosGridViewController * const topController = (PhotosGridViewController *)navController.topViewController;
-   topController.photoDownloader.url = [NSURL URLWithString : (NSString *)info[@"Url"]];
-   topController.navigationItem.title = categoryName;
    
    if (controller.slidingViewController.topViewController)
       CancelConnections(controller.slidingViewController.topViewController);

@@ -10,4 +10,10 @@
                                                                        PhotoDownloaderDelegate, HUDRefreshProtocol,
                                                                        MWPhotoBrowserDelegate>
 
+@property (nonatomic, strong) PhotoDownloader *photoDownloader;
+
+- (IBAction) reloadImages : (id) sender;
+- (IBAction) revealMenu : (id) sender;
+
+
 @end

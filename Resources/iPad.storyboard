@@ -213,6 +213,68 @@
             </objects>
             <point key="canvasLocation" x="2930" y="2749"/>
         </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="WFA-uf-uMX">
+            <objects>
+                <navigationController storyboardIdentifier="PhotosCollectionViewControllerID" definesPresentationContext="YES" id="znT-bM-D1R" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Hr-O5-ixb">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Fm4-vg-l4a" kind="relationship" relationship="rootViewController" id="3ui-P7-QSQ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="AXI-EE-67S" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2011" y="3929"/>
+        </scene>
+        <!--Photos Collection View Controller-->
+        <scene sceneID="Nw4-nr-lrn">
+            <objects>
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="Fm4-vg-l4a" customClass="PhotosCollectionViewController" sceneMemberID="viewController">
+                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="Hqu-4q-aZR">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="e6B-fW-lUj">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="BvA-4D-1a2">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="Fm4-vg-l4a" id="IFd-V4-bN4"/>
+                            <outlet property="delegate" destination="Fm4-vg-l4a" id="T1B-wx-u0e"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="gMD-Pm-OVG">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="2wn-7Z-f5j">
+                            <connections>
+                                <action selector="revealMenu:" destination="Fm4-vg-l4a" id="1Rj-8E-YkK"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="iZy-At-uTR">
+                            <connections>
+                                <action selector="reloadImages:" destination="Fm4-vg-l4a" id="Zhw-A2-HWq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gyZ-Km-xdZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2878" y="3929"/>
+        </scene>
     </scenes>
     <resources>
         <image name="menu.png" width="20" height="20"/>
@@ -258,6 +320,13 @@
                 <relationship kind="action" name="reloadPageFromRefreshControl"/>
             </relationships>
         </class>
+        <class className="PhotosCollectionViewController" superclassName="UICollectionViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotosCollectionViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="reloadImages:"/>
+                <relationship kind="action" name="revealMenu:"/>
+            </relationships>
+        </class>
         <class className="StaticInfoTileViewController" superclassName="TileViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/StaticInfoTileViewController.h"/>
         </class>
@@ -266,6 +335,18 @@
             <relationships>
                 <relationship kind="action" name="revealMenu:"/>
             </relationships>
+        </class>
+        <class className="UICollectionReusableView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
+        </class>
+        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
+        </class>
+        <class className="UICollectionViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewController.h"/>
+        </class>
+        <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
