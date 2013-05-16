@@ -9,8 +9,8 @@
 @class MBProgressHUD;
 
 @interface PhotosCollectionViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate,
-                                                                       PhotoDownloaderDelegate, HUDRefreshProtocol,
-                                                                       MWPhotoBrowserDelegate>
+                                                                       PhotoDownloaderDelegate, HUDRefreshProtocol>
+//                                                                       MWPhotoBrowserDelegate>
 
 @property (nonatomic, strong) PhotoDownloader *photoDownloader;
 

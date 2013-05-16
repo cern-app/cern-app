@@ -4,6 +4,12 @@
 
 @interface PhotoViewCell : UICollectionViewCell
 
-@property (nonatomic, strong, readonly) UIImageView *imageView;
+@property (nonatomic, strong, readonly) IBOutlet UIImageView *imageView;
 
 @end
+
+namespace CernAPP {
+
+extern NSString * const PhotoCellKind;
+
+}

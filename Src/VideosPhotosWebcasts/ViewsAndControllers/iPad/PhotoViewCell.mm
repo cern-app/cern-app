@@ -4,6 +4,12 @@
 
 //TODO: this class should be merged with PhotoGridViewCell (or replace it).
 
+namespace CernAPP {
+
+NSString * const PhotoCellKind = @"PhotoViewCell";
+
+}
+
 @implementation PhotoViewCell
 
 @synthesize imageView;
@@ -24,12 +30,13 @@
       self.layer.shadowOpacity = 0.5f;
 
       //To show stacked images (views) I'll use rotation transformation.
-      //To anti-alias edges, we rasterize (thanks to Bryan Hansen for this nice
-      //article and tutorial, bryanhansen@gmail.com).
+      //To anti-alias edges, we rasterize (thanks to Bryan Hansen for his nice
+      //article and tutorial: http://www.skeuo.com/uicollectionview-custom-layout-tutorial).
       self.layer.rasterizationScale = [UIScreen mainScreen].scale;
       self.layer.shouldRasterize = YES;
         
       imageView = [[UIImageView alloc] initWithFrame : self.bounds];
+      imageView.backgroundColor = [UIColor darkGrayColor];
       imageView.contentMode = UIViewContentModeScaleAspectFill;
       imageView.clipsToBounds = YES;
         

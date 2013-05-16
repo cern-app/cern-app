@@ -1,6 +1,7 @@
 #import "PhotosCollectionViewController.h"
 #import "ECSlidingViewController.h"
 #import "ApplicationErrors.h"
+#import "PhotoViewCell.h"
 
 @implementation PhotosCollectionViewController {
    BOOL viewDidAppear;
@@ -32,6 +33,9 @@
    //
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
+   
+   [self.collectionView registerClass : [PhotoViewCell class]
+           forCellWithReuseIdentifier : @"PhotoViewCell"];
 }
 
 //________________________________________________________________________________________
@@ -58,21 +62,105 @@
    }
 }
 
+#pragma mark - UIViewCollectionDataSource
+
+//________________________________________________________________________________________
+- (NSInteger) numberOfSectionsInCollectionView : (UICollectionView *) collectionView
+{
+#pragma unused(collectionView)
+   return photoSets.count;
+}
+
+//________________________________________________________________________________________
+- (NSInteger) collectionView : (UICollectionView *) collectionView numberOfItemsInSection : (NSInteger) section
+{
+#pragma unused(collectionView)
+   assert(section >= 0 && section < photoSets.count && "collectionView:numberOfItemsInSection:, index is out of bounds");
+   PhotoSet * const photoSet = (PhotoSet *)photoSets[section];
+
+   return photoSet.nImages;
+}
+
+//________________________________________________________________________________________
+- (UICollectionViewCell *) collectionView : (UICollectionView *) collectionView cellForItemAtIndexPath : (NSIndexPath *) indexPath
+{
+   assert(collectionView != nil && "collectionView:cellForItemAtIndexPath:, parameter 'collectionView' is nil");
+   assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
+
+   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"PhotoViewCell" forIndexPath : indexPath];
+   assert(!cell || [cell isKindOfClass : [PhotoViewCell class]] &&
+          "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
+   
+   PhotoViewCell * const photoCell = (PhotoViewCell *)cell;
+   
+   assert(indexPath.section >= 0 && indexPath.section < photoSets.count &&
+          "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
+
+   PhotoSet * const photoSet = (PhotoSet *)photoSets[indexPath.section];
+   
+   assert(indexPath.row >= 0 && indexPath.row < photoSet.nImages && "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
+   
+   photoCell.imageView.image = [photoSet getThumbnailImageForIndex : indexPath.row];
+   
+   return photoCell;
+}
+
+/*
+//________________________________________________________________________________________
+- (UICollectionReusableView *) collectionView : (UICollectionView *) collectionView
+                               viewForSupplementaryElementOfKind : (NSString *) kind atIndexPath : (NSIndexPath *) indexPath
+{
+   assert(collectionView != nil &&
+          "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, parameter 'collectionView' is nil");
+   assert(indexPath != nil &&
+          "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, parameter 'indexPath' is nil");
+   assert(indexPath.section < photoSets.count &&
+         "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, indexPath.section is out of bounds");
+
+   UICollectionReusableView *view = nil;
+
+   if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+      //
+      view = [collectionView dequeueReusableSupplementaryViewOfKind : kind
+                             withReuseIdentifier : @"SetInfoView" forIndexPath : indexPath];
+
+      assert(!view || [view isKindOfClass : [PhotoSetInfoView class]] &&
+             "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, reusable view has a wrong type");
+
+      PhotoSetInfoView * infoView = (PhotoSetInfoView *)view;
+      PhotoSet * const photoSet = (PhotoSet *)photoSets[indexPath.section];
+      infoView.descriptionLabel.text = photoSet.title;
+      
+      UIFont * const font = [UIFont fontWithName : CernAPP::childMenuFontName size : 12.f];
+      assert(font != nil && "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, font not found");
+      infoView.descriptionLabel.font = font;
+   } else {
+      //Footer.
+      view = [collectionView dequeueReusableSupplementaryViewOfKind : kind
+                             withReuseIdentifier : @"SetFooter" forIndexPath : indexPath];
+
+      assert(!view || [view isKindOfClass : [PhotoSetInfoView class]] &&
+             "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, reusable view has a wrong type");
+   }
+   
+   return view;
+}
+*/
+
 #pragma mark - PhotoDownloaderDelegate methods
 
 //________________________________________________________________________________________
 - (void) photoDownloaderDidFinish : (PhotoDownloader *) aPhotoDownloader
 {
    photoSets = [aPhotoDownloader.photoSets copy];//This is non-compacted sets without images.
- //  [self.collectionView reloadData];
+   [self.collectionView reloadData];
 }
 
 //________________________________________________________________________________________
 - (void) photoDownloader : (PhotoDownloader *) photoDownloader didDownloadThumbnail : (NSUInteger) imageIndex forSet : (NSUInteger) setIndex
 {
-//   NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : imageIndex inSection : setIndex];
-
-//   [self.collectionView reloadItemsAtIndexPaths : @[indexPath]];
+   NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : imageIndex inSection : setIndex];
+   [self.collectionView reloadItemsAtIndexPaths : @[indexPath]];
 }
 
 
@@ -95,7 +183,7 @@
    [photoDownloader compactData];
    photoSets = [photoDownloader.photoSets copy];
    self.navigationItem.rightBarButtonItem.enabled = YES;
-//   [self.collectionView reloadData];
+   [self.collectionView reloadData];
 }
 
 
