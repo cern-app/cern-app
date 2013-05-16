@@ -6,6 +6,8 @@
 #import "PhotoDownloader.h"
 #import "MWPhotoBrowser.h"
 
+@class MBProgressHUD;
+
 @interface PhotosCollectionViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate,
                                                                        PhotoDownloaderDelegate, HUDRefreshProtocol,
                                                                        MWPhotoBrowserDelegate>
@@ -15,5 +17,9 @@
 - (IBAction) reloadImages : (id) sender;
 - (IBAction) revealMenu : (id) sender;
 
+
+//HUD/GUI
+@property (nonatomic, strong) MBProgressHUD *noConnectionHUD;
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
 @end
