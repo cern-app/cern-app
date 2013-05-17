@@ -12,6 +12,54 @@
 
 using CernAPP::ItemStyle;
 
+namespace {
+
+enum class MenuUpdateStage {
+   none,
+   menuPlistUpdate,
+   livePlistUpdate
+};
+
+//________________________________________________________________________________________
+NSDictionary *LoadOfflineMenuPlist(NSString * plistName)
+{
+   assert(plistName != nil && "LoadOfflineMenuPlist, parameter 'plistName' is nil");
+
+   NSDictionary *plist = nil;
+   NSArray * const paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+   for (NSString *dir in paths) {
+      NSString * const menuPlistPath = [dir stringByAppendingPathComponent : [plistName stringByAppendingString : @".plist"]];
+      if ([[NSFileManager defaultManager] fileExistsAtPath : menuPlistPath]) {
+         //Ok, create a dictionary from the 'MENU.plist'.
+         plist = [NSDictionary dictionaryWithContentsOfFile : menuPlistPath];
+      }
+   }
+
+   if (!plist) {
+      NSString * const path = [[NSBundle mainBundle] pathForResource : plistName ofType : @"plist"];
+      plist = [NSDictionary dictionaryWithContentsOfFile : path];
+      assert(plist != nil && "loadOfflineMenuPlists, no dictionary or 'MENU.plist' found");
+   }
+   
+   return plist;
+}
+
+//________________________________________________________________________________________
+void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
+{
+   assert(plist != nil && "WriteOfflineMenuPlist, parameter 'plist' is nil");
+   assert(plistName != nil && "WriteOfflineMenuPlist, parameter 'plistName' is nil");
+   
+   NSArray * const paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+   if (paths.count) {
+      NSString * const dir = (NSString *)paths[0];
+      NSString * const filePath = [dir stringByAppendingPathComponent : plistName];
+      [plist writeToFile : filePath atomically : YES];
+   }
+}
+
+}
+
 @implementation MenuViewController {
    NSMutableArray *menuItems;
    MenuItemView *selectedItemView;
@@ -23,6 +71,11 @@ using CernAPP::ItemStyle;
    
    NSURLConnection *connection;
    NSMutableData *menuData;
+   
+   NSDictionary *menuPlist;
+   NSDictionary *livePlist;
+   
+   MenuUpdateStage updateStage;
 }
 
 //________________________________________________________________________________________
@@ -436,11 +489,11 @@ using CernAPP::ItemStyle;
 }
 
 //________________________________________________________________________________________
-- (void) loadMenuContents : (NSDictionary *) plistDict
+- (void) loadMenuContents
 {
-   assert(plistDict != nil && "loadMenuContents:, parameter 'plistDict' is nil");
-   assert(inAnimation == NO && "loadMenuContents:, called while animation is active");
-   
+   assert(inAnimation == NO && "loadMenuContents, called while animation is active");
+   assert(menuPlist != nil && "loadMenuContents, menuPlist is nil");
+
    if (menuItems && menuItems.count) {
       for (NSObject<MenuItemProtocol> *item in menuItems)
          [item deleteItemView];
@@ -450,7 +503,7 @@ using CernAPP::ItemStyle;
    
    selectedItemView = nil;
 
-   id objBase = plistDict[@"Menu Contents"];
+   id objBase = menuPlist[@"Menu Contents"];
    assert(objBase != nil && "loadMenuContents, object for the key 'Menu Contents was not found'");
    assert([objBase isKindOfClass : [NSArray class]] &&
           "loadMenuContents, menu contents must be of a NSArray type");
@@ -513,6 +566,7 @@ using CernAPP::ItemStyle;
 {
    inAnimation = NO;
    newOpen = nil;
+   updateStage = MenuUpdateStage::none;
 }
 
 //________________________________________________________________________________________
@@ -554,14 +608,10 @@ using CernAPP::ItemStyle;
    scrollView.showsVerticalScrollIndicator = NO;
    
    selectedItemView = nil;
-   ///
-   //Read menu contents from the "built-in" 'MENU.plist'.
-   //Create menu items and corresponding views.
-   NSString * const path = [[NSBundle mainBundle] pathForResource : @"MENU" ofType : @"plist"];
-   NSDictionary * const plistDict = [NSDictionary dictionaryWithContentsOfFile : path];
-   assert(plistDict != nil && "loadMenuContents, no dictionary or MENU.plist found");
-   ///
-   [self loadMenuContents : plistDict];
+
+   menuPlist = LoadOfflineMenuPlist(@"MENU");
+   livePlist = LoadOfflineMenuPlist(@"CERNLive");
+   [self loadMenuContents];
    
    //Settings modifications.
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
@@ -828,19 +878,16 @@ using CernAPP::ItemStyle;
 - (void) readLIVEData : (NSDictionary *) desc
 {
    assert(desc != nil && "readLIVEData:, parameter 'desc' is nil");
+   assert(livePlist != nil && "readLIVEData:, livePlist is nil");
 
-   NSString * const path = [[NSBundle mainBundle] pathForResource : @"CERNLive" ofType : @"plist"];
-   NSDictionary * const plistDict = [NSDictionary dictionaryWithContentsOfFile : path];
-   assert(plistDict != nil && "readLIVEData:, no dictionary or CERNLive.plist found");
-
-   NSEnumerator * const keyEnumerator = [plistDict keyEnumerator];
+   NSEnumerator * const keyEnumerator = [livePlist keyEnumerator];
    NSMutableArray * const menuGroups = [[NSMutableArray alloc] init];
 
    for (id key in keyEnumerator) {
       NSString * const experimentName = (NSString *)key;
       const CernAPP::LHCExperiment experiment = CernAPP::ExperimentNameToEnum(experimentName);
 
-      id base = plistDict[key];
+      id base = livePlist[key];
       assert([base isKindOfClass : [NSArray class]] && "readLIVEData:, entry for experiment must have NSArray type");
 
       NSArray * const dataSource = (NSArray *)base;
@@ -886,9 +933,30 @@ using CernAPP::ItemStyle;
 //________________________________________________________________________________________
 - (void) updateMenuFromServer
 {
-   //Update the menu, using 'MENU.plist' from http://cernapp.cern.ch/MENU.plist.
+   if (updateStage != MenuUpdateStage::none) {
+      //In principle, this can happen: server in future will be sending
+      //update notifications, and if we are already updating ...
+      
+      //TODO: this should be checked and tested.
+      [self performSelector : @selector(updateMenuFromServer) withObject : nil afterDelay : 5.f];
+      return;
+   }
+
    menuData = [[NSMutableData alloc] init];
+   updateStage = MenuUpdateStage::menuPlistUpdate;
    connection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/MENU.plist"]]
+                                                delegate : self];
+}
+
+//________________________________________________________________________________________
+- (void) updateMenuLIVEFromServer
+{
+   assert(updateStage == MenuUpdateStage::menuPlistUpdate && "updateMenuLIVEFromServer, wrong stage");
+   
+   menuData = [[NSMutableData alloc] init];
+
+   updateStage = MenuUpdateStage::livePlistUpdate;
+   connection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/CERNLive.plist"]]
                                                 delegate : self];
 }
 
@@ -897,8 +965,7 @@ using CernAPP::ItemStyle;
 {
    assert(aConnection != nil && "connection:didReceiveData:, parameter 'aConnection' is nil");
    assert(data != nil && "connection:didReceiveData:, parameter 'data' is nil");
-   assert(menuData != nil && "connection:didReceiveData:, menuData is nil");
-   
+   //assert(menuData != nil && "connection:didReceiveData:, menuData is nil");
    if (connection != aConnection) {
       //I do not think this can ever happen :)
       NSLog(@"imageDownloader, error: connection:didReceiveData:, data from unknown connection");
@@ -919,7 +986,7 @@ using CernAPP::ItemStyle;
       NSLog(@"imageDownloader, error: connection:didFaileWithError:, unknown connection");
       return;
    }
-
+   
    menuData = nil;
    connection = nil;//Can I do this??? (I'm in a callback function now)
 }
@@ -928,6 +995,7 @@ using CernAPP::ItemStyle;
 - (void) connectionDidFinishLoading : (NSURLConnection *) aConnection
 {
    assert(aConnection != nil && "connectionDidFinishLoading:, parameter 'aConnection' is nil");
+   assert(updateStage != MenuUpdateStage::none && "connectionDidFinishLoading:, wrong stage");
    
    if (connection != aConnection) {
       NSLog(@"imageDownloader, error: connectionDidFinishLoading:, unknown connection");
@@ -936,32 +1004,44 @@ using CernAPP::ItemStyle;
 
    connection = nil;//Can I do this??? (I'm in a callback function now)
 
-   if (menuData.length) {
-      NSError *err = nil;
-      NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
+   NSError *err = nil;
+   NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
+   id obj = nil;
+   
+   if (menuData.length)
+      obj = [NSPropertyListSerialization propertyListWithData : menuData options : NSPropertyListImmutable format : &format error : &err];
 
-      id obj = [NSPropertyListSerialization propertyListWithData:menuData options:NSPropertyListImmutable format : &format error : &err];
-      if (obj && !err && [obj isKindOfClass : [NSDictionary class]]) {
+   //
+   menuData = nil;
+   //
+
+   if (obj && !err && [obj isKindOfClass : [NSDictionary class]]) {
+      if (updateStage == MenuUpdateStage::menuPlistUpdate) {
+         menuPlist = (NSDictionary *)obj;
+         WriteOfflineMenuPlist(menuPlist, @"MENU.plist");
+         [self updateMenuLIVEFromServer];
+      } else {
+         livePlist = (NSDictionary *)obj;
+         WriteOfflineMenuPlist(livePlist, @"LIVE.plist");
          //Reload
-         if (inAnimation)
-            [self performSelector : @selector(reloadMenuFromDictionary:) withObject : obj afterDelay : 0.5f];
-         else
-            [self reloadMenuFromDictionary : (NSDictionary *)obj];
+         [self reloadMenuAfterAnimationFinished];
+      }
+   } else {
+      if (updateStage == MenuUpdateStage::menuPlistUpdate) {
+         [self updateMenuLIVEFromServer];
+      } else {
+         [self reloadMenuAfterAnimationFinished];
       }
    }
-   
-   menuData = nil;
 }
 
 //________________________________________________________________________________________
-- (void) reloadMenuFromDictionary : (NSDictionary *) dict
+- (void) reloadMenuAfterAnimationFinished
 {
-   assert(dict != nil && "reloadMenuFromDictionary:, parameter 'dict' is nil");
-   
-   if (inAnimation)//We still have to wait.
-      [self performSelector : @selector(reloadMenuFromDictionary:) withObject : dict afterDelay : 0.5f];
+   if (inAnimation)//We have to wait.
+      [self performSelector : @selector(reloadMenuAfterAnimationFinished) withObject : nil afterDelay : 0.5f];
    else
-      [self loadMenuContents : dict];
+      [self loadMenuContents];
 }
 
 @end
