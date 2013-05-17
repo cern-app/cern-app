@@ -17,7 +17,7 @@ extern NSString * const ResourceTypeThumbnail;
 }
 
 //PhotoAlbum - set of images (info about images).
-@interface PhotoAlbum : NSObject
+@interface PhotoAlbum : NSObject<ImageDownloaderDelegate>
 
 @property (nonatomic) NSString *title;
 
@@ -28,13 +28,7 @@ extern NSString * const ResourceTypeThumbnail;
 
 - (NSUInteger) nImages;
 
-@end
-
-//Load thumbnail images for a photo album
-//(only one, if an album has a 'stacked' style.
-@interface PhotoAlbumThumbnailDownloader : NSObject<ImageDownloaderDelegate>
-
-- (void) loadFirstThumbnailForAlbum : (PhotoAlbum *) album delegate : (NSObject<ImageDownloaderDelegate> *) delegate;
-- (void) loadThumbnailsForAlbum : (PhotoAlbum *) album delegate : (NSObject<ImageDownloaderDelegate> *) delegate;
+- (void) loadFirstThumbnailWithDelegate : (NSObject<ImageDownloaderDelegate> *) delegate;
+- (void) loadThumbnailsWithDelegate : (NSObject<ImageDownloaderDelegate> *) delegate;
 
 @end

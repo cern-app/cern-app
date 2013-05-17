@@ -18,6 +18,12 @@ extern NSString * const ResourceTypeThumbnail = @"Thumbnail";
 
 @implementation PhotoAlbum {
    NSMutableArray *albumData;
+   BOOL stackedMode;
+   NSUInteger stackIndex;
+   
+   NSMutableDictionary *downloaders;
+   __weak PhotoAlbum *photoAlbum;
+   __weak NSObject<ImageDownloaderDelegate> *delegate;   
 }
 
 @synthesize title;
@@ -25,8 +31,15 @@ extern NSString * const ResourceTypeThumbnail = @"Thumbnail";
 //________________________________________________________________________________________
 - (id) init
 {
-   if (self = [super init])
+   if (self = [super init]) {
       albumData = [[NSMutableArray alloc] init];
+      stackedMode = NO;
+      stackIndex = 0;
+      
+      downloaders = [[NSMutableDictionary alloc] init];
+      photoAlbum = nil;
+      delegate = nil;      
+   }
 
    return self;
 }
@@ -77,59 +90,25 @@ extern NSString * const ResourceTypeThumbnail = @"Thumbnail";
    return albumData.count;
 }
 
-@end
-
-@implementation PhotoAlbumThumbnailDownloader {
-   BOOL stackedMode;
-   NSUInteger stackIndex;
-   
-   NSMutableDictionary *downloaders;
-   __weak PhotoAlbum *photoAlbum;
-   __weak NSObject<ImageDownloaderDelegate> *delegate;
-}
-
 //________________________________________________________________________________________
-- (id) init
+- (void) loadFirstThumbnailWithDelegate : (NSObject<ImageDownloaderDelegate> *) aDelegate
 {
-   if (self = [super init]) {
-      stackedMode = NO;
-      stackIndex = 0;
-      
-      downloaders = [[NSMutableDictionary alloc] init];
-      photoAlbum = nil;
-      delegate = nil;
-   }
+   assert(aDelegate != nil && "loadFirstThumbnailWithDelegate:, parameter 'aDelegate' is nil");
    
-   return self;
-}
-
-//________________________________________________________________________________________
-- (void) loadFirstThumbnailForAlbum : (PhotoAlbum *) album delegate : (NSObject<ImageDownloaderDelegate> *) aDelegate
-{
-   assert(album != nil && "loadFirstThumbnailForAlbum:delegate:, parameter 'album' is nil");
-   assert(aDelegate != nil && "loadFirstThumbnailForAlbum:delegate:, parameter 'aDelegate' is nil");
-   
-   if (downloaders.count) {
-      assert(0 && "loadFirstThumbnailForAlbum:delegate:, called while download is still active.");
+   if (downloaders.count)
       return;
-   }
    
-   if (!album.nImages) {
-      assert(0 && "loadFirstThumbnailForAlbum:delegate:, invalid photo album");
+   if (!albumData.count)
       return;
-   }
 
    stackedMode = YES;
 
-   photoAlbum = album;
    delegate = aDelegate;
-   
    //We just try to load the first image and do not touch the others - they are not visible in a stacked mode.
-   
 }
 
 //________________________________________________________________________________________
-- (void) loadThumbnailsForAlbum : (PhotoAlbum *) album delegate : (NSObject<ImageDownloaderDelegate> *) delegate
+- (void) loadThumbnailsWithDelegate : (NSObject<ImageDownloaderDelegate> *) delegate
 {
 
 }
@@ -149,4 +128,3 @@ extern NSString * const ResourceTypeThumbnail = @"Thumbnail";
 }
 
 @end
-
