@@ -28,10 +28,10 @@ NSDictionary *LoadOfflineMenuPlist(NSString * plistName)
    NSDictionary *plist = nil;
    NSArray * const paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
    for (NSString *dir in paths) {
-      NSString * const menuPlistPath = [dir stringByAppendingPathComponent : [plistName stringByAppendingString : @".plist"]];
-      if ([[NSFileManager defaultManager] fileExistsAtPath : menuPlistPath]) {
+      NSString * const plistPath = [dir stringByAppendingPathComponent : [plistName stringByAppendingString : @".plist"]];
+      if ([[NSFileManager defaultManager] fileExistsAtPath : plistPath]) {
          //Ok, create a dictionary from the 'MENU.plist'.
-         plist = [NSDictionary dictionaryWithContentsOfFile : menuPlistPath];
+         plist = [NSDictionary dictionaryWithContentsOfFile : plistPath];
       }
    }
 
@@ -617,7 +617,6 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
    
    //TODO: We also have to subscribe for push notifications here - the 'MENU.plist' on a server can be updated.
-   
    [self updateMenuFromServer];
 }
 
@@ -1022,7 +1021,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          [self updateMenuLIVEFromServer];
       } else {
          livePlist = (NSDictionary *)obj;
-         WriteOfflineMenuPlist(livePlist, @"LIVE.plist");
+         WriteOfflineMenuPlist(livePlist, @"CERNLive.plist");
          //Reload
          [self reloadMenuAfterAnimationFinished];
       }
