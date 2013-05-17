@@ -2,291 +2,314 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LHCb</key>
+	<key>Root</key>
 	<array>
 		<dict>
-			<key>Category name</key>
-			<string>News</string>
-			<key>Tweets</key>
+			<key>Data</key>
 			<array>
 				<dict>
-					<key>Category name</key>
-					<string>Tweet</string>
-					<key>Url</key>
-					<string>http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=LHCBExperiment</string>
-					<key>Name</key>
-					<string>LHCb Twitter</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>Category name</key>
-			<string>Live Events</string>
-			<key>Images</key>
-			<array>
-				<dict>
-					<key>Name</key>
-					<string>Side view</string>
-					<key>Bounds</key>
-					<dict>
-						<key>cropH</key>
-						<integer>811</integer>
-						<key>cropW</key>
-						<integer>1685</integer>
-						<key>cropY</key>
-						<integer>66</integer>
-						<key>cropX</key>
-						<integer>0</integer>
-					</dict>
-					<key>Category name</key>
-					<string>SingleImage</string>
-					<key>Image</key>
-					<string>http://lbcomet.cern.ch/Online/Images/evdisp.jpg</string>
-				</dict>
-			</array>
-		</dict>
-	</array>
-	<key>ALICE</key>
-	<array>
-		<dict>
-			<key>Category name</key>
-			<string>News</string>
-			<key>Feeds</key>
-			<array>
-				<dict>
-					<key>Url</key>
-					<string>http://alicematters.web.cern.ch/rss.xml</string>
-					<key>Name</key>
-					<string>ALICE News</string>
-				</dict>
-			</array>
-			<key>Tweets</key>
-			<array>
-				<dict>
-					<key>Category name</key>
-					<string>Tweet</string>
-					<key>Url</key>
-					<string>http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=ALICEexperiment</string>
-					<key>Name</key>
-					<string>ALICE Twitter</string>
-				</dict>
-			</array>
-		</dict>
-	</array>
-	<key>LHC</key>
-	<array>
-		<dict>
-			<key>Images</key>
-			<array>
-				<dict>
-					<key>Image</key>
-					<string>http://vistar-capture.web.cern.ch/vistar-capture/lhc1.png</string>
-					<key>Name</key>
-					<string>LHC Page1</string>
-					<key>Category name</key>
-					<string>SingleImage</string>
-				</dict>
-				<dict>
-					<key>Image</key>
-					<string>http://vistar-capture.web.cern.ch/vistar-capture/lhc3.png</string>
-					<key>Name</key>
-					<string>LHC Page 2</string>
-					<key>Category name</key>
-					<string>SingleImage</string>
-				</dict>
-				<dict>
-					<key>Category name</key>
-					<string>SingleImage</string>
-					<key>Name</key>
-					<string>LHC Luminosity</string>
-					<key>Image</key>
-					<string>http://vistar-capture.web.cern.ch/vistar-capture/lhclumi.png</string>
-				</dict>
-				<dict>
-					<key>Category name</key>
-					<string>SingleImage</string>
-					<key>Name</key>
-					<string>Coordination Planning</string>
-					<key>Image</key>
-					<string>http://vistar-capture.web.cern.ch/vistar-capture/lhccoord.png</string>
-				</dict>
-			</array>
-			<key>Category name</key>
-			<string>Status</string>
-		</dict>
-	</array>
-	<key>ATLAS</key>
-	<array>
-		<dict>
-			<key>Category name</key>
-			<string>News</string>
-			<key>Feeds</key>
-			<array>
-				<dict>
-					<key>Url</key>
-					<string>http://pdg2.lbl.gov/atlasblog/?feed=rss2</string>
-					<key>Name</key>
-					<string>ATLAS News</string>
-				</dict>
-			</array>
-			<key>Tweets</key>
-			<array>
-				<dict>
-					<key>Category name</key>
-					<string>Tweet</string>
-					<key>Url</key>
-					<string>http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=ATLASexperiment</string>
-					<key>Name</key>
-					<string>ATLAS Twitter</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>Category name</key>
-			<string>Live Events</string>
-			<key>Images</key>
-			<array>
-				<dict>
-					<key>Bounds</key>
+					<key>Images</key>
 					<array>
 						<dict>
-							<key>cropX</key>
-							<integer>2</integer>
-							<key>cropY</key>
-							<integer>2</integer>
-							<key>cropW</key>
-							<integer>764</integer>
-							<key>cropH</key>
-							<integer>764</integer>
+							<key>Image</key>
+							<string>http://vistar-capture.web.cern.ch/vistar-capture/lhc1.png</string>
+							<key>Name</key>
+							<string>LHC Page1</string>
+							<key>Category name</key>
+							<string>SingleImage</string>
 						</dict>
 						<dict>
-							<key>cropX</key>
-							<integer>770</integer>
-							<key>cropY</key>
-							<integer>2</integer>
-							<key>cropW</key>
-							<integer>379</integer>
-							<key>cropH</key>
-							<integer>370</integer>
+							<key>Image</key>
+							<string>http://vistar-capture.web.cern.ch/vistar-capture/lhc3.png</string>
+							<key>Name</key>
+							<string>LHC Page 2</string>
+							<key>Category name</key>
+							<string>SingleImage</string>
+						</dict>
+						<dict>
+							<key>Category name</key>
+							<string>SingleImage</string>
+							<key>Name</key>
+							<string>LHC Luminosity</string>
+							<key>Image</key>
+							<string>http://vistar-capture.web.cern.ch/vistar-capture/lhclumi.png</string>
+						</dict>
+						<dict>
+							<key>Category name</key>
+							<string>SingleImage</string>
+							<key>Name</key>
+							<string>Coordination Planning</string>
+							<key>Image</key>
+							<string>http://vistar-capture.web.cern.ch/vistar-capture/lhccoord.png</string>
 						</dict>
 					</array>
-					<key>Names</key>
+					<key>Category name</key>
+					<string>Status</string>
+				</dict>
+			</array>
+			<key>ExperimentName</key>
+			<string>LHC</string>
+		</dict>
+		<dict>
+			<key>Data</key>
+			<array>
+				<dict>
+					<key>Category name</key>
+					<string>News</string>
+					<key>Feeds</key>
 					<array>
-						<string>Front view</string>
-						<string>Side view</string>
+						<dict>
+							<key>Url</key>
+							<string>http://alicematters.web.cern.ch/rss.xml</string>
+							<key>Name</key>
+							<string>ALICE News</string>
+						</dict>
 					</array>
-					<key>Category name</key>
-					<string>ImageSet</string>
-					<key>nImages</key>
-					<integer>2</integer>
-					<key>Image</key>
-					<string>http://atlas-live.cern.ch/live.png</string>
+					<key>Tweets</key>
+					<array>
+						<dict>
+							<key>Category name</key>
+							<string>Tweet</string>
+							<key>Url</key>
+							<string>http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=ALICEexperiment</string>
+							<key>Name</key>
+							<string>ALICE Twitter</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
+			<key>ExperimentName</key>
+			<string>ALICE</string>
 		</dict>
-	</array>
-	<key>CMS</key>
-	<array>
 		<dict>
-			<key>Category name</key>
-			<string>News</string>
-			<key>Feeds</key>
-			<array>
-				<dict>
-					<key>Url</key>
-					<string>http://cms.web.cern.ch/news/category/265/rss.xml</string>
-					<key>Name</key>
-					<string>CMS News</string>
-				</dict>
-			</array>
-			<key>Tweets</key>
+			<key>Data</key>
 			<array>
 				<dict>
 					<key>Category name</key>
-					<string>Tweet</string>
-					<key>Url</key>
-					<string>http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=CMSexperiment</string>
-					<key>Name</key>
-					<string>CMS Twitter</string>
+					<string>News</string>
+					<key>Feeds</key>
+					<array>
+						<dict>
+							<key>Url</key>
+							<string>http://pdg2.lbl.gov/atlasblog/?feed=rss2</string>
+							<key>Name</key>
+							<string>ATLAS Blog</string>
+						</dict>
+					</array>
+					<key>Tweets</key>
+					<array>
+						<dict>
+							<key>Category name</key>
+							<string>Tweet</string>
+							<key>Url</key>
+							<string>http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=ATLASexperiment</string>
+							<key>Name</key>
+							<string>ATLAS Twitter</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>Category name</key>
+					<string>Live Events</string>
+					<key>Images</key>
+					<array>
+						<dict>
+							<key>Bounds</key>
+							<array>
+								<dict>
+									<key>cropX</key>
+									<integer>2</integer>
+									<key>cropY</key>
+									<integer>2</integer>
+									<key>cropW</key>
+									<integer>764</integer>
+									<key>cropH</key>
+									<integer>764</integer>
+								</dict>
+								<dict>
+									<key>cropX</key>
+									<integer>770</integer>
+									<key>cropY</key>
+									<integer>2</integer>
+									<key>cropW</key>
+									<integer>379</integer>
+									<key>cropH</key>
+									<integer>370</integer>
+								</dict>
+							</array>
+							<key>Names</key>
+							<array>
+								<string>Front view</string>
+								<string>Side view</string>
+							</array>
+							<key>Category name</key>
+							<string>ImageSet</string>
+							<key>nImages</key>
+							<integer>2</integer>
+							<key>Image</key>
+							<string>http://atlas-live.cern.ch/live.png</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
+			<key>ExperimentName</key>
+			<string>ATLAS</string>
 		</dict>
 		<dict>
-			<key>Category name</key>
-			<string>CMS Status</string>
-			<key>Images</key>
+			<key>Data</key>
 			<array>
 				<dict>
-					<key>Image</key>
-					<string>http://cmspage1.web.cern.ch/cmspage1/data/page1.png</string>
-					<key>Name</key>
+					<key>Category name</key>
+					<string>News</string>
+					<key>Feeds</key>
+					<array>
+						<dict>
+							<key>Url</key>
+							<string>http://cms.web.cern.ch/news/category/265/rss.xml</string>
+							<key>Name</key>
+							<string>CMS News</string>
+						</dict>
+					</array>
+					<key>Tweets</key>
+					<array>
+						<dict>
+							<key>Category name</key>
+							<string>Tweet</string>
+							<key>Url</key>
+							<string>http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=CMSexperiment</string>
+							<key>Name</key>
+							<string>CMS Twitter</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>Category name</key>
 					<string>CMS Status</string>
-					<key>Category name</key>
-					<string>SingleImage</string>
+					<key>Images</key>
+					<array>
+						<dict>
+							<key>Image</key>
+							<string>http://cmspage1.web.cern.ch/cmspage1/data/page1.png</string>
+							<key>Name</key>
+							<string>CMS Status</string>
+							<key>Category name</key>
+							<string>SingleImage</string>
+						</dict>
+					</array>
 				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>Category name</key>
-			<string>DAQ Status</string>
-			<key>Images</key>
-			<array>
 				<dict>
-					<key>Name</key>
+					<key>Category name</key>
 					<string>DAQ Status</string>
-					<key>Image</key>
-					<string>http://cmsonline.cern.ch/daqStatusSCX/aDAQmon/DAQstatusGre.jpg</string>
+					<key>Images</key>
+					<array>
+						<dict>
+							<key>Name</key>
+							<string>DAQ Status</string>
+							<key>Image</key>
+							<string>http://cmsonline.cern.ch/daqStatusSCX/aDAQmon/DAQstatusGre.jpg</string>
+							<key>Category name</key>
+							<string>SingleImage</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
 					<key>Category name</key>
-					<string>SingleImage</string>
+					<string>Live Events</string>
+					<key>Images</key>
+					<array>
+						<dict>
+							<key>Category name</key>
+							<string>SingleImage</string>
+							<key>Name</key>
+							<string>3D Tower</string>
+							<key>Image</key>
+							<string>http://cmsonline.cern.ch/evtdisp/3DTower.png</string>
+						</dict>
+						<dict>
+							<key>Category name</key>
+							<string>SingleImage</string>
+							<key>Name</key>
+							<string>3D RecHit</string>
+							<key>Image</key>
+							<string>http://cmsonline.cern.ch/evtdisp/3DRecHit.png</string>
+						</dict>
+						<dict>
+							<key>Category name</key>
+							<string>SingleImage</string>
+							<key>Name</key>
+							<string>Lego</string>
+							<key>Image</key>
+							<string>http://cmsonline.cern.ch/evtdisp/Lego.png</string>
+						</dict>
+						<dict>
+							<key>Category name</key>
+							<string>SingleImage</string>
+							<key>Name</key>
+							<string>RhoPhi</string>
+							<key>Image</key>
+							<string>http://cmsonline.cern.ch/evtdisp/RhoPhi.png</string>
+						</dict>
+						<dict>
+							<key>Category name</key>
+							<string>SingleImage</string>
+							<key>Name</key>
+							<string>RhoZ</string>
+							<key>Image</key>
+							<string>http://cmsonline.cern.ch/evtdisp/RhoZ.png</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
+			<key>ExperimentName</key>
+			<string>CMS</string>
 		</dict>
 		<dict>
-			<key>Category name</key>
-			<string>Live Events</string>
-			<key>Images</key>
+			<key>Data</key>
 			<array>
 				<dict>
 					<key>Category name</key>
-					<string>SingleImage</string>
-					<key>Name</key>
-					<string>3D Tower</string>
-					<key>Image</key>
-					<string>http://cmsonline.cern.ch/evtdisp/3DTower.png</string>
+					<string>News</string>
+					<key>Tweets</key>
+					<array>
+						<dict>
+							<key>Category name</key>
+							<string>Tweet</string>
+							<key>Url</key>
+							<string>http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=LHCBExperiment</string>
+							<key>Name</key>
+							<string>LHCb Twitter</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>Category name</key>
-					<string>SingleImage</string>
-					<key>Name</key>
-					<string>3D RecHit</string>
-					<key>Image</key>
-					<string>http://cmsonline.cern.ch/evtdisp/3DRecHit.png</string>
-				</dict>
-				<dict>
-					<key>Category name</key>
-					<string>SingleImage</string>
-					<key>Name</key>
-					<string>Lego</string>
-					<key>Image</key>
-					<string>http://cmsonline.cern.ch/evtdisp/Lego.png</string>
-				</dict>
-				<dict>
-					<key>Category name</key>
-					<string>SingleImage</string>
-					<key>Name</key>
-					<string>RhoPhi</string>
-					<key>Image</key>
-					<string>http://cmsonline.cern.ch/evtdisp/RhoPhi.png</string>
-				</dict>
-				<dict>
-					<key>Category name</key>
-					<string>SingleImage</string>
-					<key>Name</key>
-					<string>RhoZ</string>
-					<key>Image</key>
-					<string>http://cmsonline.cern.ch/evtdisp/RhoZ.png</string>
+					<string>Live Events</string>
+					<key>Images</key>
+					<array>
+						<dict>
+							<key>Name</key>
+							<string>Side view</string>
+							<key>Bounds</key>
+							<dict>
+								<key>cropH</key>
+								<integer>811</integer>
+								<key>cropW</key>
+								<integer>1685</integer>
+								<key>cropY</key>
+								<integer>66</integer>
+								<key>cropX</key>
+								<integer>0</integer>
+							</dict>
+							<key>Category name</key>
+							<string>SingleImage</string>
+							<key>Image</key>
+							<string>http://lbcomet.cern.ch/Online/Images/evdisp.jpg</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
+			<key>ExperimentName</key>
+			<string>LHCb</string>
 		</dict>
 	</array>
 </dict>

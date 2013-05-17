@@ -37,4 +37,6 @@ extern NSString * const ResourceTypeThumbnail;
 - (void) loadFirstThumbnail;
 - (void) loadThumbnails;
 
+- (void) cancelDownload;
+
 @end

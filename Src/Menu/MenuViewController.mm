@@ -26,14 +26,14 @@ NSDictionary *LoadOfflineMenuPlist(NSString * plistName)
    assert(plistName != nil && "LoadOfflineMenuPlist, parameter 'plistName' is nil");
 
    NSDictionary *plist = nil;
-   NSArray * const paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+ /*  NSArray * const paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
    for (NSString *dir in paths) {
       NSString * const plistPath = [dir stringByAppendingPathComponent : [plistName stringByAppendingString : @".plist"]];
       if ([[NSFileManager defaultManager] fileExistsAtPath : plistPath]) {
          //Ok, create a dictionary from the 'MENU.plist'.
          plist = [NSDictionary dictionaryWithContentsOfFile : plistPath];
       }
-   }
+   }*/
 
    if (!plist) {
       NSString * const path = [[NSBundle mainBundle] pathForResource : plistName ofType : @"plist"];
@@ -617,7 +617,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
    
    //TODO: We also have to subscribe for push notifications here - the 'MENU.plist' on a server can be updated.
-   [self updateMenuFromServer];
+   //[self updateMenuFromServer];
 }
 
 //________________________________________________________________________________________
@@ -878,19 +878,28 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    assert(desc != nil && "readLIVEData:, parameter 'desc' is nil");
    assert(livePlist != nil && "readLIVEData:, livePlist is nil");
+   assert([livePlist[@"Root"] isKindOfClass : [NSArray class]] &&
+          "readLIVEData:, 'Root' not found or has a wrong type");
 
-   NSEnumerator * const keyEnumerator = [livePlist keyEnumerator];
+   NSArray * const liveItems = (NSArray *)livePlist[@"Root"];
+   
    NSMutableArray * const menuGroups = [[NSMutableArray alloc] init];
 
-   for (id key in keyEnumerator) {
-      NSString * const experimentName = (NSString *)key;
+   for (id obj in liveItems) {
+      assert([obj isKindOfClass : [NSDictionary class]] &&
+             "readLIVEData:, NSDictionary was expected");
+      
+      NSDictionary * const itemData = (NSDictionary *)obj;
+      assert([itemData[@"ExperimentName"] isKindOfClass:[NSString class]] &&
+             "readLIVEData:, 'ExperimentName' not found or has a wrong type");
+      NSString * const experimentName = (NSString *)itemData[@"ExperimentName"];
       const CernAPP::LHCExperiment experiment = CernAPP::ExperimentNameToEnum(experimentName);
 
-      id base = livePlist[key];
-      assert([base isKindOfClass : [NSArray class]] && "readLIVEData:, entry for experiment must have NSArray type");
+      id base = itemData[@"Data"];
+      assert([base isKindOfClass : [NSArray class]] && "readLIVEData:, 'Data' not found or has a wrong type");
 
       NSArray * const dataSource = (NSArray *)base;
-      
+   
       liveData = [[NSMutableArray alloc] init];
       for (id arrayItem in dataSource) {
          assert([arrayItem isKindOfClass : [NSDictionary class]] && "readLIVEData:, array of dictionaries expected");

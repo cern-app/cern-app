@@ -126,6 +126,15 @@ using CernAPP::ResourceTypeThumbnail;
    //Load everything here.
 }
 
+//________________________________________________________________________________________
+- (void) cancelDownload
+{
+   for (ImageDownloader * downloader in downloaders)
+      [downloader cancelDownload];
+   
+   [downloaders removeAllObjects];
+}
+
 #pragma mark - ImageDownloader delegate.
 
 //________________________________________________________________________________________
