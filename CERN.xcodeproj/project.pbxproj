@@ -228,6 +228,7 @@
 		70E69AC1170EC2D700384523 /* ArticleiPadCSS.css in Resources */ = {isa = PBXBuildFile; fileRef = 70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */; };
 		70E69AC4170EE81F00384523 /* FeedCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E69AC2170EE81F00384523 /* FeedCache.mm */; };
 		70E9EE6117461E6300D1530E /* PhotoDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E9EE6017461E6300D1530E /* PhotoDownloader.mm */; };
+		70E9EE641746203500D1530E /* PhotoAlbum.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E9EE631746203500D1530E /* PhotoAlbum.mm */; };
 		70FB8558172987E500F7CCBD /* AnimationDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70FB8554172987E500F7CCBD /* AnimationDelegate.mm */; };
 		70FB8559172987E500F7CCBD /* AnimationFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70FB8556172987E500F7CCBD /* AnimationFrame.mm */; };
 		70FDADCE16CE604200933383 /* cern_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 70FDADCD16CE604200933383 /* cern_info.png */; };
@@ -571,6 +572,8 @@
 		70E69AC3170EE81F00384523 /* FeedCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCache.h; sourceTree = "<group>"; };
 		70E9EE5F17461E6300D1530E /* PhotoDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDownloader.h; sourceTree = "<group>"; };
 		70E9EE6017461E6300D1530E /* PhotoDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoDownloader.mm; sourceTree = "<group>"; };
+		70E9EE621746203500D1530E /* PhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbum.h; sourceTree = "<group>"; };
+		70E9EE631746203500D1530E /* PhotoAlbum.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoAlbum.mm; sourceTree = "<group>"; };
 		70FB8554172987E500F7CCBD /* AnimationDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimationDelegate.mm; sourceTree = "<group>"; };
 		70FB8555172987E500F7CCBD /* AnimationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationDelegate.h; sourceTree = "<group>"; };
 		70FB8556172987E500F7CCBD /* AnimationFrame.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimationFrame.mm; sourceTree = "<group>"; };
@@ -1056,6 +1059,8 @@
 				70E9EE6017461E6300D1530E /* PhotoDownloader.mm */,
 				70A56285173A32F600145FEC /* Parsers */,
 				70A5628A173A32F600145FEC /* ViewsAndControllers */,
+				70E9EE621746203500D1530E /* PhotoAlbum.h */,
+				70E9EE631746203500D1530E /* PhotoAlbum.mm */,
 			);
 			path = VideosPhotosWebcasts;
 			sourceTree = "<group>";
@@ -1618,6 +1623,7 @@
 				70CDF7041745048100DA1803 /* PhotosCollectionViewLayout.mm in Sources */,
 				70CDF7071745052200DA1803 /* PhotoViewCell.mm in Sources */,
 				70E9EE6117461E6300D1530E /* PhotoDownloader.mm in Sources */,
+				70E9EE641746203500D1530E /* PhotoAlbum.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
