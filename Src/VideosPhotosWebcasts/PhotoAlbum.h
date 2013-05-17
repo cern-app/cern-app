@@ -20,6 +20,12 @@ extern NSString * const ResourceTypeThumbnail;
 @interface PhotoAlbum : NSObject<ImageDownloaderDelegate>
 
 @property (nonatomic) NSString *title;
+@property (nonatomic) NSUInteger sectionIndex;
+
+//Album is ImageDownloader delegate itself and it also
+//has the delegate - after the image was created, delegate is informed,
+//using the same protocol.
+@property (nonatomic, weak) NSObject<ImageDownloaderDelegate> *delegate;
 
 - (void) addImageData : (NSDictionary *) dict;
 - (UIImage *) getThumbnailImageForIndex : (NSUInteger) index;
@@ -28,7 +34,7 @@ extern NSString * const ResourceTypeThumbnail;
 
 - (NSUInteger) nImages;
 
-- (void) loadFirstThumbnailWithDelegate : (NSObject<ImageDownloaderDelegate> *) delegate;
-- (void) loadThumbnailsWithDelegate : (NSObject<ImageDownloaderDelegate> *) delegate;
+- (void) loadFirstThumbnail;
+- (void) loadThumbnails;
 
 @end

@@ -16,6 +16,8 @@ extern NSString * const ResourceTypeThumbnail = @"Thumbnail";
 
 }
 
+using CernAPP::ResourceTypeThumbnail;
+
 @implementation PhotoAlbum {
    NSMutableArray *albumData;
    BOOL stackedMode;
@@ -26,7 +28,7 @@ extern NSString * const ResourceTypeThumbnail = @"Thumbnail";
    __weak NSObject<ImageDownloaderDelegate> *delegate;   
 }
 
-@synthesize title;
+@synthesize title, sectionIndex, delegate;
 
 //________________________________________________________________________________________
 - (id) init
@@ -91,10 +93,8 @@ extern NSString * const ResourceTypeThumbnail = @"Thumbnail";
 }
 
 //________________________________________________________________________________________
-- (void) loadFirstThumbnailWithDelegate : (NSObject<ImageDownloaderDelegate> *) aDelegate
+- (void) loadFirstThumbnail
 {
-   assert(aDelegate != nil && "loadFirstThumbnailWithDelegate:, parameter 'aDelegate' is nil");
-   
    if (downloaders.count)
       return;
    
@@ -102,15 +102,28 @@ extern NSString * const ResourceTypeThumbnail = @"Thumbnail";
       return;
 
    stackedMode = YES;
+   stackIndex = 0;
 
-   delegate = aDelegate;
-   //We just try to load the first image and do not touch the others - they are not visible in a stacked mode.
+   [self loadNextThumbnail];
 }
 
 //________________________________________________________________________________________
-- (void) loadThumbnailsWithDelegate : (NSObject<ImageDownloaderDelegate> *) delegate
+- (void) loadNextThumbnail
 {
+   assert(stackIndex < albumData.count && "loadNextThumbnail, stackIndex is out of bounds");
+   
+   ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL :
+                                         [self getImageURLWithIndex : stackIndex forType : ResourceTypeThumbnail]];
+   NSIndexPath * const key = [NSIndexPath indexPathForRow : stackIndex inSection : sectionIndex];
+   downloader.indexPathInTableView = key;
+   [downloaders setObject : downloader forKey : key];
+   [downloader startDownload];
+}
 
+//________________________________________________________________________________________
+- (void) loadThumbnails
+{
+   //Load everything here.
 }
 
 #pragma mark - ImageDownloader delegate.
@@ -118,13 +131,35 @@ extern NSString * const ResourceTypeThumbnail = @"Thumbnail";
 //________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
-
+   assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
+   assert(delegate != nil && "imageDidLoad:, delegate is nil");//No reason to download anything without the delegate.
+   
+   ImageDownloader * const downloader = (ImageDownloader *)downloaders[indexPath];
+   assert(downloader != nil && "imageDidLoad:, no downloader found for indexPath");
+   if (downloader.image)
+      [self setThumbnailImage : downloader.image withIndex : indexPath.row];
+   [delegate imageDidLoad : indexPath];
+   
+   [downloaders removeObjectForKey : indexPath];
 }
 
 //________________________________________________________________________________________
 - (void) imageDownloadFailed : (NSIndexPath *) indexPath
 {
-
+   assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
+   assert(delegate != nil && "imageDownloadFailed:, delegate is nil");//No reason to download anything without the delegate.
+   assert(downloaders[indexPath] != nil && "imageDownloadFailed:, no downloader found for indexPath");
+   
+   [downloaders removeObjectForKey : indexPath];
+   
+   if (stackedMode) {
+      if (stackIndex + 1 < albumData.count) {//Try again!
+         ++stackIndex;
+         [self loadNextThumbnail];
+      } else {
+         [delegate imageDownloadFailed : indexPath];//We inform only at this point - all failed.
+      }
+   }
 }
 
 @end
