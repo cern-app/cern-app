@@ -1057,10 +1057,10 @@
 			children = (
 				70E9EE5F17461E6300D1530E /* PhotoDownloader.h */,
 				70E9EE6017461E6300D1530E /* PhotoDownloader.mm */,
-				70A56285173A32F600145FEC /* Parsers */,
-				70A5628A173A32F600145FEC /* ViewsAndControllers */,
 				70E9EE621746203500D1530E /* PhotoAlbum.h */,
 				70E9EE631746203500D1530E /* PhotoAlbum.mm */,
+				70A56285173A32F600145FEC /* Parsers */,
+				70A5628A173A32F600145FEC /* ViewsAndControllers */,
 			);
 			path = VideosPhotosWebcasts;
 			sourceTree = "<group>";

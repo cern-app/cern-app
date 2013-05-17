@@ -205,7 +205,7 @@ void CancelConnections(UIViewController *controller)
 
 
       PhotosCollectionViewController * const topController = (PhotosCollectionViewController *)navController.topViewController;
-      topController.photoDownloader.url = [NSURL URLWithString : (NSString *)info[@"Url"]];
+    //  topController.photoDownloader.url = [NSURL URLWithString : (NSString *)info[@"Url"]];
       topController.navigationItem.title = categoryName;
    }
    
