@@ -165,7 +165,6 @@
 		707B13F7169AF69300180E02 /* UIImage+SquareScaledImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EE169AF69300180E02 /* UIImage+SquareScaledImage.m */; };
 		707B13FA169AF6AE00180E02 /* StoryboardIdentifiers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */; };
 		7098286616C404C500311025 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7098286516C404C500311025 /* Social.framework */; };
-		709CE66B16A59B11006D524E /* PhotoDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 709CE66A16A59B11006D524E /* PhotoDownloader.mm */; };
 		709CE6C516A5BE97006D524E /* 389-flash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C416A5BE97006D524E /* 389-flash@2x.png */; };
 		709CE6C816A5C045006D524E /* 112-group@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C716A5C045006D524E /* 112-group@2x.png */; };
 		709CE6CA16A5C287006D524E /* 180-stickynote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C916A5C287006D524E /* 180-stickynote@2x.png */; };
@@ -228,6 +227,7 @@
 		70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */; };
 		70E69AC1170EC2D700384523 /* ArticleiPadCSS.css in Resources */ = {isa = PBXBuildFile; fileRef = 70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */; };
 		70E69AC4170EE81F00384523 /* FeedCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E69AC2170EE81F00384523 /* FeedCache.mm */; };
+		70E9EE6117461E6300D1530E /* PhotoDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E9EE6017461E6300D1530E /* PhotoDownloader.mm */; };
 		70FB8558172987E500F7CCBD /* AnimationDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70FB8554172987E500F7CCBD /* AnimationDelegate.mm */; };
 		70FB8559172987E500F7CCBD /* AnimationFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70FB8556172987E500F7CCBD /* AnimationFrame.mm */; };
 		70FDADCE16CE604200933383 /* cern_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 70FDADCD16CE604200933383 /* cern_info.png */; };
@@ -462,8 +462,6 @@
 		707B13F8169AF6AE00180E02 /* StoryboardIdentifiers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryboardIdentifiers.h; sourceTree = "<group>"; };
 		707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StoryboardIdentifiers.mm; sourceTree = "<group>"; };
 		7098286516C404C500311025 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
-		709CE66916A59B11006D524E /* PhotoDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDownloader.h; sourceTree = "<group>"; };
-		709CE66A16A59B11006D524E /* PhotoDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoDownloader.mm; sourceTree = "<group>"; };
 		709CE6C416A5BE97006D524E /* 389-flash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "389-flash@2x.png"; sourceTree = "<group>"; };
 		709CE6C716A5C045006D524E /* 112-group@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "112-group@2x.png"; sourceTree = "<group>"; };
 		709CE6C916A5C287006D524E /* 180-stickynote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "180-stickynote@2x.png"; sourceTree = "<group>"; };
@@ -571,6 +569,8 @@
 		70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = ArticleiPadCSS.css; sourceTree = "<group>"; };
 		70E69AC2170EE81F00384523 /* FeedCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedCache.mm; sourceTree = "<group>"; };
 		70E69AC3170EE81F00384523 /* FeedCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCache.h; sourceTree = "<group>"; };
+		70E9EE5F17461E6300D1530E /* PhotoDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoDownloader.h; sourceTree = "<group>"; };
+		70E9EE6017461E6300D1530E /* PhotoDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoDownloader.mm; sourceTree = "<group>"; };
 		70FB8554172987E500F7CCBD /* AnimationDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimationDelegate.mm; sourceTree = "<group>"; };
 		70FB8555172987E500F7CCBD /* AnimationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationDelegate.h; sourceTree = "<group>"; };
 		70FB8556172987E500F7CCBD /* AnimationFrame.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimationFrame.mm; sourceTree = "<group>"; };
@@ -1018,8 +1018,6 @@
 			children = (
 				700B978216AEB03D0006EAD3 /* ImageDownloader.h */,
 				700B978316AEB03D0006EAD3 /* ImageDownloader.mm */,
-				709CE66916A59B11006D524E /* PhotoDownloader.h */,
-				709CE66A16A59B11006D524E /* PhotoDownloader.mm */,
 				707B13F8169AF6AE00180E02 /* StoryboardIdentifiers.h */,
 				707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */,
 				707B13DD169AF69300180E02 /* DeviceCheck.h */,
@@ -1054,6 +1052,8 @@
 		70A56284173A32F600145FEC /* VideosPhotosWebcasts */ = {
 			isa = PBXGroup;
 			children = (
+				70E9EE5F17461E6300D1530E /* PhotoDownloader.h */,
+				70E9EE6017461E6300D1530E /* PhotoDownloader.mm */,
 				70A56285173A32F600145FEC /* Parsers */,
 				70A5628A173A32F600145FEC /* ViewsAndControllers */,
 			);
@@ -1548,7 +1548,6 @@
 				707B13FA169AF6AE00180E02 /* StoryboardIdentifiers.mm in Sources */,
 				70086231169B56F2001C7BB5 /* MenuItemViews.mm in Sources */,
 				70CC55EF169EF80600292332 /* MenuNavigationController.mm in Sources */,
-				709CE66B16A59B11006D524E /* PhotoDownloader.mm in Sources */,
 				700B978416AEB03D0006EAD3 /* ImageDownloader.mm in Sources */,
 				41B3D9C816B12D6000AF4463 /* MWCaptionView.m in Sources */,
 				41B3D9C916B12D6000AF4463 /* MWPhoto.m in Sources */,
@@ -1618,6 +1617,7 @@
 				70783B0B17450265006635D8 /* PhotosCollectionViewController.mm in Sources */,
 				70CDF7041745048100DA1803 /* PhotosCollectionViewLayout.mm in Sources */,
 				70CDF7071745052200DA1803 /* PhotoViewCell.mm in Sources */,
+				70E9EE6117461E6300D1530E /* PhotoDownloader.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
