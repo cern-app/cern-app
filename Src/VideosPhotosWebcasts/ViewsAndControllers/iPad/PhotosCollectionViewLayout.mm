@@ -102,7 +102,8 @@ const NSUInteger PhotoCellBaseZIndex = 100;
    itemInsets = UIEdgeInsetsMake(22.0f, 22.0f, 13.0f, 22.0f);
    itemSize = CGSizeMake(125.0f, 125.0f);
    interItemSpacingY = 12.0f;
-   numberOfColumns = 5;
+   
+   numberOfColumns = 4;
    //titleHeight = 26.0f;
     
    //Create rotations at load so that they are consistent during prepareLayout

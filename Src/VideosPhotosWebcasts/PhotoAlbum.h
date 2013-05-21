@@ -11,6 +11,7 @@
 namespace CernAPP {
 
 extern NSString * const ResourceTypeThumbnail;
+extern NSString * const ResourceTypeThumbnailImage;
 
 }
 

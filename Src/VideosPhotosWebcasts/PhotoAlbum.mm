@@ -12,11 +12,13 @@
 
 namespace CernAPP {
 
-extern NSString * const ResourceTypeThumbnail = @"Thumbnail";
+extern NSString * const ResourceTypeThumbnail = @"jpgIcon";
+extern NSString * const ResourceTypeThumbnailImage = @"Thumbnail";
 
 }
 
 using CernAPP::ResourceTypeThumbnail;
+using CernAPP::ResourceTypeThumbnailImage;
 
 @implementation PhotoAlbum {
    NSMutableArray *albumData;
@@ -48,7 +50,7 @@ using CernAPP::ResourceTypeThumbnail;
    assert(index < albumData.count && "getThumbnailImageForIndex, parameter 'index' is out of bounds");
    
    NSDictionary * const imageData = (NSDictionary *)albumData[index];
-   return (UIImage *)imageData[@"Thumbnail"];
+   return (UIImage *)imageData[ResourceTypeThumbnailImage];
 }
 
 //________________________________________________________________________________________
@@ -58,7 +60,7 @@ using CernAPP::ResourceTypeThumbnail;
    assert(index < albumData.count && "setThumbnailImage:withIndex:, parameter 'index' is out of bounds");
    
    NSMutableDictionary * const imageDict = (NSMutableDictionary *)albumData[index];
-   [imageDict setObject : image forKey : @"Thumbnail"];
+   [imageDict setObject : image forKey : ResourceTypeThumbnailImage];
 }
 
 //________________________________________________________________________________________

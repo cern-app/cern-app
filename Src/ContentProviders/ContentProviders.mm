@@ -205,10 +205,11 @@ void CancelConnections(UIViewController *controller)
 
 
       PhotosCollectionViewController * const topController = (PhotosCollectionViewController *)navController.topViewController;
-    //  topController.photoDownloader.url = [NSURL URLWithString : (NSString *)info[@"Url"]];
+      [topController setURL : [NSURL URLWithString : (NSString *)info[@"Url"]]];
+      topController.stackedMode = YES;//Show images grouped as stacks.
       topController.navigationItem.title = categoryName;
    }
-   
+
    if (controller.slidingViewController.topViewController)
       CancelConnections(controller.slidingViewController.topViewController);
 
