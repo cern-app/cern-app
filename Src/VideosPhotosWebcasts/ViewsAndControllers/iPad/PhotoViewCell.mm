@@ -4,12 +4,6 @@
 
 //TODO: this class should be merged with PhotoGridViewCell (or replace it).
 
-namespace CernAPP {
-
-NSString * const PhotoCellKind = @"PhotoViewCell";
-
-}
-
 @implementation PhotoViewCell
 
 @synthesize imageView;

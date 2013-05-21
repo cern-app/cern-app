@@ -202,6 +202,7 @@
 		70A562F0173A382A00145FEC /* StaticInfoScrollViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562EB173A382A00145FEC /* StaticInfoScrollViewController.mm */; };
 		70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B22F0416F9DCAA007D88EF /* action_blue.png */; };
 		70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */; };
+		70B3B63E174B9138002DDD78 /* ImageStackCellView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B3B63D174B9138002DDD78 /* ImageStackCellView.mm */; };
 		70B6B0B9169DD2790058DADA /* live_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0B8169DD2790058DADA /* live_color.png */; };
 		70B6B0BC169DD48E0058DADA /* news_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BB169DD48E0058DADA /* news_color.png */; };
 		70B6B0BE169DD6BE0058DADA /* cern_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BD169DD6BE0058DADA /* cern_logo.png */; };
@@ -217,7 +218,6 @@
 		70C0E94A169C85FA0004ED1E /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 70C0E949169C85FA0004ED1E /* menu.png */; };
 		70C728461732C6E300992077 /* FlipView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70C728441732C6E200992077 /* FlipView.mm */; };
 		70CC55EF169EF80600292332 /* MenuNavigationController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CC55ED169EF80500292332 /* MenuNavigationController.mm */; };
-		70CDF7041745048100DA1803 /* PhotosCollectionViewLayout.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CDF7021745048100DA1803 /* PhotosCollectionViewLayout.mm */; };
 		70CDF7071745052200DA1803 /* PhotoViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CDF7051745052200DA1803 /* PhotoViewCell.mm */; };
 		70D2629516F8948600883316 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D2629416F8948600883316 /* CoreText.framework */; };
 		70D98B0816F73ABA003C42E7 /* AppSettingsController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98AFD16F73ABA003C42E7 /* AppSettingsController.mm */; };
@@ -423,7 +423,6 @@
 		7072B3271713F72F00515DA8 /* TiledPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiledPage.h; sourceTree = "<group>"; };
 		70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWFeedParserLicense.txt; sourceTree = "<group>"; };
 		70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWPhotoBrowserLicense.txt; sourceTree = "<group>"; };
-		70783B0917450265006635D8 /* PhotosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosCollectionViewController.h; sourceTree = "<group>"; };
 		70783B0A17450265006635D8 /* PhotosCollectionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotosCollectionViewController.mm; sourceTree = "<group>"; };
 		707B1379169AEB6300180E02 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		707B137A169AEB6300180E02 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -533,6 +532,9 @@
 		70B2A75116DBBD5200BC8657 /* PageControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageControllerProtocol.h; sourceTree = "<group>"; };
 		70B2A75216DBBE5E00BC8657 /* HUDRefreshProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDRefreshProtocol.h; sourceTree = "<group>"; };
 		70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HUDRefreshProtocol.mm; sourceTree = "<group>"; };
+		70B3B63C174B9138002DDD78 /* ImageStackCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageStackCellView.h; sourceTree = "<group>"; };
+		70B3B63D174B9138002DDD78 /* ImageStackCellView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageStackCellView.mm; sourceTree = "<group>"; };
+		70B3B63F174B9D19002DDD78 /* PhotosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosCollectionViewController.h; sourceTree = "<group>"; };
 		70B6B0B8169DD2790058DADA /* live_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = live_color.png; sourceTree = "<group>"; };
 		70B6B0BB169DD48E0058DADA /* news_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = news_color.png; sourceTree = "<group>"; };
 		70B6B0BD169DD6BE0058DADA /* cern_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_logo.png; sourceTree = "<group>"; };
@@ -552,8 +554,6 @@
 		70C728451732C6E200992077 /* FlipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipView.h; sourceTree = "<group>"; };
 		70CC55ED169EF80500292332 /* MenuNavigationController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuNavigationController.mm; sourceTree = "<group>"; };
 		70CC55EE169EF80600292332 /* MenuNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuNavigationController.h; sourceTree = "<group>"; };
-		70CDF7021745048100DA1803 /* PhotosCollectionViewLayout.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotosCollectionViewLayout.mm; sourceTree = "<group>"; };
-		70CDF7031745048100DA1803 /* PhotosCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosCollectionViewLayout.h; sourceTree = "<group>"; };
 		70CDF7051745052200DA1803 /* PhotoViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoViewCell.mm; sourceTree = "<group>"; };
 		70CDF7061745052200DA1803 /* PhotoViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewCell.h; sourceTree = "<group>"; };
 		70D2629416F8948600883316 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -876,12 +876,12 @@
 		70783B0817450265006635D8 /* iPad */ = {
 			isa = PBXGroup;
 			children = (
+				70B3B63F174B9D19002DDD78 /* PhotosCollectionViewController.h */,
 				70CDF7051745052200DA1803 /* PhotoViewCell.mm */,
 				70CDF7061745052200DA1803 /* PhotoViewCell.h */,
-				70CDF7021745048100DA1803 /* PhotosCollectionViewLayout.mm */,
-				70CDF7031745048100DA1803 /* PhotosCollectionViewLayout.h */,
-				70783B0917450265006635D8 /* PhotosCollectionViewController.h */,
 				70783B0A17450265006635D8 /* PhotosCollectionViewController.mm */,
+				70B3B63C174B9138002DDD78 /* ImageStackCellView.h */,
+				70B3B63D174B9138002DDD78 /* ImageStackCellView.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1620,10 +1620,10 @@
 				70A562EF173A382A00145FEC /* StaticInfoItemViewController.mm in Sources */,
 				70A562F0173A382A00145FEC /* StaticInfoScrollViewController.mm in Sources */,
 				70783B0B17450265006635D8 /* PhotosCollectionViewController.mm in Sources */,
-				70CDF7041745048100DA1803 /* PhotosCollectionViewLayout.mm in Sources */,
 				70CDF7071745052200DA1803 /* PhotoViewCell.mm in Sources */,
 				70E9EE6117461E6300D1530E /* PhotoDownloader.mm in Sources */,
 				70E9EE641746203500D1530E /* PhotoAlbum.mm in Sources */,
+				70B3B63E174B9138002DDD78 /* ImageStackCellView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

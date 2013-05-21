@@ -7,9 +7,3 @@
 @property (nonatomic, strong, readonly) IBOutlet UIImageView *imageView;
 
 @end
-
-namespace CernAPP {
-
-extern NSString * const PhotoCellKind;
-
-}

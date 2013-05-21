@@ -1,8 +1,8 @@
 #import <algorithm>
 
 #import "PhotosCollectionViewController.h"
-#import "PhotosCollectionViewLayout.h"
 #import "ECSlidingViewController.h"
+#import "ImageStackCellView.h"
 #import "ApplicationErrors.h"
 #import "PhotoViewCell.h"
 #import "Reachability.h"
@@ -90,8 +90,8 @@ using CernAPP::NetworkStatus;
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
    
-   [self.collectionView registerClass : [PhotoViewCell class]
-           forCellWithReuseIdentifier : @"PhotoViewCell"];
+   [self.collectionView registerClass : [ImageStackCellView class]
+           forCellWithReuseIdentifier : @"ImageStackCellView"];
 }
 
 //________________________________________________________________________________________
@@ -100,6 +100,7 @@ using CernAPP::NetworkStatus;
    if (!viewDidAppear) {
       viewDidAppear = YES;
       
+      /*
       assert([self.collectionView.collectionViewLayout isKindOfClass : [PhotosCollectionViewLayout class]] &&
                 "viewDidAppear:, collection view has a wrong layout type");
       PhotosCollectionViewLayout * const layout = (PhotosCollectionViewLayout *)self.collectionView.collectionViewLayout;
@@ -107,6 +108,7 @@ using CernAPP::NetworkStatus;
          layout.numberOfColumns = 4;
       else
          layout.numberOfColumns = 3;
+      */
       
       [self refresh];
    }
@@ -142,10 +144,21 @@ using CernAPP::NetworkStatus;
 #pragma mark - UIViewCollectionDataSource
 
 //________________________________________________________________________________________
+- (CGSize) collectionView : (UICollectionView *) collectionView layout : (UICollectionViewLayout*) collectionViewLayout
+           sizeForItemAtIndexPath : (NSIndexPath *) indexPath
+{
+#pragma unused(collectionView, collectionViewLayout, indexPath)
+   return CGSizeMake(150.f, 150.f);
+}
+
+//________________________________________________________________________________________
 - (NSInteger) numberOfSectionsInCollectionView : (UICollectionView *) collectionView
 {
 #pragma unused(collectionView)
-   return photoAlbumsStatic.count;
+   if (!photoAlbumsStatic)
+      return 0;
+
+   return 1;//photoAlbumsStatic.count;
 }
 
 //________________________________________________________________________________________
@@ -154,12 +167,9 @@ using CernAPP::NetworkStatus;
 #pragma unused(collectionView)
    assert(section >= 0 && section < photoAlbumsStatic.count && "collectionView:numberOfItemsInSection:, index is out of bounds");
 
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[section];
-   
-   if (stackedMode)
-      return std::min(NSUInteger(3), album.nImages);
-   
-   return album.nImages;
+   assert(stackedMode == YES && "non-stacked, not-implemented yet");
+
+   return photoAlbumsStatic.count;
 }
 
 
@@ -169,20 +179,22 @@ using CernAPP::NetworkStatus;
    assert(collectionView != nil && "collectionView:cellForItemAtIndexPath:, parameter 'collectionView' is nil");
    assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
 
-   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"PhotoViewCell" forIndexPath : indexPath];
-   assert(!cell || [cell isKindOfClass : [PhotoViewCell class]] &&
+   assert(stackedMode == YES && "non-stacked, not-implemented");
+
+   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"ImageStackCellView" forIndexPath : indexPath];
+   assert(!cell || [cell isKindOfClass : [ImageStackCellView class]] &&
           "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
    
-   PhotoViewCell * const photoCell = (PhotoViewCell *)cell;
+   ImageStackCellView * const photoCell = (ImageStackCellView *)cell;
    
    assert(indexPath.section >= 0 && indexPath.section < photoAlbumsStatic.count &&
           "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
 
    if (stackedMode) {
-      if (!indexPath.row) {
+      //if (!indexPath.row) {
          if (UIImage * const image = (UIImage *)thumbnails[indexPath])
             photoCell.imageView.image = image;
-      }
+      //}
    } else {
       PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
       assert(indexPath.row >= 0 && indexPath.row < album.nImages &&
@@ -264,14 +276,13 @@ using CernAPP::NetworkStatus;
    assert(indexPath != nil && "loadNextThumbnail:, parameter 'indexPath' is nil");
    assert(indexPath.section < photoAlbumsStatic.count && "loadNextThumbnail:, section index is out of bounds");
    PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
-   assert(indexPath.row + 1 < album.nImages && "loadNextThumbnail:, row index is out of bounds");
+   assert(indexPath.row < album.nImages && "loadNextThumbnail:, row index is out of bounds");
 
-   NSIndexPath * const key = [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section];
    ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL :
                                          [album getImageURLWithIndex : indexPath.row + 1 forType : ResourceTypeThumbnail]];
    downloader.delegate = self;
-   downloader.indexPathInTableView = key;
-   [imageDownloaders setObject : downloader forKey : key];
+   downloader.indexPathInTableView = indexPath;
+   [imageDownloaders setObject : downloader forKey : indexPath];
    [downloader startDownload];
 }
 
@@ -312,10 +323,11 @@ using CernAPP::NetworkStatus;
       [album setThumbnailImage : downloader.image withIndex : indexPath.row];
       //Here we have to do some magic:
       if (stackedMode) {
-         NSIndexPath * const key = [NSIndexPath indexPathForRow : 0 inSection : indexPath.section];
+         NSIndexPath * const key = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
          if (!thumbnails[key]) {
             [thumbnails setObject : downloader.image forKey : key];
-            [self.collectionView reloadItemsAtIndexPaths : @[key]];
+            //It's a bit of a mess here - section goes to the row and becomes 0.
+            [self.collectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.section inSection : 0]]];
             //Load other thumbnails (not visible in a stacked mode).
             [self loadThumbnailsForAlbum : indexPath.section];
          }
@@ -438,6 +450,7 @@ using CernAPP::NetworkStatus;
 
 #pragma mark - Interface orientation change.
 
+/*
 //________________________________________________________________________________________
 - (void) willRotateToInterfaceOrientation : (UIInterfaceOrientation) toInterfaceOrientation duration : (NSTimeInterval) duration
 {
@@ -453,6 +466,7 @@ using CernAPP::NetworkStatus;
          layout.numberOfColumns = 3;
    }
 }
+*/
 
 #pragma mark - ConnectionController delegate and related methods.
 
