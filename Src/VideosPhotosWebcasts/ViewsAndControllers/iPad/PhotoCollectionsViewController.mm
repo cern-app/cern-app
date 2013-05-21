@@ -255,7 +255,7 @@ using CernAPP::NetworkStatus;
       //1. Animate layout changed. At the end of animation:
       //TODO:
       //2. Switch between views.
-      [UIView transitionFromView : albumCollectionView toView : self.collectionView duration : 0.5f options : transitionOptions completion : ^(BOOL finished) {
+      [UIView transitionFromView : albumCollectionView toView : self.collectionView duration : 0.25f options : transitionOptions completion : ^(BOOL finished) {
          if (finished) {
             //We switched back to the stacked album views.
          }
@@ -265,7 +265,7 @@ using CernAPP::NetworkStatus;
              "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
       selected = indexPath;
       [albumCollectionView reloadData];
-      [UIView transitionFromView : self.collectionView toView : albumCollectionView duration : 0.5f options : transitionOptions completion : ^(BOOL finished) {
+      [UIView transitionFromView : self.collectionView toView : albumCollectionView duration : 0.25f options : transitionOptions completion : ^(BOOL finished) {
          if (finished) {
             //Start animation - move images from stack.
          }
