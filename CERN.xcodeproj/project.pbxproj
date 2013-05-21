@@ -203,6 +203,7 @@
 		70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B22F0416F9DCAA007D88EF /* action_blue.png */; };
 		70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */; };
 		70B3B63E174B9138002DDD78 /* ImageStackCellView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B3B63D174B9138002DDD78 /* ImageStackCellView.mm */; };
+		70B3B642174BA17F002DDD78 /* PhotoAlbumCoverView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B3B641174BA17E002DDD78 /* PhotoAlbumCoverView.mm */; };
 		70B6B0B9169DD2790058DADA /* live_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0B8169DD2790058DADA /* live_color.png */; };
 		70B6B0BC169DD48E0058DADA /* news_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BB169DD48E0058DADA /* news_color.png */; };
 		70B6B0BE169DD6BE0058DADA /* cern_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BD169DD6BE0058DADA /* cern_logo.png */; };
@@ -535,6 +536,8 @@
 		70B3B63C174B9138002DDD78 /* ImageStackCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageStackCellView.h; sourceTree = "<group>"; };
 		70B3B63D174B9138002DDD78 /* ImageStackCellView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageStackCellView.mm; sourceTree = "<group>"; };
 		70B3B63F174B9D19002DDD78 /* PhotosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosCollectionViewController.h; sourceTree = "<group>"; };
+		70B3B640174BA17E002DDD78 /* PhotoAlbumCoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbumCoverView.h; sourceTree = "<group>"; };
+		70B3B641174BA17E002DDD78 /* PhotoAlbumCoverView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoAlbumCoverView.mm; sourceTree = "<group>"; };
 		70B6B0B8169DD2790058DADA /* live_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = live_color.png; sourceTree = "<group>"; };
 		70B6B0BB169DD48E0058DADA /* news_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = news_color.png; sourceTree = "<group>"; };
 		70B6B0BD169DD6BE0058DADA /* cern_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_logo.png; sourceTree = "<group>"; };
@@ -882,6 +885,8 @@
 				70783B0A17450265006635D8 /* PhotosCollectionViewController.mm */,
 				70B3B63C174B9138002DDD78 /* ImageStackCellView.h */,
 				70B3B63D174B9138002DDD78 /* ImageStackCellView.mm */,
+				70B3B640174BA17E002DDD78 /* PhotoAlbumCoverView.h */,
+				70B3B641174BA17E002DDD78 /* PhotoAlbumCoverView.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1624,6 +1629,7 @@
 				70E9EE6117461E6300D1530E /* PhotoDownloader.mm in Sources */,
 				70E9EE641746203500D1530E /* PhotoAlbum.mm in Sources */,
 				70B3B63E174B9138002DDD78 /* ImageStackCellView.mm in Sources */,
+				70B3B642174BA17F002DDD78 /* PhotoAlbumCoverView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

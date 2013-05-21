@@ -2,6 +2,7 @@
 
 #import "PhotosCollectionViewController.h"
 #import "ECSlidingViewController.h"
+#import "PhotoAlbumCoverView.h"
 #import "ImageStackCellView.h"
 #import "ApplicationErrors.h"
 #import "PhotoViewCell.h"
@@ -90,8 +91,8 @@ using CernAPP::NetworkStatus;
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
    
-   [self.collectionView registerClass : [ImageStackCellView class]
-           forCellWithReuseIdentifier : @"ImageStackCellView"];
+   [self.collectionView registerClass : [PhotoAlbumCoverView class]
+           forCellWithReuseIdentifier : @"PhotoAlbumCoverView"];
 }
 
 //________________________________________________________________________________________
@@ -148,7 +149,7 @@ using CernAPP::NetworkStatus;
            sizeForItemAtIndexPath : (NSIndexPath *) indexPath
 {
 #pragma unused(collectionView, collectionViewLayout, indexPath)
-   return CGSizeMake(150.f, 150.f);
+   return CGSizeMake(200.f, 200.f);
 }
 
 //________________________________________________________________________________________
@@ -158,7 +159,7 @@ using CernAPP::NetworkStatus;
    if (!photoAlbumsStatic)
       return 0;
 
-   return 1;//photoAlbumsStatic.count;
+   return 1;
 }
 
 //________________________________________________________________________________________
@@ -181,74 +182,32 @@ using CernAPP::NetworkStatus;
 
    assert(stackedMode == YES && "non-stacked, not-implemented");
 
-   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"ImageStackCellView" forIndexPath : indexPath];
-   assert(!cell || [cell isKindOfClass : [ImageStackCellView class]] &&
+   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"PhotoAlbumCoverView" forIndexPath : indexPath];
+   assert(!cell || [cell isKindOfClass : [PhotoAlbumCoverView class]] &&
           "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
    
-   ImageStackCellView * const photoCell = (ImageStackCellView *)cell;
+   PhotoAlbumCoverView * const photoCell = (PhotoAlbumCoverView *)cell;
    
    assert(indexPath.section >= 0 && indexPath.section < photoAlbumsStatic.count &&
           "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
 
+   assert(indexPath.row >= 0 && indexPath.row < photoAlbumsStatic.count &&
+          "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.row];
+
    if (stackedMode) {
-      //if (!indexPath.row) {
-         if (UIImage * const image = (UIImage *)thumbnails[indexPath])
-            photoCell.imageView.image = image;
-      //}
-   } else {
-      PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
-      assert(indexPath.row >= 0 && indexPath.row < album.nImages &&
-             "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
+      if (UIImage * const image = (UIImage *)thumbnails[indexPath])
+         photoCell.imageView.image = image;
+   } else
       photoCell.imageView.image = [album getThumbnailImageForIndex : indexPath.row];
-   }
    
+   if (album.title.length)
+      photoCell.title = album.title;
+
    photoCell.alpha = 0.2f;
 
    return photoCell;
 }
-
-
-/*
-//________________________________________________________________________________________
-- (UICollectionReusableView *) collectionView : (UICollectionView *) collectionView
-                               viewForSupplementaryElementOfKind : (NSString *) kind atIndexPath : (NSIndexPath *) indexPath
-{
-   assert(collectionView != nil &&
-          "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, parameter 'collectionView' is nil");
-   assert(indexPath != nil &&
-          "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, parameter 'indexPath' is nil");
-   assert(indexPath.section < photoSets.count &&
-         "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, indexPath.section is out of bounds");
-
-   UICollectionReusableView *view = nil;
-
-   if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-      //
-      view = [collectionView dequeueReusableSupplementaryViewOfKind : kind
-                             withReuseIdentifier : @"SetInfoView" forIndexPath : indexPath];
-
-      assert(!view || [view isKindOfClass : [PhotoSetInfoView class]] &&
-             "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, reusable view has a wrong type");
-
-      PhotoSetInfoView * infoView = (PhotoSetInfoView *)view;
-      PhotoSet * const photoSet = (PhotoSet *)photoSets[indexPath.section];
-      infoView.descriptionLabel.text = photoSet.title;
-      
-      UIFont * const font = [UIFont fontWithName : CernAPP::childMenuFontName size : 12.f];
-      assert(font != nil && "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, font not found");
-      infoView.descriptionLabel.font = font;
-   } else {
-      //Footer.
-      view = [collectionView dequeueReusableSupplementaryViewOfKind : kind
-                             withReuseIdentifier : @"SetFooter" forIndexPath : indexPath];
-
-      assert(!view || [view isKindOfClass : [PhotoSetInfoView class]] &&
-             "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, reusable view has a wrong type");
-   }
-   
-   return view;
-}
-*/
 
 #pragma mark - ImageDownloaderDelegate and related methods.
 
@@ -447,26 +406,6 @@ using CernAPP::NetworkStatus;
    else
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
 }
-
-#pragma mark - Interface orientation change.
-
-/*
-//________________________________________________________________________________________
-- (void) willRotateToInterfaceOrientation : (UIInterfaceOrientation) toInterfaceOrientation duration : (NSTimeInterval) duration
-{
-#pragma unused(duration)
-
-   if (stackedMode) {
-      assert([self.collectionView.collectionViewLayout isKindOfClass : [PhotosCollectionViewLayout class]] &&
-                "willRotateToInterfaceOrientation:duration:, collection view has a wrong layout type");
-      PhotosCollectionViewLayout * const layout = (PhotosCollectionViewLayout *)self.collectionView.collectionViewLayout;
-      if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
-         layout.numberOfColumns = 4;
-      else
-         layout.numberOfColumns = 3;
-   }
-}
-*/
 
 #pragma mark - ConnectionController delegate and related methods.
 

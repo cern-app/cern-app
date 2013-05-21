@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ImageStackCellView : UICollectionViewCell
+@interface ImageStackCellView : UIView
 
 @property (nonatomic, strong, readonly) IBOutlet UIImageView *imageView;
 

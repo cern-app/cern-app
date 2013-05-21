@@ -236,34 +236,22 @@
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="Hqu-4q-aZR">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="xVd-AP-QrY">
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ouv-bw-ypR">
                             <size key="itemSize" width="50" height="50"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImageStackCellView" id="BvA-4D-1a2" customClass="ImageStackCellView">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoAlbumCoverView" id="BvA-4D-1a2" customClass="PhotoAlbumCoverView">
                                 <rect key="frame" x="0.0" y="0.0" width="215" height="215"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="215" height="215"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SKL-fL-gW7"/>
-                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
-                                <constraints>
-                                    <constraint firstItem="SKL-fL-gW7" firstAttribute="bottom" secondItem="BvA-4D-1a2" secondAttribute="bottom" type="default" id="3sO-k4-RS3"/>
-                                    <constraint firstItem="SKL-fL-gW7" firstAttribute="top" secondItem="BvA-4D-1a2" secondAttribute="top" type="default" id="75a-LL-CEw"/>
-                                    <constraint firstItem="SKL-fL-gW7" firstAttribute="trailing" secondItem="BvA-4D-1a2" secondAttribute="trailing" type="default" id="T7P-9f-pOi"/>
-                                    <constraint firstItem="SKL-fL-gW7" firstAttribute="leading" secondItem="BvA-4D-1a2" secondAttribute="leading" type="default" id="fqB-tl-d6v"/>
-                                </constraints>
                                 <size key="customSize" width="215" height="215"/>
-                                <connections>
-                                    <outlet property="imageView" destination="SKL-fL-gW7" id="Jv1-f2-zoY"/>
-                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -312,12 +300,6 @@
         <class className="FlipParentView" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/FlipParentView.h"/>
         </class>
-        <class className="ImageStackCellView" superclassName="UICollectionViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/ImageStackCellView.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
         <class className="InitialSlidingViewController" superclassName="ECSlidingViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/InitialSlidingViewController.h"/>
         </class>
@@ -338,6 +320,9 @@
             <relationships>
                 <relationship kind="action" name="reloadPageFromRefreshControl"/>
             </relationships>
+        </class>
+        <class className="PhotoAlbumCoverView" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoAlbumCoverView.h"/>
         </class>
         <class className="PhotosCollectionViewController" superclassName="UICollectionViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotosCollectionViewController.h"/>
@@ -366,9 +351,6 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
-        </class>
-        <class className="UICollectionViewLayout" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
