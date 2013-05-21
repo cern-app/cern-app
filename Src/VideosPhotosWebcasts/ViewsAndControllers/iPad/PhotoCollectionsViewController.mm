@@ -24,10 +24,14 @@ using CernAPP::NetworkStatus;
    NSMutableArray *photoAlbumsStatic;//Loaded.
    NSMutableArray *photoAlbumsDynamic;//In process.
    
+   NSIndexPath *selected;
+   
    Reachability *internetReach;
+   
+   UICollectionView *stacksView;
 }
 
-@synthesize noConnectionHUD, spinner;
+@synthesize noConnectionHUD, spinner, albumCollectionView;
 
 
 #pragma mark - Network reachability.
@@ -93,8 +97,12 @@ using CernAPP::NetworkStatus;
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
    
+   stacksView = self.collectionView;
+   
    [self.collectionView registerClass : [PhotoAlbumCoverView class]
            forCellWithReuseIdentifier : @"PhotoAlbumCoverView"];
+   [albumCollectionView registerClass : [PhotoViewCell class]
+           forCellWithReuseIdentifier : @"PhotoViewCell"];
 }
 
 //________________________________________________________________________________________
@@ -140,13 +148,22 @@ using CernAPP::NetworkStatus;
            sizeForItemAtIndexPath : (NSIndexPath *) indexPath
 {
 #pragma unused(collectionView, collectionViewLayout, indexPath)
+   if (collectionView == albumCollectionView)
+      return CGSizeMake(125.f, 125.f);
+
    return CGSizeMake(200.f, 200.f);
 }
 
 //________________________________________________________________________________________
 - (NSInteger) numberOfSectionsInCollectionView : (UICollectionView *) collectionView
 {
-#pragma unused(collectionView)
+   if (collectionView == albumCollectionView) {
+      if (!selected)//assert?
+         return 0;//TODO
+    
+      return 1;
+   }
+
    if (!photoAlbumsStatic)
       return 0;
 
@@ -156,7 +173,17 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (NSInteger) collectionView : (UICollectionView *) collectionView numberOfItemsInSection : (NSInteger) section
 {
-#pragma unused(collectionView)
+   if (collectionView == albumCollectionView) {
+      if (!selected)//assert?
+         return 0;
+      
+      assert(selected.row < photoAlbumsStatic.count &&
+             "numberOfSectionsInCollectionView:, selected.row is out of bounds");
+      PhotoAlbum * const album = photoAlbumsStatic[selected.row];
+
+      return album.nImages;
+   }
+
    assert(section >= 0 && section < photoAlbumsStatic.count && "collectionView:numberOfItemsInSection:, index is out of bounds");
 
    return photoAlbumsStatic.count;
@@ -169,28 +196,82 @@ using CernAPP::NetworkStatus;
    assert(collectionView != nil && "collectionView:cellForItemAtIndexPath:, parameter 'collectionView' is nil");
    assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
 
-   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"PhotoAlbumCoverView" forIndexPath : indexPath];
-   assert(!cell || [cell isKindOfClass : [PhotoAlbumCoverView class]] &&
-          "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
+   if (collectionView == albumCollectionView) {
+      UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"PhotoViewCell" forIndexPath : indexPath];
+      assert(!cell || [cell isKindOfClass : [PhotoViewCell class]] &&
+             "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
+      if (!cell)
+         cell = [[PhotoViewCell alloc] initWithFrame : CGRect()];
+      
+      PhotoViewCell * const photoCell = (PhotoViewCell *)cell;
+      if (selected) {
+         assert(selected.row < photoAlbumsStatic.count &&
+                "collectionView:cellForItemAtIndexPath:, selected.row is out of bounds");
+         PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
+         if (UIImage * const image = [album getThumbnailImageForIndex : indexPath.row])
+            photoCell.imageView.image = image;
+      }
+
+      return photoCell;
+   } else {
+      UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"PhotoAlbumCoverView" forIndexPath : indexPath];
+      assert(!cell || [cell isKindOfClass : [PhotoAlbumCoverView class]] &&
+             "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
+      
+      PhotoAlbumCoverView * const photoCell = (PhotoAlbumCoverView *)cell;
+      
+      assert(indexPath.section >= 0 && indexPath.section < photoAlbumsStatic.count &&
+             "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
+
+      assert(indexPath.row >= 0 && indexPath.row < photoAlbumsStatic.count &&
+             "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
+      PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.row];
+
+      if (UIImage * const image = (UIImage *)thumbnails[indexPath])
+         photoCell.imageView.image = image;
+      
+      if (album.title.length)
+         photoCell.title = album.title;
+
+      return photoCell;
+   }
+}
+
+#pragma mark - UICollectionView delegate.
+
+//________________________________________________________________________________________
+- (void) collectionView : (UICollectionView *) collectionView didSelectItemAtIndexPath : (NSIndexPath *) indexPath
+{
+   assert(indexPath != nil && "collectionView:didSelectItemAtIndexPath:, parameter 'indexPath' is nil");
+
+   const UIViewAnimationOptions transitionOptions = UIViewAnimationOptionTransitionCrossDissolve;
    
-   PhotoAlbumCoverView * const photoCell = (PhotoAlbumCoverView *)cell;
-   
-   assert(indexPath.section >= 0 && indexPath.section < photoAlbumsStatic.count &&
-          "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
+   if (collectionView == albumCollectionView) {
+      PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
+      assert(indexPath.row < album.nImages && "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
+      //Open MWPhotoBrowser.
+      
+      //Right now (test only):
+      //1. Animate layout changed. At the end of animation:
+      //TODO:
+      //2. Switch between views.
+      [UIView transitionFromView : albumCollectionView toView : self.collectionView duration : 0.5f options : transitionOptions completion : ^(BOOL finished) {
+         if (finished) {
+            //We switched back to the stacked album views.
+         }
+      }];   
+   } else {
+      assert(indexPath.row < photoAlbumsStatic.count &&
+             "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
+      selected = indexPath;
+      [albumCollectionView reloadData];
+      [UIView transitionFromView : self.collectionView toView : albumCollectionView duration : 0.5f options : transitionOptions completion : ^(BOOL finished) {
+         if (finished) {
+            //Start animation - move images from stack.
+         }
+      }];
 
-   assert(indexPath.row >= 0 && indexPath.row < photoAlbumsStatic.count &&
-          "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.row];
-
-   if (UIImage * const image = (UIImage *)thumbnails[indexPath])
-      photoCell.imageView.image = image;
-   
-   if (album.title.length)
-      photoCell.title = album.title;
-
-   photoCell.alpha = 0.2f;
-
-   return photoCell;
+   }
 }
 
 #pragma mark - ImageDownloaderDelegate and related methods.

@@ -40,4 +40,10 @@
    return self;
 }
 
+//________________________________________________________________________________________
+- (NSString *) reuseIdentifier
+{
+   return @"PhotoViewCell";
+}
+
 @end

@@ -841,7 +841,7 @@ void CancelConnections(UIViewController *controller)
 //________________________________________________________________________________________
 - (void) loadControllerTo : (UIViewController *) controller
 {
-   //TODO: there is not view/controller for iPad at the moment.
+   //TODO: there is no view/controller for iPad at the moment.
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
       CernAPP::ShowErrorAlert(@"Not implemented", @"Close");
       return;
