@@ -23,9 +23,6 @@
       self.layer.shadowOffset = CGSizeMake(-2.f, -2.f);
       self.layer.shadowOpacity = 0.5f;
 
-      //To show stacked images (views) I'll use rotation transformation.
-      //To anti-alias edges, we rasterize (thanks to Bryan Hansen for his nice
-      //article and tutorial: http://www.skeuo.com/uicollectionview-custom-layout-tutorial).
       self.layer.rasterizationScale = [UIScreen mainScreen].scale;
       self.layer.shouldRasterize = YES;
         
@@ -33,6 +30,12 @@
       imageView.backgroundColor = [UIColor darkGrayColor];
       imageView.contentMode = UIViewContentModeScaleAspectFill;
       imageView.clipsToBounds = YES;
+      
+      imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
+                                   UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
+                                   UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+      self.autoresizesSubviews = YES;
+      
         
       [self.contentView addSubview : self.imageView];
    }

@@ -13,6 +13,28 @@ using CernAPP::ResourceTypeThumbnail;
 using CernAPP::NetworkStatus;
 
 //TODO: This class or a some derived class should also replace a PhotoGridViewController (iPhone version, non-stacked mode).
+namespace
+{
+
+//________________________________________________________________________________________
+CGSize CellSizeFromImageSize(CGSize imageSize)
+{
+   CGSize cellSize = CGSizeMake(125.f, 125.f);
+   if (imageSize.width > 0.f && imageSize.height > 0.f) {
+      //
+      const CGFloat maxFixed = 150.f;//150x150 - maximum possible size.
+      //
+      const CGFloat max = std::max(imageSize.width, imageSize.height);
+      const CGFloat scale = maxFixed / max;
+      cellSize.width = imageSize.width * scale;
+      cellSize.height = imageSize.height * scale;
+   }
+   
+   return cellSize;
+}
+
+}
+
 
 @implementation PhotoCollectionsViewController {
    BOOL viewDidAppear;
@@ -147,9 +169,25 @@ using CernAPP::NetworkStatus;
 - (CGSize) collectionView : (UICollectionView *) collectionView layout : (UICollectionViewLayout*) collectionViewLayout
            sizeForItemAtIndexPath : (NSIndexPath *) indexPath
 {
-#pragma unused(collectionView, collectionViewLayout, indexPath)
-   if (collectionView == albumCollectionView)
+#pragma unused(collectionViewLayout)
+
+   assert(indexPath != nil && "collectionView:layout:sizeForItemAtIndexPath:, parameter 'indexPath' is nil");
+
+   if (collectionView == albumCollectionView) {
+      assert(selected != nil &&
+             "collectionView:layout:sizeForItemAtIndexPath:, no album was selected");
+      PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
+      assert(indexPath.row < album.nImages &&
+             "collectionView:layout:sizeForItemAtIndexPath:, row index is out of bounds");
+      
+      if (UIImage * const thumbnail = [album getThumbnailImageForIndex : indexPath.row]) {
+         const CGSize cellSize = CellSizeFromImageSize(thumbnail.size);
+         NSLog(@"index path %@ w %g h %g", indexPath, cellSize.width, cellSize.height);
+         return cellSize;
+      }
+      
       return CGSizeMake(125.f, 125.f);
+   }
 
    return CGSizeMake(200.f, 200.f);
 }
@@ -227,8 +265,15 @@ using CernAPP::NetworkStatus;
              "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
       PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.row];
 
-      if (UIImage * const image = (UIImage *)thumbnails[indexPath])
+      CGRect cellFrame = photoCell.frame;
+      if (UIImage * const image = (UIImage *)thumbnails[indexPath]) {
+         cellFrame.size = CellSizeFromImageSize(image.size);
          photoCell.imageView.image = image;
+      } else {
+         cellFrame.size = CGSizeMake(125.f, 125.f);
+      }
+         
+      photoCell.frame = cellFrame;
       
       if (album.title.length)
          photoCell.title = album.title;
