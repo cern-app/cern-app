@@ -10,7 +10,7 @@
 
 @interface PhotosCollectionViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate,
                                                                        ImageDownloaderDelegate, HUDRefreshProtocol,
-                                                                       CernMediaMarcParserDelegate>
+                                                                       CernMediaMarcParserDelegate, ConnectionController>
 
 - (void) setURL : (NSURL *) url;
 @property (nonatomic) BOOL stackedMode;

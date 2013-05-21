@@ -59,6 +59,7 @@
 //________________________________________________________________________________________
 - (void) stop
 {
+   //TODO: test!
    if (!isFinishedParsing) {
       if (currentConnection)
          [currentConnection cancel];
@@ -93,6 +94,8 @@
    if (self.delegate && [self.delegate respondsToSelector : @selector(parser:didFailWithError:)])
       [self.delegate parser : self didFailWithError : error];
    currentConnection = nil;
+
+   isFinishedParsing = YES;//TODO: test!
 }
 
 #pragma mark NSXMLParserDelegate methods

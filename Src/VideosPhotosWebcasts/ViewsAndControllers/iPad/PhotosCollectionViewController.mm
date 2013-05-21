@@ -5,9 +5,11 @@
 #import "ECSlidingViewController.h"
 #import "ApplicationErrors.h"
 #import "PhotoViewCell.h"
+#import "Reachability.h"
 #import "PhotoAlbum.h"
 
 using CernAPP::ResourceTypeThumbnail;
+using CernAPP::NetworkStatus;
 
 @implementation PhotosCollectionViewController {
    BOOL viewDidAppear;
@@ -16,10 +18,37 @@ using CernAPP::ResourceTypeThumbnail;
    
    NSMutableDictionary *imageDownloaders;
    NSMutableDictionary *thumbnails;
-   NSMutableArray *photoAlbums;
+   NSMutableArray *photoAlbumsStatic;//Loaded.
+   NSMutableArray *photoAlbumsDynamic;//In process.
+   
+   Reachability *internetReach;
 }
 
 @synthesize noConnectionHUD, spinner, stackedMode;
+
+
+#pragma mark - Network reachability.
+
+//________________________________________________________________________________________
+- (void) reachabilityStatusChanged : (Reachability *) current
+{
+#pragma unused(current)
+   
+   if (internetReach && [internetReach currentReachabilityStatus] == NetworkStatus::notReachable) {
+      //Depending on what we do now and what we have now ...
+      if (!parser.isFinishedParsing)
+         [parser stop];
+      
+      [self cancelAllImageDownloaders];
+      self.navigationItem.rightBarButtonItem.enabled = YES;
+   }
+}
+
+//________________________________________________________________________________________
+- (bool) hasConnection
+{
+   return internetReach && [internetReach currentReachabilityStatus] != NetworkStatus::notReachable;
+}
 
 #pragma mark - Lifecycle
 
@@ -33,10 +62,22 @@ using CernAPP::ResourceTypeThumbnail;
       //
       imageDownloaders = [[NSMutableDictionary alloc] init];
       thumbnails = [[NSMutableDictionary alloc] init];
-      photoAlbums = [[NSMutableArray alloc] init];
+      photoAlbumsStatic = nil;
+      photoAlbumsDynamic = [[NSMutableArray alloc] init];
+      
+      [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
+      internetReach = [Reachability reachabilityForInternetConnection];
+      [internetReach startNotifier];
    }
 
    return self;
+}
+
+//________________________________________________________________________________________
+- (void) dealloc
+{
+   [internetReach stopNotifier];
+   [[NSNotificationCenter defaultCenter] removeObserver : self];
 }
 
 #pragma mark - viewDid/Done/Does/Will etc.
@@ -88,7 +129,11 @@ using CernAPP::ResourceTypeThumbnail;
 - (void) refresh
 {
    if (parser.isFinishedParsing) {
+      [photoAlbumsDynamic removeAllObjects];
       [noConnectionHUD hide : YES];
+      
+      self.navigationItem.rightBarButtonItem.enabled = NO;
+      
       CernAPP::ShowSpinner(self);
       [parser parse];
    }
@@ -100,16 +145,16 @@ using CernAPP::ResourceTypeThumbnail;
 - (NSInteger) numberOfSectionsInCollectionView : (UICollectionView *) collectionView
 {
 #pragma unused(collectionView)
-   return photoAlbums.count;
+   return photoAlbumsStatic.count;
 }
 
 //________________________________________________________________________________________
 - (NSInteger) collectionView : (UICollectionView *) collectionView numberOfItemsInSection : (NSInteger) section
 {
 #pragma unused(collectionView)
-   assert(section >= 0 && section < photoAlbums.count && "collectionView:numberOfItemsInSection:, index is out of bounds");
+   assert(section >= 0 && section < photoAlbumsStatic.count && "collectionView:numberOfItemsInSection:, index is out of bounds");
 
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[section];
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[section];
    
    if (stackedMode)
       return std::min(NSUInteger(3), album.nImages);
@@ -130,7 +175,7 @@ using CernAPP::ResourceTypeThumbnail;
    
    PhotoViewCell * const photoCell = (PhotoViewCell *)cell;
    
-   assert(indexPath.section >= 0 && indexPath.section < photoAlbums.count &&
+   assert(indexPath.section >= 0 && indexPath.section < photoAlbumsStatic.count &&
           "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
 
    if (stackedMode) {
@@ -139,14 +184,14 @@ using CernAPP::ResourceTypeThumbnail;
             photoCell.imageView.image = image;
       }
    } else {
-      PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.section];
+      PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
       assert(indexPath.row >= 0 && indexPath.row < album.nImages &&
              "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
       photoCell.imageView.image = [album getThumbnailImageForIndex : indexPath.row];
    }
    
    photoCell.alpha = 0.2f;
-   
+
    return photoCell;
 }
 
@@ -204,10 +249,10 @@ using CernAPP::ResourceTypeThumbnail;
    if (imageDownloaders.count)
       return;
    
-   if (!photoAlbums.count)
+   if (!photoAlbumsStatic.count)
       return;
 
-   for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i)
+   for (NSUInteger i = 0, e = photoAlbumsStatic.count; i < e; ++i)
       [self loadNextThumbnail : [NSIndexPath indexPathForRow : 0 inSection : i]];
 }
 
@@ -217,8 +262,8 @@ using CernAPP::ResourceTypeThumbnail;
    assert(stackedMode == YES && "loadNextThumbnail:, can be called only in a stacked mode");
 
    assert(indexPath != nil && "loadNextThumbnail:, parameter 'indexPath' is nil");
-   assert(indexPath.section < photoAlbums.count && "loadNextThumbnail:, section index is out of bounds");
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.section];
+   assert(indexPath.section < photoAlbumsStatic.count && "loadNextThumbnail:, section index is out of bounds");
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
    assert(indexPath.row + 1 < album.nImages && "loadNextThumbnail:, row index is out of bounds");
 
    NSIndexPath * const key = [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section];
@@ -233,9 +278,9 @@ using CernAPP::ResourceTypeThumbnail;
 //________________________________________________________________________________________
 - (void) loadThumbnailsForAlbum : (NSUInteger) index
 {
-   assert(index < photoAlbums.count && "loadThumbnailsForAlbum:, parameter 'index' is out of bounds");
+   assert(index < photoAlbumsStatic.count && "loadThumbnailsForAlbum:, parameter 'index' is out of bounds");
    
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[index];
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[index];
    for (NSUInteger i = 0, e = album.nImages; i < e; ++i) {
       NSIndexPath * const key = [NSIndexPath indexPathForRow : i inSection : index];
       if ([album getThumbnailImageForIndex : i] || imageDownloaders[key])
@@ -253,10 +298,10 @@ using CernAPP::ResourceTypeThumbnail;
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
    assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
-   assert(indexPath.section < photoAlbums.count &&
+   assert(indexPath.section < photoAlbumsStatic.count &&
           "imageDidLoad:, section index is out of bounds");
    
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.section];
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
    assert(indexPath.row < album.nImages && "imageDidLoad:, row index is out of bounds");
    
    ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath];
@@ -283,18 +328,20 @@ using CernAPP::ResourceTypeThumbnail;
       [self loadNextThumbnail : [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section]];
    }
    
-   if (!imageDownloaders.count)
+   if (!imageDownloaders.count) {
+      self.navigationItem.rightBarButtonItem.enabled = YES;
       CernAPP::HideSpinner(self);
+   }
 }
 
 //________________________________________________________________________________________
 - (void) imageDownloadFailed : (NSIndexPath *) indexPath
 {
    assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
-   assert(indexPath.section < photoAlbums.count &&
+   assert(indexPath.section < photoAlbumsStatic.count &&
           "imageDownloadFailed:, section index is out of bounds");
 
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.section];
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
    assert(indexPath.row < album.nImages &&
           "imageDownloadFailed:, row index is out of bounds");
 
@@ -310,8 +357,10 @@ using CernAPP::ResourceTypeThumbnail;
       assert(0 && "imageDownloadFailed:, not implemented");
    }
    
-   if (!imageDownloaders.count)
+   if (!imageDownloaders.count) {
+      self.navigationItem.rightBarButtonItem.enabled = YES;   
       CernAPP::HideSpinner(self);
+   }
 }
 
 #pragma mark - CERNMediaMARCParser delegate.
@@ -355,7 +404,7 @@ using CernAPP::ResourceTypeThumbnail;
    }
    
    newAlbum.title = record[@"title"];
-   [photoAlbums addObject : newAlbum];
+   [photoAlbumsDynamic addObject : newAlbum];
 }
 
 //________________________________________________________________________________________
@@ -365,6 +414,7 @@ using CernAPP::ResourceTypeThumbnail;
 
    //We start downloading images here.
    if (stackedMode) {
+      photoAlbumsStatic = [photoAlbumsDynamic mutableCopy];
       [self loadFirstThumbnails];
       [self.collectionView reloadData];
    } else {
@@ -377,7 +427,13 @@ using CernAPP::ResourceTypeThumbnail;
 {
 #pragma unused(aParser)
    CernAPP::HideSpinner(self);
-   CernAPP::ShowErrorHUD(self, @"Network error");
+   
+   self.navigationItem.rightBarButtonItem.enabled = YES;
+   
+   if (!photoAlbumsStatic.count)
+      CernAPP::ShowErrorHUD(self, @"Network error");
+   else
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
 }
 
 #pragma mark - Interface orientation change.
@@ -398,20 +454,37 @@ using CernAPP::ResourceTypeThumbnail;
    }
 }
 
+#pragma mark - ConnectionController delegate and related methods.
+
+//________________________________________________________________________________________
+- (void) cancelAllImageDownloaders
+{
+   for (ImageDownloader *downloader in imageDownloaders)
+      [downloader cancelDownload];
+   
+   [imageDownloaders removeAllObjects];
+}
+
+//________________________________________________________________________________________
+- (void) cancelAnyConnections
+{
+   [parser stop];
+   [self cancelAllImageDownloaders];
+}
+
 #pragma mark - UI.
 
 //________________________________________________________________________________________
 - (IBAction) reloadImages : (id) sender
 {
 #pragma unused(sender)
-/*
-   if (!photoDownloader.isDownloading) {
-      if (!photoDownloader.hasConnection)
+
+   if (parser.isFinishedParsing) {
+      if (![self hasConnection])
          CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
       else
          [self refresh];
    }
-   */
 }
 
 #pragma mark - ECSlidingViewController.
@@ -423,6 +496,5 @@ using CernAPP::ResourceTypeThumbnail;
    //
    [self.slidingViewController anchorTopViewTo : ECRight];
 }
-
 
 @end
