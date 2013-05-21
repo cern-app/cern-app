@@ -280,12 +280,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="RHe-rB-TLz">
-                        <size key="itemSize" width="50" height="50"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    </collectionViewFlowLayout>
+                    <collectionViewLayout key="collectionViewLayout" id="j8V-ZB-xvJ" customClass="AnimatedStackLayout"/>
                     <cells>
                         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="6sS-CY-gt1">
                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -310,6 +305,9 @@
         <image name="menu.png" width="20" height="20"/>
     </resources>
     <classes>
+        <class className="AnimatedStackLayout" superclassName="UICollectionViewFlowLayout">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AnimatedStackLayout.h"/>
+        </class>
         <class className="ArticleDetailViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ArticleDetailViewController.h"/>
             <relationships>
@@ -381,6 +379,9 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

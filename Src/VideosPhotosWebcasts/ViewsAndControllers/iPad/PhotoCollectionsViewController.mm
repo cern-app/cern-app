@@ -3,6 +3,7 @@
 #import "PhotoCollectionsViewController.h"
 #import "ECSlidingViewController.h"
 #import "PhotoAlbumCoverView.h"
+#import "AnimatedStackLayout.h"
 #import "ImageStackCellView.h"
 #import "ApplicationErrors.h"
 #import "PhotoViewCell.h"
@@ -297,21 +298,37 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       
       //Right now (test only):
       //1. Animate layout changed. At the end of animation:
-      //TODO:
-      //2. Switch between views.
-      [UIView transitionFromView : albumCollectionView toView : self.collectionView duration : 0.5f options : transitionOptions completion : ^(BOOL finished) {
+      [albumCollectionView performBatchUpdates : ^ {
+               ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 0.f;
+       } completion : ^(BOOL finished) {
+         //2. Switch between views.
          if (finished) {
-            //We switched back to the stacked album views.
+            [UIView transitionFromView : albumCollectionView toView : self.collectionView duration : 0.1f options : transitionOptions completion : ^(BOOL finished) {
+               if (finished) {
+                  //We switched back to the stacked album views.
+               }
+            }];
          }
-      }];   
+       }];
    } else {
+      //Here's the magic.
+      UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : indexPath];
+      assert([albumCollectionView.collectionViewLayout isKindOfClass:[AnimatedStackLayout class]] &&
+             "collectionView:didSelectItemAtIndexPath:, albumCollectionView has a wrong layout type");
+      AnimatedStackLayout *layout = (AnimatedStackLayout *)albumCollectionView.collectionViewLayout;
+      layout.stackCenter = cell.center;
+      layout.stackFactor = 0.f;
+
+      
       assert(indexPath.row < photoAlbumsStatic.count &&
              "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
       selected = indexPath;
       [albumCollectionView reloadData];
-      [UIView transitionFromView : self.collectionView toView : albumCollectionView duration : 0.5f options : transitionOptions completion : ^(BOOL finished) {
+      [UIView transitionFromView : self.collectionView toView : albumCollectionView duration : 0.1f options : transitionOptions completion : ^(BOOL finished) {
          if (finished) {
-            //Start animation - move images from stack.
+            [albumCollectionView performBatchUpdates : ^ {
+               ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 1.f;
+            } completion : nil];
          }
       }];
 

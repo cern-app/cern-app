@@ -204,6 +204,7 @@
 		70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */; };
 		70B3B63E174B9138002DDD78 /* ImageStackCellView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B3B63D174B9138002DDD78 /* ImageStackCellView.mm */; };
 		70B3B642174BA17F002DDD78 /* PhotoAlbumCoverView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B3B641174BA17E002DDD78 /* PhotoAlbumCoverView.mm */; };
+		70B3B645174BDD0E002DDD78 /* AnimatedStackLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 70B3B644174BDD0D002DDD78 /* AnimatedStackLayout.m */; };
 		70B6B0B9169DD2790058DADA /* live_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0B8169DD2790058DADA /* live_color.png */; };
 		70B6B0BC169DD48E0058DADA /* news_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BB169DD48E0058DADA /* news_color.png */; };
 		70B6B0BE169DD6BE0058DADA /* cern_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BD169DD6BE0058DADA /* cern_logo.png */; };
@@ -538,6 +539,8 @@
 		70B3B63F174B9D19002DDD78 /* PhotoCollectionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCollectionsViewController.h; sourceTree = "<group>"; };
 		70B3B640174BA17E002DDD78 /* PhotoAlbumCoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbumCoverView.h; sourceTree = "<group>"; };
 		70B3B641174BA17E002DDD78 /* PhotoAlbumCoverView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoAlbumCoverView.mm; sourceTree = "<group>"; };
+		70B3B643174BDD0C002DDD78 /* AnimatedStackLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedStackLayout.h; sourceTree = "<group>"; };
+		70B3B644174BDD0D002DDD78 /* AnimatedStackLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimatedStackLayout.m; sourceTree = "<group>"; };
 		70B6B0B8169DD2790058DADA /* live_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = live_color.png; sourceTree = "<group>"; };
 		70B6B0BB169DD48E0058DADA /* news_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = news_color.png; sourceTree = "<group>"; };
 		70B6B0BD169DD6BE0058DADA /* cern_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_logo.png; sourceTree = "<group>"; };
@@ -887,6 +890,8 @@
 				70B3B63D174B9138002DDD78 /* ImageStackCellView.mm */,
 				70B3B640174BA17E002DDD78 /* PhotoAlbumCoverView.h */,
 				70B3B641174BA17E002DDD78 /* PhotoAlbumCoverView.mm */,
+				70B3B643174BDD0C002DDD78 /* AnimatedStackLayout.h */,
+				70B3B644174BDD0D002DDD78 /* AnimatedStackLayout.m */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1630,6 +1635,7 @@
 				70E9EE641746203500D1530E /* PhotoAlbum.mm in Sources */,
 				70B3B63E174B9138002DDD78 /* ImageStackCellView.mm in Sources */,
 				70B3B642174BA17F002DDD78 /* PhotoAlbumCoverView.mm in Sources */,
+				70B3B645174BDD0E002DDD78 /* AnimatedStackLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
