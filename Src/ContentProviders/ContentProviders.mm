@@ -1,7 +1,7 @@
 #import <cassert>
 
+#import "PhotoCollectionsViewController.h"
 #import "StaticInfoScrollViewController.h"
-#import "PhotosCollectionViewController.h"
 #import "StaticInfoTileViewController.h"
 #import "BulletinTableViewController.h"
 #import "BulletinFeedViewController.h"
@@ -199,14 +199,12 @@ void CancelConnections(UIViewController *controller)
       topController.photoDownloader.url = [NSURL URLWithString : (NSString *)info[@"Url"]];
       topController.navigationItem.title = categoryName;
    } else {
-      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotosCollectionViewControllerID];
-      assert([navController.topViewController isKindOfClass : [PhotosCollectionViewController class]] &&
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotoCollectionsViewControllerID];
+      assert([navController.topViewController isKindOfClass : [PhotoCollectionsViewController class]] &&
              "loadControllerTo:, top view controller is either nil or has a wrong type");
 
-
-      PhotosCollectionViewController * const topController = (PhotosCollectionViewController *)navController.topViewController;
+      PhotoCollectionsViewController * const topController = (PhotoCollectionsViewController *)navController.topViewController;
       [topController setURL : [NSURL URLWithString : (NSString *)info[@"Url"]]];
-      topController.stackedMode = YES;//Show images grouped as stacks.
       topController.navigationItem.title = categoryName;
    }
 

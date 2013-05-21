@@ -1,6 +1,6 @@
 #import <algorithm>
 
-#import "PhotosCollectionViewController.h"
+#import "PhotoCollectionsViewController.h"
 #import "ECSlidingViewController.h"
 #import "PhotoAlbumCoverView.h"
 #import "ImageStackCellView.h"
@@ -12,7 +12,9 @@
 using CernAPP::ResourceTypeThumbnail;
 using CernAPP::NetworkStatus;
 
-@implementation PhotosCollectionViewController {
+//TODO: This class or a some derived class should also replace a PhotoGridViewController (iPhone version, non-stacked mode).
+
+@implementation PhotoCollectionsViewController {
    BOOL viewDidAppear;
    
    CernMediaMARCParser *parser;
@@ -25,7 +27,7 @@ using CernAPP::NetworkStatus;
    Reachability *internetReach;
 }
 
-@synthesize noConnectionHUD, spinner, stackedMode;
+@synthesize noConnectionHUD, spinner;
 
 
 #pragma mark - Network reachability.
@@ -100,17 +102,6 @@ using CernAPP::NetworkStatus;
 {
    if (!viewDidAppear) {
       viewDidAppear = YES;
-      
-      /*
-      assert([self.collectionView.collectionViewLayout isKindOfClass : [PhotosCollectionViewLayout class]] &&
-                "viewDidAppear:, collection view has a wrong layout type");
-      PhotosCollectionViewLayout * const layout = (PhotosCollectionViewLayout *)self.collectionView.collectionViewLayout;
-      if (self.collectionView.frame.size.width > self.collectionView.frame.size.height)
-         layout.numberOfColumns = 4;
-      else
-         layout.numberOfColumns = 3;
-      */
-      
       [self refresh];
    }
 }
@@ -168,8 +159,6 @@ using CernAPP::NetworkStatus;
 #pragma unused(collectionView)
    assert(section >= 0 && section < photoAlbumsStatic.count && "collectionView:numberOfItemsInSection:, index is out of bounds");
 
-   assert(stackedMode == YES && "non-stacked, not-implemented yet");
-
    return photoAlbumsStatic.count;
 }
 
@@ -179,8 +168,6 @@ using CernAPP::NetworkStatus;
 {
    assert(collectionView != nil && "collectionView:cellForItemAtIndexPath:, parameter 'collectionView' is nil");
    assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
-
-   assert(stackedMode == YES && "non-stacked, not-implemented");
 
    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"PhotoAlbumCoverView" forIndexPath : indexPath];
    assert(!cell || [cell isKindOfClass : [PhotoAlbumCoverView class]] &&
@@ -195,11 +182,8 @@ using CernAPP::NetworkStatus;
           "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
    PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.row];
 
-   if (stackedMode) {
-      if (UIImage * const image = (UIImage *)thumbnails[indexPath])
-         photoCell.imageView.image = image;
-   } else
-      photoCell.imageView.image = [album getThumbnailImageForIndex : indexPath.row];
+   if (UIImage * const image = (UIImage *)thumbnails[indexPath])
+      photoCell.imageView.image = image;
    
    if (album.title.length)
       photoCell.title = album.title;
@@ -214,9 +198,6 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (void) loadFirstThumbnails
 {
-   assert(stackedMode == YES &&
-          "loadFirstThumbnails, can be called only in a stacked mode");
-
    if (imageDownloaders.count)
       return;
    
@@ -230,8 +211,6 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (void) loadNextThumbnail : (NSIndexPath *) indexPath
 {
-   assert(stackedMode == YES && "loadNextThumbnail:, can be called only in a stacked mode");
-
    assert(indexPath != nil && "loadNextThumbnail:, parameter 'indexPath' is nil");
    assert(indexPath.section < photoAlbumsStatic.count && "loadNextThumbnail:, section index is out of bounds");
    PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
@@ -281,20 +260,15 @@ using CernAPP::NetworkStatus;
    if (downloader.image) {
       [album setThumbnailImage : downloader.image withIndex : indexPath.row];
       //Here we have to do some magic:
-      if (stackedMode) {
-         NSIndexPath * const key = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
-         if (!thumbnails[key]) {
-            [thumbnails setObject : downloader.image forKey : key];
-            //It's a bit of a mess here - section goes to the row and becomes 0.
-            [self.collectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.section inSection : 0]]];
-            //Load other thumbnails (not visible in a stacked mode).
-            [self loadThumbnailsForAlbum : indexPath.section];
-         }
-      } else {
-         //TODO: non-stacked mode is not implemented.
-         assert(0 && "imageDidLoad:, not implemented");
+      NSIndexPath * const key = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
+      if (!thumbnails[key]) {
+         [thumbnails setObject : downloader.image forKey : key];
+         //It's a bit of a mess here - section goes to the row and becomes 0.
+         [self.collectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.section inSection : 0]]];
+         //Load other thumbnails (not visible in a stacked mode).
+         [self loadThumbnailsForAlbum : indexPath.section];
       }
-   } else if (stackedMode && indexPath.row + 1 < album.nImages) {
+   } else if (indexPath.row + 1 < album.nImages) {
       //Ooops, but we can still try to download the next thumbnail?
       [self loadNextThumbnail : [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section]];
    }
@@ -319,14 +293,9 @@ using CernAPP::NetworkStatus;
    assert(imageDownloaders[indexPath] != nil && "imageDownloadFailed:, no downloader found for indexPath");
    [imageDownloaders removeObjectForKey : indexPath];
    
-   if (stackedMode) {
-      NSIndexPath * const key = [NSIndexPath indexPathForRow : 0 inSection : indexPath.section];
-      if (!thumbnails[key] && indexPath.row + 1 < album.nImages)//We're still trying to download an album's thumbnail.
-         [self loadNextThumbnail : [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section]];
-   } else {
-      //TODO: non-stacked mode is not implemented.
-      assert(0 && "imageDownloadFailed:, not implemented");
-   }
+   NSIndexPath * const key = [NSIndexPath indexPathForRow : 0 inSection : indexPath.section];
+   if (!thumbnails[key] && indexPath.row + 1 < album.nImages)//We're still trying to download an album's thumbnail.
+      [self loadNextThumbnail : [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section]];
    
    if (!imageDownloaders.count) {
       self.navigationItem.rightBarButtonItem.enabled = YES;   
@@ -382,15 +351,10 @@ using CernAPP::NetworkStatus;
 - (void) parserDidFinish : (CernMediaMARCParser *) aParser
 {
 #pragma unused(aParser)
-
    //We start downloading images here.
-   if (stackedMode) {
-      photoAlbumsStatic = [photoAlbumsDynamic mutableCopy];
-      [self loadFirstThumbnails];
-      [self.collectionView reloadData];
-   } else {
-      assert(0 && "parserDidFinish:, not implemented");
-   }
+   photoAlbumsStatic = [photoAlbumsDynamic mutableCopy];
+   [self loadFirstThumbnails];
+   [self.collectionView reloadData];
 }
 
 //________________________________________________________________________________________

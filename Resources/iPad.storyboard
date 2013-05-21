@@ -216,7 +216,7 @@
         <!--Menu Navigation Controller-->
         <scene sceneID="WFA-uf-uMX">
             <objects>
-                <navigationController storyboardIdentifier="PhotosCollectionViewControllerID" definesPresentationContext="YES" id="znT-bM-D1R" customClass="MenuNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="PhotoCollectionsViewControllerID" definesPresentationContext="YES" id="znT-bM-D1R" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Hr-O5-ixb">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -229,10 +229,10 @@
             </objects>
             <point key="canvasLocation" x="2011" y="3929"/>
         </scene>
-        <!--Photos Collection View Controller-->
+        <!--Photo Collections View Controller-->
         <scene sceneID="Nw4-nr-lrn">
             <objects>
-                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="Fm4-vg-l4a" customClass="PhotosCollectionViewController" sceneMemberID="viewController">
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="Fm4-vg-l4a" customClass="PhotoCollectionsViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="Hqu-4q-aZR">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -324,8 +324,8 @@
         <class className="PhotoAlbumCoverView" superclassName="UICollectionViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoAlbumCoverView.h"/>
         </class>
-        <class className="PhotosCollectionViewController" superclassName="UICollectionViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotosCollectionViewController.h"/>
+        <class className="PhotoCollectionsViewController" superclassName="UICollectionViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoCollectionsViewController.h"/>
             <relationships>
                 <relationship kind="action" name="reloadImages:"/>
                 <relationship kind="action" name="revealMenu:"/>
