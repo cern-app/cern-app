@@ -26,7 +26,7 @@ NSString * const PhotoCellKind = @"PhotoViewCell";
       self.layer.borderWidth = 3.f;
       self.layer.shadowColor = [UIColor blackColor].CGColor;
       self.layer.shadowRadius = 3.f;
-      self.layer.shadowOffset = CGSizeMake(0.f, 2.f);
+      self.layer.shadowOffset = CGSizeMake(-2.f, -2.f);
       self.layer.shadowOpacity = 0.5f;
 
       //To show stacked images (views) I'll use rotation transformation.

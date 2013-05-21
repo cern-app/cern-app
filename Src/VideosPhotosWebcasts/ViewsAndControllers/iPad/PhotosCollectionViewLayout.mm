@@ -107,6 +107,7 @@ const NSUInteger PhotoCellBaseZIndex = 100;
    //titleHeight = 26.0f;
     
    //Create rotations at load so that they are consistent during prepareLayout
+   /*
    rotations = [NSMutableArray arrayWithCapacity : RotationCount];
    CGFloat percentage = 0.0f;
    for (NSUInteger i = 0; i < RotationCount; ++i) {
@@ -121,7 +122,7 @@ const NSUInteger PhotoCellBaseZIndex = 100;
       const CGFloat angle = 2 * M_PI * (1.0f + percentage);
       CATransform3D transform = CATransform3DMakeRotation(angle, 0.0f, 0.0f, 1.0f);
       [rotations addObject:[NSValue valueWithCATransform3D:transform]];
-   }
+   }*/
 }
 
 
@@ -139,18 +140,21 @@ const NSUInteger PhotoCellBaseZIndex = 100;
    
    for (NSInteger section = 0; section < sectionCount; ++section) {
       const NSInteger itemCount = [self.collectionView numberOfItemsInSection : section];
+      const CGFloat originShift = 4.f;
 
       for (NSInteger item = 0; item < itemCount; ++item) {
          indexPath = [NSIndexPath indexPathForItem : item inSection : section];
 
          UICollectionViewLayoutAttributes *itemAttributes =
          [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-         itemAttributes.frame = [self frameForAlbumPhotoAtIndexPath:indexPath];
-         itemAttributes.transform3D = [self transformForAlbumPhotoAtIndex:indexPath];
+         CGRect frame = [self frameForAlbumPhotoAtIndexPath : indexPath];
+         frame.origin.x -= item * originShift;
+         frame.origin.y -= item * originShift;
+         itemAttributes.frame = frame;
+         //itemAttributes.transform3D = [self transformForAlbumPhotoAtIndex:indexPath];
          itemAttributes.zIndex = PhotoCellBaseZIndex + itemCount - item;
-
          cellLayoutInfo[indexPath] = itemAttributes;
-         
+
          /*
          if (!indexPath.item) {
             UICollectionViewLayoutAttributes *titleAttributes =
@@ -186,7 +190,7 @@ const NSUInteger PhotoCellBaseZIndex = 100;
 - (NSArray *) layoutAttributesForElementsInRect : (CGRect) rect
 {
    NSMutableArray * const allAttributes = [NSMutableArray arrayWithCapacity:self.layoutInfo.count];
-    
+
    [self.layoutInfo enumerateKeysAndObjectsUsingBlock : ^(NSString *elementIdentifier, NSDictionary *elementsInfo, BOOL *stop) {
       [elementsInfo enumerateKeysAndObjectsUsingBlock : ^(NSIndexPath *indexPath, UICollectionViewLayoutAttributes *attributes, BOOL *innerStop) {
          if (CGRectIntersectsRect(rect, attributes.frame)) {
