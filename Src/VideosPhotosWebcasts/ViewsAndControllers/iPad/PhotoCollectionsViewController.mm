@@ -169,6 +169,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 {
    if (parser.isFinishedParsing) {
       [photoAlbumsDynamic removeAllObjects];
+      //
+      [self cancelAllImageDownloaders];//TODO: test??
+      //
       [noConnectionHUD hide : YES];
       
       self.navigationItem.rightBarButtonItem.enabled = NO;
@@ -262,7 +265,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
          PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
          if (UIImage * const image = [album getThumbnailImageForIndex : indexPath.row])
             photoCell.imageView.image = image;
-      }
+      } else
+         NSLog(@"nothing selected????");
 
       return photoCell;
    } else {
@@ -308,20 +312,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
       assert(indexPath.row < album.nImages && "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
       //Open MWPhotoBrowser.
-      
-      /*
-      self.collectionView.hidden = NO;
-      [albumCollectionView performBatchUpdates : ^ {
-         ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 0.f;
-      } completion : ^(BOOL finished) {
-         [self.collectionView.superview bringSubviewToFront:self.collectionView];
-         if (spinner.isAnimating)//Do not forget to show the spinner again, we are still loading.
-            [spinner.superview bringSubviewToFront : spinner];
-   
-         albumCollectionView.hidden = YES;
-      }];
-      */
-      
       MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate : self];
       browser.displayActionButton = YES;
       [browser setInitialPageIndex : indexPath.row];
@@ -348,7 +338,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
       self.collectionView.hidden = YES;
       albumCollectionView.hidden = NO;
-      [albumCollectionView.superview bringSubviewToFront:albumCollectionView];
+      [albumCollectionView.superview bringSubviewToFront : albumCollectionView];
       
       [albumCollectionView performBatchUpdates : ^ {
          ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 1.f;
@@ -557,6 +547,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 #pragma unused(aParser)
    //We start downloading images here.
    photoAlbumsStatic = [photoAlbumsDynamic mutableCopy];
+   [thumbnails removeAllObjects];
    [self loadFirstThumbnails];
    [self.collectionView reloadData];
 }
