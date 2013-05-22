@@ -190,12 +190,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    if (parser.isFinishedParsing) {
       [photoAlbumsDynamic removeAllObjects];
       //
-      [self cancelAllImageDownloaders];//TODO: test??
+      [self cancelAllImageDownloaders];//TODO: test, can any of them be active if I can refresh??
       //
       [noConnectionHUD hide : YES];
-      
       self.navigationItem.rightBarButtonItem.enabled = NO;
-      
       CernAPP::ShowSpinner(self);
       [parser parse];
    }
@@ -225,6 +223,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       return CGSizeMake(125.f, 125.f);
    }
 
+   //Album's cover has a fixed size.
    return CGSizeMake(200.f, 200.f);
 }
 
@@ -434,12 +433,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) loadFirstThumbnails
 {
-   if (imageDownloaders.count)
-      return;
-   
-   if (!photoAlbumsStatic.count)
-      return;
-
    for (NSUInteger i = 0, e = photoAlbumsStatic.count; i < e; ++i)
       [self loadNextThumbnail : [NSIndexPath indexPathForRow : 0 inSection : i]];
 }
@@ -449,6 +442,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 {
    assert(indexPath != nil && "loadNextThumbnail:, parameter 'indexPath' is nil");
    assert(indexPath.section < photoAlbumsStatic.count && "loadNextThumbnail:, section index is out of bounds");
+
    PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
    assert(indexPath.row < album.nImages && "loadNextThumbnail:, row index is out of bounds");
 
@@ -496,23 +490,25 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(downloader != nil && "imageDidLoad:, no downloader found for indexPath");
    [imageDownloaders removeObjectForKey : indexPath];
    
+   NSIndexPath * const coverImageKey = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
+   
    if (downloader.image) {
       [album setThumbnailImage : downloader.image withIndex : indexPath.row];
       //Here we have to do some magic:
-      NSIndexPath * const key = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
-      if (!thumbnails[key]) {//We have to update an album's cover.
-         [thumbnails setObject : downloader.image forKey : key];
+      
+      if (!thumbnails[coverImageKey]) {//We have to update an album's cover.
+         [thumbnails setObject : downloader.image forKey : coverImageKey];
          //It's a bit of a mess here - section goes to the row and becomes 0.
-         [self.collectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.section inSection : 0]]];
+         [self.collectionView reloadItemsAtIndexPaths : @[coverImageKey]];
          //Load other thumbnails (not visible in a stacked mode).
          [self loadThumbnailsForAlbum : indexPath.section];
       }
       
-      if (selected && !albumCollectionView.hidden) {
-         if (selected.row == indexPath.section) {
-            [albumCollectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.row inSection : 0]]];
-         }
-      }
+      if (selectedAlbum == album)
+         [albumCollectionView reloadItemsAtIndexPaths : @[coverImageKey]];
+   } else if (!thumbnails[coverImageKey] && indexPath.row + 1 < album.nImages) {
+      //We're still trying to download a cover image.
+      [self loadNextThumbnail : [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section]];
    }
    
    if (!imageDownloaders.count) {
@@ -535,9 +531,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(imageDownloaders[indexPath] != nil && "imageDownloadFailed:, no downloader found for indexPath");
    [imageDownloaders removeObjectForKey : indexPath];
    
-   NSIndexPath * const key = [NSIndexPath indexPathForRow : 0 inSection : indexPath.section];
-   if (!thumbnails[key] && indexPath.row + 1 < album.nImages)//We're still trying to download an album's thumbnail.
+   NSIndexPath * const coverImageKey = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
+   if (!thumbnails[coverImageKey] && indexPath.row + 1 < album.nImages) {
+      //We're still trying to download an album's cover image.
       [self loadNextThumbnail : [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section]];
+   }
    
    if (!imageDownloaders.count) {
       self.navigationItem.rightBarButtonItem.enabled = YES;   
@@ -593,9 +591,13 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (void) parserDidFinish : (CernMediaMARCParser *) aParser
 {
 #pragma unused(aParser)
-   //We start downloading images here.
    photoAlbumsStatic = [photoAlbumsDynamic mutableCopy];
    [thumbnails removeAllObjects];
+   
+   //It's possible, that self.collectionView is hidden now.
+   //But anyway - first try to download the first image from
+   //every album and set the 'cover', after that, download others.
+   //If albumCollectionView is active and visible now, it stil shows data from the selectedAlbum (if any).
    [self loadFirstThumbnails];
    [self.collectionView reloadData];
 }
