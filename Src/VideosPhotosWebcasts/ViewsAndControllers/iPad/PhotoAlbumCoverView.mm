@@ -81,4 +81,19 @@
    titleLabel.text = title;
 }
 
+#pragma mark - Reuse cell.
+
+//________________________________________________________________________________________
+- (void) prepareForReuse
+{
+   imageStackView.imageView.image = nil;
+   titleLabel.text = nil;
+}
+
+//________________________________________________________________________________________
+- (NSString *) reuseIdentifier
+{
+   return @"PhotoAlbumCoverView";
+}
+
 @end

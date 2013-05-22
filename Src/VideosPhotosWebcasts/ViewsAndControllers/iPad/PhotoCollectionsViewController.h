@@ -15,7 +15,8 @@
 
 @interface PhotoCollectionsViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate,
                                                                       ImageDownloaderDelegate, HUDRefreshProtocol,
-                                                                      CernMediaMarcParserDelegate, ConnectionController>
+                                                                      CernMediaMarcParserDelegate, ConnectionController,
+                                                                      MWPhotoBrowserDelegate>
 
 
 - (void) setURL : (NSURL *) url;

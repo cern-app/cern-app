@@ -49,4 +49,10 @@
    return @"PhotoViewCell";
 }
 
+//________________________________________________________________________________________
+- (void) prepareForReuse
+{
+   imageView.image = nil;
+}
+
 @end

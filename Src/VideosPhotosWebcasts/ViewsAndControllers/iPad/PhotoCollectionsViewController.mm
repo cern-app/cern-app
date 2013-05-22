@@ -10,6 +10,7 @@
 #import "Reachability.h"
 #import "PhotoAlbum.h"
 
+using CernAPP::ResourceTypeImageForPhotoBrowserIPAD;
 using CernAPP::ResourceTypeThumbnail;
 using CernAPP::NetworkStatus;
 
@@ -35,7 +36,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 }
 
 }
-
 
 @implementation PhotoCollectionsViewController {
    BOOL viewDidAppear;
@@ -296,7 +296,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    }
 }
 
-#pragma mark - UICollectionView delegate.
+#pragma mark - UICollectionView delegate + related methods.
 
 //________________________________________________________________________________________
 - (void) collectionView : (UICollectionView *) collectionView didSelectItemAtIndexPath : (NSIndexPath *) indexPath
@@ -304,10 +304,12 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(indexPath != nil && "collectionView:didSelectItemAtIndexPath:, parameter 'indexPath' is nil");
 
    if (collectionView == albumCollectionView) {
+      assert(selected != nil && "collectionView:didSelectItemAtIndexPath:, selected is nil");
       PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
       assert(indexPath.row < album.nImages && "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
       //Open MWPhotoBrowser.
       
+      /*
       self.collectionView.hidden = NO;
       [albumCollectionView performBatchUpdates : ^ {
          ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 0.f;
@@ -318,7 +320,18 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
          albumCollectionView.hidden = YES;
       }];
+      */
+      
+      MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate : self];
+      browser.displayActionButton = YES;
+      [browser setInitialPageIndex : indexPath.row];
+
+      UINavigationController * const navController = [[UINavigationController alloc] initWithRootViewController : browser];
+      navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+      [self presentViewController : navController animated : YES completion : nil];      
    } else {
+      self.navigationItem.rightBarButtonItem.enabled = NO;
+   
       //Here's the magic.
       UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : indexPath];
       assert([albumCollectionView.collectionViewLayout isKindOfClass:[AnimatedStackLayout class]] &&
@@ -339,7 +352,48 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       
       [albumCollectionView performBatchUpdates : ^ {
          ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 1.f;
-      } completion : nil];
+      } completion : ^(BOOL finished) {
+         if (finished) {
+            [self swapNavigationBarButtons : NO];
+         }
+      }];
+   }
+}
+
+//________________________________________________________________________________________
+- (void) switchToStackedMode : (id) sender
+{
+#pragma unused(sender)
+
+   assert(self.collectionView.hidden == YES && "switchToStackedMode:, self.collectionView is already visible");
+   assert(albumCollectionView.hidden == NO && "switchToStackedMode:, albumCollectionView is already hidden");
+
+   self.navigationItem.rightBarButtonItem.enabled = NO;
+
+   self.collectionView.hidden = NO;
+   [albumCollectionView performBatchUpdates : ^ {
+      ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 0.f;
+   } completion : ^(BOOL finished) {
+      [self.collectionView.superview bringSubviewToFront:self.collectionView];
+      if (spinner.isAnimating)//Do not forget to show the spinner again, we are still loading.
+         [spinner.superview bringSubviewToFront : spinner];
+   
+      albumCollectionView.hidden = YES;
+      [self swapNavigationBarButtons : YES];
+   }];
+}
+
+//________________________________________________________________________________________
+- (void) swapNavigationBarButtons : (BOOL) stackedMode
+{
+   if (stackedMode) {
+      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                                initWithBarButtonSystemItem : UIBarButtonSystemItemRefresh
+                                                target : self action : @selector(reloadImages:)];
+   } else {
+      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                                initWithBarButtonSystemItem : UIBarButtonSystemItemDone
+                                                target : self action : @selector(switchToStackedMode:)];
    }
 }
 
@@ -537,6 +591,35 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 {
    [parser stop];
    [self cancelAllImageDownloaders];
+}
+
+#pragma mark - MWPhotoBrowserDelegate.
+
+//________________________________________________________________________________________
+- (NSUInteger) numberOfPhotosInPhotoBrowser : (MWPhotoBrowser *) photoBrowser
+{
+#pragma unused(photoBrowser)
+
+   assert(selected != nil && "numberOfPhotosInPhotoBrowser:, selected is nil");
+   assert(selected.row < photoAlbumsStatic.count && "numberOfPhotosInPhotoBrowser:, row is out of bounds");
+
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
+   return album.nImages;
+}
+
+//________________________________________________________________________________________
+- (MWPhoto *) photoBrowser : (MWPhotoBrowser *) photoBrowser photoAtIndex : (NSUInteger) index
+{
+#pragma unused(photoBrowser)
+   assert(selected != nil && "photoBrowser:photoAtIndex:, selected is nil");
+   assert(selected.row < photoAlbumsStatic.count &&
+          "photoBrowser:photoAtIndex:, row is out of bounds");
+
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
+   assert(index < album.nImages && "photoBrowser:photoAtIndex:, index is out of bounds");
+
+   NSURL * const url = [album getImageURLWithIndex : index forType : ResourceTypeImageForPhotoBrowserIPAD];
+   return [MWPhoto photoWithURL : url];
 }
 
 #pragma mark - UI.
