@@ -276,7 +276,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
          cell = [[PhotoViewCell alloc] initWithFrame : CGRect()];
       
       PhotoViewCell * const photoCell = (PhotoViewCell *)cell;
-      if (selectedAlbum) {
+      if (selectedAlbum) {         
          if (UIImage * const image = [selectedAlbum getThumbnailImageForIndex : indexPath.row])
             photoCell.imageView.image = image;
       }//assert on selectedAlbum == nil?
@@ -489,7 +489,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath];
    assert(downloader != nil && "imageDidLoad:, no downloader found for indexPath");
    [imageDownloaders removeObjectForKey : indexPath];
-   
+
    NSIndexPath * const coverImageKey = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
    
    if (downloader.image) {
@@ -504,8 +504,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
          [self loadThumbnailsForAlbum : indexPath.section];
       }
       
-      if (selectedAlbum == album)
-         [albumCollectionView reloadItemsAtIndexPaths : @[coverImageKey]];
+      if (selectedAlbum == album) {
+         [albumCollectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.row inSection : 0]]];
+      }
    } else if (!thumbnails[coverImageKey] && indexPath.row + 1 < album.nImages) {
       //We're still trying to download a cover image.
       [self loadNextThumbnail : [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section]];
