@@ -122,12 +122,17 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
    
+   self.view.backgroundColor = [UIColor blackColor];
+   
    albumCollectionView = [[UICollectionView alloc] initWithFrame:CGRect() collectionViewLayout : [[AnimatedStackLayout alloc] init]];
    albumCollectionView.hidden = YES;
    albumCollectionView.delegate = self;
    albumCollectionView.dataSource = self;
-   
+   //
+   albumCollectionView.backgroundColor = [UIColor clearColor];
+   //
    [self.view addSubview : albumCollectionView];
+   [self.collectionView.superview bringSubviewToFront : self.collectionView];   
 
    [self.collectionView registerClass : [PhotoAlbumCoverView class]
            forCellWithReuseIdentifier : @"PhotoAlbumCoverView"];
@@ -303,10 +308,14 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       assert(indexPath.row < album.nImages && "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
       //Open MWPhotoBrowser.
       
+      self.collectionView.hidden = NO;
       [albumCollectionView performBatchUpdates : ^ {
          ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 0.f;
       } completion : ^(BOOL finished) {
-         self.collectionView.hidden = NO;
+         [self.collectionView.superview bringSubviewToFront:self.collectionView];
+         if (spinner.isAnimating)//Do not forget to show the spinner again, we are still loading.
+            [spinner.superview bringSubviewToFront : spinner];
+   
          albumCollectionView.hidden = YES;
       }];
    } else {
@@ -326,6 +335,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
       self.collectionView.hidden = YES;
       albumCollectionView.hidden = NO;
+      [albumCollectionView.superview bringSubviewToFront:albumCollectionView];
       
       [albumCollectionView performBatchUpdates : ^ {
          ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 1.f;

@@ -46,6 +46,10 @@ void ShowSpinner(UIViewController<HUDRefreshProtocol> *controller)
       controller.spinner.hidden = NO;
    if (!controller.spinner.isAnimating)
       [controller.spinner startAnimating];
+   
+   //Hahahah, I like this laja.hlam.shlak.musor :)
+   if (controller.spinner.superview.subviews.lastObject != controller.spinner)
+      [controller.spinner.superview bringSubviewToFront : controller.spinner];
 }
 
 //________________________________________________________________________________________
