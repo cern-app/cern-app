@@ -138,6 +138,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
            forCellWithReuseIdentifier : @"PhotoAlbumCoverView"];
    [albumCollectionView registerClass : [PhotoViewCell class]
            forCellWithReuseIdentifier : @"PhotoViewCell"];
+   
+   albumCollectionView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
+                                          UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
+                                          UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+
 }
 
 //________________________________________________________________________________________
@@ -382,7 +387,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
                                                 target : self action : @selector(reloadImages:)];
    } else {
       self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-                                                initWithBarButtonSystemItem : UIBarButtonSystemItemDone
+                                                initWithTitle : @"Back to albums" style : UIBarButtonItemStyleDone
                                                 target : self action : @selector(switchToStackedMode:)];
    }
 }

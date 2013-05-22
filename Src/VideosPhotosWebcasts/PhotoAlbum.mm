@@ -15,6 +15,7 @@ namespace CernAPP {
 NSString * const ResourceTypeThumbnail = @"jpgIcon";
 NSString * const ResourceTypeThumbnailImage = @"Thumbnail";
 NSString * const ResourceTypeImageForPhotoBrowserIPAD = @"jpgA4";
+NSString * const ResourceTypeImageForPhotoBrowserIPHONE = @"jpgA5";
 
 }
 
