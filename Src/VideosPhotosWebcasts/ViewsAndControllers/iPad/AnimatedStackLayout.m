@@ -61,7 +61,7 @@
       const CGFloat yPosition = stackCenter.y + (attributes.center.y - stackCenter.y) * stackFactor;
 
       attributes.center = CGPointMake(xPosition, yPosition);
-        
+      
       if (attributes.indexPath.row == 0) {
          attributes.alpha = 1.f;
          attributes.zIndex = 1.f; // Put the first cell on top of the stack

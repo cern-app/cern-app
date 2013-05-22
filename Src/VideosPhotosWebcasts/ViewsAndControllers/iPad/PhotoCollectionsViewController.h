@@ -18,8 +18,6 @@
                                                                       CernMediaMarcParserDelegate, ConnectionController>
 
 
-@property (nonatomic, weak) IBOutlet UICollectionView *albumCollectionView;
-
 - (void) setURL : (NSURL *) url;
 
 //UI actions (buttons on the navigation bar).

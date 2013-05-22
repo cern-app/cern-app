@@ -51,10 +51,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
    Reachability *internetReach;
    
-   UICollectionView *stacksView;
+   UICollectionView *albumCollectionView;
 }
 
-@synthesize noConnectionHUD, spinner, albumCollectionView;
+@synthesize noConnectionHUD, spinner;
 
 
 #pragma mark - Network reachability.
@@ -98,6 +98,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
       internetReach = [Reachability reachabilityForInternetConnection];
       [internetReach startNotifier];
+      
+      albumCollectionView = nil;
    }
 
    return self;
@@ -120,8 +122,13 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
    
-   stacksView = self.collectionView;
+   albumCollectionView = [[UICollectionView alloc] initWithFrame:CGRect() collectionViewLayout : [[AnimatedStackLayout alloc] init]];
+   albumCollectionView.hidden = YES;
+   albumCollectionView.delegate = self;
+   albumCollectionView.dataSource = self;
    
+   [self.view addSubview : albumCollectionView];
+
    [self.collectionView registerClass : [PhotoAlbumCoverView class]
            forCellWithReuseIdentifier : @"PhotoAlbumCoverView"];
    [albumCollectionView registerClass : [PhotoViewCell class]
@@ -135,6 +142,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       viewDidAppear = YES;
       [self refresh];
    }
+   
+   albumCollectionView.frame = self.collectionView.frame;//TODO: test this!
 }
 
 #pragma mark - Misc. methods.
@@ -289,27 +298,17 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 {
    assert(indexPath != nil && "collectionView:didSelectItemAtIndexPath:, parameter 'indexPath' is nil");
 
-   const UIViewAnimationOptions transitionOptions = UIViewAnimationOptionTransitionCrossDissolve;
-   
    if (collectionView == albumCollectionView) {
       PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
       assert(indexPath.row < album.nImages && "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
       //Open MWPhotoBrowser.
       
-      //Right now (test only):
-      //1. Animate layout changed. At the end of animation:
       [albumCollectionView performBatchUpdates : ^ {
-               ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 0.f;
-       } completion : ^(BOOL finished) {
-         //2. Switch between views.
-         if (finished) {
-            [UIView transitionFromView : albumCollectionView toView : self.collectionView duration : 0.1f options : transitionOptions completion : ^(BOOL finished) {
-               if (finished) {
-                  //We switched back to the stacked album views.
-               }
-            }];
-         }
-       }];
+         ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 0.f;
+      } completion : ^(BOOL finished) {
+         self.collectionView.hidden = NO;
+         albumCollectionView.hidden = YES;
+      }];
    } else {
       //Here's the magic.
       UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : indexPath];
@@ -319,19 +318,18 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       layout.stackCenter = cell.center;
       layout.stackFactor = 0.f;
 
-      
       assert(indexPath.row < photoAlbumsStatic.count &&
              "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
+
       selected = indexPath;
       [albumCollectionView reloadData];
-      [UIView transitionFromView : self.collectionView toView : albumCollectionView duration : 0.1f options : transitionOptions completion : ^(BOOL finished) {
-         if (finished) {
-            [albumCollectionView performBatchUpdates : ^ {
-               ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 1.f;
-            } completion : nil];
-         }
-      }];
 
+      self.collectionView.hidden = YES;
+      albumCollectionView.hidden = NO;
+      
+      [albumCollectionView performBatchUpdates : ^ {
+         ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 1.f;
+      } completion : nil];
    }
 }
 
