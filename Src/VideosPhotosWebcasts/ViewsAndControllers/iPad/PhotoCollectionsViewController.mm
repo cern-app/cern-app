@@ -224,7 +224,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    }
 
    //Album's cover has a fixed size.
-   return CGSizeMake(200.f, 200.f);
+   return CGSizeMake(200.f, 230.f);
 }
 
 //________________________________________________________________________________________

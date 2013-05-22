@@ -33,10 +33,10 @@
       [self addSubview : imageStackView];
       
       CGRect titleFrame = {};
-      titleFrame.size.width = frame.size.width * 0.8f;
+      titleFrame.size.width = frame.size.width * 0.9f;
       titleFrame.size.height = frame.size.height * 0.3f;
       
-      titleFrame.origin.x = 0.1f * frame.size.width;
+      titleFrame.origin.x = 0.05f * frame.size.width;
       titleFrame.origin.y = 0.85f * frame.size.height;
       
       titleLabel = [[UILabel alloc] initWithFrame : titleFrame];
