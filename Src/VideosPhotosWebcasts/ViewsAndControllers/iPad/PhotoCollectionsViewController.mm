@@ -52,6 +52,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    Reachability *internetReach;
    
    UICollectionView *albumCollectionView;
+   BOOL isInTransition;
 }
 
 @synthesize noConnectionHUD, spinner;
@@ -99,6 +100,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       internetReach = [Reachability reachabilityForInternetConnection];
       [internetReach startNotifier];
       
+      isInTransition = NO;
       albumCollectionView = nil;
    }
 
@@ -340,6 +342,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
       selected = indexPath;
       [albumCollectionView reloadData];
+      
+      isInTransition = YES;
 
       self.collectionView.hidden = YES;
       albumCollectionView.hidden = NO;
@@ -350,6 +354,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       } completion : ^(BOOL finished) {
          if (finished) {
             [self swapNavigationBarButtons : NO];
+            isInTransition = NO;
          }
       }];
    }
@@ -364,6 +369,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(albumCollectionView.hidden == NO && "switchToStackedMode:, albumCollectionView is already hidden");
 
    self.navigationItem.rightBarButtonItem.enabled = NO;
+   isInTransition = YES;
 
    self.collectionView.hidden = NO;
    [albumCollectionView performBatchUpdates : ^ {
@@ -375,6 +381,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
       albumCollectionView.hidden = YES;
       [self swapNavigationBarButtons : YES];
+      isInTransition = NO;
+      selected = nil;
    }];
 }
 
@@ -389,6 +397,27 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
                                                 initWithTitle : @"Back to albums" style : UIBarButtonItemStyleDone
                                                 target : self action : @selector(switchToStackedMode:)];
+   }
+}
+
+#pragma mark - Interface orientation change.
+
+//________________________________________________________________________________________
+- (BOOL) shouldAutorotate
+{
+   return !isInTransition;
+}
+
+//________________________________________________________________________________________
+- (void) willAnimateRotationToInterfaceOrientation : (UIInterfaceOrientation) toInterfaceOrientation duration : (NSTimeInterval)duration
+{
+   assert(isInTransition == NO &&
+          "willAnimateRotationToInterfaceOrientation:duration:, called while stack animation is active");
+   
+   if (selected && !albumCollectionView.hidden) {
+      //We (probably) have to find a new stack center.
+      UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : selected];
+      [((AnimatedStackLayout *)albumCollectionView.collectionViewLayout) setStackCenterNoUpdate : cell.center];
    }
 }
 

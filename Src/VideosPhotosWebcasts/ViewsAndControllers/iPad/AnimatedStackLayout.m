@@ -29,6 +29,13 @@
 }
 
 //________________________________________________________________________________________
+- (void) setStackCenterNoUpdate : (CGPoint) aStackCenter
+{
+   stackCenter = aStackCenter;
+   //No need to invalidate layout.   
+}
+
+//________________________________________________________________________________________
 - (void) setStackCenter : (CGPoint) aStackCenter
 {
    stackCenter = aStackCenter;

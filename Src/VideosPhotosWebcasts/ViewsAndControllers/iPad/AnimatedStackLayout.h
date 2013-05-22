@@ -12,6 +12,7 @@
 
 //The point to which the stack collapses.
 @property (nonatomic) CGPoint stackCenter;
+- (void) setStackCenterNoUpdate : (CGPoint) stackCenter;
 
 //0.f means completely stacked, 1.f results in the default FlowLayout.
 @property (nonatomic) CGFloat stackFactor;
