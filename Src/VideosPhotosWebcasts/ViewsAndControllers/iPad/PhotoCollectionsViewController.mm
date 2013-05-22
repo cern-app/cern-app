@@ -156,6 +156,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    }
    
    albumCollectionView.frame = self.collectionView.frame;//TODO: test this!
+
+   if (selected) {
+      UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : selected];
+      [(AnimatedStackLayout *)albumCollectionView.collectionViewLayout setStackCenterNoUpdate : cell.center];
+   }
 }
 
 #pragma mark - Misc. methods.
