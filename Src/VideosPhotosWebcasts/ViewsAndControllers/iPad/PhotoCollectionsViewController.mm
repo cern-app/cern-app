@@ -15,6 +15,10 @@ using CernAPP::ResourceTypeThumbnail;
 using CernAPP::NetworkStatus;
 
 //TODO: This class or a some derived class should also replace a PhotoGridViewController (iPhone version, non-stacked mode).
+
+
+//TODO: image load logic is weird and must be fixed/clarified.
+
 namespace
 {
 
@@ -48,6 +52,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    NSMutableArray *photoAlbumsDynamic;//In process.
    
    NSIndexPath *selected;
+   PhotoAlbum *selectedAlbum;
    
    Reachability *internetReach;
    
@@ -95,6 +100,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       thumbnails = [[NSMutableDictionary alloc] init];
       photoAlbumsStatic = nil;
       photoAlbumsDynamic = [[NSMutableArray alloc] init];
+      
+      selected = nil;
+      selectedAlbum = nil;
       
       [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
       internetReach = [Reachability reachabilityForInternetConnection];
@@ -157,7 +165,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
    albumCollectionView.frame = self.collectionView.frame;//TODO: test this!
 
-   if (selected) {
+   if ([self selectedIsValid]) {
       UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : selected];
       [(AnimatedStackLayout *)albumCollectionView.collectionViewLayout setStackCenterNoUpdate : cell.center];
    }
@@ -204,17 +212,16 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(indexPath != nil && "collectionView:layout:sizeForItemAtIndexPath:, parameter 'indexPath' is nil");
 
    if (collectionView == albumCollectionView) {
-      assert(selected != nil &&
+      assert(selectedAlbum != nil &&
              "collectionView:layout:sizeForItemAtIndexPath:, no album was selected");
-      PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
-      assert(indexPath.row < album.nImages &&
+      assert(indexPath.row < selectedAlbum.nImages &&
              "collectionView:layout:sizeForItemAtIndexPath:, row index is out of bounds");
       
-      if (UIImage * const thumbnail = [album getThumbnailImageForIndex : indexPath.row]) {
+      if (UIImage * const thumbnail = [selectedAlbum getThumbnailImageForIndex : indexPath.row]) {
          const CGSize cellSize = CellSizeFromImageSize(thumbnail.size);
          return cellSize;
       }
-      
+
       return CGSizeMake(125.f, 125.f);
    }
 
@@ -244,11 +251,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       if (!selected)//assert?
          return 0;
       
-      assert(selected.row < photoAlbumsStatic.count &&
-             "numberOfSectionsInCollectionView:, selected.row is out of bounds");
-      PhotoAlbum * const album = photoAlbumsStatic[selected.row];
+      assert(selectedAlbum != nil &&
+             "numberOfSectionsInCollectionView:, no album selected");
 
-      return album.nImages;
+      return selectedAlbum.nImages;
    }
 
    assert(section >= 0 && section < photoAlbumsStatic.count && "collectionView:numberOfItemsInSection:, index is out of bounds");
@@ -271,14 +277,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
          cell = [[PhotoViewCell alloc] initWithFrame : CGRect()];
       
       PhotoViewCell * const photoCell = (PhotoViewCell *)cell;
-      if (selected) {
-         assert(selected.row < photoAlbumsStatic.count &&
-                "collectionView:cellForItemAtIndexPath:, selected.row is out of bounds");
-         PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
-         if (UIImage * const image = [album getThumbnailImageForIndex : indexPath.row])
+      if (selectedAlbum) {
+         if (UIImage * const image = [selectedAlbum getThumbnailImageForIndex : indexPath.row])
             photoCell.imageView.image = image;
-      } else
-         NSLog(@"nothing selected????");
+      }//assert on selectedAlbum == nil?
 
       return photoCell;
    } else {
@@ -320,9 +322,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(indexPath != nil && "collectionView:didSelectItemAtIndexPath:, parameter 'indexPath' is nil");
 
    if (collectionView == albumCollectionView) {
-      assert(selected != nil && "collectionView:didSelectItemAtIndexPath:, selected is nil");
-      PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
-      assert(indexPath.row < album.nImages && "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
+      assert(selectedAlbum != nil && "collectionView:didSelectItemAtIndexPath:, no album selected");
+      assert(indexPath.row < selectedAlbum.nImages && "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
       //Open MWPhotoBrowser.
       MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate : self];
       browser.displayActionButton = YES;
@@ -346,6 +347,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
              "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
 
       selected = indexPath;
+      selectedAlbum = (PhotoAlbum *)photoAlbumsStatic[indexPath.row];
       [albumCollectionView reloadData];
       
       isInTransition = YES;
@@ -388,6 +390,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       [self swapNavigationBarButtons : YES];
       isInTransition = NO;
       selected = nil;
+      selectedAlbum = nil;
    }];
 }
 
@@ -419,7 +422,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(isInTransition == NO &&
           "willAnimateRotationToInterfaceOrientation:duration:, called while stack animation is active");
    
-   if (selected && !albumCollectionView.hidden) {
+   if (selected && !albumCollectionView.hidden && [self selectedIsValid]) {
       //We (probably) have to find a new stack center.
       UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : selected];
       [((AnimatedStackLayout *)albumCollectionView.collectionViewLayout) setStackCenterNoUpdate : cell.center];
@@ -448,6 +451,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(indexPath.section < photoAlbumsStatic.count && "loadNextThumbnail:, section index is out of bounds");
    PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
    assert(indexPath.row < album.nImages && "loadNextThumbnail:, row index is out of bounds");
+
+   if (imageDownloaders[indexPath])//Downloading already.
+      return;
 
    ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL :
                                          [album getImageURLWithIndex : indexPath.row + 1 forType : ResourceTypeThumbnail]];
@@ -494,16 +500,19 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       [album setThumbnailImage : downloader.image withIndex : indexPath.row];
       //Here we have to do some magic:
       NSIndexPath * const key = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
-      if (!thumbnails[key]) {
+      if (!thumbnails[key]) {//We have to update an album's cover.
          [thumbnails setObject : downloader.image forKey : key];
          //It's a bit of a mess here - section goes to the row and becomes 0.
          [self.collectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.section inSection : 0]]];
          //Load other thumbnails (not visible in a stacked mode).
          [self loadThumbnailsForAlbum : indexPath.section];
       }
-   } else if (indexPath.row + 1 < album.nImages) {
-      //Ooops, but we can still try to download the next thumbnail?
-      [self loadNextThumbnail : [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section]];
+      
+      if (selected && !albumCollectionView.hidden) {
+         if (selected.row == indexPath.section) {
+            [albumCollectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.row inSection : 0]]];
+         }
+      }
    }
    
    if (!imageDownloaders.count) {
@@ -630,25 +639,18 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 {
 #pragma unused(photoBrowser)
 
-   assert(selected != nil && "numberOfPhotosInPhotoBrowser:, selected is nil");
-   assert(selected.row < photoAlbumsStatic.count && "numberOfPhotosInPhotoBrowser:, row is out of bounds");
-
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
-   return album.nImages;
+   assert(selectedAlbum != nil && "numberOfPhotosInPhotoBrowser:, no album selected");
+   return selectedAlbum.nImages;
 }
 
 //________________________________________________________________________________________
 - (MWPhoto *) photoBrowser : (MWPhotoBrowser *) photoBrowser photoAtIndex : (NSUInteger) index
 {
 #pragma unused(photoBrowser)
-   assert(selected != nil && "photoBrowser:photoAtIndex:, selected is nil");
-   assert(selected.row < photoAlbumsStatic.count &&
-          "photoBrowser:photoAtIndex:, row is out of bounds");
+   assert(selectedAlbum != nil && "photoBrowser:photoAtIndex:, no album selected");
+   assert(index < selectedAlbum.nImages && "photoBrowser:photoAtIndex:, index is out of bounds");
 
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[selected.row];
-   assert(index < album.nImages && "photoBrowser:photoAtIndex:, index is out of bounds");
-
-   NSURL * const url = [album getImageURLWithIndex : index forType : ResourceTypeImageForPhotoBrowserIPAD];
+   NSURL * const url = [selectedAlbum getImageURLWithIndex : index forType : ResourceTypeImageForPhotoBrowserIPAD];
    return [MWPhoto photoWithURL : url];
 }
 
@@ -675,6 +677,22 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 #pragma unused(sender)
    //
    [self.slidingViewController anchorTopViewTo : ECRight];
+}
+
+#pragma mark - Aux.
+
+//________________________________________________________________________________________
+- (BOOL) selectedIsValid
+{
+   if (!selected)
+      return NO;
+
+   //It can happen, that we:
+   //1. pressed refresh button and
+   //2. before photo collections were refreshed selected one of loaded albums.
+   //3. we are looking at the selected album, but it does not exist after refresh.
+   
+   return selected.row < photoAlbumsStatic.count;
 }
 
 @end
