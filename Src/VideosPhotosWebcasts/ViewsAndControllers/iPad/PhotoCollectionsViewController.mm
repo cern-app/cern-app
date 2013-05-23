@@ -181,7 +181,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
    if ([self selectedIsValid]) {
       UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : selected];
-      [(AnimatedStackLayout *)albumCollectionView.collectionViewLayout setStackCenterNoUpdate : cell.center];
+      [(AnimatedStackLayout *)albumCollectionView.collectionViewLayout setStackCenterNoUpdate :
+         CGPointMake(cell.center.x, cell.center.y - self.collectionView.contentOffset.y)];
    }
 }
 
@@ -265,7 +266,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
       const CGFloat hugeH = 2000.f;
       const CGRect frame = albumCollectionView.frame;
-      const CGSize textSize = [selectedAlbum.title sizeWithFont : albumDescriptionCustomFont constrainedToSize : CGSizeMake(frame.size.width, hugeH)];
+      const CGSize textSize = [selectedAlbum.title sizeWithFont : albumDescriptionCustomFont
+                               constrainedToSize : CGSizeMake(frame.size.width, hugeH)];
 
       return textSize;
    }
@@ -442,7 +444,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       assert([albumCollectionView.collectionViewLayout isKindOfClass : [AnimatedStackLayout class]] &&
              "collectionView:didSelectItemAtIndexPath:, albumCollectionView has a wrong layout type");
       AnimatedStackLayout * const layout = (AnimatedStackLayout *)albumCollectionView.collectionViewLayout;
-      layout.stackCenter = cell.center;
+      layout.stackCenter = CGPointMake(cell.center.x, cell.center.y - self.collectionView.contentOffset.y);
       layout.inAnimation = YES;
       layout.stackFactor = 0.f;
 
@@ -495,7 +497,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    [albumCollectionView performBatchUpdates : ^ {
       ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 0.f;
    } completion : ^(BOOL finished) {
-
       if (finished) {
          //Many thanks to Apple for UICollectionView - it somehow manages to create a lot of footer views,
          //which it DOES NOT delete on reloadData, so I have to ... recreate this view to get rid of
@@ -549,7 +550,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    if (selected && !albumCollectionView.hidden && [self selectedIsValid]) {
       //We (probably) have to find a new stack center.
       UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : selected];
-      [((AnimatedStackLayout *)albumCollectionView.collectionViewLayout) setStackCenterNoUpdate : cell.center];
+      [((AnimatedStackLayout *)albumCollectionView.collectionViewLayout) setStackCenterNoUpdate :
+       CGPointMake(cell.center.x, cell.center.y - self.collectionView.contentOffset.y)];
    }
 }
 
@@ -781,37 +783,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    NSURL * const url = [selectedAlbum getImageURLWithIndex : index forType : ResourceTypeImageForPhotoBrowserIPAD];
    return [MWPhoto photoWithURL : url];
 }
-/*
-#pragma mark - UIScrollView delegate and related methods.
-
-//________________________________________________________________________________________
-- (void) adjustStackCenter
-{
-   assert(albumCollectionView != nil && "adjustStackCenter, albumCollectionView is nil");
-   assert([albumCollectionView.collectionViewLayout isKindOfClass : [AnimatedStackLayout class]] &&
-          "adjustStackCenter, albumCollectionView has a wrong layout type");
-   
-   const CGPoint offset = albumCollectionView.contentOffset;
-   NSLog(@"offset is %g %g", offset.x, offset.y);
-}
-
-//________________________________________________________________________________________
-- (void) scrollViewDidEndDragging : (UIScrollView *) scrollView willDecelerate : (BOOL) decelerate
-{
-#pragma unused(scrollView)
-
-   if (!decelerate && scrollView == albumCollectionView)
-      [self adjustStackCenter];
-}
-
-//________________________________________________________________________________________
-- (void) scrollViewDidEndDecelerating : (UIScrollView *) scrollView
-{
-#pragma unused(scrollView)
-
-   [self adjustStackCenter];
-}
-*/
 
 #pragma mark - UI.
 

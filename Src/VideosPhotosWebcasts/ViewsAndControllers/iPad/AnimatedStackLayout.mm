@@ -64,7 +64,7 @@
    //to the right point on the screen, even after we srcolled an album.
    const CGPoint adjustedStackCenter = CGPointMake(stackCenter.x, stackCenter.y + self.collectionView.contentOffset.y);
 
-   NSArray * const attributesArray = [super layoutAttributesForElementsInRect:rect];
+   NSArray * const attributesArray = [super layoutAttributesForElementsInRect : rect];
    for (UICollectionViewLayoutAttributes *attributes in attributesArray) {
       const CGFloat xPosition = adjustedStackCenter.x + (attributes.center.x - adjustedStackCenter.x) * stackFactor;
       const CGFloat yPosition = adjustedStackCenter.y + (attributes.center.y - adjustedStackCenter.y) * stackFactor;
