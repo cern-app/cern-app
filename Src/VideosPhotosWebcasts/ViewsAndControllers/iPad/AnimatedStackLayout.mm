@@ -60,10 +60,14 @@
 //________________________________________________________________________________________
 -(NSArray*) layoutAttributesForElementsInRect : (CGRect) rect
 {
+   //stackCenter depends on the view's contentOffset - stack should collapse/expand
+   //to the right point on the screen, even after we srcolled an album.
+   const CGPoint adjustedStackCenter = CGPointMake(stackCenter.x, stackCenter.y + self.collectionView.contentOffset.y);
+
    NSArray * const attributesArray = [super layoutAttributesForElementsInRect:rect];
    for (UICollectionViewLayoutAttributes *attributes in attributesArray) {
-      const CGFloat xPosition = stackCenter.x + (attributes.center.x - stackCenter.x) * stackFactor;
-      const CGFloat yPosition = stackCenter.y + (attributes.center.y - stackCenter.y) * stackFactor;
+      const CGFloat xPosition = adjustedStackCenter.x + (attributes.center.x - adjustedStackCenter.x) * stackFactor;
+      const CGFloat yPosition = adjustedStackCenter.y + (attributes.center.y - adjustedStackCenter.y) * stackFactor;
 
       attributes.center = CGPointMake(xPosition, yPosition);
       

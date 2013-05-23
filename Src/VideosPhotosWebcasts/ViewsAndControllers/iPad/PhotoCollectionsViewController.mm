@@ -57,7 +57,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
    Reachability *internetReach;
    
-   UICollectionView *albumCollectionView;   
+   UICollectionView *albumCollectionView;
    UIFont *albumDescriptionCustomFont;//The custom font for a album's description label.
 }
 
@@ -781,6 +781,37 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    NSURL * const url = [selectedAlbum getImageURLWithIndex : index forType : ResourceTypeImageForPhotoBrowserIPAD];
    return [MWPhoto photoWithURL : url];
 }
+/*
+#pragma mark - UIScrollView delegate and related methods.
+
+//________________________________________________________________________________________
+- (void) adjustStackCenter
+{
+   assert(albumCollectionView != nil && "adjustStackCenter, albumCollectionView is nil");
+   assert([albumCollectionView.collectionViewLayout isKindOfClass : [AnimatedStackLayout class]] &&
+          "adjustStackCenter, albumCollectionView has a wrong layout type");
+   
+   const CGPoint offset = albumCollectionView.contentOffset;
+   NSLog(@"offset is %g %g", offset.x, offset.y);
+}
+
+//________________________________________________________________________________________
+- (void) scrollViewDidEndDragging : (UIScrollView *) scrollView willDecelerate : (BOOL) decelerate
+{
+#pragma unused(scrollView)
+
+   if (!decelerate && scrollView == albumCollectionView)
+      [self adjustStackCenter];
+}
+
+//________________________________________________________________________________________
+- (void) scrollViewDidEndDecelerating : (UIScrollView *) scrollView
+{
+#pragma unused(scrollView)
+
+   [self adjustStackCenter];
+}
+*/
 
 #pragma mark - UI.
 
