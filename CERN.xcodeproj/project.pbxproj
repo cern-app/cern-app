@@ -114,6 +114,7 @@
 		701AE10216D26AEE003F6533 /* glyphspro_4_license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE10116D26AEE003F6533 /* glyphspro_4_license.txt */; };
 		70221E4416B1722B007AE923 /* videos.png in Resources */ = {isa = PBXBuildFile; fileRef = 70221E4316B1722B007AE923 /* videos.png */; };
 		702A4B7C1678E4D7005EBD1B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 702A4B7B1678E4D7005EBD1B /* SystemConfiguration.framework */; };
+		703ED8C1174DFEEA00C10903 /* PhotoAlbumFooterView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 703ED8C0174DFEEA00C10903 /* PhotoAlbumFooterView.mm */; };
 		703FD35C161DDB4F00B8BB8C /* PTS75F.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 703FD35B161DDB4F00B8BB8C /* PTS75F.ttf */; };
 		7046DFD716A423AB00F17445 /* 18-puzzle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7046DFD616A423AB00F17445 /* 18-puzzle@2x.png */; };
 		7046DFD916A425D700F17445 /* 124-bullhorn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7046DFD816A425D700F17445 /* 124-bullhorn@2x.png */; };
@@ -204,7 +205,7 @@
 		70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */; };
 		70B3B63E174B9138002DDD78 /* ImageStackCellView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B3B63D174B9138002DDD78 /* ImageStackCellView.mm */; };
 		70B3B642174BA17F002DDD78 /* PhotoAlbumCoverView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B3B641174BA17E002DDD78 /* PhotoAlbumCoverView.mm */; };
-		70B3B645174BDD0E002DDD78 /* AnimatedStackLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 70B3B644174BDD0D002DDD78 /* AnimatedStackLayout.m */; };
+		70B3B645174BDD0E002DDD78 /* AnimatedStackLayout.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B3B644174BDD0D002DDD78 /* AnimatedStackLayout.mm */; };
 		70B6B0B9169DD2790058DADA /* live_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0B8169DD2790058DADA /* live_color.png */; };
 		70B6B0BC169DD48E0058DADA /* news_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BB169DD48E0058DADA /* news_color.png */; };
 		70B6B0BE169DD6BE0058DADA /* cern_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BD169DD6BE0058DADA /* cern_logo.png */; };
@@ -385,6 +386,8 @@
 		701AE10116D26AEE003F6533 /* glyphspro_4_license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glyphspro_4_license.txt; sourceTree = "<group>"; };
 		70221E4316B1722B007AE923 /* videos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = videos.png; sourceTree = "<group>"; };
 		702A4B7B1678E4D7005EBD1B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		703ED8BF174DFEEA00C10903 /* PhotoAlbumFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbumFooterView.h; sourceTree = "<group>"; };
+		703ED8C0174DFEEA00C10903 /* PhotoAlbumFooterView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoAlbumFooterView.mm; sourceTree = "<group>"; };
 		703FD35B161DDB4F00B8BB8C /* PTS75F.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PTS75F.ttf; sourceTree = "<group>"; };
 		7046DFD616A423AB00F17445 /* 18-puzzle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "18-puzzle@2x.png"; sourceTree = "<group>"; };
 		7046DFD816A425D700F17445 /* 124-bullhorn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "124-bullhorn@2x.png"; sourceTree = "<group>"; };
@@ -540,7 +543,7 @@
 		70B3B640174BA17E002DDD78 /* PhotoAlbumCoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbumCoverView.h; sourceTree = "<group>"; };
 		70B3B641174BA17E002DDD78 /* PhotoAlbumCoverView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoAlbumCoverView.mm; sourceTree = "<group>"; };
 		70B3B643174BDD0C002DDD78 /* AnimatedStackLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedStackLayout.h; sourceTree = "<group>"; };
-		70B3B644174BDD0D002DDD78 /* AnimatedStackLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimatedStackLayout.m; sourceTree = "<group>"; };
+		70B3B644174BDD0D002DDD78 /* AnimatedStackLayout.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimatedStackLayout.mm; sourceTree = "<group>"; };
 		70B6B0B8169DD2790058DADA /* live_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = live_color.png; sourceTree = "<group>"; };
 		70B6B0BB169DD48E0058DADA /* news_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = news_color.png; sourceTree = "<group>"; };
 		70B6B0BD169DD6BE0058DADA /* cern_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_logo.png; sourceTree = "<group>"; };
@@ -891,7 +894,9 @@
 				70B3B640174BA17E002DDD78 /* PhotoAlbumCoverView.h */,
 				70B3B641174BA17E002DDD78 /* PhotoAlbumCoverView.mm */,
 				70B3B643174BDD0C002DDD78 /* AnimatedStackLayout.h */,
-				70B3B644174BDD0D002DDD78 /* AnimatedStackLayout.m */,
+				70B3B644174BDD0D002DDD78 /* AnimatedStackLayout.mm */,
+				703ED8BF174DFEEA00C10903 /* PhotoAlbumFooterView.h */,
+				703ED8C0174DFEEA00C10903 /* PhotoAlbumFooterView.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1635,7 +1640,8 @@
 				70E9EE641746203500D1530E /* PhotoAlbum.mm in Sources */,
 				70B3B63E174B9138002DDD78 /* ImageStackCellView.mm in Sources */,
 				70B3B642174BA17F002DDD78 /* PhotoAlbumCoverView.mm in Sources */,
-				70B3B645174BDD0E002DDD78 /* AnimatedStackLayout.m in Sources */,
+				70B3B645174BDD0E002DDD78 /* AnimatedStackLayout.mm in Sources */,
+				703ED8C1174DFEEA00C10903 /* PhotoAlbumFooterView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

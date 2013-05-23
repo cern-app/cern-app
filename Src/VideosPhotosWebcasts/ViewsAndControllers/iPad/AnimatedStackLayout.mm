@@ -13,7 +13,7 @@
 
 @implementation AnimatedStackLayout
 
-@synthesize stackCenter, stackFactor;
+@synthesize stackCenter, stackFactor, inAnimation;
 
 //________________________________________________________________________________________
 - (void) setStackFactor : (CGFloat) aStackFactor
@@ -61,8 +61,6 @@
 -(NSArray*) layoutAttributesForElementsInRect : (CGRect) rect
 {
    NSArray * const attributesArray = [super layoutAttributesForElementsInRect:rect];
-   
-   // Calculate the new position of each cell based on stackFactor and stackCenter
    for (UICollectionViewLayoutAttributes *attributes in attributesArray) {
       const CGFloat xPosition = stackCenter.x + (attributes.center.x - stackCenter.x) * stackFactor;
       const CGFloat yPosition = stackCenter.y + (attributes.center.y - stackCenter.y) * stackFactor;
@@ -80,6 +78,5 @@
 
    return attributesArray;
 }
-
 
 @end

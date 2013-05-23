@@ -2,6 +2,7 @@
 
 #import "PhotoCollectionsViewController.h"
 #import "ECSlidingViewController.h"
+#import "PhotoAlbumFooterView.h"
 #import "PhotoAlbumCoverView.h"
 #import "AnimatedStackLayout.h"
 #import "ImageStackCellView.h"
@@ -56,8 +57,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
    Reachability *internetReach;
    
-   UICollectionView *albumCollectionView;
-   BOOL isInTransition;
+   UICollectionView *albumCollectionView;   
+   UIFont *albumDescriptionCustomFont;//The custom font for a album's description label.
 }
 
 @synthesize noConnectionHUD, spinner;
@@ -107,9 +108,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
       internetReach = [Reachability reachabilityForInternetConnection];
       [internetReach startNotifier];
-      
-      isInTransition = NO;
+
       albumCollectionView = nil;
+      
+      albumDescriptionCustomFont = [UIFont fontWithName:@"PTSans-Bold" size : 24];
+      assert(albumDescriptionCustomFont != nil && "initWithCoder:, custom font is nil");
    }
 
    return self;
@@ -125,6 +128,29 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 #pragma mark - viewDid/Done/Does/Will etc.
 
 //________________________________________________________________________________________
+- (void) createAlbumViewWithFrame : (CGRect) frame
+{
+   albumCollectionView = [[UICollectionView alloc] initWithFrame : frame collectionViewLayout : [[AnimatedStackLayout alloc] init]];
+   albumCollectionView.hidden = YES;
+   albumCollectionView.delegate = self;
+   albumCollectionView.dataSource = self;
+   //
+   albumCollectionView.backgroundColor = [UIColor clearColor];
+   //
+   [self.view addSubview : albumCollectionView];
+   
+   [albumCollectionView registerClass : [PhotoViewCell class]
+           forCellWithReuseIdentifier : @"PhotoViewCell"];
+   [albumCollectionView registerClass: [PhotoAlbumFooterView class]
+           forSupplementaryViewOfKind : UICollectionElementKindSectionFooter
+                  withReuseIdentifier : @"PhotoAlbumFooterView"];
+
+   albumCollectionView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
+                                          UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
+                                          UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+}
+
+//________________________________________________________________________________________
 - (void) viewDidLoad
 {
    [super viewDidLoad];
@@ -134,24 +160,12 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
    self.view.backgroundColor = [UIColor blackColor];
    
-   albumCollectionView = [[UICollectionView alloc] initWithFrame:CGRect() collectionViewLayout : [[AnimatedStackLayout alloc] init]];
-   albumCollectionView.hidden = YES;
-   albumCollectionView.delegate = self;
-   albumCollectionView.dataSource = self;
-   //
-   albumCollectionView.backgroundColor = [UIColor clearColor];
-   //
-   [self.view addSubview : albumCollectionView];
+   [self createAlbumViewWithFrame : CGRect()];   
    [self.collectionView.superview bringSubviewToFront : self.collectionView];   
 
    [self.collectionView registerClass : [PhotoAlbumCoverView class]
            forCellWithReuseIdentifier : @"PhotoAlbumCoverView"];
-   [albumCollectionView registerClass : [PhotoViewCell class]
-           forCellWithReuseIdentifier : @"PhotoViewCell"];
    
-   albumCollectionView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
-                                          UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
-                                          UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
 
 }
 
@@ -199,7 +213,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    }
 }
 
-#pragma mark - UIViewCollectionDataSource
+#pragma mark - UICollectionViewDelegateFlowLayout
+//This delegate, by the way, never explicitly
+//mentioned anywhere and even autocomplete does not work
+//with this bloody 200-symbols names, remember it by heart, my ass.
 
 //________________________________________________________________________________________
 - (CGSize) collectionView : (UICollectionView *) collectionView layout : (UICollectionViewLayout*) collectionViewLayout
@@ -226,6 +243,45 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    //Album's cover has a fixed size.
    return CGSizeMake(200.f, 230.f);
 }
+
+//________________________________________________________________________________________
+- (CGSize) collectionView : (UICollectionView *) aCollectionView layout : (UICollectionViewLayout*) collectionViewLayout
+           referenceSizeForFooterInSection : (NSInteger) section
+{
+#pragma unsued(collectionLayout)
+
+   assert(aCollectionView != nil &&
+          "collectionView:layout:referenceSizeForFooterInSection:, parameter 'aCollectionView' is nil");
+
+   if (aCollectionView == albumCollectionView && selectedAlbum.title.length) {
+      assert([collectionViewLayout isKindOfClass:[AnimatedStackLayout class]] &&
+             "collectionView:layout:referenceSizeForFooterInSection:, wrong layout type");
+
+      if (((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation)
+         return CGSize();
+      
+      assert(section == 0 &&
+             "collectionView:layout:referenceSizeForFooterInSection:, section is invalid");
+
+      const CGFloat hugeH = 2000.f;
+      const CGRect frame = albumCollectionView.frame;
+      const CGSize textSize = [selectedAlbum.title sizeWithFont : albumDescriptionCustomFont constrainedToSize : CGSizeMake(frame.size.width, hugeH)];
+
+      return textSize;
+   }
+   
+   return CGSize();
+}
+
+//________________________________________________________________________________________
+- (CGSize) collectionView : (UICollectionView *) aCollectionView layout : (UICollectionViewLayout*) collectionViewLayout
+           referenceSizeForHeaderInSection : (NSInteger) section
+{
+#pragma unsued(collectionLayout)   
+   return CGSize();
+}
+
+#pragma mark - UIViewCollectionDataSource
 
 //________________________________________________________________________________________
 - (NSInteger) numberOfSectionsInCollectionView : (UICollectionView *) collectionView
@@ -287,6 +343,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       assert(!cell || [cell isKindOfClass : [PhotoAlbumCoverView class]] &&
              "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
       
+      if (!cell) {
+         //TODO
+      }
+      
       PhotoAlbumCoverView * const photoCell = (PhotoAlbumCoverView *)cell;
       
       assert(indexPath.section >= 0 && indexPath.section < photoAlbumsStatic.count &&
@@ -313,6 +373,48 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    }
 }
 
+//________________________________________________________________________________________
+- (UICollectionReusableView *) collectionView : (UICollectionView *) aCollectionView
+                               viewForSupplementaryElementOfKind : (NSString *) kind atIndexPath : (NSIndexPath *) indexPath
+{
+   assert(aCollectionView != nil &&
+          "collectionView:viewForSupplementaryElementOfKind:atIndexPath:, parameter 'aCollectionView' is nil");
+   assert(kind != nil &&
+          "collectionView:viewForSupplementaryElementOfKind:atIndexPath:, parameter 'kind' is nil");
+   assert(indexPath != nil &&
+          "collectionView:viewForSupplementaryElementOfKind:atIndexPath:, parameter 'indexPath' is nil");
+
+   if (aCollectionView == albumCollectionView && [kind isEqualToString : UICollectionElementKindSectionFooter]) {
+      //Dequeue
+      assert(selectedAlbum != nil &&
+            "collectionView:viewForSupplementaryElementOfKind:atIndexPath:, no album is selected");
+      assert(indexPath.row < selectedAlbum.nImages &&
+            "collectionView:viewForSupplementaryElementOfKind:atIndexPath:, row is out of bounds");
+      UICollectionViewCell *cell = [albumCollectionView dequeueReusableSupplementaryViewOfKind : kind
+                                                                           withReuseIdentifier : @"PhotoAlbumFooterView"
+                                                                                  forIndexPath : indexPath];
+      assert(!cell || [cell isKindOfClass : [PhotoAlbumFooterView class]] &&
+             "collectionView:viewForSupplementaryElementOfKind:atIndexPath:, no album is selected");
+      
+      if (!cell) {
+         //TODO
+      }
+      
+      PhotoAlbumFooterView * const photoCell = (PhotoAlbumFooterView *)cell;
+      if (selectedAlbum.title.length) {
+         photoCell.albumDescription.text = selectedAlbum.title;
+         photoCell.albumDescription.font = albumDescriptionCustomFont;
+      } else
+         photoCell.albumDescription.text = @"";
+      
+      return cell;
+   }
+   
+   return nil;
+}
+
+
+
 #pragma mark - UICollectionView delegate + related methods.
 
 //________________________________________________________________________________________
@@ -336,10 +438,12 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
       //Here's the magic.
       UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : indexPath];
-      assert([albumCollectionView.collectionViewLayout isKindOfClass:[AnimatedStackLayout class]] &&
+
+      assert([albumCollectionView.collectionViewLayout isKindOfClass : [AnimatedStackLayout class]] &&
              "collectionView:didSelectItemAtIndexPath:, albumCollectionView has a wrong layout type");
-      AnimatedStackLayout *layout = (AnimatedStackLayout *)albumCollectionView.collectionViewLayout;
+      AnimatedStackLayout * const layout = (AnimatedStackLayout *)albumCollectionView.collectionViewLayout;
       layout.stackCenter = cell.center;
+      layout.inAnimation = YES;
       layout.stackFactor = 0.f;
 
       assert(indexPath.row < photoAlbumsStatic.count &&
@@ -347,9 +451,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
       selected = indexPath;
       selectedAlbum = (PhotoAlbum *)photoAlbumsStatic[indexPath.row];
+
       [albumCollectionView reloadData];
-      
-      isInTransition = YES;
 
       self.collectionView.hidden = YES;
       albumCollectionView.hidden = NO;
@@ -359,8 +462,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
          ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 1.f;
       } completion : ^(BOOL finished) {
          if (finished) {
+            ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation = NO;
+            [albumCollectionView reloadData];//YESSSSSS :(
             [self swapNavigationBarButtons : NO];
-            isInTransition = NO;
          }
       }];
    }
@@ -373,23 +477,40 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
    assert(self.collectionView.hidden == YES && "switchToStackedMode:, self.collectionView is already visible");
    assert(albumCollectionView.hidden == NO && "switchToStackedMode:, albumCollectionView is already hidden");
+   assert([albumCollectionView.collectionViewLayout isKindOfClass : [AnimatedStackLayout class]] &&
+          "switchToStackedMode:, albumCollectionView has a wrong layout type");
+   
+   AnimatedStackLayout * const layout = (AnimatedStackLayout *)albumCollectionView.collectionViewLayout;
+
+   //Try to hide a footer if any, I do not want to see it during the animation.
+   for (UIView *v in albumCollectionView.subviews) {
+      if ([v isKindOfClass : [PhotoAlbumFooterView class]])
+         v.hidden = YES;
+   }
 
    self.navigationItem.rightBarButtonItem.enabled = NO;
-   isInTransition = YES;
+   layout.inAnimation = YES;
 
    self.collectionView.hidden = NO;
    [albumCollectionView performBatchUpdates : ^ {
       ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 0.f;
    } completion : ^(BOOL finished) {
-      [self.collectionView.superview bringSubviewToFront:self.collectionView];
-      if (spinner.isAnimating)//Do not forget to show the spinner again, we are still loading.
-         [spinner.superview bringSubviewToFront : spinner];
-   
-      albumCollectionView.hidden = YES;
-      [self swapNavigationBarButtons : YES];
-      isInTransition = NO;
-      selected = nil;
-      selectedAlbum = nil;
+
+      if (finished) {
+         //Many thanks to Apple for UICollectionView - it somehow manages to create a lot of footer views,
+         //which it DOES NOT delete on reloadData, so I have to ... recreate this view to get rid of
+         //footers.
+         [albumCollectionView removeFromSuperview];
+         [self createAlbumViewWithFrame : self.collectionView.frame];
+         [self.collectionView.superview bringSubviewToFront : self.collectionView];
+
+         if (spinner.isAnimating)//Do not forget to show the spinner again, we are still loading.
+            [spinner.superview bringSubviewToFront : spinner];
+
+         [self swapNavigationBarButtons : YES];
+         selected = nil;
+         selectedAlbum = nil;
+      }
    }];
 }
 
@@ -412,13 +533,17 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (BOOL) shouldAutorotate
 {
-   return !isInTransition;
+   assert(albumCollectionView != nil && "shouldAutorotate, albumCollectionView is nil");
+   assert([albumCollectionView.collectionViewLayout isKindOfClass : [AnimatedStackLayout class]] &&
+          "shouldAutorotate, albumCollectionView has a wrong layout");
+   
+   return !((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation;
 }
 
 //________________________________________________________________________________________
 - (void) willAnimateRotationToInterfaceOrientation : (UIInterfaceOrientation) toInterfaceOrientation duration : (NSTimeInterval)duration
 {
-   assert(isInTransition == NO &&
+   assert([self shouldAutorotate] == YES &&
           "willAnimateRotationToInterfaceOrientation:duration:, called while stack animation is active");
    
    if (selected && !albumCollectionView.hidden && [self selectedIsValid]) {

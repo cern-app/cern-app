@@ -158,7 +158,7 @@
 
    UICollectionReusableView *view = nil;
 
-   if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+   if ([kind isEqualToString : UICollectionElementKindSectionHeader]) {
       //
       view = [collectionView dequeueReusableSupplementaryViewOfKind : kind
                              withReuseIdentifier : @"SetInfoView" forIndexPath : indexPath];

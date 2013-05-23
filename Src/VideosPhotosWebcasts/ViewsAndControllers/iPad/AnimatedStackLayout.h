@@ -12,6 +12,8 @@
 
 //The point to which the stack collapses.
 @property (nonatomic) CGPoint stackCenter;
+@property (nonatomic) BOOL inAnimation;
+
 - (void) setStackCenterNoUpdate : (CGPoint) stackCenter;
 
 //0.f means completely stacked, 1.f results in the default FlowLayout.
