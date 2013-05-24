@@ -493,7 +493,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    self.navigationItem.rightBarButtonItem.enabled = NO;
    layout.inAnimation = YES;
 
-   self.collectionView.hidden = NO;
+   if (selectedAlbum.nImages <= 36)
+      self.collectionView.hidden = NO;
+   
    [albumCollectionView performBatchUpdates : ^ {
       ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 0.f;
    } completion : ^(BOOL finished) {
@@ -501,6 +503,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
          //Many thanks to Apple for UICollectionView - it somehow manages to create a lot of footer views,
          //which it DOES NOT delete on reloadData, so I have to ... recreate this view to get rid of
          //footers.
+         self.collectionView.hidden = NO;
          [albumCollectionView removeFromSuperview];
          [self createAlbumViewWithFrame : self.collectionView.frame];
          [self.collectionView.superview bringSubviewToFront : self.collectionView];
