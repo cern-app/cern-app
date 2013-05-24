@@ -347,6 +347,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="segmentedControl" destination="CmG-Do-qKy" id="Zqd-C4-qeF"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cay-Qg-1kj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -440,6 +443,7 @@
                 <relationship kind="action" name="reload:"/>
                 <relationship kind="action" name="revealMenu:"/>
                 <relationship kind="action" name="sectionSelected:" candidateClass="UISegmentedControl"/>
+                <relationship kind="outlet" name="segmentedControl" candidateClass="UISegmentedControl"/>
             </relationships>
         </class>
     </classes>

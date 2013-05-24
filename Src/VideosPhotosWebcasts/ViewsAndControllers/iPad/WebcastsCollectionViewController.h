@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WebcastsCollectionViewController : UICollectionViewController
+#import "ConnectionController.h"
+#import "ImageDownloader.h"
+#import "MWFeedParser.h"
+
+@interface WebcastsCollectionViewController : UICollectionViewController<MWFeedParserDelegate, ConnectionController,
+                                                                         ImageDownloaderDelegate>
 
 - (void) setControllerData : (NSArray *) dataItems;
 
