@@ -27,18 +27,18 @@ NSDictionary *LoadOfflineMenuPlist(NSString * plistName)
 
    NSDictionary *plist = nil;
    NSArray * const paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-   for (NSString *dir in paths) {
+ /*  for (NSString *dir in paths) {
       NSString * const plistPath = [dir stringByAppendingPathComponent : [plistName stringByAppendingString : @".plist"]];
       if ([[NSFileManager defaultManager] fileExistsAtPath : plistPath]) {
          //Ok, create a dictionary from the 'MENU.plist'.
          plist = [NSDictionary dictionaryWithContentsOfFile : plistPath];
       }
-   }
+   }*/
 
    if (!plist) {
       NSString * const path = [[NSBundle mainBundle] pathForResource : plistName ofType : @"plist"];
       plist = [NSDictionary dictionaryWithContentsOfFile : path];
-      assert(plist != nil && "loadOfflineMenuPlists, no dictionary or 'MENU.plist' found");
+      assert(plist != nil && "loadOfflineMenuPlists, no dictionary or 'FILENAME.plist' found");
    }
    
    return plist;
@@ -617,7 +617,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
    
    //TODO: We also have to subscribe for push notifications here - the 'MENU.plist' on a server can be updated.
-   [self updateMenuFromServer];
+   //[self updateMenuFromServer];
 }
 
 //________________________________________________________________________________________
