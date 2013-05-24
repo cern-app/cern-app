@@ -139,6 +139,27 @@
 					<string>Latest videos</string>
 				</dict>
 				<dict>
+					<key>ItemData</key>
+					<array>
+						<dict>
+							<key>Url</key>
+							<string>http://webcast.web.cern.ch/webcast/feeds/?type=recent</string>
+							<key>Category name</key>
+							<string>Recent</string>
+						</dict>
+						<dict>
+							<key>Url</key>
+							<string>http://webcast.web.cern.ch/webcast/feeds/?type=upcoming</string>
+							<key>Category name</key>
+							<string>Upcoming</string>
+						</dict>
+						<dict>
+							<key>Url</key>
+							<string>http://webcast.web.cern.ch/webcast/feeds/?type=live</string>
+							<key>Category name</key>
+							<string>Live</string>
+						</dict>
+					</array>
 					<key>ControllerID</key>
 					<string>WebcastsControllerID</string>
 					<key>Image name</key>

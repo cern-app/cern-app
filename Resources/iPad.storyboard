@@ -276,6 +276,82 @@
             </objects>
             <point key="canvasLocation" x="2878" y="3929"/>
         </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="lwW-qc-M2h">
+            <objects>
+                <navigationController storyboardIdentifier="WebcastsControllerID" definesPresentationContext="YES" id="fa8-sK-xye" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="v9x-uT-5HR">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="c9e-RJ-5cx" kind="relationship" relationship="rootViewController" id="Kdv-VY-KLg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Rg-be-lR3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2011" y="5099"/>
+        </scene>
+        <!--Webcasts Collection View Controller-->
+        <scene sceneID="ooR-pJ-XrQ">
+            <objects>
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="c9e-RJ-5cx" customClass="WebcastsCollectionViewController" sceneMemberID="viewController">
+                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="lVe-YZ-Lkm">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="pdP-AR-LEE">
+                            <size key="itemSize" width="213" height="202"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoViewCell" id="zth-VQ-Tqq" customClass="PhotoViewCell">
+                                <rect key="frame" x="0.0" y="0.0" width="213" height="202"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="213" height="202"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="c9e-RJ-5cx" id="amh-9N-SQb"/>
+                            <outlet property="delegate" destination="c9e-RJ-5cx" id="QTZ-pU-w84"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="2Bk-2J-Do0">
+                        <nil key="title"/>
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="l7x-DI-YiP">
+                            <connections>
+                                <action selector="revealMenu:" destination="c9e-RJ-5cx" id="9a9-aw-jX9"/>
+                            </connections>
+                        </barButtonItem>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="CmG-Do-qKy">
+                            <rect key="frame" x="230" y="7" width="307" height="31"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <segments>
+                                <segment title="Live"/>
+                                <segment title="Upcoming"/>
+                                <segment title="Recent"/>
+                            </segments>
+                            <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="sectionSelected:" destination="c9e-RJ-5cx" eventType="valueChanged" id="Ow3-HA-Oli"/>
+                            </connections>
+                        </segmentedControl>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="QEW-Hw-pKR">
+                            <connections>
+                                <action selector="reload:" destination="c9e-RJ-5cx" id="y67-iO-NCL"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cay-Qg-1kj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2925" y="5099"/>
+        </scene>
     </scenes>
     <resources>
         <image name="menu.png" width="20" height="20"/>
@@ -329,7 +405,12 @@
             <relationships>
                 <relationship kind="action" name="reloadImages:"/>
                 <relationship kind="action" name="revealMenu:"/>
-                <relationship kind="outlet" name="albumCollectionView" candidateClass="UICollectionView"/>
+            </relationships>
+        </class>
+        <class className="PhotoViewCell" superclassName="UICollectionViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoViewCell.h"/>
+            <relationships>
+                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
             </relationships>
         </class>
         <class className="StaticInfoTileViewController" superclassName="TileViewController">
@@ -352,6 +433,14 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="WebcastsCollectionViewController" superclassName="UICollectionViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/WebcastsCollectionViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="reload:"/>
+                <relationship kind="action" name="revealMenu:"/>
+                <relationship kind="action" name="sectionSelected:" candidateClass="UISegmentedControl"/>
+            </relationships>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

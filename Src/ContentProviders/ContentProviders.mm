@@ -805,6 +805,7 @@ void CancelConnections(UIViewController *controller)
 @implementation NavigationViewProvider {
    UIImage *image;
    NSString *controllerID;
+   NSArray *itemData;
 }
 
 @synthesize categoryName;
@@ -825,6 +826,14 @@ void CancelConnections(UIViewController *controller)
          image = [UIImage imageNamed:(NSString *)dict[@"Image name"]];
       }
       
+      if (dict[@"ItemData"]) {
+         assert([dict[@"ItemData"] isKindOfClass : [NSArray class]] &&
+                "initWithDictionary:, 'ItemData' has a wrong type");
+         itemData = (NSArray *)dict[@"ItemData"];
+      
+      } else
+         itemData = nil;
+      
       assert([dict[@"ControllerID"] isKindOfClass : [NSString class]] &&
              "'ControllerID' not found or has a wrong type");
       controllerID = (NSString *)dict[@"ControllerID"];
@@ -842,10 +851,6 @@ void CancelConnections(UIViewController *controller)
 - (void) loadControllerTo : (UIViewController *) controller
 {
    //TODO: there is no view/controller for iPad at the moment.
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      CernAPP::ShowErrorAlert(@"Not implemented", @"Close");
-      return;
-   }
 
    assert(controller != nil && "loadControllerTo:, parameter 'controller' is nil");
    
@@ -853,7 +858,10 @@ void CancelConnections(UIViewController *controller)
    if (controller.slidingViewController.topViewController)
       CancelConnections(controller.slidingViewController.topViewController);
 
-   [controller.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete:^{
+   if (itemData && [navController.topViewController respondsToSelector:@selector(setNavigationControllerData:)])
+      [navController.topViewController performSelector : @selector(setNavigationControllerData:) withObject : itemData];
+
+   [controller.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete : ^ {
       CGRect frame = controller.slidingViewController.topViewController.view.frame;
       controller.slidingViewController.topViewController = navController;
       controller.slidingViewController.topViewController.view.frame = frame;
