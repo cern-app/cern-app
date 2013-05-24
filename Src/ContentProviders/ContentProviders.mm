@@ -830,7 +830,6 @@ void CancelConnections(UIViewController *controller)
          assert([dict[@"ItemData"] isKindOfClass : [NSArray class]] &&
                 "initWithDictionary:, 'ItemData' has a wrong type");
          itemData = (NSArray *)dict[@"ItemData"];
-      
       } else
          itemData = nil;
       
@@ -858,8 +857,8 @@ void CancelConnections(UIViewController *controller)
    if (controller.slidingViewController.topViewController)
       CancelConnections(controller.slidingViewController.topViewController);
 
-   if (itemData && [navController.topViewController respondsToSelector:@selector(setNavigationControllerData:)])
-      [navController.topViewController performSelector : @selector(setNavigationControllerData:) withObject : itemData];
+   if (itemData && [navController.topViewController respondsToSelector:@selector(setControllerData:)])
+      [navController.topViewController performSelector : @selector(setControllerData:) withObject : itemData];
 
    [controller.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete : ^ {
       CGRect frame = controller.slidingViewController.topViewController.view.frame;

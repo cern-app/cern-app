@@ -10,4 +10,6 @@
 
 @interface WebcastsCollectionViewController : UICollectionViewController
 
+- (void) setControllerData : (NSArray *) dataItems;
+
 @end
