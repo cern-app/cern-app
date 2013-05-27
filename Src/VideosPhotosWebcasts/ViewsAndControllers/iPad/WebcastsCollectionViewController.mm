@@ -319,6 +319,9 @@ using CernAPP::NetworkStatus;
    else
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    
+   if ([self allParsersFinished])
+      self.navigationItem.rightBarButtonItem.enabled = YES;
+   
 }
 
 //________________________________________________________________________________________
