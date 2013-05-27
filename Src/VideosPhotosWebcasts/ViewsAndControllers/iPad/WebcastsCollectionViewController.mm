@@ -12,8 +12,12 @@
 #import "ECSlidingViewController.h"
 #import "NewsTableViewController.h"
 #import "HUDRefreshProtocol.h"
+#import "ApplicationErrors.h"
 #import "WebcastViewCell.h"
 #import "MBProgressHUD.h"
+#import "Reachability.h"
+
+using CernAPP::NetworkStatus;
 
 //________________________________________________________________________________________
 @implementation WebcastsCollectionViewController {   
@@ -34,7 +38,56 @@
    
    UIActivityIndicatorView *spinners[3];
    MBProgressHUD *noConnectionHUDs[3];
+   
+   Reachability *internetReach;
 }
+
+#pragma mark - Network reachability.
+
+//TODO: check this part.
+
+//________________________________________________________________________________________
+- (void) showErrorHUDIfEmptyPage : (NSUInteger) pageIndex
+{
+   assert(pageIndex < 3 && "showErrorHUDIfEmptyPage:, parameter 'pageIndex' is out of bounds");
+   
+   if (!pageIndex && !feedData[0].count)
+      CernAPP::ShowErrorHUD(self.view, @"Network error");
+}
+
+//________________________________________________________________________________________
+- (void) reachabilityStatusChanged : (Reachability *) current
+{
+#pragma unused(current)
+   
+   if (internetReach && [internetReach currentReachabilityStatus] == NetworkStatus::notReachable) {
+      //Depending on what we do now and what we have now ...
+      [self cancelAnyConnections];
+      
+      for (NSUInteger i = 0; i < 3; ++i) {
+         [self hideSpinnerForView : i];
+         [self showErrorHUDIfEmptyPage : i];
+      }
+
+      const NSInteger index = segmentedControl.selectedSegmentIndex;
+      assert(index >= 0 && index < 3 && "reachabilityStatusChanged:, selected segment is out of bounds");
+      
+      if (feedData[index].count) {
+         //We did not show error HUD for the current page.
+         CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+      }
+
+      self.navigationItem.rightBarButtonItem.enabled = YES;
+   }
+}
+
+//________________________________________________________________________________________
+- (bool) hasConnection
+{
+   return internetReach && [internetReach currentReachabilityStatus] != NetworkStatus::notReachable;
+}
+
+#pragma mark - Lifecycle.
 
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
@@ -57,10 +110,21 @@
       }
 
       viewDidAppear = NO;
+      
+      [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
+      internetReach = [Reachability reachabilityForInternetConnection];
    }
    
    return self;
 }
+
+//________________________________________________________________________________________
+- (void) dealloc
+{
+   [[NSNotificationCenter defaultCenter] removeObserver : self];
+}
+
+#pragma mark - viewDid/Will/NeverDoes etc.
 
 //________________________________________________________________________________________
 - (void) viewDidLoad
@@ -92,6 +156,8 @@
 
    spinners[0] = CernAPP::AddSpinner(self.view);
    CernAPP::HideSpinner(spinners[0]);
+   
+   [internetReach startNotifier];
 }
 
 //________________________________________________________________________________________
@@ -179,16 +245,45 @@
 {
    assert(parsers[0] != nil && parsers[1] != nil && parsers[2] != nil &&
           "refresh:, not all parsers/feeds are valid");
+   assert(parsers[0].isParsing == NO && parsers[1].isParsing == NO && parsers[2].isParsing == NO &&
+          "refresh:, called while some parser is still active");
 
-   //Check internet reachability.
-   
    [self cancelAllDownloaders : selectedSegmentOnly];
-   [self stopParsing : selectedSegmentOnly];
+
+   [MBProgressHUD hideAllHUDsForView : self.view animated : NO];
+   assert(auxCollectionViews[0] != nil && auxCollectionViews[1] != nil &&
+          "refresh:, aux. collection views were not initialized correctly");
+   [MBProgressHUD hideAllHUDsForView : auxCollectionViews[0] animated : NO];
+   [MBProgressHUD hideAllHUDsForView : auxCollectionViews[1] animated : NO];
+   
+   self.navigationItem.rightBarButtonItem.enabled = NO;
+   
    [self startParsing : selectedSegmentOnly];
    [self showSpinners : selectedSegmentOnly];   
 }
 
 #pragma mark - Feed parsers and related methods.
+
+//________________________________________________________________________________________
+- (BOOL) allParsersFinished
+{
+   return !parsers[0].isParsing && !parsers[1].isParsing && !parsers[2].isParsing;
+}
+
+//________________________________________________________________________________________
+- (NSUInteger) indexForParser : (MWFeedParser *) parser
+{
+   assert(parser != nil && "indexForParser:, parameter 'parser' is nil");
+   
+   for (NSUInteger i = 0; i < 3; ++i) {
+      if (parsers[i] == parser)
+         return i;
+   }
+   
+   assert(0 && "indexForParser:, parser not found");
+   
+   return 0;
+}
 
 //________________________________________________________________________________________
 - (void) feedParser : (MWFeedParser *) feedParser didParseFeedItem:(MWFeedItem *) item
@@ -212,11 +307,18 @@
 //________________________________________________________________________________________
 - (void) feedParser : (MWFeedParser *) feedParser didFailWithError : (NSError *) error
 {
+#pragma unused(error)
+
    assert(feedParser != nil && "feedParser:didFailWithError:, parameter 'feedParser' is nil");
 
-   //TODO: show some information (alert or HUD).
+   const NSUInteger index = [self indexForParser : feedParser];
+   feedDataTmp[index] = nil;
 
-   NSLog(@"error: %@", error);
+   if (!feedData[index].count)//feedData[index] is either nil or an empty array.
+      CernAPP::ShowErrorHUD(auxParentViews[index - 1], @"Network error");
+   else
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+   
 }
 
 //________________________________________________________________________________________
@@ -242,6 +344,9 @@
 
    //TODO: remove, this is for the test only.
    [self hideSpinnerForView : feedN];
+   
+   if ([self allParsersFinished])
+      self.navigationItem.rightBarButtonItem.enabled = YES;
 
    /*
    NSLog(@" --------- got a feed:");
@@ -481,7 +586,10 @@
 //________________________________________________________________________________________
 - (IBAction) reload : (id) sender
 {
-
+   if (![self hasConnection])
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+   else
+      [self refresh : YES];//We refresh only a visible page!
 }
 
 //________________________________________________________________________________________
@@ -507,12 +615,36 @@
 
 #pragma mark - ConnectionController
 
+//________________________________________________________________________________________
 - (void) cancelAllDownloaders : (BOOL) selectedSegmentOnly
 {
+   if (selectedSegmentOnly) {
+      const NSInteger segment = segmentedControl.selectedSegmentIndex;
+      assert(segment >= 0 && segment < 3 && "cancelAllDownloaders:, selected index is out of bounds");
+      
+      for (ImageDownloader *downloader in imageDownloaders[segment])
+         [downloader cancelDownload];
+      
+      [imageDownloaders[segment] removeAllObjects];
+   } else {
+      for (unsigned i = 0; i < 3; ++i) {
+         for (ImageDownloader *downloader in imageDownloaders[i])
+            [downloader cancelDownload];
+      
+         [imageDownloaders[i] removeAllObjects];
+      }
+   }
 }
 
+//________________________________________________________________________________________
 - (void) cancelAnyConnections
 {
+   for (unsigned i = 0; i < 3; ++i) {
+      [parsers[i] stopParsing];
+      feedDataTmp[i] = nil;
+   }
+   
+   [self cancelAllDownloaders : NO];
 }
 
 @end

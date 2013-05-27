@@ -78,6 +78,12 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       
       [self cancelAllImageDownloaders];
       self.navigationItem.rightBarButtonItem.enabled = YES;
+      
+      //TODO: inform about network error.
+      if (!photoAlbumsStatic.count)
+         CernAPP::ShowErrorHUD(self, @"Network error");
+      else
+         CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    }
 }
 
@@ -107,7 +113,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       
       [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
       internetReach = [Reachability reachabilityForInternetConnection];
-      [internetReach startNotifier];
+      //[internetReach startNotifier];
 
       albumCollectionView = nil;
       
@@ -161,7 +167,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    self.view.backgroundColor = [UIColor blackColor];
    
    [self createAlbumViewWithFrame : CGRect()];   
-   [self.collectionView.superview bringSubviewToFront : self.collectionView];   
+   [self.collectionView.superview bringSubviewToFront : self.collectionView];
+   
+   [internetReach startNotifier];
 
    [self.collectionView registerClass : [PhotoAlbumCoverView class]
            forCellWithReuseIdentifier : @"PhotoAlbumCoverView"];
