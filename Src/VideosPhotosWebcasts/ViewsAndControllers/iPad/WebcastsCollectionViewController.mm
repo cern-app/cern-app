@@ -10,6 +10,10 @@
 
 #import "WebcastsCollectionViewController.h"
 #import "ECSlidingViewController.h"
+#import "NewsTableViewController.h"
+#import "HUDRefreshProtocol.h"
+#import "WebcastViewCell.h"
+#import "MBProgressHUD.h"
 
 //________________________________________________________________________________________
 @implementation WebcastsCollectionViewController {   
@@ -20,17 +24,36 @@
    MWFeedParser *parsers[3];
    NSArray *feedData[3];
    NSMutableArray *feedDataTmp[3];
+   NSMutableDictionary *imageDownloaders[3];
 
    BOOL viewDidAppear;
+   
+   //These are additional collection views for the upcoming and recorded webcasts.
+   UIView *auxParentViews[2];
+   UICollectionView * auxCollectionViews[2];
+   
+   UIActivityIndicatorView *spinners[3];
+   MBProgressHUD *noConnectionHUDs[3];
 }
 
+//________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
    if (self = [super initWithCoder : aDecoder]) {
-      for (NSUInteger i = 0; i < 3; ++i) {
+      for (unsigned i = 0; i < 3; ++i) {
          parsers[i] = nil;
          feedData[i] = nil;
          feedDataTmp[i] = nil;
+         
+         imageDownloaders[i] = [[NSMutableDictionary alloc] init];
+         
+         spinners[i] = nil;
+         noConnectionHUDs[i] = nil;
+      }
+
+      for (unsigned i = 0; i < 2; ++i) {
+         auxParentViews[i] = nil;
+         auxCollectionViews[i] = nil;
       }
 
       viewDidAppear = NO;
@@ -44,6 +67,47 @@
 {
    [super viewDidLoad];
 	// Do any additional setup after loading the view.
+   for (unsigned i = 0; i < 2; ++i) {
+      auxParentViews[i] = [[UIView alloc] initWithFrame : CGRect()];
+      auxParentViews[i].autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
+                                           UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
+                                           UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+      auxParentViews[i].autoresizesSubviews = YES;
+      auxCollectionViews[i] = [[UICollectionView alloc] initWithFrame : CGRect() collectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
+      auxCollectionViews[i].autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
+                                               UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
+                                               UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+      auxCollectionViews[i].dataSource = self;
+      auxCollectionViews[i].delegate = self;
+      
+      [auxParentViews[i] addSubview : auxCollectionViews[i]];
+      [self.view addSubview : auxParentViews[i]];
+      
+      [auxCollectionViews[i] registerClass : [WebcastViewCell class]
+           forCellWithReuseIdentifier : @"WebcastViewCell"];
+      
+      spinners[i + 1] = CernAPP::AddSpinner(auxParentViews[i]);
+      CernAPP::HideSpinner(spinners[i + 1]);
+   }
+
+   spinners[0] = CernAPP::AddSpinner(self.view);
+   CernAPP::HideSpinner(spinners[0]);
+}
+
+//________________________________________________________________________________________
+- (void) viewWillAppear : (BOOL) animated
+{
+   [segmentedControl setSelectedSegmentIndex : 0];
+
+   CGRect frame = self.collectionView.frame;
+   auxParentViews[0].frame = frame;
+   auxParentViews[1].frame = frame;
+   
+   frame.origin = CGPoint();
+   auxCollectionViews[0].frame = frame;
+   auxCollectionViews[1].frame = frame;
+
+   [self.view bringSubviewToFront : self.collectionView];
 }
 
 //________________________________________________________________________________________
@@ -56,7 +120,7 @@
    
    if (!viewDidAppear) {
       viewDidAppear = YES;
-      //Check, which segment is visible now.
+      //Refresh all "pages".
       [self refresh : NO];
    }
 }
@@ -121,8 +185,7 @@
    [self cancelAllDownloaders : selectedSegmentOnly];
    [self stopParsing : selectedSegmentOnly];
    [self startParsing : selectedSegmentOnly];
-   
-   //Show spinners.
+   [self showSpinners : selectedSegmentOnly];   
 }
 
 #pragma mark - Feed parsers and related methods.
@@ -163,25 +226,45 @@
    
    //Stop the corresponding spinner and update the corresponding collection view.
    NSMutableArray *data = nil;
-   unsigned feedN = 0;
-   for (unsigned i = 0; i < 3; ++i) {
+   NSUInteger feedN = 0;
+   for (NSUInteger i = 0; i < 3; ++i) {
       if (feedParser == parsers[i]) {
          feedN = i;
          data = feedDataTmp[i];
+         feedDataTmp[i] = nil;
          break;
       }
    }
    
    assert(data != nil && "feedParserDidFinish:, unknown parser");
    
-   NSLog(@"start of feed %u:", feedN);
+   feedData[feedN] = data;
+
+   //TODO: remove, this is for the test only.
+   [self hideSpinnerForView : feedN];
+
+   /*
+   NSLog(@" --------- got a feed:");
+
    for (MWFeedItem *item in data) {
-      NSLog(@"link %@", item.link);
-      NSLog(@"title %@", item.title);
-      NSLog(@"summary %@", item.summary);
-      NSLog(@"description %@", item.description);
+      NSLog(@"title: %@", item.title);
+      NSLog(@"description: %@", item.description);
+      NSLog(@"link: %@", item.link);
+      NSLog(@"date: %@", item.date);
+      NSLog(@"updated: %@", item.updated);
+      NSLog(@"summary: %@", item.summary);
+      NSLog(@"content: %@", item.content);
+      NSLog(@"enclosures: %@", item.enclosures);
    }
-   NSLog(@"end of feed %u", feedN);
+      
+   NSLog(@"end of feed ---------- ");
+   */
+
+   if (!feedN)
+      [self.collectionView reloadData];
+   else
+      [auxCollectionViews[feedN - 1] reloadData];
+   //
 }
 
 //________________________________________________________________________________________
@@ -221,18 +304,155 @@
    }
 }
 
+#pragma mark - UIViewCollectionDataSource
+
+//________________________________________________________________________________________
+- (NSInteger) indexForCollectionView : (UICollectionView *) aCollectionView
+{
+   assert(aCollectionView != nil && "indexForCollectionView:, parameter 'aCollectionView' is nil");
+
+   if (aCollectionView == self.collectionView)
+      return 0;
+   
+   for (unsigned i = 0; i < 2; ++i) {
+      if (auxCollectionViews[i] == aCollectionView)
+         return i + 1;
+   }
+   
+   assert(0 && "indexForCollectionView:, collection view not found");
+   
+   return 0;
+}
+
+//________________________________________________________________________________________
+- (NSInteger) numberOfSectionsInCollectionView : (UICollectionView *) aCollectionView
+{
+   assert(aCollectionView != nil && "numberOfSectionsInCollectionView, parameter 'aCollectionView' is nil");
+
+   const NSUInteger viewIndex = [self indexForCollectionView : aCollectionView];
+   if (feedData[viewIndex].count)//If feedData[viewIndex] is nil, condition is false.
+      return 1;
+
+   return 0;
+}
+
+//________________________________________________________________________________________
+- (NSInteger) collectionView : (UICollectionView *) aCollectionView numberOfItemsInSection : (NSInteger) section
+{
+   assert(aCollectionView != nil && "collectionView:numberOfItemsInSection:, parameter 'aCollectionView' is nil");
+   assert(section == 0 && "collectionView:numberOfItemsInSection:, parameter 'section' is out of bounds");
+   
+   const NSUInteger viewIndex = [self indexForCollectionView : aCollectionView];
+   return feedData[viewIndex].count;//0 if feedData[viewIndex] is nil.
+}
+
+
+//________________________________________________________________________________________
+- (UICollectionViewCell *) collectionView : (UICollectionView *) aCollectionView cellForItemAtIndexPath : (NSIndexPath *) indexPath
+{
+   assert(aCollectionView != nil && "collectionView:cellForItemAtIndexPath:, parameter 'aCollectionView' is nil");
+   assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
+   assert(indexPath.section == 0 && "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
+
+   UICollectionViewCell *cell = [aCollectionView dequeueReusableCellWithReuseIdentifier : @"WebcastViewCell" forIndexPath : indexPath];
+   assert(!cell || [cell isKindOfClass : [WebcastViewCell class]] &&
+          "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
+   if (!cell)
+      cell = [[WebcastViewCell alloc] initWithFrame : CGRect()];
+   
+   WebcastViewCell * const webcastCell = (WebcastViewCell *)cell;
+   
+   const NSUInteger i = [self indexForCollectionView : aCollectionView];
+   NSArray * const data = feedData[i];
+   assert(indexPath.row >= 0 && indexPath.row < data.count &&
+          "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
+   MWFeedItem * const feedItem = (MWFeedItem *)data[indexPath.row];
+   [webcastCell setCellData : feedItem];
+
+   //Check if we have a thumbnail and download it if not.
+   if (!feedItem.image) {
+      //image downloader.
+      NSMutableDictionary * const downloaders = imageDownloaders[i];
+      assert(downloaders != nil &&
+             "collectionView:cellForItemAtIndexPath:, imageDownloaders is not initialized correctly");
+      
+      if (!downloaders[indexPath]) {
+         if (feedItem.summary) {//TODO: verify and confirm where do we have a thumbnail link.
+            if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : feedItem.summary]) {
+               //We need this key to later be able identify a collection view, and indexPath.seciton is always 0 here, since
+               //all 3 our views have 1 section.
+               NSIndexPath * const newKey = [NSIndexPath indexPathForRow : indexPath.row inSection : NSInteger(i)];
+               ImageDownloader * const newDownloader = [[ImageDownloader alloc] initWithURLString : urlString];
+               [downloaders setObject : newDownloader forKey : newKey];
+               newDownloader.indexPathInTableView = newKey;
+               newDownloader.delegate = self;
+               [newDownloader startDownload];
+            }
+         }
+      }
+   }
+
+   return webcastCell;
+}
+
+#pragma mark - UICollectionViewFlowLayout delegate.
+
+//________________________________________________________________________________________
+- (CGSize) collectionView : (UICollectionView *) collectionView layout : (UICollectionViewLayout*) collectionViewLayout
+           sizeForItemAtIndexPath : (NSIndexPath *) indexPath
+{
+#pragma unused(collectionView, collectionViewLayout, indexPath)
+   return CGSizeMake(230.f, 230.f);
+}
+
 #pragma mark - Thumbnails download.
 
 //________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
-#pragma unused(indexPath)
+   assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
+   assert(indexPath.section >= 0 && indexPath.section < 3 &&
+          "imageDidLoad:, section index is out of bounds");
+   
+   ImageDownloader * const downloader = imageDownloaders[indexPath.section][indexPath];
+   assert(downloader != nil && "imageDidLoad:, downloader not found for index path");
+   
+   if (downloader.image) {
+      NSArray * const data = feedData[indexPath.section];
+      assert(indexPath.row >= 0 && indexPath.row < data.count &&
+             "imageDidLoad:, row index is out of bounds");
+      MWFeedItem * const feedItem = (MWFeedItem *)data[indexPath.row];
+      feedItem.image = downloader.image;
+      
+      UICollectionView * const viewToUpdate = indexPath.section ? auxCollectionViews[indexPath.section - 1] : self.collectionView;
+      [viewToUpdate reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.row inSection : 0]]];
+   }
+   
+   [imageDownloaders[indexPath.section] removeObjectForKey : indexPath];
+   //Probably (later) hide a spinner here.
 }
 
 //________________________________________________________________________________________
-- (void) imageDownloadFailed:(NSIndexPath *)indexPath
+- (void) imageDownloadFailed : (NSIndexPath *) indexPath
 {
-#pragma unsued(indexPath)
+   assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
+   assert(indexPath.section >= 0 && indexPath.section < 3 &&
+          "imageDownloadFailed:, section index is out of bounds");
+   
+   assert(imageDownloaders[indexPath.section][indexPath] &&
+          "imageDownloadFailed:, no downloader found for indexPath");
+   
+   [imageDownloaders[indexPath.section] removeObjectForKey : indexPath];
+   
+   //Probably (later) hide a spinner here.
+}
+
+#pragma mark - Interface orientation.
+
+//________________________________________________________________________________________
+- (BOOL) shouldAutorotate
+{
+   return YES;
 }
 
 #pragma mark - UI.
@@ -240,7 +460,15 @@
 //________________________________________________________________________________________
 - (IBAction) sectionSelected : (UISegmentedControl *) sender
 {
-
+   assert(sender != nil && "sectionSelected:, parameter 'sender' is nil");
+   
+   const NSInteger i = sender.selectedSegmentIndex;
+   assert(i >= 0 && i < 3 && "sectionSelected:, invalid segment index");
+   
+   if (!i)
+      [self.view bringSubviewToFront : self.collectionView];
+   else
+      [self.view bringSubviewToFront : auxParentViews[i - 1]];
 }
 
 //________________________________________________________________________________________
@@ -254,6 +482,27 @@
 - (IBAction) reload : (id) sender
 {
 
+}
+
+//________________________________________________________________________________________
+- (void) showSpinners : (BOOL) selectedSegmentOnly
+{
+   if (selectedSegmentOnly) {
+      const NSInteger selected = segmentedControl.selectedSegmentIndex;
+      assert(selected >= 0 && selected < 3 && "showSpinners, invalid segment index");
+      CernAPP::ShowSpinner(spinners[selected]);
+   } else {
+      for (unsigned i = 0; i < 3; ++i)
+         CernAPP::ShowSpinner(spinners[i]);
+   }
+}
+
+//________________________________________________________________________________________
+- (void) hideSpinnerForView : (NSUInteger) viewIndex
+{
+   assert(viewIndex < 3 && "hideSpinnerForView:, parameter 'viewIndex' is out of bounds");
+   
+   CernAPP::HideSpinner(spinners[viewIndex]);
 }
 
 #pragma mark - ConnectionController

@@ -21,8 +21,15 @@
 namespace CernAPP {
 
 void AddSpinner(UIViewController<HUDRefreshProtocol> *controller);
+UIActivityIndicatorView *AddSpinner(UIView *parentView);
+
 void ShowSpinner(UIViewController<HUDRefreshProtocol> *controller);
+void ShowSpinner(UIActivityIndicatorView *spinner);
+
 void HideSpinner(UIViewController<HUDRefreshProtocol> *controller);
+void HideSpinner(UIActivityIndicatorView *spinner);
+
 void ShowErrorHUD(UIViewController<HUDRefreshProtocol> *controller, NSString *errorMessage);
+MBProgressHUD *ShowErrorHUD(UIView *parentView, NSString *errorMessage);
 
 }

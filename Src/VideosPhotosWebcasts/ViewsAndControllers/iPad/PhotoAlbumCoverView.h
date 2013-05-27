@@ -10,6 +10,9 @@
 
 @interface PhotoAlbumCoverView : UICollectionViewCell
 
+- (id) initWithFrame : (CGRect) frame;//Use ImageStackCellView to show a thumbnail.
+- (id) initWithUIImageView : (CGRect) frame;//Use UIImageView to show a thumbnail.
+
 @property (nonatomic, readonly) UIImageView *imageView;
 @property (nonatomic) NSString *title;
 

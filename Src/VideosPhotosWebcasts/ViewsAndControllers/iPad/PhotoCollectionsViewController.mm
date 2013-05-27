@@ -5,7 +5,7 @@
 #import "PhotoAlbumFooterView.h"
 #import "PhotoAlbumCoverView.h"
 #import "AnimatedStackLayout.h"
-#import "ImageStackCellView.h"
+#import "ImageStackViewCell.h"
 #import "ApplicationErrors.h"
 #import "PhotoViewCell.h"
 #import "Reachability.h"

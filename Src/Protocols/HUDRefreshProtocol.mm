@@ -18,11 +18,15 @@ void AddSpinner(UIViewController<HUDRefreshProtocol> *controller)
 {
    assert(controller != nil && "AddSpinner, parameter 'controller' is nil");
 
-   using CernAPP::spinnerSize;
+   controller.spinner = AddSpinner(controller.view);
+}
 
+//________________________________________________________________________________________
+UIActivityIndicatorView *AddSpinner(UIView *parentView)
+{
+   assert(parentView != nil && "AddSpinner, parameter 'parentView' is nil");
 
-
-   const CGPoint spinnerOrigin = CGPointMake(controller.view.frame.size.width / 2 - spinnerSize / 2, controller.view.frame.size.height / 2 - spinnerSize / 2);
+   const CGPoint spinnerOrigin = CGPointMake(parentView.frame.size.width / 2 - spinnerSize / 2, parentView.frame.size.height / 2 - spinnerSize / 2);
 
    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame : CGRectMake(spinnerOrigin.x, spinnerOrigin.y, spinnerSize, spinnerSize)];
    spinner.color = [UIColor grayColor];
@@ -33,33 +37,52 @@ void AddSpinner(UIViewController<HUDRefreshProtocol> *controller)
                                  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
    }
    
-   [controller.view addSubview : spinner];
-   controller.spinner = spinner;
+   [parentView addSubview : spinner];
+
+   return spinner;
 }
 
 //________________________________________________________________________________________
 void ShowSpinner(UIViewController<HUDRefreshProtocol> *controller)
 {
-   assert(controller != nil && "ShowSpinner, parameter 'controller is nil");
+   assert(controller != nil && "ShowSpinner, parameter 'controller' is nil");
+   assert(controller.spinner != nil && "ShowSpinner, controller.spinner is nil");
 
-   if (controller.spinner.hidden)
-      controller.spinner.hidden = NO;
-   if (!controller.spinner.isAnimating)
-      [controller.spinner startAnimating];
+   ShowSpinner(controller.spinner);
+}
+
+//________________________________________________________________________________________
+void ShowSpinner(UIActivityIndicatorView *spinner)
+{
+   assert(spinner != nil && "ShowSpinner, parameter 'spinner' is nil");
+   
+   if (spinner.hidden)
+      spinner.hidden = NO;
+   if (!spinner.isAnimating)
+      [spinner startAnimating];
    
    //Hahahah, I like this laja.hlam.shlak.musor :)
-   if (controller.spinner.superview.subviews.lastObject != controller.spinner)
-      [controller.spinner.superview bringSubviewToFront : controller.spinner];
+   if (spinner.superview.subviews.lastObject != spinner)
+      [spinner.superview bringSubviewToFront : spinner];
 }
 
 //________________________________________________________________________________________
 void HideSpinner(UIViewController<HUDRefreshProtocol> *controller)
 {
    assert(controller != nil && "HideSpinner, parameter 'controller' is nil");
+   assert(controller.spinner != nil && "HideSpinner, controller.spinner is nil");
+
+   HideSpinner(controller.spinner);
+}
+
+//________________________________________________________________________________________
+void HideSpinner(UIActivityIndicatorView *spinner)
+{
+   assert(spinner != nil && "HideSpinner, parameter 'spinner' is nil");
    
-   if (controller.spinner.isAnimating)
-      [controller.spinner stopAnimating];
-   controller.spinner.hidden = YES;
+   if (spinner.isAnimating)
+      [spinner stopAnimating];
+   spinner.hidden = YES;
 }
 
 //________________________________________________________________________________________
@@ -68,14 +91,24 @@ void ShowErrorHUD(UIViewController<HUDRefreshProtocol> *controller, NSString *er
    assert(controller != nil && "ShowErrorHUD, parameter 'controller' is nil");
    assert(errorMessage != nil && "ShowErrorHUD, parameter 'errorMessage' is nil");
 
-   [MBProgressHUD hideHUDForView : controller.view animated : YES];
+   controller.noConnectionHUD = ShowErrorHUD(controller.view, errorMessage);
+}
 
-   MBProgressHUD *noConnectionHUD = [MBProgressHUD showHUDAddedTo : controller.view animated : YES];
+//________________________________________________________________________________________
+MBProgressHUD *ShowErrorHUD(UIView *parentView, NSString *errorMessage)
+{
+   assert(parentView != nil && "ShowErrorHUD, parameter 'parentView' is nil");
+   assert(errorMessage != nil && "ShowErrorHUD, parameter 'errorMessage' is nil");
+
+   [MBProgressHUD hideHUDForView : parentView animated : YES];
+
+   MBProgressHUD *noConnectionHUD = [MBProgressHUD showHUDAddedTo : parentView animated : YES];
    noConnectionHUD.color = [UIColor redColor];
    noConnectionHUD.mode = MBProgressHUDModeText;
    noConnectionHUD.labelText = @"Network error";
    noConnectionHUD.removeFromSuperViewOnHide = YES;
-   controller.noConnectionHUD = noConnectionHUD;
+
+   return noConnectionHUD;
 }
 
 }

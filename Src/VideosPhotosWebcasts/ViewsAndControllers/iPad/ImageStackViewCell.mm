@@ -8,9 +8,9 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-#import "ImageStackCellView.h"
+#import "ImageStackViewCell.h"
 
-@implementation ImageStackCellView
+@implementation ImageStackViewCell
 
 @synthesize imageView;
 

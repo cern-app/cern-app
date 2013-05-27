@@ -9,10 +9,11 @@
 #import <cassert>
 
 #import "PhotoAlbumCoverView.h"
-#import "ImageStackCellView.h"
+#import "ImageStackViewCell.h"
 
 @implementation PhotoAlbumCoverView {
-   ImageStackCellView *imageStackView;
+   ImageStackViewCell *imageStackView;
+   UIImageView *imageView;
    UILabel *titleLabel;
 }
 
@@ -29,7 +30,7 @@
       stackFrame.origin.x = 0.15f * frame.size.width;
       stackFrame.origin.y = 0.15f * frame.size.height;
       
-      imageStackView = [[ImageStackCellView alloc] initWithFrame : stackFrame];
+      imageStackView = [[ImageStackViewCell alloc] initWithFrame : stackFrame];
       [self addSubview : imageStackView];
       
       CGRect titleFrame = {};
@@ -54,15 +55,58 @@
    return self;
 }
 
+//________________________________________________________________________________________
+- (id) initWithUIImageView : (CGRect) frame
+{
+   if (self = [super initWithFrame : frame]) {
+      CGRect stackFrame = {};
+      stackFrame.size.width = frame.size.width * 0.7f;
+      stackFrame.size.height = frame.size.height * 0.7f;
+      
+      stackFrame.origin.x = 0.15f * frame.size.width;
+      stackFrame.origin.y = 0.15f * frame.size.height;
+      
+      imageStackView = nil;
+      
+      imageView = [[UIImageView alloc] initWithFrame : stackFrame];
+      imageView.contentMode = UIViewContentModeScaleAspectFill;
+      imageView.clipsToBounds = YES;
+      [self addSubview : imageView];
+
+      CGRect titleFrame = {};
+      titleFrame.size.width = frame.size.width * 0.9f;
+      titleFrame.size.height = frame.size.height * 0.3f;
+      
+      titleFrame.origin.x = 0.05f * frame.size.width;
+      titleFrame.origin.y = 0.85f * frame.size.height;
+      
+      titleLabel = [[UILabel alloc] initWithFrame : titleFrame];
+      titleLabel.clipsToBounds = YES;
+      titleLabel.backgroundColor = [UIColor clearColor];
+      titleLabel.numberOfLines = 0;
+      
+      UIFont * const titleFont = [UIFont systemFontOfSize : 14.f];
+      titleLabel.font = titleFont;
+      titleLabel.textColor = [UIColor whiteColor];
+      titleLabel.textAlignment = NSTextAlignmentCenter;
+      [self addSubview : titleLabel];
+   }
+
+   return self;
+}
+
 #pragma mark - Setters/getters.
 
 //________________________________________________________________________________________
 - (UIImageView *) imageView
 {
-   assert(imageStackView != nil && "imageView, imageStackView is nil");
-   assert(imageStackView.imageView != nil && "imageView, imageStackView.imageView is nil");
-
-   return imageStackView.imageView;
+   if (imageStackView) {
+      assert(imageStackView.imageView != nil && "imageView, imageStackView.imageView is nil");
+      return imageStackView.imageView;
+   }
+   
+   assert(imageView != nil && "imageView, neither imageStackView, not imageView was initialized");
+   return imageView;
 }
 
 //________________________________________________________________________________________
@@ -86,7 +130,13 @@
 //________________________________________________________________________________________
 - (void) prepareForReuse
 {
-   imageStackView.imageView.image = nil;
+   assert(imageStackView != nil || imageView != nil && "prepareForReuse, both imageStackView and imageView are nil");
+
+   if (imageStackView)
+      imageStackView.imageView.image = nil;
+   else
+      imageView.image = nil;
+
    titleLabel.text = nil;
 }
 
