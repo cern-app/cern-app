@@ -10,6 +10,27 @@
 
 #import "CreditsViewController.h"
 
+namespace {
+
+//________________________________________________________________________________________
+CGFloat CaptionFontSize()
+{
+   return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 20.f : 26.f;
+}
+
+//________________________________________________________________________________________
+CGFloat GenericTextFontSize()
+{
+   return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 14.f : 24.f;
+}
+
+CGFloat LicenseFontSize()
+{
+   return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 8.f : 18.f;
+}
+
+}
+
 @implementation CreditsViewController {
    NSMutableAttributedString *text;
    UIColor *captionColor;
@@ -68,7 +89,7 @@
 //________________________________________________________________________________________
 - (void) setCaptionAttribute : (NSRange) range
 {
-   UIFont * const titleFont = [UIFont fontWithName : @"PTSans-Bold" size : 20.f];
+   UIFont * const titleFont = [UIFont fontWithName : @"PTSans-Bold" size : CaptionFontSize()];
    assert(titleFont != nil && "setCaptionAttribute:, font is nil");
    
    [text addAttribute : NSFontAttributeName value : titleFont range : range];
@@ -108,7 +129,7 @@
    //Let's do some nice formatting here!
    [self setCaptionAttribute : captionRange];
    //
-   UIFont * const textFont = [UIFont fontWithName : @"PTSans-Caption" size : 14.f];
+   UIFont * const textFont = [UIFont fontWithName : @"PTSans-Caption" size : GenericTextFontSize()];
    [self setFont : textFont color : [UIColor blackColor] forRange : versionInfoRange];
 }
 
@@ -127,7 +148,7 @@
    //Let's do some nice formatting here!
    [self setCaptionAttribute : captionRange];
    //
-   UIFont * const textFont = [UIFont fontWithName : @"PTSans-Caption" size : 14.f];
+   UIFont * const textFont = [UIFont fontWithName : @"PTSans-Caption" size : GenericTextFontSize()];
    [self setFont : textFont color : [UIColor blackColor] forRange : devInfoRange];
 }
 
@@ -148,7 +169,7 @@
 
    [self setCaptionAttribute : captionRange];
 
-   UIFont * const textFont = [UIFont fontWithName : @"Helvetica" size : 14.f];
+   UIFont * const textFont = [UIFont fontWithName : @"Helvetica" size : GenericTextFontSize()];
    [self setFont : textFont color : [UIColor blackColor] forRange : infoRange];
 
    [text addAttribute : NSForegroundColorAttributeName value : [UIColor blueColor] range : linkRange];
@@ -168,9 +189,15 @@
    [text appendAttributedString : link];
    [text appendAttributedString : info];
    
-   [self setCaptionAttribute:captionRange];
+   [self setCaptionAttribute : captionRange];
    [text addAttribute : NSForegroundColorAttributeName value : [UIColor blueColor] range : linkRange];
    [text addAttribute : NSForegroundColorAttributeName value : [UIColor blueColor] range : infoRange];
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      UIFont * const textFont = [UIFont fontWithName : @"Helvetica" size : GenericTextFontSize()];
+      [text addAttribute : NSFontAttributeName value : textFont range : linkRange];
+      [text addAttribute : NSFontAttributeName value : textFont range : infoRange];
+   }
+
 }
 
 //________________________________________________________________________________________
@@ -189,7 +216,7 @@
 
    [self setCaptionAttribute : captionRange];
    
-   UIFont * const textFont = [UIFont fontWithName : @"Helvetica" size : 14.f];
+   UIFont * const textFont = [UIFont fontWithName : @"Helvetica" size : GenericTextFontSize()];
    [self setFont : textFont color : [UIColor blackColor] forRange : infoRange];
 
    if (NSString * const filePath = [[NSBundle mainBundle] pathForResource : fileName ofType : @"txt"]) {
@@ -200,7 +227,7 @@
          [text appendAttributedString : [[NSAttributedString alloc] initWithString : licenseText]];
          const NSRange licRange = NSMakeRange(infoRange.location + infoRange.length, licenseText.length);
          
-         UIFont * const licFont = [UIFont fontWithName : @"Courier" size : 8.f];
+         UIFont * const licFont = [UIFont fontWithName : @"Courier" size : LicenseFontSize()];
          [self setFont:licFont color:[UIColor blackColor] forRange:licRange];
       }
    }

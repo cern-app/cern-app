@@ -2,7 +2,7 @@
 
 #import "PhotoCollectionsViewController.h"
 #import "StaticInfoScrollViewController.h"
-#import "VideoCollectionsViewController.h"
+#import "VideosCollectionViewController.h"
 #import "StaticInfoTileViewController.h"
 #import "BulletinTableViewController.h"
 #import "BulletinFeedViewController.h"
@@ -15,7 +15,6 @@
 #import "ECSlidingViewController.h"
 #import "NewsFeedViewController.h"
 #import "StoryboardIdentifiers.h"
-#import "AppSettingsController.h"
 #import "ConnectionController.h"
 #import "ApplicationErrors.h"//TODO: remove when all controllers are activated.
 #import "ContentProviders.h"
@@ -718,7 +717,7 @@ void CancelConnections(UIViewController *controller)
                                                                      VideoCollectionsViewControllerID];
 
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      assert([navController.topViewController isKindOfClass : [VideoCollectionsViewController class]] &&
+      assert([navController.topViewController isKindOfClass : [VideosCollectionViewController class]] &&
              "loadControllerTo:, top view controller is either nil or has a wrong type");
       //Some additional setup here?.
    
@@ -788,18 +787,9 @@ void CancelConnections(UIViewController *controller)
    assert(controller != nil && "loadControllerTo:, parameter 'controller' is nil");
    
    using namespace CernAPP;
-   
-      //TODO: there is not view/controller for iPad at the moment.
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      ShowErrorAlert(@"Not implemented", @"Close");
-      return;
-   }
-   
-   AppSettingsController * const appSettingscontroller =
-            (AppSettingsController *)[controller.storyboard instantiateViewControllerWithIdentifier : controllerID];
-
-   //
-   [controller presentViewController : appSettingscontroller animated : YES completion : nil];
+ 
+   UIViewController * const vc = [controller.storyboard instantiateViewControllerWithIdentifier : controllerID];
+   [controller presentViewController : vc animated : YES completion : nil];
 }
 
 @end 

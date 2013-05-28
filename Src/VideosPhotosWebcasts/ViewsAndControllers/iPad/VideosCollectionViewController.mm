@@ -1,17 +1,9 @@
-//
-//  VideoCollectionsViewController.m
-//  CERN
-//
-//  Created by Timur Pocheptsov on 5/28/13.
-//  Copyright (c) 2013 CERN. All rights reserved.
-//
-
 #import <MediaPlayer/MediaPlayer.h>
 
-#import "VideoCollectionsViewController.h"
+#import "VideosCollectionViewController.h"
 #import "VideoThumbnailCell.h"
 
-@implementation VideoCollectionsViewController
+@implementation VideosCollectionViewController
 
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
@@ -32,7 +24,7 @@
 }
 
 //________________________________________________________________________________________
-- (void)didReceiveMemoryWarning
+- (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

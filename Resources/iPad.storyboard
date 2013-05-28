@@ -371,10 +371,10 @@
             </objects>
             <point key="canvasLocation" x="2011" y="6323"/>
         </scene>
-        <!--Video Collections View Controller-->
+        <!--Videos Collection View Controller-->
         <scene sceneID="nhc-f8-aHG">
             <objects>
-                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="MDs-b9-uRh" customClass="VideoCollectionsViewController" sceneMemberID="viewController">
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="MDs-b9-uRh" customClass="VideosCollectionViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="TwK-Mp-ZET">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -417,11 +417,112 @@
             </objects>
             <point key="canvasLocation" x="2907" y="6323"/>
         </scene>
+        <!--App Settings Controller-->
+        <scene sceneID="Qwp-xH-MMn">
+            <objects>
+                <viewController storyboardIdentifier="AppSettingsControllerID" id="9UZ-Wz-VxU" customClass="AppSettingsController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FdE-vA-1ua">
+                        <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="al1-A6-0Fy">
+                                <subviews>
+                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t0G-2D-rZS">
+                                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                                        <items>
+                                            <navigationItem title="Settings" id="M3H-Fr-28o">
+                                                <barButtonItem key="rightBarButtonItem" systemItem="done" id="Wcn-Qk-jO1">
+                                                    <connections>
+                                                        <action selector="donePressed:" destination="9UZ-Wz-VxU" id="CLt-G0-53m"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                            </navigationItem>
+                                        </items>
+                                    </navigationBar>
+                                </subviews>
+                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="t0G-2D-rZS" firstAttribute="top" secondItem="al1-A6-0Fy" secondAttribute="top" type="default" id="BGZ-rp-TER"/>
+                                    <constraint firstItem="t0G-2D-rZS" firstAttribute="trailing" secondItem="al1-A6-0Fy" secondAttribute="trailing" type="default" id="Sut-vh-5F0"/>
+                                    <constraint firstItem="t0G-2D-rZS" firstAttribute="leading" secondItem="al1-A6-0Fy" secondAttribute="leading" type="default" id="Wu0-aE-4tb"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="al1-A6-0Fy" firstAttribute="leading" secondItem="FdE-vA-1ua" secondAttribute="leading" type="default" id="M2Y-eO-DDC"/>
+                            <constraint firstItem="al1-A6-0Fy" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" type="default" id="dco-va-bQK"/>
+                            <constraint firstItem="al1-A6-0Fy" firstAttribute="trailing" secondItem="FdE-vA-1ua" secondAttribute="trailing" type="default" id="ttF-wj-KsE"/>
+                            <constraint firstItem="al1-A6-0Fy" firstAttribute="bottom" secondItem="FdE-vA-1ua" secondAttribute="bottom" type="default" id="w9n-wb-VvB"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WMy-4U-1NJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2016" y="7474"/>
+        </scene>
+        <!--Credits View Controller-->
+        <scene sceneID="Z4D-5i-5Pa">
+            <objects>
+                <viewController storyboardIdentifier="CreditsViewControllerID" id="B0g-ew-1eY" customClass="CreditsViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Fc9-a4-tOc">
+                        <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rEa-Nf-yTm">
+                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="45h-uQ-CJg">
+                                <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <items>
+                                    <navigationItem title="Credits" id="KnG-eK-xIY">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="wsS-JW-BGI">
+                                            <connections>
+                                                <action selector="donePressed:" destination="B0g-ew-1eY" id="Cy0-QS-0OR"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="trailing" secondItem="Fc9-a4-tOc" secondAttribute="trailing" type="default" id="2Tr-Dr-8aJ"/>
+                            <constraint firstItem="45h-uQ-CJg" firstAttribute="top" secondItem="Fc9-a4-tOc" secondAttribute="top" type="default" id="Hf0-2L-Mi1"/>
+                            <constraint firstItem="45h-uQ-CJg" firstAttribute="trailing" secondItem="Fc9-a4-tOc" secondAttribute="trailing" type="default" id="Iua-aO-y3c"/>
+                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="leading" secondItem="Fc9-a4-tOc" secondAttribute="leading" type="default" id="LFF-Lf-EJ6"/>
+                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="top" secondItem="45h-uQ-CJg" secondAttribute="bottom" type="default" id="QRN-S7-uRd"/>
+                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="bottom" secondItem="Fc9-a4-tOc" secondAttribute="bottom" type="default" id="VZt-wg-OhN"/>
+                            <constraint firstItem="45h-uQ-CJg" firstAttribute="leading" secondItem="Fc9-a4-tOc" secondAttribute="leading" type="default" id="kHv-Pa-JxA"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="textView" destination="rEa-Nf-yTm" id="BeG-lL-j1g"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b9w-Di-J8U" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2907" y="7475"/>
+        </scene>
     </scenes>
     <resources>
         <image name="menu.png" width="20" height="20"/>
     </resources>
     <classes>
+        <class className="AppSettingsController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AppSettingsController.h"/>
+            <relationships>
+                <relationship kind="action" name="donePressed:"/>
+                <relationship kind="action" name="guiFontSizeChanged:" candidateClass="UISlider"/>
+                <relationship kind="action" name="htmlFontSizeChanged:" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="guiFontSizeSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="guiSettingsView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="rdbFontSizeSlider" candidateClass="UISlider"/>
+                <relationship kind="outlet" name="rdbSettingsView" candidateClass="UIView"/>
+            </relationships>
+        </class>
         <class className="ArticleDetailViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ArticleDetailViewController.h"/>
             <relationships>
@@ -434,6 +535,13 @@
         </class>
         <class className="BulletinIssueViewController" superclassName="NewsFeedViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BulletinIssueViewController.h"/>
+        </class>
+        <class className="CreditsViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CreditsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="donePressed:"/>
+                <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
+            </relationships>
         </class>
         <class className="ECSlidingViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ECSlidingViewController.h"/>
@@ -493,11 +601,11 @@
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
         </class>
-        <class className="VideoCollectionsViewController" superclassName="VideosGridViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/VideoCollectionsViewController.h"/>
-        </class>
         <class className="VideoThumbnailCell" superclassName="PhotoAlbumCoverView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/VideoThumbnailCell.h"/>
+        </class>
+        <class className="VideosCollectionViewController" superclassName="VideosGridViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/VideosCollectionViewController.h"/>
         </class>
         <class className="VideosGridViewController" superclassName="UICollectionViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/VideosGridViewController.h"/>

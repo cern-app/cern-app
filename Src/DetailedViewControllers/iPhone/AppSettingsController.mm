@@ -110,7 +110,7 @@
 //________________________________________________________________________________________
 - (BOOL) shouldAutorotate
 {
-   return NO;
+   return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
 }
 
 @end
