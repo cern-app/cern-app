@@ -539,12 +539,10 @@ using CernAPP::NetworkStatus;
             if ([data isKindOfClass : [NSDictionary class]]) {
                NSDictionary * const dict = (NSDictionary *)data;
                if ([dict[@"url"] isKindOfClass : [NSString class]]) {
-                  NSURL * const url = [NSURL URLWithString : (NSString *)dict[@"url"]];
-                  if (url) {
+                  if (NSURL * const url = [NSURL URLWithString : (NSString *)dict[@"url"]]) {
                      MPMoviePlayerViewController * const playerController = [[MPMoviePlayerViewController alloc] initWithContentURL : url];
                      [self presentMoviePlayerViewControllerAnimated : playerController];
                   }
-                  
                   break;
                }
             }
