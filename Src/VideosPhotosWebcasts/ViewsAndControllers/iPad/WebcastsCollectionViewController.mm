@@ -224,9 +224,10 @@ using CernAPP::NetworkStatus;
              "setControllerData:, 'Url' is not found or has a wrong type");
       NSString * const urlStr = (NSString *)itemDict[@"Url"];
       
-      if ([name isEqualToString:@"Live"])
+      if ([name isEqualToString:@"Live"]) {
          parsers[0] = [[MWFeedParser alloc] initWithFeedURL : [NSURL URLWithString : urlStr]];
-      else if ([name isEqualToString : @"Upcoming"])
+         parsers[0].atomSpecialCase = YES;//TODO: MWFeedParser is not able to find a link.
+      } else if ([name isEqualToString : @"Upcoming"])
          parsers[1] = [[MWFeedParser alloc] initWithFeedURL : [NSURL URLWithString : urlStr]];
       else if ([name isEqualToString : @"Recent"])
          parsers[2] = [[MWFeedParser alloc] initWithFeedURL : [NSURL URLWithString : urlStr]];
@@ -357,23 +358,23 @@ using CernAPP::NetworkStatus;
    
    if ([self allParsersFinished])
       self.navigationItem.rightBarButtonItem.enabled = YES;
-
    /*
-   NSLog(@" --------- got a feed:");
+   if (!feedN) {
+      NSLog(@" --------- got a feed:");
 
-   for (MWFeedItem *item in data) {
-      NSLog(@"title: %@", item.title);
-      NSLog(@"description: %@", item.description);
-      NSLog(@"link: %@", item.link);
-      NSLog(@"date: %@", item.date);
-      NSLog(@"updated: %@", item.updated);
-      NSLog(@"summary: %@", item.summary);
-      NSLog(@"content: %@", item.content);
-      NSLog(@"enclosures: %@", item.enclosures);
-   }
-      
-   NSLog(@"end of feed ---------- ");
-   */
+      for (MWFeedItem *item in data) {
+         NSLog(@"title: %@", item.title);
+         NSLog(@"description: %@", item.description);
+         NSLog(@"link: %@", item.link);
+         NSLog(@"date: %@", item.date);
+         NSLog(@"updated: %@", item.updated);
+         NSLog(@"summary: %@", item.summary);
+         NSLog(@"content: %@", item.content);
+         NSLog(@"enclosures: %@", item.enclosures);
+      }
+         
+      NSLog(@"end of feed ---------- ");
+   }*/
 
    if (!feedN)
       [self.collectionView reloadData];
@@ -509,6 +510,25 @@ using CernAPP::NetworkStatus;
    }
 
    return webcastCell;
+}
+
+#pragma mark - UICollectionView delegate.
+
+//________________________________________________________________________________________
+- (void) collectionView : (UICollectionView *) aCollectionView didSelectItemAtIndexPath : (NSIndexPath *) indexPath
+{
+   assert(aCollectionView != nil && "collectionView:didSelecteItemAtIndexPath:, parameter 'aCollectionView' is nil");
+   assert(indexPath != nil && "collectionView:didSelecteItemAtIndexPath:, parameter 'idnexPath' is nil");
+
+   if (aCollectionView == self.collectionView) {
+      //Live webcast, open it in a Safari browser.
+      assert(indexPath.row >= 0 && indexPath.row < feedData[0].count &&
+             "collectionView:didSelecteItemAtIndexPath:, row index is out of bounds");
+
+      MWFeedItem * const item = feedData[0][indexPath.row];
+      if (item.link)
+         [[UIApplication sharedApplication] openURL : [NSURL URLWithString : item.link]];
+   }
 }
 
 #pragma mark - UICollectionViewFlowLayout delegate.

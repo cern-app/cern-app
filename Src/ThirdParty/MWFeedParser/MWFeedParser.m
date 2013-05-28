@@ -54,6 +54,7 @@
 @synthesize feedParseType, feedParser, currentPath, currentText, currentElementAttributes, item, info;
 @synthesize pathOfElementWithXHTMLType;
 @synthesize stopped, failed, parsing;
+@synthesize atomSpecialCase;
 
 #pragma mark -
 #pragma mark NSObject
@@ -929,7 +930,12 @@
 			}
 		}
 		
-	}
+	} else if (atomSpecialCase) {
+      if (attributes && [attributes objectForKey : @"href"] && attributes.count == 1) {
+         [MWObject setLink:[attributes objectForKey:@"href"]]; // Can be added to MWFeedItem or MWFeedInfo
+			return YES;
+      }
+   }
 	return NO;
 }
 

@@ -126,6 +126,9 @@ typedef enum { FeedTypeUnknown, FeedTypeRSS, FeedTypeRSS1, FeedTypeAtom } FeedTy
 // Whether parsing is in progress
 @property (nonatomic, readonly, getter=isParsing) BOOL parsing;
 
+// One of our ATOM feeds has a <link href=""> which I need and it's ignored by the parser.
+@property (nonatomic) BOOL atomSpecialCase;
+
 #pragma mark Public Methods
 
 // Init MWFeedParser with a URL string
