@@ -314,9 +314,12 @@ using CernAPP::NetworkStatus;
    const NSUInteger index = [self indexForParser : feedParser];
    feedDataTmp[index] = nil;
 
-   if (!feedData[index].count)//feedData[index] is either nil or an empty array.
-      CernAPP::ShowErrorHUD(auxParentViews[index - 1], @"Network error");
-   else
+   if (!feedData[index].count) {//feedData[index] is either nil or an empty array.
+      if (!index)
+         CernAPP::ShowErrorHUD(self.collectionView, @"Network error");
+      else
+         CernAPP::ShowErrorHUD(auxParentViews[index - 1], @"Network error");
+   } else
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    
    if ([self allParsersFinished])
