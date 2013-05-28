@@ -760,9 +760,14 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) cancelAllImageDownloaders
 {
-   for (ImageDownloader *downloader in imageDownloaders)
-      [downloader cancelDownload];
-   
+   if (imageDownloaders.count) {
+      @autoreleasepool {
+         NSArray * const values = [imageDownloaders allValues];
+         for (ImageDownloader *downloader in values)
+            [downloader cancelDownload];
+      }
+   }
+
    [imageDownloaders removeAllObjects];
 }
 

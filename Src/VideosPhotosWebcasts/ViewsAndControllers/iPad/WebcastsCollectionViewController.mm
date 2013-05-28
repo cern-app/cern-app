@@ -627,23 +627,32 @@ using CernAPP::NetworkStatus;
 #pragma mark - ConnectionController
 
 //________________________________________________________________________________________
+- (void) cancelAllDownloadersForPage : (NSUInteger) pageIndex
+{
+   assert(pageIndex < 3 && "calncelAllDownloadersForPage:, parameter 'pageIndex' is out of bounds");
+   
+   if (imageDownloaders[pageIndex].count) {
+      @autoreleasepool {
+         NSArray * const values = [imageDownloaders[pageIndex] allValues];
+         for (ImageDownloader *downloader in values)
+            [downloader cancelDownload];
+         
+         [imageDownloaders[pageIndex] removeAllObjects];
+      }
+   }
+}
+
+//________________________________________________________________________________________
 - (void) cancelAllDownloaders : (BOOL) selectedSegmentOnly
 {
    if (selectedSegmentOnly) {
       const NSInteger segment = segmentedControl.selectedSegmentIndex;
       assert(segment >= 0 && segment < 3 && "cancelAllDownloaders:, selected index is out of bounds");
       
-      for (ImageDownloader *downloader in imageDownloaders[segment])
-         [downloader cancelDownload];
-      
-      [imageDownloaders[segment] removeAllObjects];
+      [self cancelAllDownloadersForPage : segment];
    } else {
-      for (unsigned i = 0; i < 3; ++i) {
-         for (ImageDownloader *downloader in imageDownloaders[i])
-            [downloader cancelDownload];
-      
-         [imageDownloaders[i] removeAllObjects];
-      }
+      for (unsigned i = 0; i < 3; ++i)
+         [self cancelAllDownloadersForPage : i];
    }
 }
 
