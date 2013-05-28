@@ -8,6 +8,8 @@
 
 #import <cassert>
 
+#import <MediaPlayer/MediaPlayer.h>
+
 #import "WebcastsCollectionViewController.h"
 #import "ECSlidingViewController.h"
 #import "NewsTableViewController.h"
@@ -522,14 +524,32 @@ using CernAPP::NetworkStatus;
    assert(indexPath != nil && "collectionView:didSelecteItemAtIndexPath:, parameter 'idnexPath' is nil");
 
    const NSUInteger viewIndex = [self indexForCollectionView : aCollectionView];
+   assert(indexPath.row >= 0 && indexPath.row < feedData[viewIndex].count &&
+          "collectionView:didSelecteItemAtIndexPath:, row index is out of bounds");
+   
+   MWFeedItem * const item = feedData[viewIndex][indexPath.row];
    if (viewIndex < 2) {
-      //Live webcast, open it in a Safari browser.
-      assert(indexPath.row >= 0 && indexPath.row < feedData[viewIndex].count &&
-             "collectionView:didSelecteItemAtIndexPath:, row index is out of bounds");
-
-      MWFeedItem * const item = feedData[viewIndex][indexPath.row];
+      //Live/upcoming webcast, open it in a Safari browser.
       if (item.link)
          [[UIApplication sharedApplication] openURL : [NSURL URLWithString : item.link]];
+   } else {
+      //For the 'recent' we have 'enclosures':
+      if (item.enclosures) {
+         for (id data in item.enclosures) {
+            if ([data isKindOfClass : [NSDictionary class]]) {
+               NSDictionary * const dict = (NSDictionary *)data;
+               if ([dict[@"url"] isKindOfClass : [NSString class]]) {
+                  NSURL * const url = [NSURL URLWithString : (NSString *)dict[@"url"]];
+                  if (url) {
+                     MPMoviePlayerViewController * const playerController = [[MPMoviePlayerViewController alloc] initWithContentURL : url];
+                     [self presentMoviePlayerViewControllerAnimated : playerController];
+                  }
+                  
+                  break;
+               }
+            }
+         }
+      }
    }
 }
 
