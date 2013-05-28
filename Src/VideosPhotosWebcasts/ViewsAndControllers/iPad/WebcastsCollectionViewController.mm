@@ -560,7 +560,7 @@ using CernAPP::NetworkStatus;
            sizeForItemAtIndexPath : (NSIndexPath *) indexPath
 {
 #pragma unused(collectionView, collectionViewLayout, indexPath)
-   return CGSizeMake(230.f, 230.f);
+   return CGSizeMake(230.f, 240.f);
 }
 
 #pragma mark - Thumbnails download.
