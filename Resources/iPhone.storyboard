@@ -457,7 +457,7 @@
         <!--Menu Navigation Controller-->
         <scene sceneID="Ane-wd-yN7">
             <objects>
-                <navigationController restorationIdentifier="VideosCollectionViewControllerID" storyboardIdentifier="VideosCollectionViewControllerID" definesPresentationContext="YES" id="sjt-Q6-hGe" customClass="MenuNavigationController" sceneMemberID="viewController">
+                <navigationController restorationIdentifier="VideoCollectionsViewControllerID" storyboardIdentifier="VideoCollectionsViewControllerID" definesPresentationContext="YES" id="sjt-Q6-hGe" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HWI-Dd-Hud">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1095,6 +1095,9 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="VideosGridViewController" superclassName="UICollectionViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/VideosGridViewController.h"/>

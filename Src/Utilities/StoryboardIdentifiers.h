@@ -18,14 +18,16 @@ extern NSString * const StaticInfoScrollViewControllerNoRootID;
 extern NSString * const PhotoGridControllerNavID;
 extern NSString * const BulletinTableViewControllerID;
 extern NSString * const BulletinIssueTableControllerID;
-extern NSString * const VideosCollectionViewControllerID;
 extern NSString * const AppSettingsControllerID;
 extern NSString * const WebcastsControllerID;
+extern NSString * const VideoCollectionsViewControllerID;
+
 //iPad special:
 extern NSString * const FeedTileViewControllerID;
 extern NSString * const BulletinTileViewControllerID;
 extern NSString * const BulletinIssueViewControllerID;
 extern NSString * const StaticInfoTileViewControllerID;
 extern NSString * const PhotoCollectionsViewControllerID;
+
 
 }

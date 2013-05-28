@@ -8,6 +8,8 @@
 
 #import <cassert>
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "PhotoAlbumCoverView.h"
 #import "ImageStackViewCell.h"
 
@@ -71,6 +73,11 @@
       imageView = [[UIImageView alloc] initWithFrame : stackFrame];
       imageView.contentMode = UIViewContentModeScaleAspectFill;
       imageView.clipsToBounds = YES;
+      //
+      imageView.layer.borderColor = [UIColor whiteColor].CGColor;
+      imageView.layer.borderWidth = 2.f;
+      imageView.backgroundColor = [UIColor darkGrayColor];
+
       [self addSubview : imageView];
 
       CGRect titleFrame = {};

@@ -16,6 +16,12 @@
 
 @interface VideosGridViewController : UICollectionViewController<CernMediaMarcParserDelegate, ImageDownloaderDelegate, ConnectionController,
                                                                  UICollectionViewDataSource, UICollectionViewDelegate, HUDRefreshProtocol>
+{
+@protected
+   NSMutableArray *videoMetadata;
+   NSMutableDictionary *videoThumbnails;
+   NSMutableDictionary *imageDownloaders;
+}
 
 - (IBAction)refresh : (id) sender;
 - (IBAction) revealMenu : (id) sender;

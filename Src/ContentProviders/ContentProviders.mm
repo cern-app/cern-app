@@ -2,6 +2,7 @@
 
 #import "PhotoCollectionsViewController.h"
 #import "StaticInfoScrollViewController.h"
+#import "VideoCollectionsViewController.h"
 #import "StaticInfoTileViewController.h"
 #import "BulletinTableViewController.h"
 #import "BulletinFeedViewController.h"
@@ -712,21 +713,22 @@ void CancelConnections(UIViewController *controller)
    
    using namespace CernAPP;
    
-      //TODO: there is not view/controller for iPad at the moment.
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      ShowErrorAlert(@"Not implemented", @"Close");
-      return;
-   }
-
    MenuNavigationController * const navController =
                   (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
-                                                                     VideosCollectionViewControllerID];
+                                                                     VideoCollectionsViewControllerID];
 
-   assert([navController.topViewController isKindOfClass : [VideosGridViewController class]] &&
-          "loadControllerTo:, top view controller is either nil or has a wrong type");
-
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      assert([navController.topViewController isKindOfClass : [VideoCollectionsViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+      //Some additional setup here?.
    
-   VideosGridViewController * const vc = (VideosGridViewController *)navController.topViewController;
+   } else {
+      assert([navController.topViewController isKindOfClass : [VideosGridViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+      //Some additional setup here?.
+   }
+
+   UIViewController * const vc = navController.topViewController;
    vc.navigationItem.title = categoryName;
    
    if (controller.slidingViewController.topViewController)

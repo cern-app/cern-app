@@ -1,5 +1,7 @@
 #import <cassert>
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "VideoThumbnailCell.h"
 #import "MWFeedItem.h"
 

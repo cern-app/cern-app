@@ -144,6 +144,7 @@
 		7069F33116C11517006BC78B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7069F33016C11517006BC78B /* Settings.bundle */; };
 		7069F76516C14D6D006BC78B /* OverlayView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7069F76216C14D6D006BC78B /* OverlayView.mm */; };
 		7069F76616C14D6D006BC78B /* PictureButtonView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7069F76416C14D6D006BC78B /* PictureButtonView.mm */; };
+		706A3F9F1754CB5C00FD8685 /* VideoCollectionsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A3F9E1754CB5B00FD8685 /* VideoCollectionsViewController.mm */; };
 		706FEFC1175379950079468A /* VideoThumbnailCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706FEFC0175379950079468A /* VideoThumbnailCell.mm */; };
 		70767DC716CE8F4D00164516 /* MWFeedParserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */; };
 		70767DC916CE922D00164516 /* MWPhotoBrowserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */; };
@@ -429,6 +430,8 @@
 		7069F76216C14D6D006BC78B /* OverlayView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OverlayView.mm; sourceTree = "<group>"; };
 		7069F76316C14D6D006BC78B /* PictureButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureButtonView.h; sourceTree = "<group>"; };
 		7069F76416C14D6D006BC78B /* PictureButtonView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureButtonView.mm; sourceTree = "<group>"; };
+		706A3F9D1754CB5B00FD8685 /* VideoCollectionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCollectionsViewController.h; sourceTree = "<group>"; };
+		706A3F9E1754CB5B00FD8685 /* VideoCollectionsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoCollectionsViewController.mm; sourceTree = "<group>"; };
 		706FEFBF175379950079468A /* VideoThumbnailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoThumbnailCell.h; sourceTree = "<group>"; };
 		706FEFC0175379950079468A /* VideoThumbnailCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoThumbnailCell.mm; sourceTree = "<group>"; };
 		7072B3271713F72F00515DA8 /* TiledPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiledPage.h; sourceTree = "<group>"; };
@@ -907,6 +910,8 @@
 				7059E7E7174F89960094C9A4 /* WebcastsCollectionViewController.mm */,
 				706FEFBF175379950079468A /* VideoThumbnailCell.h */,
 				706FEFC0175379950079468A /* VideoThumbnailCell.mm */,
+				706A3F9D1754CB5B00FD8685 /* VideoCollectionsViewController.h */,
+				706A3F9E1754CB5B00FD8685 /* VideoCollectionsViewController.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1654,6 +1659,7 @@
 				703ED8C1174DFEEA00C10903 /* PhotoAlbumFooterView.mm in Sources */,
 				7059E7E8174F89960094C9A4 /* WebcastsCollectionViewController.mm in Sources */,
 				706FEFC1175379950079468A /* VideoThumbnailCell.mm in Sources */,
+				706A3F9F1754CB5C00FD8685 /* VideoCollectionsViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

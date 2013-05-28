@@ -10,6 +10,7 @@
 
 #import "VideosGridViewController.h"
 #import "ECSlidingViewController.h"
+#import "VideoThumbnailCell.h"
 #import "PhotoGridViewCell.h"
 #import "ApplicationErrors.h"
 #import "PhotoSetInfoView.h"
@@ -28,9 +29,6 @@
    BOOL loaded;
    
    CernMediaMARCParser *parser;
-   NSMutableArray *videoMetadata;
-   NSMutableDictionary *videoThumbnails;
-   NSMutableDictionary *imageDownloaders;
    
    Reachability *internetReach;
    UIActivityIndicatorView *spinner;
@@ -66,10 +64,6 @@
 
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
-   
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-   
-   }
 }
 
 //________________________________________________________________________________________
@@ -232,10 +226,8 @@
 - (NSInteger) collectionView : (UICollectionView *) collectionView numberOfItemsInSection : (NSInteger) section
 {
 #pragma unused(collectionView)
-
    assert(section >= 0 && section < videoMetadata.count &&
           "collectionView:numbefOfItemsInSection:, parameter 'section' is out of bounds");
-
    return 1;//We always have 1 cell in a section.
 }
 

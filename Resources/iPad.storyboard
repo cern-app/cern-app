@@ -355,6 +355,68 @@
             </objects>
             <point key="canvasLocation" x="2925" y="5099"/>
         </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="9ku-Ff-Zp7">
+            <objects>
+                <navigationController storyboardIdentifier="VideoCollectionsViewControllerID" definesPresentationContext="YES" id="WNB-nu-GMH" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7mV-6t-VJu">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="MDs-b9-uRh" kind="relationship" relationship="rootViewController" id="tqA-5q-hwF"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7fR-1D-95r" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2011" y="6323"/>
+        </scene>
+        <!--Video Collections View Controller-->
+        <scene sceneID="nhc-f8-aHG">
+            <objects>
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="MDs-b9-uRh" customClass="VideoCollectionsViewController" sceneMemberID="viewController">
+                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="TwK-Mp-ZET">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="iOF-yQ-SJG">
+                            <size key="itemSize" width="230" height="230"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoThumbnailCell" id="Qrl-Hl-CSH" customClass="VideoThumbnailCell">
+                                <rect key="frame" x="0.0" y="0.0" width="230" height="230"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="230" height="230"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="MDs-b9-uRh" id="ya7-82-9Qg"/>
+                            <outlet property="delegate" destination="MDs-b9-uRh" id="Mvm-cy-GCJ"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="XA9-UZ-aZx">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="bsx-tG-v1O">
+                            <connections>
+                                <action selector="revealMenu:" destination="MDs-b9-uRh" id="52s-QL-HxF"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="pUe-ym-YjW">
+                            <connections>
+                                <action selector="refresh:" destination="MDs-b9-uRh" id="kGS-tn-3Jk"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1N0-zm-eBh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2907" y="6323"/>
+        </scene>
     </scenes>
     <resources>
         <image name="menu.png" width="20" height="20"/>
@@ -431,8 +493,18 @@
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
         </class>
+        <class className="VideoCollectionsViewController" superclassName="VideosGridViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/VideoCollectionsViewController.h"/>
+        </class>
         <class className="VideoThumbnailCell" superclassName="PhotoAlbumCoverView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/VideoThumbnailCell.h"/>
+        </class>
+        <class className="VideosGridViewController" superclassName="UICollectionViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/VideosGridViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="refresh:"/>
+                <relationship kind="action" name="revealMenu:"/>
+            </relationships>
         </class>
         <class className="WebcastsCollectionViewController" superclassName="UICollectionViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/WebcastsCollectionViewController.h"/>
