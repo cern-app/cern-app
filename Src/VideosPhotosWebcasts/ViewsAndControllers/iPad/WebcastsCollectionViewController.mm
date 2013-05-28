@@ -14,8 +14,8 @@
 #import "ECSlidingViewController.h"
 #import "NewsTableViewController.h"
 #import "HUDRefreshProtocol.h"
+#import "VideoThumbnailCell.h"
 #import "ApplicationErrors.h"
-#import "WebcastViewCell.h"
 #import "MBProgressHUD.h"
 #import "Reachability.h"
 
@@ -149,15 +149,15 @@ using CernAPP::NetworkStatus;
       [auxParentViews[i] addSubview : auxCollectionViews[i]];
       [self.view addSubview : auxParentViews[i]];
       
-      [auxCollectionViews[i] registerClass : [WebcastViewCell class]
-           forCellWithReuseIdentifier : @"WebcastViewCell"];
+      [auxCollectionViews[i] registerClass : [VideoThumbnailCell class]
+           forCellWithReuseIdentifier : @"VideoThumbnailCell"];
       
       spinners[i + 1] = CernAPP::AddSpinner(auxParentViews[i]);
       CernAPP::HideSpinner(spinners[i + 1]);
    }
 
-   [self.collectionView registerClass : [WebcastViewCell class]
-           forCellWithReuseIdentifier : @"WebcastViewCell"];
+   [self.collectionView registerClass : [VideoThumbnailCell class]
+           forCellWithReuseIdentifier : @"VideoThumbnailCell"];
 
    spinners[0] = CernAPP::AddSpinner(self.view);
    CernAPP::HideSpinner(spinners[0]);
@@ -169,8 +169,6 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (void) viewWillAppear : (BOOL) animated
 {
-   [segmentedControl setSelectedSegmentIndex : 0];
-
    CGRect frame = self.collectionView.frame;
    auxParentViews[0].frame = frame;
    auxParentViews[1].frame = frame;
@@ -179,7 +177,11 @@ using CernAPP::NetworkStatus;
    auxCollectionViews[0].frame = frame;
    auxCollectionViews[1].frame = frame;
 
-   [self.view bringSubviewToFront : self.collectionView];
+   if (!viewDidAppear) {
+      //Do it only once.
+      [segmentedControl setSelectedSegmentIndex : 0];
+      [self.view bringSubviewToFront : self.collectionView];
+   }
 }
 
 //________________________________________________________________________________________
@@ -473,14 +475,14 @@ using CernAPP::NetworkStatus;
    assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
    assert(indexPath.section == 0 && "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
 
-   UICollectionViewCell *cell = [aCollectionView dequeueReusableCellWithReuseIdentifier : @"WebcastViewCell" forIndexPath : indexPath];
-   assert(!cell || [cell isKindOfClass : [WebcastViewCell class]] &&
+   UICollectionViewCell *cell = [aCollectionView dequeueReusableCellWithReuseIdentifier : @"VideoThumbnailCell" forIndexPath : indexPath];
+   assert(!cell || [cell isKindOfClass : [VideoThumbnailCell class]] &&
           "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
 
    if (!cell)
-      cell = [[WebcastViewCell alloc] initWithFrame : CGRect()];
+      cell = [[VideoThumbnailCell alloc] initWithFrame : CGRect()];
    
-   WebcastViewCell * const webcastCell = (WebcastViewCell *)cell;
+   VideoThumbnailCell * const webcastCell = (VideoThumbnailCell *)cell;
    
    const NSUInteger i = [self indexForCollectionView : aCollectionView];
    NSArray * const data = feedData[i];

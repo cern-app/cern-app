@@ -10,7 +10,7 @@
 
 @class MWFeedItem;
 
-@interface WebcastViewCell : PhotoAlbumCoverView
+@interface VideoThumbnailCell : PhotoAlbumCoverView
 
 - (void) setCellData : (MWFeedItem *) itemData;
 

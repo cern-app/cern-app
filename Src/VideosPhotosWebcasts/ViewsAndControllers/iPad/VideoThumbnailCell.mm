@@ -1,9 +1,9 @@
 #import <cassert>
 
-#import "WebcastViewCell.h"
+#import "VideoThumbnailCell.h"
 #import "MWFeedItem.h"
 
-@implementation WebcastViewCell
+@implementation VideoThumbnailCell
 
 //________________________________________________________________________________________
 - (id) initWithFrame : (CGRect) frame

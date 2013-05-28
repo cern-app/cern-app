@@ -66,6 +66,10 @@
 
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
+   
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+   
+   }
 }
 
 //________________________________________________________________________________________
