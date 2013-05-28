@@ -154,8 +154,12 @@ using CernAPP::NetworkStatus;
       CernAPP::HideSpinner(spinners[i + 1]);
    }
 
+   [self.collectionView registerClass : [WebcastViewCell class]
+           forCellWithReuseIdentifier : @"WebcastViewCell"];
+
    spinners[0] = CernAPP::AddSpinner(self.view);
    CernAPP::HideSpinner(spinners[0]);
+   
    
    [internetReach startNotifier];
 }
@@ -468,6 +472,7 @@ using CernAPP::NetworkStatus;
    UICollectionViewCell *cell = [aCollectionView dequeueReusableCellWithReuseIdentifier : @"WebcastViewCell" forIndexPath : indexPath];
    assert(!cell || [cell isKindOfClass : [WebcastViewCell class]] &&
           "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
+
    if (!cell)
       cell = [[WebcastViewCell alloc] initWithFrame : CGRect()];
    

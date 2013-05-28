@@ -25,7 +25,7 @@
 - (void) setCellData : (MWFeedItem *) itemData
 {
    assert(itemData != nil && "setCellData, parameter 'itemData' is nil");
-   //
+   
    if (itemData.title)
       self.title = itemData.title;
    else
