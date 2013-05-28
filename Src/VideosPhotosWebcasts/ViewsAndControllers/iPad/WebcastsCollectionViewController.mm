@@ -227,9 +227,10 @@ using CernAPP::NetworkStatus;
       if ([name isEqualToString:@"Live"]) {
          parsers[0] = [[MWFeedParser alloc] initWithFeedURL : [NSURL URLWithString : urlStr]];
          parsers[0].atomSpecialCase = YES;//TODO: MWFeedParser is not able to find a link.
-      } else if ([name isEqualToString : @"Upcoming"])
+      } else if ([name isEqualToString : @"Upcoming"]) {
          parsers[1] = [[MWFeedParser alloc] initWithFeedURL : [NSURL URLWithString : urlStr]];
-      else if ([name isEqualToString : @"Recent"])
+         parsers[1].atomSpecialCase = YES;
+      } else if ([name isEqualToString : @"Recent"])
          parsers[2] = [[MWFeedParser alloc] initWithFeedURL : [NSURL URLWithString : urlStr]];
       else
          assert(0 && @"setControllerData:, unknown category name for a segment");
@@ -520,12 +521,13 @@ using CernAPP::NetworkStatus;
    assert(aCollectionView != nil && "collectionView:didSelecteItemAtIndexPath:, parameter 'aCollectionView' is nil");
    assert(indexPath != nil && "collectionView:didSelecteItemAtIndexPath:, parameter 'idnexPath' is nil");
 
-   if (aCollectionView == self.collectionView) {
+   const NSUInteger viewIndex = [self indexForCollectionView : aCollectionView];
+   if (viewIndex < 2) {
       //Live webcast, open it in a Safari browser.
-      assert(indexPath.row >= 0 && indexPath.row < feedData[0].count &&
+      assert(indexPath.row >= 0 && indexPath.row < feedData[viewIndex].count &&
              "collectionView:didSelecteItemAtIndexPath:, row index is out of bounds");
 
-      MWFeedItem * const item = feedData[0][indexPath.row];
+      MWFeedItem * const item = feedData[viewIndex][indexPath.row];
       if (item.link)
          [[UIApplication sharedApplication] openURL : [NSURL URLWithString : item.link]];
    }
