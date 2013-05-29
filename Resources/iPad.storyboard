@@ -639,6 +639,48 @@
             </objects>
             <point key="canvasLocation" x="2907" y="8749"/>
         </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="YnT-o6-dH5">
+            <objects>
+                <navigationController storyboardIdentifier="TwitterViewControllerID" definesPresentationContext="YES" id="vvZ-YM-7aN" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="A1x-Be-nlV">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="zFU-Oj-aJC" kind="relationship" relationship="rootViewController" id="fRm-c6-mco"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vHd-ds-UWI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2038" y="10053"/>
+        </scene>
+        <!--Twitter Table View Controller-->
+        <scene sceneID="1Z7-fs-pJo">
+            <objects>
+                <viewController id="zFU-Oj-aJC" customClass="TwitterTableViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cEr-va-4qC">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="aiL-HZ-xgv">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="FJf-ly-dvN">
+                            <connections>
+                                <action selector="revealMenu:" destination="zFU-Oj-aJC" id="Vlw-Rn-bMy"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="X7g-hY-LaT">
+                            <connections>
+                                <action selector="refresh:" destination="zFU-Oj-aJC" id="7yP-ff-0kM"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JLt-aq-Poq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2939" y="10053"/>
+        </scene>
         <!--Credits View Controller-->
         <scene sceneID="Z4D-5i-5Pa">
             <objects>
@@ -779,6 +821,14 @@
                 <relationship kind="action" name="revealMenu:"/>
             </relationships>
         </class>
+        <class className="TwitterTableViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TwitterTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="refresh:"/>
+                <relationship kind="action" name="revealMenu:"/>
+                <relationship kind="outlet" name="parentView" candidateClass="UIView"/>
+            </relationships>
+        </class>
         <class className="UICollectionReusableView" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
         </class>
@@ -790,6 +840,9 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="VideoThumbnailCell" superclassName="PhotoAlbumCoverView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/VideoThumbnailCell.h"/>

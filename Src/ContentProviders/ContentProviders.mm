@@ -5,6 +5,7 @@
 #import "VideosCollectionViewController.h"
 #import "StaticInfoTileViewController.h"
 #import "BulletinTableViewController.h"
+#import "TwitterTableViewController.h"
 #import "BulletinFeedViewController.h"
 #import "EventDisplayViewController.h"
 #import "VideosGridViewController.h"
@@ -123,8 +124,14 @@ void CancelConnections(UIViewController *controller)
    } else {
       //twitter feed on iPad.
       //TODO: there is not view/controller for iPad at the moment.
-      ShowErrorAlert(@"Not implemented", @"Close");
-      return;//TODO: need a new view/controller for this.
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier:
+                                                                         TwitterViewControllerID];
+      assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+      //
+      //Setup the controller.
+      //
+      //
    }
 
    if (controller.slidingViewController.topViewController)

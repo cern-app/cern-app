@@ -128,6 +128,8 @@
 		70501E3C16B6E180002C0F48 /* GCOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 70501E3816B6E180002C0F48 /* GCOAuth.m */; };
 		70501E3D16B6E180002C0F48 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 70501E3A16B6E180002C0F48 /* NSData+Base64.m */; };
 		705185521755F16700CE9EB8 /* LiveEventTableController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 705185511755F16700CE9EB8 /* LiveEventTableController.mm */; };
+		705185BB17561E4E00CE9EB8 /* TweetCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 705185BA17561E4E00CE9EB8 /* TweetCell.mm */; };
+		705185BE17561EA200CE9EB8 /* TwitterTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 705185BD17561EA200CE9EB8 /* TwitterTableViewController.mm */; };
 		7054DEEC169AFD7A00B025C7 /* MENU.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7054DEEB169AFD7A00B025C7 /* MENU.plist */; };
 		7059E7E8174F89960094C9A4 /* WebcastsCollectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7059E7E7174F89960094C9A4 /* WebcastsCollectionViewController.mm */; };
 		705D9FB4166F3A00007C7611 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 705D9FB3166F3A00007C7611 /* AudioToolbox.framework */; };
@@ -410,6 +412,10 @@
 		70501E4216B6E6EB002C0F48 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		705185501755F16700CE9EB8 /* LiveEventTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveEventTableController.h; sourceTree = "<group>"; };
 		705185511755F16700CE9EB8 /* LiveEventTableController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LiveEventTableController.mm; sourceTree = "<group>"; };
+		705185B917561E4E00CE9EB8 /* TweetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetCell.h; sourceTree = "<group>"; };
+		705185BA17561E4E00CE9EB8 /* TweetCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TweetCell.mm; sourceTree = "<group>"; };
+		705185BC17561EA200CE9EB8 /* TwitterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterTableViewController.h; sourceTree = "<group>"; };
+		705185BD17561EA200CE9EB8 /* TwitterTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TwitterTableViewController.mm; sourceTree = "<group>"; };
 		70533AEC16CA5B4C00077B0E /* PhotoBrowserProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserProtocol.h; sourceTree = "<group>"; };
 		7054DEEB169AFD7A00B025C7 /* MENU.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MENU.plist; sourceTree = "<group>"; };
 		7059E7E6174F89960094C9A4 /* WebcastsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsCollectionViewController.h; sourceTree = "<group>"; };
@@ -877,6 +883,33 @@
 			path = iPhone;
 			sourceTree = "<group>";
 		};
+		705185B617561E4E00CE9EB8 /* Twitter */ = {
+			isa = PBXGroup;
+			children = (
+				705185B717561E4E00CE9EB8 /* ViewsAndControllers */,
+			);
+			path = Twitter;
+			sourceTree = "<group>";
+		};
+		705185B717561E4E00CE9EB8 /* ViewsAndControllers */ = {
+			isa = PBXGroup;
+			children = (
+				705185B817561E4E00CE9EB8 /* iPad */,
+			);
+			path = ViewsAndControllers;
+			sourceTree = "<group>";
+		};
+		705185B817561E4E00CE9EB8 /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				705185B917561E4E00CE9EB8 /* TweetCell.h */,
+				705185BA17561E4E00CE9EB8 /* TweetCell.mm */,
+				705185BC17561EA200CE9EB8 /* TwitterTableViewController.h */,
+				705185BD17561EA200CE9EB8 /* TwitterTableViewController.mm */,
+			);
+			path = iPad;
+			sourceTree = "<group>";
+		};
 		705D9FB2166F387D007C7611 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -946,6 +979,7 @@
 		707B1342169AE8C900180E02 /* Src */ = {
 			isa = PBXGroup;
 			children = (
+				705185B617561E4E00CE9EB8 /* Twitter */,
 				706A401F1754FD0900FD8685 /* EventDisplay */,
 				70A562DA173A37AA00145FEC /* ViewControllers */,
 				70A56284173A32F600145FEC /* VideosPhotosWebcasts */,
@@ -1668,6 +1702,8 @@
 				706A401E1754FBE000FD8685 /* CreditsViewController.mm in Sources */,
 				706A40231754FD0A00FD8685 /* EventDisplayViewController.mm in Sources */,
 				705185521755F16700CE9EB8 /* LiveEventTableController.mm in Sources */,
+				705185BB17561E4E00CE9EB8 /* TweetCell.mm in Sources */,
+				705185BE17561EA200CE9EB8 /* TwitterTableViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

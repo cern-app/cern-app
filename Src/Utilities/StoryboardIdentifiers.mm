@@ -26,6 +26,6 @@ NSString * const BulletinTileViewControllerID = @"BulletinTileViewControllerID";
 NSString * const BulletinIssueViewControllerID = @"BulletinIssueViewControllerID";
 NSString * const StaticInfoTileViewControllerID = @"StaticInfoTileViewControllerID";
 NSString * const PhotoCollectionsViewControllerID = @"PhotoCollectionsViewControllerID";
-
+NSString * const TwitterViewControllerID = @"TwitterViewControllerID";
 
 }
