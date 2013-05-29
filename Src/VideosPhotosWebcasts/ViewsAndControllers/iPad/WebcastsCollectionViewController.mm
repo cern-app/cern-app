@@ -56,7 +56,12 @@ using CernAPP::NetworkStatus;
    
    if (internetReach && [internetReach currentReachabilityStatus] == NetworkStatus::notReachable) {
       //Depending on what we do now and what we have now ...
-      [self cancelAnyConnections];
+      for (unsigned i = 0; i < 3; ++i) {
+         [parsers[i] stopParsing];
+         feedDataTmp[i] = nil;
+      }
+      
+      [self cancelAllDownloaders : NO];
       
       for (NSUInteger i = 0; i < 3; ++i) {
          [self hideSpinnerForView : i];
@@ -695,6 +700,7 @@ using CernAPP::NetworkStatus;
 {
    for (unsigned i = 0; i < 3; ++i) {
       [parsers[i] stopParsing];
+      parsers[i] = nil;
       feedDataTmp[i] = nil;
    }
    

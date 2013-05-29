@@ -1,10 +1,82 @@
+#import <cassert>
+
 #import "TwitterTableViewController.h"
 #import "ECSlidingViewController.h"
+#import "ApplicationErrors.h"
+#import "Reachability.h"
 #import "TweetCell.h"
 
 @implementation TwitterTableViewController {
    UITableView *tableView;
    NSIndexPath *selected;
+   
+   MWFeedParser *parser;
+   NSMutableArray *tweets;
+   NSMutableArray *tmpData;
+   
+   Reachability *internetReach;
+   BOOL viewDidAppear;
+}
+
+#pragma mark - Reachability.
+
+//________________________________________________________________________________________
+- (BOOL) hasConnection
+{
+   return internetReach && [internetReach currentReachabilityStatus] != CernAPP::NetworkStatus::notReachable;
+}
+
+#pragma mark - Lifecycle.
+
+@synthesize spinner, noConnectionHUD;
+
+//________________________________________________________________________________________
+- (id) initWithCoder : (NSCoder *) aDecoder
+{
+   if (self = [super initWithCoder : aDecoder]) {
+      parser = nil;
+      internetReach = [Reachability reachabilityForInternetConnection];
+   }
+   
+   return self;
+}
+
+#pragma mark - Other methods.
+
+//________________________________________________________________________________________
+- (void) setFeedURL : (NSString *) urlString
+{
+   assert(urlString != nil && "setFeedURL:, parameter 'urlString' is nil");
+
+   if (NSURL * const url = [NSURL URLWithString:urlString]) {
+      parser = [[MWFeedParser alloc] initWithFeedURL : url];
+      parser.delegate = self;
+      parser.connectionType = ConnectionTypeAsynchronously;
+   } else {
+      NSLog(@"setFeedURL:, error: bad url %@", urlString);
+      parser = nil;
+   }
+}
+
+//________________________________________________________________________________________
+- (void) refresh
+{
+   if (!parser) {
+      NSLog(@"refresh, error: parser is not initialized");
+      return;
+   }
+   
+   assert(parser.isParsing == NO && "refresh, parser is still parsing");
+   
+   [noConnectionHUD hide : YES];
+   self.navigationItem.rightBarButtonItem.enabled = NO;
+   
+   CernAPP::ShowSpinner(self);
+   
+   //TODO: [self cancellAllImageDownloaders];
+   
+   tmpData = [[NSMutableArray alloc] init];
+   [parser parse];
 }
 
 #pragma mark - viewDid/Will/Does/Never.
@@ -28,15 +100,28 @@
    tableView.separatorColor = [UIColor clearColor];
    
    [tableView registerClass : [TweetCell class] forCellReuseIdentifier : @"TweetCell"];
+   
+   CernAPP::AddSpinner(self);
+   CernAPP::HideSpinner(self);
 }
 
 //________________________________________________________________________________________
-- (void) viewWillAppear:(BOOL)animated
+- (void) viewWillAppear : (BOOL) animated
 {
    [super viewWillAppear : animated];
    CGRect frame = self.view.frame;
    frame.origin = CGPoint();
    tableView.frame = frame;
+}
+
+//________________________________________________________________________________________
+- (void) viewDidAppear : (BOOL) animated
+{
+   [super viewDidAppear : animated];
+   if (!viewDidAppear) {
+      viewDidAppear = YES;
+      [self refresh];
+   }
 }
 
 //________________________________________________________________________________________
@@ -51,19 +136,20 @@
 //________________________________________________________________________________________
 - (NSInteger) numberOfSectionsInTableView : (UITableView *) tableView
 {
+   if (!tweets.count)
+      return 0;
+   
    return 1;
 }
 
 //________________________________________________________________________________________
 - (NSInteger) tableView : (UITableView *) tableView numberOfRowsInSection : (NSInteger)section
 {
-   //TODO: implementation.
-   //Just a test, not a real data.
-   return 100;
+   return tweets.count;
 }
 
 //________________________________________________________________________________________
-- (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath : (NSIndexPath *)indexPath
+- (UITableViewCell *) tableView : (UITableView *) aTableView cellForRowAtIndexPath : (NSIndexPath *)indexPath
 {
    TweetCell * const cell = (TweetCell *)[tableView dequeueReusableCellWithIdentifier : @"TweetCell" forIndexPath : indexPath];
    UIView *bgColorView = [[UIView alloc] init];
@@ -107,8 +193,9 @@
 {
    assert(feedParser != nil && "feedParser:didParseFeedItem:, parameter 'feedParser' is nil");
    assert(item != nil && "feedParser:didParseFeedItem:, parameter 'item' is nil");
+   assert(tmpData != nil && "feedParser:didParseFeedItem:, tmpData is nil");
 
-   //TODO: implementation.
+   [tmpData addObject : item];
 }
 
 
@@ -119,7 +206,14 @@
 
    assert(feedParser != nil && "feedParser:didFailWithError:, parameter 'feedParser' is nil");
 
-   //TODO: implementation.
+   CernAPP::HideSpinner(self);
+   self.navigationItem.rightBarButtonItem.enabled = YES;
+
+   //Here, depending on the fact if we have data or not, we either show a HUD or an alert.
+   if (!tweets.count)//Also true if tweets is nil.
+      CernAPP::ShowErrorHUD(self, @"No network");
+   else
+      CernAPP::ShowErrorAlert(@"Please, check network connection!", @"Close");
 }
 
 //________________________________________________________________________________________
@@ -127,7 +221,14 @@
 {
    assert(feedParser != nil && "feedParserDidFinish:, parameter 'feedParser' is nil");
    
-   //TODO: implementation.
+   tweets = tmpData;
+   tmpData = nil;
+   
+   CernAPP::HideSpinner(self);
+   self.navigationItem.rightBarButtonItem.enabled = YES;
+   
+   selected = nil;
+   [tableView reloadData];
 }
 
 #pragma mark - ImageDownloader delegate.
@@ -149,6 +250,11 @@
 //________________________________________________________________________________________
 - (void) cancelAnyConnections
 {
+   //This method is called before the controller/view are removed.
+   if (parser.isParsing)
+      [parser stopParsing];
+   
+   parser = nil;
 }
 
 #pragma mark - UI
@@ -164,7 +270,12 @@
 - (IBAction) refresh : (id) sender
 {
 #pragma unused(sender)
-   //TODO: implementation.
+   assert(parser.isParsing == NO && "refresh:, parser is still parsing");
+   
+   if (![self hasConnection])
+      CernAPP::ShowErrorAlert(@"Please, check netword!", @"Close");
+   else
+      [self refresh];
 }
 
 @end

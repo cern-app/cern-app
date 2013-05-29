@@ -127,10 +127,9 @@ void CancelConnections(UIViewController *controller)
                                                                          TwitterViewControllerID];
       assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
              "loadControllerTo:, top view controller is either nil or has a wrong type");
-      //
-      //Setup the controller.
-      //
-      //
+      TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
+      tvc.navigationItem.title = feedName;
+      [tvc setFeedURL : feed];
    }
 
    if (controller.slidingViewController.topViewController)
