@@ -17,7 +17,6 @@
 #import "NewsFeedViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "ConnectionController.h"
-#import "ApplicationErrors.h"//TODO: remove when all controllers are activated.
 #import "ContentProviders.h"
 #import "KeyVal.h"
 
@@ -846,6 +845,7 @@ void CancelConnections(UIViewController *controller)
    return self;
 }
 
+//________________________________________________________________________________________
 - (UIImage *) categoryImage
 {
    return image;
