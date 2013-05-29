@@ -425,12 +425,6 @@ void CancelConnections(UIViewController *controller)
 {
    using namespace CernAPP;
 
-   //TODO: there is not view/controller for iPad at the moment.
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      ShowErrorAlert(@"Not implemented", @"Close");
-      return;
-   }
-
    assert(controller != nil && "loadControllerTo:, parameter controller is nil");
    
    
@@ -441,26 +435,38 @@ void CancelConnections(UIViewController *controller)
       //For such an image we just load "event display" view directly into the navigation controller.
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : EventDisplayControllerID];
       //
-      assert([navController.topViewController isKindOfClass:[EventDisplayViewController class]] &&
+      assert([navController.topViewController isKindOfClass : [EventDisplayViewController class]] &&
              "loadControllerTo:, top view controller is either nil or has a wrong type");
       
       EventDisplayViewController * const evc = (EventDisplayViewController *)navController.topViewController;
-      [self addLiveImageDescription:liveEvents[0] into : evc];
-      
+      [self addLiveImageDescription : liveEvents[0] into : evc];
       //Combine experiment name and category name?
       evc.title = categoryName;
    } else {
-      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : EventDisplayControllerFromTableID];
-      assert([navController.topViewController isKindOfClass : [LiveEventTableController class]] &&
-             "loadControllerTo:, top view controller is either nil or has a wrong type");
-
-      LiveEventTableController * const eventViewController = (LiveEventTableController *)navController.topViewController;
+      //TODO: there is not view/controller for iPad at the moment.
+      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+         navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : EventDisplayControllerID];
+         assert([navController.topViewController isKindOfClass : [EventDisplayViewController class]] &&
+                "loadControllerTo:, top view controller is either nil or has a wrong type");
       
-      eventViewController.navigationItem.title = categoryName;
+         EventDisplayViewController * const evc = (EventDisplayViewController *)navController.topViewController;
+         for (id obj in liveEvents)
+            [self addLiveImageDescription : obj into : evc];
 
-      [eventViewController setTableContents : liveEvents experimentName : experimentName];
-      eventViewController.provider = self;
-      eventViewController.navController = navController;
+         evc.title = [NSString stringWithFormat : @"%s", ExperimentName(experiment)];
+      } else {//On iPhone we have an intermediate table.
+         navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : EventDisplayControllerFromTableID];
+         assert([navController.topViewController isKindOfClass : [LiveEventTableController class]] &&
+                "loadControllerTo:, top view controller is either nil or has a wrong type");
+
+         LiveEventTableController * const eventViewController = (LiveEventTableController *)navController.topViewController;
+         
+         eventViewController.navigationItem.title = categoryName;
+
+         [eventViewController setTableContents : liveEvents experimentName : experimentName];
+         eventViewController.provider = self;
+         eventViewController.navController = navController;
+      }
    }
    
    if (controller.slidingViewController.topViewController)

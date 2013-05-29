@@ -560,13 +560,15 @@ using CernAPP::NetworkStatus;
 {
 #pragma unused(duration)
    pageBeforeRotation = pageControl.currentPage;//Ufff, uglyugly!!!
-
-   if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
-      [self.navigationController.view removeGestureRecognizer : self.slidingViewController.panGesture];
-      [self.navigationController setNavigationBarHidden : YES];
-   } else {
-      [self.navigationController.view addGestureRecognizer : self.slidingViewController.panGesture];
-      [self.navigationController setNavigationBarHidden : NO];
+   
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {//We do not hide a title bar on iPad.
+      if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+         [self.navigationController.view removeGestureRecognizer : self.slidingViewController.panGesture];
+         [self.navigationController setNavigationBarHidden : YES];
+      } else {
+         [self.navigationController.view addGestureRecognizer : self.slidingViewController.panGesture];
+         [self.navigationController setNavigationBarHidden : NO];
+      }
    }
 }
 
