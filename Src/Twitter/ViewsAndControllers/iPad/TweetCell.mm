@@ -13,22 +13,24 @@ const CGFloat largeSizeVMargin = 0.05f;
 
 @implementation TweetCell {
    CALayer *layer;
-   
+
+   UILabel *tweetNameLabel;
    UILabel *titleLabel;
    UILabel *linkLabel;
    UILabel *dateLabel;
-   UIButton *openBtn;
    
    UIFont *smallFont;
    UIFont *largeFont;
    UIFont *smallFontBold;
    UIFont *largeFontBold;
+   UIFont *linkFont;
 }
+
 
 //________________________________________________________________________________________
 + (CGFloat) collapsedHeight
 {
-   return 120.f;
+   return 100.f;
 }
 
 //________________________________________________________________________________________
@@ -52,11 +54,20 @@ const CGFloat largeSizeVMargin = 0.05f;
       layer = [CALayer layer];
       layer.backgroundColor = [UIColor colorWithRed : 0.95f green : 0.95f blue : 0.95f alpha : 1.f].CGColor;
       [self.layer addSublayer : layer];
+
+      tweetNameLabel = [[UILabel alloc] initWithFrame : CGRect()];
+      tweetNameLabel.clipsToBounds = YES;
+      tweetNameLabel.textColor = [UIColor blackColor];
+      tweetNameLabel.textAlignment = NSTextAlignmentLeft;
+      tweetNameLabel.backgroundColor = [UIColor clearColor];
+      tweetNameLabel.numberOfLines = 1;
+      [self addSubview : tweetNameLabel];
+
       
       titleLabel = [[UILabel alloc] initWithFrame : CGRect()];
       titleLabel.clipsToBounds = YES;
-      titleLabel.textColor = [UIColor blackColor];
-      titleLabel.textAlignment = NSTextAlignmentCenter;
+      titleLabel.textColor = [UIColor darkGrayColor];
+      titleLabel.textAlignment = NSTextAlignmentLeft;
       titleLabel.backgroundColor = [UIColor clearColor];
       [self addSubview : titleLabel];
       
@@ -80,18 +91,28 @@ const CGFloat largeSizeVMargin = 0.05f;
       dateLabel.backgroundColor = [UIColor clearColor];
       [self addSubview : dateLabel];
       //Custom fonts.
-      smallFont = [UIFont fontWithName:@"PTSans-Caption" size : 16.f];
+      smallFont = [UIFont fontWithName:@"PTSans-Caption" size : 12.f];
       assert(smallFont != nil && "initWithStyle:reuseIdentifier:, smallFont is nil");
-      largeFont = [UIFont fontWithName:@"PTSans-Caption" size : 28.f];
+      largeFont = [UIFont fontWithName:@"PTSans-Caption" size : 22.f];
       assert(largeFont != nil && "initWithStyle:reuseIdentifier:, largeFont is nil");
       
       smallFontBold = [UIFont fontWithName:@"PTSans-Bold" size : 16.f];
       assert(smallFontBold != nil && "initWithStyle:reuseIdentifier:, smallFontBold is nil");
-      largeFontBold = [UIFont fontWithName:@"PTSans-Bold" size : 28.f];
+      largeFontBold = [UIFont fontWithName:@"PTSans-Bold" size : 26.f];
       assert(largeFontBold != nil && "initWithStyle:reuseIdentifier:, largeFontBold is nil");
+      
+      linkFont = [UIFont fontWithName:@"PTSans-Bold" size : 14.f];
+      assert(linkFont != nil && "initWithStyle:reuseIdentifier:, linkFont is nil");
+      linkLabel.font = linkFont;
    }
 
    return self;
+}
+
+//________________________________________________________________________________________
+- (BOOL) cellExpanded
+{
+   return std::abs(self.frame.size.height - [TweetCell collapsedHeight]) > 0.1f;
 }
 
 //________________________________________________________________________________________
@@ -109,10 +130,9 @@ const CGFloat largeSizeVMargin = 0.05f;
    const CGFloat h = frame.size.height;
    
    CGRect adjustedFrame = {};
-   if (std::abs(h - [TweetCell collapsedHeight]) > 0.1f) {//hehe
+   if (self.cellExpanded) {
       adjustedFrame = CGRectMake(w * largeSizeHMargin, h * largeSizeVMargin, w - 2 * w * largeSizeHMargin, h - 2 * h * largeSizeVMargin);
       layer.cornerRadius = 10.f;
-      
    } else {
       adjustedFrame = CGRectMake(w * smallSizeHMargin, h * smallSizeVMargin, w - 2 * w * smallSizeHMargin, h - 2 * h * smallSizeVMargin);
       layer.cornerRadius = 0.f;
@@ -123,17 +143,25 @@ const CGFloat largeSizeVMargin = 0.05f;
 }
 
 //________________________________________________________________________________________
-- (void) setCellData : (MWFeedItem *) data
+- (void) setCellData : (MWFeedItem *) data forTweet : (NSString *) tweetName
 {
-   assert(data != nil && "setCellData:, parameter 'data' is nil");
-   assert(titleLabel != nil && "setCellData:, titleLabel is nil");
-   assert(dateLabel != nil && "setCellData:, dateLabel is nil");
+   assert(data != nil && "setCellData:forTweet:, parameter 'data' is nil");
+   assert(tweetName != nil && "setCellData:forTweet:, parameter 'tweetName' is nil");
+   
+   assert(tweetNameLabel != nil && "setCellData:forTweet:, tweetNameLabel is nil");
+   assert(titleLabel != nil && "setCellData:forTweet:, titleLabel is nil");
+   assert(dateLabel != nil && "setCellData:forTweet:, dateLabel is nil");
+   
+   if (tweetName.length)
+      tweetNameLabel.text = tweetName;
+   else
+      tweetNameLabel.text = @"";
    
    if (data.title.length)
       titleLabel.text = data.title;
    else
       titleLabel.text = @"";
-   
+
    NSDateFormatter * const dateFormatter = [[NSDateFormatter alloc] init];
    [dateFormatter setDateFormat : @"d MMM. yyyy"];
    dateLabel.text = [dateFormatter stringFromDate : data.date ? data.date : [NSDate date]];
@@ -148,25 +176,45 @@ const CGFloat largeSizeVMargin = 0.05f;
 - (void) layoutUIInFrame : (CGRect) frame
 {
    const CGFloat w = frame.size.width;
-   const CGFloat h = frame.size.height;
    
-   if (std::abs(self.frame.size.height - [TweetCell collapsedHeight]) > 0.1f) {
+   if (self.cellExpanded) {
       linkLabel.hidden = NO;
-      titleLabel.font = largeFontBold;
+      tweetNameLabel.font = largeFontBold;
+      titleLabel.font = largeFont;
       dateLabel.font = largeFont;
-      linkLabel.font = largeFont;
+
+      const CGFloat h = frame.size.height - 2 * frame.size.height * largeSizeHMargin;//We place labels in this rectangle.
+      tweetNameLabel.frame = CGRectMake(frame.origin.x + w * largeSizeHMargin, frame.origin.y,
+                                        w - 2 * w * largeSizeHMargin, h * 0.2f);
 
       titleLabel.numberOfLines = 4;
-      titleLabel.frame = CGRectMake(frame.origin.x + w * largeSizeHMargin, frame.origin.y + h * largeSizeVMargin,
-                                    w - 2 * w * largeSizeHMargin, h - 2 * h * largeSizeVMargin);
+      titleLabel.frame = CGRectMake(frame.origin.x + w * largeSizeHMargin, frame.origin.y + 0.2f * h,
+                                    w - 2 * w * largeSizeHMargin, h * 0.6f);
+      
+      const CGSize dateTextSize = [dateLabel.text sizeWithFont : dateLabel.font];
+      dateLabel.frame = CGRectMake(frame.origin.x + w - dateTextSize.width * 1.1f, frame.origin.y,
+                                   dateTextSize.width * 1.1f, 0.2f * h);
+      
+      linkLabel.frame = CGRectMake(frame.origin.x + w * largeSizeHMargin, frame.origin.y + 0.9f * h,
+                                   w - 2 * w * largeSizeHMargin, 0.1f * h);
    } else {
       linkLabel.hidden = YES;
-      titleLabel.font = smallFontBold;
+      tweetNameLabel.font = smallFontBold;
+      titleLabel.font = smallFont;
       dateLabel.font = smallFont;
       
-      titleLabel.numberOfLines = 1;
-      titleLabel.frame = CGRectMake(frame.origin.x + w * smallSizeHMargin, frame.origin.y + h * smallSizeVMargin,
-                                    w - 2 * w * smallSizeHMargin, h - 2 * h * smallSizeVMargin);
+      const CGFloat h = frame.size.height / 3;
+      tweetNameLabel.frame = CGRectMake(frame.origin.x + w * largeSizeHMargin, frame.origin.y,
+                                        w - 2 * w * largeSizeHMargin, h);
+      titleLabel.numberOfLines = 2;
+      titleLabel.frame = CGRectMake(frame.origin.x + w * largeSizeHMargin, frame.origin.y + h,
+                                    w - 2 * w * largeSizeHMargin, h);
+      const CGSize dateTextSize = [dateLabel.text sizeWithFont : dateLabel.font];
+      dateLabel.frame = CGRectMake(frame.origin.x + frame.size.width - dateTextSize.width * 1.1f,
+                                   frame.origin.y, dateTextSize.width * 1.1f, h);
+      
+      linkLabel.frame = CGRectMake(frame.origin.x + w * smallSizeHMargin, 2 * h,
+                                   w - 2 * w * largeSizeHMargin, h);
    }
 }
 

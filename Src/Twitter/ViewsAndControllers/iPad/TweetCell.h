@@ -8,7 +8,9 @@
 + (CGFloat) expandedHeight;
 + (CGFloat) expandedHeightWithImage;
 
+@property (nonatomic, readonly) BOOL cellExpanded;
+
 - (void) layoutSubviews;
-- (void) setCellData : (MWFeedItem *) data;
+- (void) setCellData : (MWFeedItem *) data forTweet : (NSString *) tweetName;
 
 @end

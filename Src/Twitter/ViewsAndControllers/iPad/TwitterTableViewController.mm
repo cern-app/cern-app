@@ -16,6 +16,8 @@
    
    Reachability *internetReach;
    BOOL viewDidAppear;
+   
+   NSString *tweetName;
 }
 
 #pragma mark - Reachability.
@@ -162,9 +164,9 @@
 
    assert(indexPath.row >= 0 && indexPath.row < tweets.count &&
           "tableView:cellForRowAtIndexPath:, row index is out of bounds");
-   [cell setCellData : (MWFeedItem *)tweets[indexPath.row]];
+   [cell setCellData : (MWFeedItem *)tweets[indexPath.row] forTweet : tweetName ? tweetName : @""];
+   
    [cell layoutSubviews];
-//   [cell setCellFrame : cell.frame];
 
    return cell;
 }
@@ -195,6 +197,22 @@
 }
 
 #pragma mark - MWFeedParser delegate.
+
+//________________________________________________________________________________________
+- (void)feedParser : (MWFeedParser *) feedParser didParseFeedInfo : (MWFeedInfo *) info
+{
+   assert(feedParser != nil && "feedParser:didParseFeedInfo:, parameter 'feedParser' is nil");
+   assert(info != nil && "feedParser:didParseFeedInfo:, parameter 'info' is nil");
+   
+   if (info.title.length) {
+      const NSRange range = [info.title rangeOfString : @"/"];
+      if (range.location != NSNotFound && range.location + 1 < info.title.length)
+         tweetName = [[info.title substringFromIndex:range.location + 1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+      else
+         tweetName = info.title;
+   } else
+      tweetName = @"";
+}
 
 //________________________________________________________________________________________
 - (void) feedParser : (MWFeedParser *) feedParser didParseFeedItem : (MWFeedItem *) item
