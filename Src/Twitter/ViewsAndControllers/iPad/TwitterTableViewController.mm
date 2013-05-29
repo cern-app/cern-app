@@ -149,14 +149,22 @@
 }
 
 //________________________________________________________________________________________
-- (UITableViewCell *) tableView : (UITableView *) aTableView cellForRowAtIndexPath : (NSIndexPath *)indexPath
+- (UITableViewCell *) tableView : (UITableView *) aTableView cellForRowAtIndexPath : (NSIndexPath *) indexPath
 {
+#pragma unused(aTableView)
+
+   assert(indexPath != nil && "tableView:cellForRowAtIndexPath:, parameter 'indexPath' is nil");
+
    TweetCell * const cell = (TweetCell *)[tableView dequeueReusableCellWithIdentifier : @"TweetCell" forIndexPath : indexPath];
    UIView *bgColorView = [[UIView alloc] init];
    [bgColorView setBackgroundColor : [UIColor clearColor]];
    [cell setSelectedBackgroundView : bgColorView];
-   
-   [cell setCellFrame : cell.frame];
+
+   assert(indexPath.row >= 0 && indexPath.row < tweets.count &&
+          "tableView:cellForRowAtIndexPath:, row index is out of bounds");
+   [cell setCellData : (MWFeedItem *)tweets[indexPath.row]];
+   [cell layoutSubviews];
+//   [cell setCellFrame : cell.frame];
 
    return cell;
 }
@@ -222,6 +230,17 @@
    assert(feedParser != nil && "feedParserDidFinish:, parameter 'feedParser' is nil");
    
    tweets = tmpData;
+   /*
+   NSLog(@"<<<<< Feed's items:");
+   for (MWFeedItem *item in tmpData) {
+      NSLog(@"title: %@", item.title);
+      NSLog(@"content: %@", item.content);
+      NSLog(@"date: %@", item.date);
+      NSLog(@"link: %@", item.link);
+      NSLog(@"summary: %@", item.summary);
+   }
+   NSLog(@"End of feed>>>>>");
+   */
    tmpData = nil;
    
    CernAPP::HideSpinner(self);

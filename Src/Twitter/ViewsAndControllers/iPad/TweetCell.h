@@ -1,11 +1,14 @@
 #import <UIKit/UIKit.h>
 
+@class MWFeedItem;
+
 @interface TweetCell : UITableViewCell
 
 + (CGFloat) collapsedHeight;
 + (CGFloat) expandedHeight;
 + (CGFloat) expandedHeightWithImage;
 
-- (void) setCellFrame : (CGRect) frame;
+- (void) layoutSubviews;
+- (void) setCellData : (MWFeedItem *) data;
 
 @end
