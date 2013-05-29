@@ -127,6 +127,7 @@
 		7049BBC116B0836C0045834E /* photos.png in Resources */ = {isa = PBXBuildFile; fileRef = 7049BBC016B0836C0045834E /* photos.png */; };
 		70501E3C16B6E180002C0F48 /* GCOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 70501E3816B6E180002C0F48 /* GCOAuth.m */; };
 		70501E3D16B6E180002C0F48 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 70501E3A16B6E180002C0F48 /* NSData+Base64.m */; };
+		705185521755F16700CE9EB8 /* LiveEventTableController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 705185511755F16700CE9EB8 /* LiveEventTableController.mm */; };
 		7054DEEC169AFD7A00B025C7 /* MENU.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7054DEEB169AFD7A00B025C7 /* MENU.plist */; };
 		7059E7E8174F89960094C9A4 /* WebcastsCollectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7059E7E7174F89960094C9A4 /* WebcastsCollectionViewController.mm */; };
 		705D9FB4166F3A00007C7611 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 705D9FB3166F3A00007C7611 /* AudioToolbox.framework */; };
@@ -199,7 +200,6 @@
 		70A562D1173A35C300145FEC /* BulletinIssueTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562BD173A35C300145FEC /* BulletinIssueTableViewController.mm */; };
 		70A562D2173A35C300145FEC /* BulletinTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562BF173A35C300145FEC /* BulletinTableViewController.mm */; };
 		70A562D3173A35C300145FEC /* CellBackgroundView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C1173A35C300145FEC /* CellBackgroundView.mm */; };
-		70A562D4173A35C300145FEC /* LiveEventTableController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C3173A35C300145FEC /* LiveEventTableController.mm */; };
 		70A562D5173A35C300145FEC /* NewsTableViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C5173A35C300145FEC /* NewsTableViewCell.mm */; };
 		70A562D6173A35C300145FEC /* NewsTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C7173A35C300145FEC /* NewsTableViewController.mm */; };
 		70A562DE173A37AA00145FEC /* TileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562DD173A37AA00145FEC /* TileViewController.mm */; };
@@ -408,6 +408,8 @@
 		70501E3B16B6E180002C0F48 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		70501E4016B6E674002C0F48 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		70501E4216B6E6EB002C0F48 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		705185501755F16700CE9EB8 /* LiveEventTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveEventTableController.h; sourceTree = "<group>"; };
+		705185511755F16700CE9EB8 /* LiveEventTableController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LiveEventTableController.mm; sourceTree = "<group>"; };
 		70533AEC16CA5B4C00077B0E /* PhotoBrowserProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserProtocol.h; sourceTree = "<group>"; };
 		7054DEEB169AFD7A00B025C7 /* MENU.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MENU.plist; sourceTree = "<group>"; };
 		7059E7E6174F89960094C9A4 /* WebcastsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsCollectionViewController.h; sourceTree = "<group>"; };
@@ -531,8 +533,6 @@
 		70A562BF173A35C300145FEC /* BulletinTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinTableViewController.mm; sourceTree = "<group>"; };
 		70A562C0173A35C300145FEC /* CellBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellBackgroundView.h; sourceTree = "<group>"; };
 		70A562C1173A35C300145FEC /* CellBackgroundView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CellBackgroundView.mm; sourceTree = "<group>"; };
-		70A562C2173A35C300145FEC /* LiveEventTableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveEventTableController.h; sourceTree = "<group>"; };
-		70A562C3173A35C300145FEC /* LiveEventTableController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LiveEventTableController.mm; sourceTree = "<group>"; };
 		70A562C4173A35C300145FEC /* NewsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewCell.h; sourceTree = "<group>"; };
 		70A562C5173A35C300145FEC /* NewsTableViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsTableViewCell.mm; sourceTree = "<group>"; };
 		70A562C6173A35C300145FEC /* NewsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsTableViewController.h; sourceTree = "<group>"; };
@@ -868,6 +868,15 @@
 			path = Src/ThirdParty/CocoaAuth;
 			sourceTree = SOURCE_ROOT;
 		};
+		7051854F1755F16700CE9EB8 /* iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				705185501755F16700CE9EB8 /* LiveEventTableController.h */,
+				705185511755F16700CE9EB8 /* LiveEventTableController.mm */,
+			);
+			path = iPhone;
+			sourceTree = "<group>";
+		};
 		705D9FB2166F387D007C7611 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -902,6 +911,7 @@
 		706A40201754FD0A00FD8685 /* ViewsAndControllers */ = {
 			isa = PBXGroup;
 			children = (
+				7051854F1755F16700CE9EB8 /* iPhone */,
 				706A40211754FD0A00FD8685 /* EventDisplayViewController.h */,
 				706A40221754FD0A00FD8685 /* EventDisplayViewController.mm */,
 			);
@@ -1195,8 +1205,6 @@
 				70A562BF173A35C300145FEC /* BulletinTableViewController.mm */,
 				70A562C0173A35C300145FEC /* CellBackgroundView.h */,
 				70A562C1173A35C300145FEC /* CellBackgroundView.mm */,
-				70A562C2173A35C300145FEC /* LiveEventTableController.h */,
-				70A562C3173A35C300145FEC /* LiveEventTableController.mm */,
 				70A562C4173A35C300145FEC /* NewsTableViewCell.h */,
 				70A562C5173A35C300145FEC /* NewsTableViewCell.mm */,
 				70A562C6173A35C300145FEC /* NewsTableViewController.h */,
@@ -1636,7 +1644,6 @@
 				70A562D1173A35C300145FEC /* BulletinIssueTableViewController.mm in Sources */,
 				70A562D2173A35C300145FEC /* BulletinTableViewController.mm in Sources */,
 				70A562D3173A35C300145FEC /* CellBackgroundView.mm in Sources */,
-				70A562D4173A35C300145FEC /* LiveEventTableController.mm in Sources */,
 				70A562D5173A35C300145FEC /* NewsTableViewCell.mm in Sources */,
 				70A562D6173A35C300145FEC /* NewsTableViewController.mm in Sources */,
 				70A562DE173A37AA00145FEC /* TileViewController.mm in Sources */,
@@ -1660,6 +1667,7 @@
 				706A401B1754FB9E00FD8685 /* ArticleDetailViewController.mm in Sources */,
 				706A401E1754FBE000FD8685 /* CreditsViewController.mm in Sources */,
 				706A40231754FD0A00FD8685 /* EventDisplayViewController.mm in Sources */,
+				705185521755F16700CE9EB8 /* LiveEventTableController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

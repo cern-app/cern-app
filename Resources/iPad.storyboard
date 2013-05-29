@@ -600,7 +600,7 @@
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A4d-gz-5LG">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A4d-gz-5LG" customClass="SlideScrollView">
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="delegate" destination="Cr0-3A-1RS" id="dDD-BQ-kcP"/>
@@ -766,6 +766,9 @@
                 <relationship kind="action" name="reloadImages:"/>
                 <relationship kind="action" name="revealMenu:"/>
             </relationships>
+        </class>
+        <class className="SlideScrollView" superclassName="UIScrollView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SlideScrollView.h"/>
         </class>
         <class className="StaticInfoTileViewController" superclassName="TileViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/StaticInfoTileViewController.h"/>
