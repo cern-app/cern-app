@@ -3,6 +3,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#import "TwitterTableViewController.h"
 #import "MWFeedItem.h"
 #import "TweetCell.h"
 
@@ -10,6 +11,30 @@ const CGFloat smallSizeHMargin = 0.05f;
 const CGFloat smallSizeVMargin = 0.005f;
 const CGFloat largeSizeHMargin = 0.03f;
 const CGFloat largeSizeVMargin = 0.05f;
+
+namespace {
+
+//________________________________________________________________________________________
+UIButton *CreateButtons(NSString *normalImageName, NSString *highlightedImageName)
+{
+   assert(normalImageName != nil && "CreateButtons, parameter 'normalImageName' is nil");
+   assert(highlightedImageName != nil && "CreateButtons, parameter 'highlightedImageName' is nil");
+
+   UIButton *btn = [UIButton buttonWithType : UIButtonTypeCustom];
+   btn.backgroundColor = [UIColor clearColor];
+   btn.opaque = YES;
+   
+   btn.layer.shadowColor = [UIColor blackColor].CGColor;
+   btn.layer.shadowOffset = CGSizeMake(2.f, 2.f);
+   btn.layer.shadowOpacity = 0.5f;
+
+   [btn setImage : [UIImage imageNamed: highlightedImageName] forState : UIControlStateHighlighted];
+   [btn setImage : [UIImage imageNamed: normalImageName] forState : UIControlStateNormal];
+   
+   return btn;
+}
+
+}
 
 @implementation TweetCell {
    UILabel *tweetNameLabel;
@@ -22,7 +47,14 @@ const CGFloat largeSizeVMargin = 0.05f;
    UIFont *smallFontBold;
    UIFont *largeFontBold;
    UIFont *linkFont;
+   
+   UIButton *retweetBtn;
+   UIButton *favBtn;
+   
+   MWFeedItem *tweet;
 }
+
+@synthesize controller;
 
 //________________________________________________________________________________________
 - (void) drawRect:(CGRect)rect
@@ -41,9 +73,8 @@ const CGFloat largeSizeVMargin = 0.05f;
       CGContextBeginPath(ctx);
       CGContextAddPath(ctx, path.CGPath);
       CGContextFillPath(ctx);
-   } else {
+   } else
       CGContextFillRect(ctx, CGRectMake(w * smallSizeHMargin, h * smallSizeVMargin, w - 2 * w * smallSizeHMargin, h - 2 * h * smallSizeVMargin));
-   }
 }
 
 //________________________________________________________________________________________
@@ -65,47 +96,64 @@ const CGFloat largeSizeVMargin = 0.05f;
 }
 
 //________________________________________________________________________________________
+- (void) createLabels
+{
+   tweetNameLabel = [[UILabel alloc] initWithFrame : CGRect()];
+   tweetNameLabel.clipsToBounds = YES;
+   tweetNameLabel.textColor = [UIColor blackColor];
+   tweetNameLabel.textAlignment = NSTextAlignmentLeft;
+   tweetNameLabel.backgroundColor = [UIColor clearColor];
+   tweetNameLabel.numberOfLines = 1;
+   [self addSubview : tweetNameLabel];
+
+   
+   titleLabel = [[UILabel alloc] initWithFrame : CGRect()];
+   titleLabel.clipsToBounds = YES;
+   titleLabel.textColor = [UIColor darkGrayColor];
+   titleLabel.textAlignment = NSTextAlignmentLeft;
+   titleLabel.backgroundColor = [UIColor clearColor];
+   [self addSubview : titleLabel];
+   
+   linkLabel = [[UILabel alloc] initWithFrame : CGRect()];
+   linkLabel.numberOfLines = 1;
+   linkLabel.clipsToBounds = YES;
+   linkLabel.textColor = [UIColor brownColor];
+   linkLabel.backgroundColor = [UIColor clearColor];
+   [self addSubview : linkLabel];
+   
+   linkLabel.hidden = YES;
+   //
+   dateLabel = [[UILabel alloc] initWithFrame : CGRect()];
+   dateLabel.clipsToBounds = YES;
+   dateLabel.numberOfLines = 1;
+   dateLabel.textColor = [UIColor blueColor];
+   dateLabel.backgroundColor = [UIColor clearColor];
+   [self addSubview : dateLabel];
+}
+
+//________________________________________________________________________________________
+- (void) createButtons
+{
+   retweetBtn = CreateButtons(@"retweet.png", @"retweet_hi.png");
+   [self addSubview : retweetBtn];
+   retweetBtn.hidden = YES;
+   [retweetBtn addTarget : self action : @selector(reTweet) forControlEvents : UIControlEventTouchDown];
+   
+   favBtn = CreateButtons(@"favs.png", @"favs_hi.png");
+   [self addSubview : favBtn];
+   favBtn.hidden = YES;
+ //  [favBtn addTarget : self action : @selector(showTweet) forControlEvents : UIControlEventTouchDown];
+}
+
+//________________________________________________________________________________________
 - (id) initWithStyle : (UITableViewCellStyle) style reuseIdentifier : (NSString *) reuseIdentifier
 {
    if (self = [super initWithStyle:style reuseIdentifier : reuseIdentifier]) {
       //Initialization code
       self.backgroundColor = [UIColor clearColor];
 
-      tweetNameLabel = [[UILabel alloc] initWithFrame : CGRect()];
-      tweetNameLabel.clipsToBounds = YES;
-      tweetNameLabel.textColor = [UIColor blackColor];
-      tweetNameLabel.textAlignment = NSTextAlignmentLeft;
-      tweetNameLabel.backgroundColor = [UIColor clearColor];
-      tweetNameLabel.numberOfLines = 1;
-      [self addSubview : tweetNameLabel];
-
+      [self createLabels];
       
-      titleLabel = [[UILabel alloc] initWithFrame : CGRect()];
-      titleLabel.clipsToBounds = YES;
-      titleLabel.textColor = [UIColor darkGrayColor];
-      titleLabel.textAlignment = NSTextAlignmentLeft;
-      titleLabel.backgroundColor = [UIColor clearColor];
-      [self addSubview : titleLabel];
-      
-      linkLabel = [[UILabel alloc] initWithFrame : CGRect()];
-      linkLabel.numberOfLines = 1;
-      linkLabel.clipsToBounds = YES;
-      linkLabel.textColor = [UIColor brownColor];
-      linkLabel.backgroundColor = [UIColor clearColor];
-      [self addSubview : linkLabel];
-      
-      linkLabel.hidden = YES;
-      
-      UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(showTweet)];
-      [linkLabel addGestureRecognizer : tapRecognizer];
-
-      //
-      dateLabel = [[UILabel alloc] initWithFrame : CGRect()];
-      dateLabel.clipsToBounds = YES;
-      dateLabel.numberOfLines = 1;
-      dateLabel.textColor = [UIColor blueColor];
-      dateLabel.backgroundColor = [UIColor clearColor];
-      [self addSubview : dateLabel];
       //Custom fonts.
       smallFont = [UIFont fontWithName:@"PTSans-Caption" size : 12.f];
       assert(smallFont != nil && "initWithStyle:reuseIdentifier:, smallFont is nil");
@@ -120,6 +168,8 @@ const CGFloat largeSizeVMargin = 0.05f;
       linkFont = [UIFont fontWithName:@"PTSans-Bold" size : 14.f];
       assert(linkFont != nil && "initWithStyle:reuseIdentifier:, linkFont is nil");
       linkLabel.font = linkFont;
+      
+      [self createButtons];
    }
 
    return self;
@@ -182,6 +232,8 @@ const CGFloat largeSizeVMargin = 0.05f;
       linkLabel.text = data.link;
    else
       linkLabel.text = @"";
+   
+   tweet = data;
 }
 
 //________________________________________________________________________________________
@@ -209,6 +261,14 @@ const CGFloat largeSizeVMargin = 0.05f;
       
       linkLabel.frame = CGRectMake(frame.origin.x + w * largeSizeHMargin, frame.origin.y + 0.9f * h,
                                    w - 2 * w * largeSizeHMargin, 0.1f * h);
+      
+      [retweetBtn setHighlighted : NO];
+      retweetBtn.hidden = NO;
+      retweetBtn.frame = CGRectMake(frame.origin.x + w - 60.f, frame.origin.y + frame.size.height - 50.f, 40.f, 40.f);
+      
+      [favBtn setHighlighted : NO];
+      favBtn.hidden = NO;
+      favBtn.frame = CGRectMake(frame.origin.x + w - 100.f, frame.origin.y + frame.size.height - 50.f, 40.f, 40.f);
    } else {
       linkLabel.hidden = YES;
       tweetNameLabel.font = smallFontBold;
@@ -227,15 +287,24 @@ const CGFloat largeSizeVMargin = 0.05f;
       
       linkLabel.frame = CGRectMake(frame.origin.x + w * smallSizeHMargin, 2 * h,
                                    w - 2 * w * largeSizeHMargin, h);
+      
+      retweetBtn.hidden = YES;
+      retweetBtn.frame = CGRectMake(frame.origin.x + w - 60.f, frame.origin.y + frame.size.height - 50.f, 44.f, 44.f);
+
+      favBtn.hidden = YES;
+      favBtn.frame = CGRectMake(frame.origin.x + w - 100.f, frame.origin.y + frame.size.height - 50.f, 44.f, 44.f);
    }
 }
 
 #pragma mark - User interactions.
 
 //________________________________________________________________________________________
-- (void) showTweet
+- (void) reTweet
 {
-   NSLog(@"tapped!");
+   assert(controller != nil && "reTweet, controller is nil");
+   assert(tweet != nil && "reTweet, tweet is nil");
+
+   [controller reTweet : tweet];
 }
 
 @end
