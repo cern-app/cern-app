@@ -89,6 +89,8 @@
    [super viewDidLoad];
 
 	// Do any additional setup after loading the view, typically from a nib.
+   self.view.backgroundColor = [UIColor lightGrayColor];
+   
    tableView = [[UITableView alloc] initWithFrame : CGRect() style : UITableViewStylePlain];
    tableView.delegate = self;
    tableView.dataSource = self;
