@@ -232,8 +232,6 @@
 		70CC55EF169EF80600292332 /* MenuNavigationController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CC55ED169EF80500292332 /* MenuNavigationController.mm */; };
 		70CDF7071745052200DA1803 /* PhotoViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70CDF7051745052200DA1803 /* PhotoViewCell.mm */; };
 		70D2629516F8948600883316 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D2629416F8948600883316 /* CoreText.framework */; };
-		70D4094D17578384001809CF /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70D4094C17578384001809CF /* Accounts.framework */; };
-		70D4094E17578441001809CF /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E15CC7B81593E9E40016CC95 /* Twitter.framework */; };
 		70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */; };
 		70E69AC1170EC2D700384523 /* ArticleiPadCSS.css in Resources */ = {isa = PBXBuildFile; fileRef = 70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */; };
 		70E69AC4170EE81F00384523 /* FeedCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E69AC2170EE81F00384523 /* FeedCache.mm */; };
@@ -591,7 +589,6 @@
 		70CDF7051745052200DA1803 /* PhotoViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoViewCell.mm; sourceTree = "<group>"; };
 		70CDF7061745052200DA1803 /* PhotoViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoViewCell.h; sourceTree = "<group>"; };
 		70D2629416F8948600883316 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		70D4094C17578384001809CF /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		70D98B2916F786D8003C42E7 /* SlideScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideScrollView.h; sourceTree = "<group>"; };
 		70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SlideScrollView.mm; sourceTree = "<group>"; };
 		70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = ArticleiPadCSS.css; sourceTree = "<group>"; };
@@ -607,7 +604,6 @@
 		70FB8557172987E500F7CCBD /* AnimationFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationFrame.h; sourceTree = "<group>"; };
 		70FDADCD16CE604200933383 /* cern_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_info.png; sourceTree = "<group>"; };
 		70FDADCF16CE615600933383 /* credits.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = credits.png; sourceTree = "<group>"; };
-		E15CC7B81593E9E40016CC95 /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		E1830BC915744B9F003F16E2 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		E1AB920C159BE44B006FBB40 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E1D87E88159EEC880051104C /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -625,8 +621,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				70D4094E17578441001809CF /* Twitter.framework in Frameworks */,
-				70D4094D17578384001809CF /* Accounts.framework in Frameworks */,
 				70D2629516F8948600883316 /* CoreText.framework in Frameworks */,
 				7004A14716CBB8E60097435D /* CoreData.framework in Frameworks */,
 				7098286616C404C500311025 /* Social.framework in Frameworks */,
@@ -1380,7 +1374,6 @@
 		E1F7B689156EDC7C0092367F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				70D4094C17578384001809CF /* Accounts.framework */,
 				70D2629416F8948600883316 /* CoreText.framework */,
 				7004A14616CBB8E60097435D /* CoreData.framework */,
 				7098286516C404C500311025 /* Social.framework */,
@@ -1388,7 +1381,6 @@
 				E1D87E8A159EEC920051104C /* MessageUI.framework */,
 				E1D87E88159EEC880051104C /* ImageIO.framework */,
 				E1AB920C159BE44B006FBB40 /* QuartzCore.framework */,
-				E15CC7B81593E9E40016CC95 /* Twitter.framework */,
 				E1830BC915744B9F003F16E2 /* libxml2.dylib */,
 				E1F7B68A156EDC7C0092367F /* UIKit.framework */,
 				E1F7B68C156EDC7C0092367F /* Foundation.framework */,
