@@ -29,6 +29,5 @@ extern NSString * const BulletinIssueViewControllerID;
 extern NSString * const StaticInfoTileViewControllerID;
 extern NSString * const PhotoCollectionsViewControllerID;
 extern NSString * const TwitterViewControllerID;
-extern NSString * const AccountSelectorControllerID;
 
 }

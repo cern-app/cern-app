@@ -4,7 +4,6 @@
 #import <Twitter/TWRequest.h>
 
 #import "TwitterTableViewController.h"
-#import "AccountSelectorController.h"
 #import "ECSlidingViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "ApplicationErrors.h"
@@ -362,90 +361,6 @@
       CernAPP::ShowErrorAlert(@"Please, check netword!", @"Close");
    else
       [self refresh];
-}
-
-#pragma mark - Twitter API.
-
-//________________________________________________________________________________________
-- (void) accountSelected : (ACAccount *) account
-{
-   assert(account != nil && "accountSelected:, parameter 'account' is nil");
-
-   //Work with this account.
-
-   selectingAccount = NO;
-   [popoverController dismissPopoverAnimated : YES];
-   //Do some work here.
-}
-
-//________________________________________________________________________________________
-- (void) showTweetAccounts : (NSArray *) params
-{
-   assert(params != nil && "showTweetAccounts:, parameter 'params' is nil");
-   assert(params.count == 2 && "showTweetAccounts:, wrong number of parameters");
-
-   if (popoverController)
-      [popoverController dismissPopoverAnimated : YES];
-   
-   AccountSelectorController *viewController = (AccountSelectorController *)[self.storyboard instantiateViewControllerWithIdentifier:CernAPP::AccountSelectorControllerID];
-   viewController.title = @"Choose a Twitter account";
-   [viewController setData : params];
-   //Attach an operation to a popover.
-   viewController.delegate = self;
-   
-   UINavigationController * const navController = [[UINavigationController alloc] initWithRootViewController : viewController];
-
-   popoverController = [[UIPopoverController alloc] initWithContentViewController : navController];
-   popoverController.delegate = self;
-   popoverController.popoverContentSize = CGSizeMake(320, 400);
-   [popoverController presentPopoverFromRect : CGRectMake(100.f, 100.f, 320.f, 400.f) inView : tableView permittedArrowDirections : UIPopoverArrowDirectionAny animated : YES];
-}
-
-//________________________________________________________________________________________
-- (void) reTweet : (MWFeedItem *) tweet
-{
-   assert(tweet != nil && "reTweet, parameter 'tweet' is nil");
-   
-   if (selectingAccount)
-      return;
-
-   selectingAccount = YES;
-
-   ACAccountStore *accountStore = [[ACAccountStore alloc] init];
-   // Create an account type that ensures Twitter accounts are retrieved.
-   ACAccountType *accountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
-   // Request access from the user to use their Twitter accounts.
-   [accountStore requestAccessToAccountsWithType : accountType options:nil completion : ^(BOOL granted, NSError *error) {
-      if(granted) {
-         // Get the list of Twitter accounts.
-         NSArray * const accounts = [accountStore accountsWithAccountType : accountType];
-         if (accounts.count) {
-            if (accounts.count > 1) {
-               //Let's ask a user, which one to use!
-               RetweetOperation * const operation = [[RetweetOperation alloc] init];
-               operation.tweet = tweet;
-               operation.account = nil;//not selected yet.
-               NSArray * const parameters = @[accounts, operation];
-               [self performSelectorOnMainThread : @selector(showTweetAccounts:) withObject : parameters waitUntilDone : NO];
-            }
-         } else {
-            //
-         }
-      }
-   }];
-}
-
-#pragma mark - UIPopoverControllerDelegate.
-
-//________________________________________________________________________________________
-- (void) popoverControllerDidDismissPopover : (UIPopoverController *) popoverController
-{
-   if (selectingAccount) {
-      //no account was selected, dismissing.
-      selectingAccount = NO;
-   } else {
-      //account was selected, dismissing.
-   }
 }
 
 @end
