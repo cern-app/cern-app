@@ -230,6 +230,7 @@
    [tableView deselectRowAtIndexPath:indexPath animated : NO];
    tableView.animatingSelection = YES;
    
+   
    if (selected) {
       NSArray * const cells = [tableView visibleCells];
       for (TweetCell *cell in cells) {
@@ -240,10 +241,8 @@
          }
       }
       selected = nil;
-   }
-   else {
+   } else
       selected = indexPath;
-   }
 
    [tableView beginUpdates];
    [tableView endUpdates];
@@ -365,6 +364,10 @@
          NSIndexPath * const indexPath = [tableView indexPathForCell : cell];
          if (indexPath && [indexPath compare : selected] == NSOrderedSame) {
             [cell addWebView];
+            const CGRect frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y,
+                                            cell.frame.size.width, [TweetCell expandedHeight]);
+            [tableView scrollRectToVisible : frame animated : YES];
+
             break;
          }
       }

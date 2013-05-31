@@ -121,8 +121,7 @@ void CancelConnections(UIViewController *controller)
       nt.feedStoreID = feedName;
       [nt.aggregator addFeedForURL : [NSURL URLWithString : feed]];
    } else {
-      //twitter feed on iPad.
-      //TODO: there is not view/controller for iPad at the moment.
+      //Twitter feed on iPad.
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier:
                                                                          TwitterViewControllerID];
       assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
