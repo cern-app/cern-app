@@ -153,6 +153,7 @@
 		706A401E1754FBE000FD8685 /* CreditsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A401C1754FBE000FD8685 /* CreditsViewController.mm */; };
 		706A40231754FD0A00FD8685 /* EventDisplayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A40221754FD0A00FD8685 /* EventDisplayViewController.mm */; };
 		706FEFC1175379950079468A /* VideoThumbnailCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706FEFC0175379950079468A /* VideoThumbnailCell.mm */; };
+		7072B2C11758E7C3002ACD75 /* TwitterTableView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7072B2C01758E7C3002ACD75 /* TwitterTableView.mm */; };
 		70767DC716CE8F4D00164516 /* MWFeedParserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */; };
 		70767DC916CE922D00164516 /* MWPhotoBrowserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */; };
 		70783B0B17450265006635D8 /* PhotoCollectionsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70783B0A17450265006635D8 /* PhotoCollectionsViewController.mm */; };
@@ -450,6 +451,8 @@
 		706A40221754FD0A00FD8685 /* EventDisplayViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EventDisplayViewController.mm; sourceTree = "<group>"; };
 		706FEFBF175379950079468A /* VideoThumbnailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoThumbnailCell.h; sourceTree = "<group>"; };
 		706FEFC0175379950079468A /* VideoThumbnailCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoThumbnailCell.mm; sourceTree = "<group>"; };
+		7072B2BF1758E7C3002ACD75 /* TwitterTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterTableView.h; sourceTree = "<group>"; };
+		7072B2C01758E7C3002ACD75 /* TwitterTableView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TwitterTableView.mm; sourceTree = "<group>"; };
 		7072B3271713F72F00515DA8 /* TiledPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiledPage.h; sourceTree = "<group>"; };
 		70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWFeedParserLicense.txt; sourceTree = "<group>"; };
 		70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWPhotoBrowserLicense.txt; sourceTree = "<group>"; };
@@ -905,6 +908,8 @@
 				705185BA17561E4E00CE9EB8 /* TweetCell.mm */,
 				705185BC17561EA200CE9EB8 /* TwitterTableViewController.h */,
 				705185BD17561EA200CE9EB8 /* TwitterTableViewController.mm */,
+				7072B2BF1758E7C3002ACD75 /* TwitterTableView.h */,
+				7072B2C01758E7C3002ACD75 /* TwitterTableView.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1702,6 +1707,7 @@
 				705185521755F16700CE9EB8 /* LiveEventTableController.mm in Sources */,
 				705185BB17561E4E00CE9EB8 /* TweetCell.mm in Sources */,
 				705185BE17561EA200CE9EB8 /* TwitterTableViewController.mm in Sources */,
+				7072B2C11758E7C3002ACD75 /* TwitterTableView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,4 +15,7 @@
 - (void) layoutSubviews;
 - (void) setCellData : (MWFeedItem *) data forTweet : (NSString *) tweetName;
 
+- (void) addWebView;
+- (void) removeWebView;
+
 @end

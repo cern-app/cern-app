@@ -10,10 +10,10 @@
 
 @interface TwitterTableViewController : UIViewController<UITableViewDelegate, UITableViewDataSource,
                                                          ConnectionController, MWFeedParserDelegate,
-                                                         ImageDownloaderDelegate, HUDRefreshProtocol,
-                                                         UIPopoverControllerDelegate>
+                                                         ImageDownloaderDelegate, HUDRefreshProtocol>
 
 - (void) setFeedURL : (NSString *) urlString;
+- (void) cellAnimationFinished;
 
 @property (nonatomic) UIActivityIndicatorView *spinner;
 @property (nonatomic) MBProgressHUD *noConnectionHUD;

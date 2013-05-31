@@ -13,6 +13,7 @@ const CGFloat largeSizeHMargin = 0.03f;
 const CGFloat largeSizeVMargin = 0.05f;
 
 @implementation TweetCell {
+   UIWebView *webView;
    UILabel *tweetNameLabel;
    UILabel *titleLabel;
    UILabel *dateLabel;
@@ -218,6 +219,35 @@ const CGFloat largeSizeVMargin = 0.05f;
       dateLabel.frame = CGRectMake(frame.origin.x + frame.size.width - dateTextSize.width * 1.1f,
                                    frame.origin.y, dateTextSize.width * 1.1f, h);
    }
+}
+
+//________________________________________________________________________________________
+- (void) addWebView
+{
+   const CGFloat w = self.frame.size.width;
+   const CGFloat h = self.frame.size.height;
+
+   const CGRect adjustedFrame = CGRectMake(w * largeSizeHMargin * 1.5, h * largeSizeVMargin * 1.5, w - 3 * w * largeSizeHMargin, h - 3 * h * largeSizeVMargin);
+   if (webView)
+      [self removeWebView];
+   
+   webView = [[UIWebView alloc] initWithFrame : adjustedFrame];
+   [self addSubview : webView];
+   
+   NSURLRequest * const req = [NSURLRequest requestWithURL : [NSURL URLWithString : tweet.link]];
+   //webView.delegate = self;
+   [webView loadRequest : req];
+}
+
+//________________________________________________________________________________________
+- (void) removeWebView
+{
+   if (webView) {
+      [webView removeFromSuperview];
+      webView.delegate = nil;
+   }
+
+   webView = nil;
 }
 
 @end

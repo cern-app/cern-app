@@ -7,6 +7,7 @@
 #import "ECSlidingViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "ApplicationErrors.h"
+#import "TwitterTableView.h"
 #import "Reachability.h"
 #import "TweetCell.h"
 
@@ -40,7 +41,7 @@
 @end
 
 @implementation TwitterTableViewController {
-   UITableView *tableView;
+   TwitterTableView *tableView;
    NSIndexPath *selected;
    
    MWFeedParser *parser;
@@ -51,8 +52,6 @@
    BOOL viewDidAppear;
    
    NSString *tweetName;
-   
-   UIPopoverController *popoverController;
    
    BOOL selectingAccount;
 }
@@ -130,7 +129,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
    self.view.backgroundColor = [UIColor lightGrayColor];
    
-   tableView = [[UITableView alloc] initWithFrame : CGRect() style : UITableViewStylePlain];
+   tableView = [[TwitterTableView alloc] initWithFrame : CGRect() style : UITableViewStylePlain];
    tableView.delegate = self;
    tableView.dataSource = self;
    tableView.backgroundColor = [UIColor lightGrayColor];
@@ -228,14 +227,27 @@
 //________________________________________________________________________________________
 - (void) tableView : (UITableView *) aTableView didSelectRowAtIndexPath : (NSIndexPath *) indexPath
 {
-   //[tableView deselectRowAtIndexPath:indexPath animated : NO];
-   if (selected && [selected compare : indexPath] == NSOrderedSame)
+   [tableView deselectRowAtIndexPath:indexPath animated : NO];
+   tableView.animatingSelection = YES;
+   
+   if (selected) {
+      NSArray * const cells = [tableView visibleCells];
+      for (TweetCell *cell in cells) {
+         NSIndexPath * const indexPath = [tableView indexPathForCell : cell];
+         if (indexPath && [indexPath compare:selected] == NSOrderedSame) {
+            [cell removeWebView];
+            break;
+         }
+      }
       selected = nil;
-   else
+   }
+   else {
       selected = indexPath;
+   }
 
    [tableView beginUpdates];
    [tableView endUpdates];
+
 }
 
 //________________________________________________________________________________________
@@ -340,6 +352,44 @@
       [parser stopParsing];
    
    parser = nil;
+}
+
+#pragma mark - Special tricks to work with web-views inside cells.
+
+//________________________________________________________________________________________
+- (void) cellAnimationFinished
+{
+   if (selected) {
+      NSArray * const cells = [tableView visibleCells];
+      for (TweetCell * cell in cells) {
+         NSIndexPath * const indexPath = [tableView indexPathForCell : cell];
+         if (indexPath && [indexPath compare : selected] == NSOrderedSame) {
+            [cell addWebView];
+            break;
+         }
+      }
+   }
+}
+
+//________________________________________________________________________________________
+- (void) scrollViewWillBeginDragging : (UIScrollView *) scrollView
+{
+#pragma unused(scrollView)
+
+   if (selected) {
+      NSArray * const cells = [tableView visibleCells];
+      for (TweetCell *cell in cells) {
+         NSIndexPath * const indexPath = [tableView indexPathForCell : cell];
+         if (indexPath && [indexPath compare:selected] == NSOrderedSame) {
+            [cell removeWebView];
+            break;
+         }
+      }
+
+      selected = nil;
+      [tableView beginUpdates];
+      [tableView endUpdates];
+   }
 }
 
 #pragma mark - UI
