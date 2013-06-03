@@ -67,7 +67,12 @@ using namespace FlipAnimation;
    flipAnimator.transformView = flipView;
    flipAnimator.controller = self;
    flipAnimator.perspectiveDepth = 2000;
-  
+   
+   //flipView is actually quite a heavy-weight thing.
+   //It has a complex hierarchy of layers attached,
+   //so sliding-view animation is simply killed by
+   //this complexity.
+   flipView.hidden = YES;
 }
 
 //________________________________________________________________________________________
@@ -237,6 +242,8 @@ using namespace FlipAnimation;
 //________________________________________________________________________________________
 - (void) revealMenu : (id) sender
 {
+#pragma unused(sender)
+
    [self.slidingViewController anchorTopViewTo : ECRight];
 }
 
