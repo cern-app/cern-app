@@ -218,8 +218,6 @@ UIViewController *FindController(UIView *view)
 {
    using namespace CernAPP;
 
-   NSLog(@"button index %d", buttonIndex);
-
    assert(buttonIndex >= 0 && "actionSheet:didDisimssWithButtonIndex:, button index must be non-negative");
 
    /*assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
