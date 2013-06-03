@@ -230,17 +230,20 @@
    [tableView deselectRowAtIndexPath:indexPath animated : NO];
    tableView.animatingSelection = YES;
    
-   
    if (selected) {
       NSArray * const cells = [tableView visibleCells];
       for (TweetCell *cell in cells) {
-         NSIndexPath * const indexPath = [tableView indexPathForCell : cell];
-         if (indexPath && [indexPath compare:selected] == NSOrderedSame) {
+         NSIndexPath * const cellPath = [tableView indexPathForCell : cell];
+         if (cellPath && [cellPath compare : selected] == NSOrderedSame) {
             [cell removeWebView];
             break;
          }
       }
-      selected = nil;
+      
+      if ([indexPath compare : selected] == NSOrderedSame)
+         selected = nil;
+      else
+         selected = indexPath;
    } else
       selected = indexPath;
 
