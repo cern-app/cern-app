@@ -222,12 +222,12 @@ UIViewController *FindController(UIView *view)
 
    assert(buttonIndex >= 0 && "actionSheet:didDisimssWithButtonIndex:, button index must be non-negative");
 
-   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+   /*assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "actionSheet:didDisimssWithButtonIndex:, application delegate has a wrong type");
-   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;*/
 
    if (buttonIndex == 1) {
-      appDelegate.tweetOption = TwitterFeedShowOption::externalView;
+      //appDelegate.tweetOption = TwitterFeedShowOption::externalView;
       
       if(![[UIApplication sharedApplication] openURL : twitterUrl])
          CernAPP::ShowErrorAlert(@"actionSheet:didDisimssWithButtonIndex:, error: Failed to open twitter app", @"Close");
@@ -237,7 +237,7 @@ UIViewController *FindController(UIView *view)
       UIViewController * const controller = ((ActionSheetWithController *)actionSheet).controller;      
       assert(controller != nil && "actionSheet:didDisimssWithButtonIndex:, controller not found");
 
-      appDelegate.tweetOption = CernAPP::TwitterFeedShowOption::builtinView;
+      //appDelegate.tweetOption = CernAPP::TwitterFeedShowOption::builtinView;
 
 
       MenuNavigationController * const navController =
