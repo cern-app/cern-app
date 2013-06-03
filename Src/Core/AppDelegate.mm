@@ -3,7 +3,7 @@
 @implementation AppDelegate
 
 @synthesize window = _window;
-
+@synthesize tweetOption;
 @synthesize OAuthToken, OAuthTokenSecret, managedObjectContext, managedObjectModel, persistentStoreCoordinator;
 
 //________________________________________________________________________________________
@@ -15,6 +15,8 @@
    NSDictionary * const appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:@13, @"GUIFontSize", @0, @"HTMLBodyFontSize", nil];
    [defaults registerDefaults : appDefaults];
    [defaults synchronize];
+   
+   tweetOption = CernAPP::TwitterFeedShowOption::notSet;
    //
    return YES;
 }

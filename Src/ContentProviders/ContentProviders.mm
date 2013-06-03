@@ -17,8 +17,12 @@
 #import "NewsFeedViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "ConnectionController.h"
+#import "ApplicationErrors.h"
 #import "ContentProviders.h"
+#import "AppDelegate.h"
 #import "KeyVal.h"
+
+using CernAPP::TwitterFeedShowOption;
 
 namespace {
 
@@ -31,13 +35,55 @@ void CancelConnections(UIViewController *controller)
       [controller performSelector : @selector(cancelAnyConnections)];
 }
 
+//________________________________________________________________________________________
+NSURL *TwitterURL(NSString *feed)
+{
+   assert(feed != nil && "TwitterURL, parameter 'feedUrl' is nil");
+   
+   const NSRange range = [feed rangeOfString : @"screen_name="];
+   if (range.location == NSNotFound)
+      return nil;
+
+   NSString * const urlString = [NSString stringWithFormat : @"twitter://user?%@", [feed substringFromIndex : range.location]];
+
+   return [NSURL URLWithString : urlString];
 }
+
+//________________________________________________________________________________________
+UIViewController *FindController(UIView *view)
+{
+   assert(view != nil && "FindController, parameter 'view' is nil");
+   id nextResponder = [view nextResponder];
+   if ([nextResponder isKindOfClass : [UIViewController class]])
+      return (UIViewController *)nextResponder;
+   else if ([nextResponder isKindOfClass : [UIView class]])
+      return FindController((UIView *)nextResponder);
+   
+   return nil;
+}
+
+}
+
+@interface ActionSheetWithController : UIActionSheet
+
+@property (nonatomic, weak) UIViewController *controller;
+
+@end
+
+@implementation ActionSheetWithController
+
+@synthesize controller;
+
+@end
+
 
 @implementation FeedProvider {
    NSString *feedName;
    NSString *feed;
    UIImage *feedImage;
    BOOL isTwitterFeed;
+   
+   NSURL *twitterUrl;
 }
 
 //________________________________________________________________________________________
@@ -63,9 +109,10 @@ void CancelConnections(UIViewController *controller)
          assert([feedInfo[@"Category name"] isKindOfClass : [NSString class]] &&
                 "initWith:, 'Category name' has a wrong type");
          
-         if ([(NSString *)feedInfo[@"Category name"] isEqualToString : @"Tweet"])
+         if ([(NSString *)feedInfo[@"Category name"] isEqualToString : @"Tweet"]) {
             isTwitterFeed = YES;
-         else
+            twitterUrl = TwitterURL(feed);
+         } else
             isTwitterFeed = NO;
       }
    }
@@ -122,13 +169,35 @@ void CancelConnections(UIViewController *controller)
       [nt.aggregator addFeedForURL : [NSURL URLWithString : feed]];
    } else {
       //Twitter feed on iPad.
-      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier:
-                                                                         TwitterViewControllerID];
-      assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
-             "loadControllerTo:, top view controller is either nil or has a wrong type");
-      TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
-      tvc.navigationItem.title = feedName;
-      [tvc setFeedURL : feed];
+      
+      assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+             "loadControllerTo:, application delegate has a wrong type");
+      
+      AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+
+      if (appDelegate.tweetOption == TwitterFeedShowOption::notSet && twitterUrl) {
+         if ([[UIApplication sharedApplication] canOpenURL : twitterUrl]) {
+            NSString *message = [NSString stringWithFormat : @"Do you want to use an external application to open %@?", feedName];
+            ActionSheetWithController *dialog = [[ActionSheetWithController alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
+                                                                                                                      destructiveButtonTitle : @"No, show in a built-in view"
+                                                                                                                      otherButtonTitles : @"Yes", nil];
+            dialog.controller = controller;
+            [dialog showInView : controller.view];
+            return;
+         }
+      } else if (appDelegate.tweetOption == TwitterFeedShowOption::builtinView) {
+         navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier:
+                                                                            TwitterViewControllerID];
+         assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
+                "loadControllerTo:, top view controller is either nil or has a wrong type");
+         TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
+         tvc.navigationItem.title = feedName;
+         [tvc setFeedURL : feed];
+      } else {
+         if(![[UIApplication sharedApplication] openURL : twitterUrl])
+            CernAPP::ShowErrorAlert(@"Failed to open twitter app", @"Close");
+         return;
+      }
    }
 
    if (controller.slidingViewController.topViewController)
@@ -140,6 +209,56 @@ void CancelConnections(UIViewController *controller)
       controller.slidingViewController.topViewController.view.frame = frame;
       [controller.slidingViewController resetTopView];
    }];
+}
+
+#pragma mark - Action sheet delegate, open tweet in an external application or in built-in view.
+
+//____________________________________________________________________________________________________
+- (void) actionSheet : (UIActionSheet *) actionSheet didDismissWithButtonIndex : (NSInteger) buttonIndex
+{
+   using namespace CernAPP;
+
+   NSLog(@"button index %d", buttonIndex);
+
+   assert(buttonIndex >= 0 && "actionSheet:didDisimssWithButtonIndex:, button index must be non-negative");
+
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "actionSheet:didDisimssWithButtonIndex:, application delegate has a wrong type");
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+
+   if (buttonIndex == 1) {
+      appDelegate.tweetOption = TwitterFeedShowOption::externalView;
+      
+      if(![[UIApplication sharedApplication] openURL : twitterUrl])
+         CernAPP::ShowErrorAlert(@"actionSheet:didDisimssWithButtonIndex:, error: Failed to open twitter app", @"Close");
+   } else {
+      assert([actionSheet isKindOfClass : [ActionSheetWithController class]] &&
+             "actionSheet:didDismissWithButtonIndex:, parameter 'actionSheet' is either nil or has a wrong type");
+      UIViewController * const controller = ((ActionSheetWithController *)actionSheet).controller;      
+      assert(controller != nil && "actionSheet:didDisimssWithButtonIndex:, controller not found");
+
+      appDelegate.tweetOption = CernAPP::TwitterFeedShowOption::builtinView;
+
+
+      MenuNavigationController * const navController =
+                        (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
+                                                     TwitterViewControllerID];
+      assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+      TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
+      tvc.navigationItem.title = feedName;
+      [tvc setFeedURL : feed];
+      
+      if (controller.slidingViewController.topViewController)
+         CancelConnections(controller.slidingViewController.topViewController);
+
+      [controller.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete:^{
+         CGRect frame = controller.slidingViewController.topViewController.view.frame;
+         controller.slidingViewController.topViewController = navController;
+         controller.slidingViewController.topViewController.view.frame = frame;
+         [controller.slidingViewController resetTopView];
+      }];
+   }
 }
 
 @end

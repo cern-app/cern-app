@@ -18,7 +18,7 @@
 //
 //I'm using this class, at the moment, for news feeds and tweets.
 //
-@interface FeedProvider : NSObject<ContentProvider>
+@interface FeedProvider : NSObject<ContentProvider, UIActionSheetDelegate>
 
 - (id) initWith : (NSDictionary *) feedInfo;
 
