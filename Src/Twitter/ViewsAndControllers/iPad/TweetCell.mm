@@ -216,7 +216,7 @@ const CGFloat largeSizeVMargin = 0.05f;
 }
 
 //________________________________________________________________________________________
-- (void) addWebView
+- (void) addWebView : (TwitterTableViewController<UIWebViewDelegate> *) delegate
 {
    const CGFloat w = self.frame.size.width;
    const CGFloat h = self.frame.size.height;
@@ -227,6 +227,7 @@ const CGFloat largeSizeVMargin = 0.05f;
    
    webView = [[UIWebView alloc] initWithFrame : adjustedFrame];
    [self addSubview : webView];
+   webView.delegate = delegate;
    
    NSURLRequest * const req = [NSURLRequest requestWithURL : [NSURL URLWithString : tweet.link]];
    //webView.delegate = self;

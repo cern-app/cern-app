@@ -2,7 +2,6 @@
 
 #import "ConnectionController.h"
 #import "HUDRefreshProtocol.h"
-#import "ImageDownloader.h"
 #import "MWFeedParser.h"
 
 @class MBProgressHUD;
@@ -10,7 +9,7 @@
 
 @interface TwitterTableViewController : UIViewController<UITableViewDelegate, UITableViewDataSource,
                                                          ConnectionController, MWFeedParserDelegate,
-                                                         ImageDownloaderDelegate, HUDRefreshProtocol>
+                                                         HUDRefreshProtocol, UIWebViewDelegate>
 
 - (void) setFeedURL : (NSString *) urlString;
 - (void) cellAnimationFinished;

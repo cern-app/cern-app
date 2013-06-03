@@ -3,6 +3,7 @@
 #import <Accounts/Accounts.h>
 #import <Twitter/TWRequest.h>
 
+#import "ArticleDetailViewController.h"
 #import "TwitterTableViewController.h"
 #import "ECSlidingViewController.h"
 #import "StoryboardIdentifiers.h"
@@ -328,19 +329,26 @@
    [tableView reloadData];
 }
 
-#pragma mark - ImageDownloader delegate.
+#pragma mark - UIWebViewDelegate.
 
+///*
 //________________________________________________________________________________________
-- (void) imageDidLoad : (NSIndexPath *) indexPath
+- (BOOL) webView : (UIWebView *) webView shouldStartLoadWithRequest : (NSURLRequest *) request navigationType : (UIWebViewNavigationType) navigationType
 {
-#pragma unsued(indexPath)
-}
+   if (navigationType == UIWebViewNavigationTypeLinkClicked) {
+      ArticleDetailViewController * const viewController = [self.storyboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailViewControllerID];
+      [viewController setLink : request.URL.absoluteString title : @""];
+      viewController.navigationItem.title = @"";
 
-//________________________________________________________________________________________
-- (void) imageDownloadFailed : (NSIndexPath *) indexPath
-{
-#pragma unused(indexPath)
+      viewController.canUseReadability = NO;
+      [self.navigationController pushViewController : viewController animated : YES];
+
+      return NO;
+   }
+
+   return YES;
 }
+//*/
 
 #pragma mark - ConnectionController.
 
@@ -364,7 +372,7 @@
       for (TweetCell * cell in cells) {
          NSIndexPath * const indexPath = [tableView indexPathForCell : cell];
          if (indexPath && [indexPath compare : selected] == NSOrderedSame) {
-            [cell addWebView];
+            [cell addWebView : self];
             const CGRect frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y,
                                             cell.frame.size.width, [TweetCell expandedHeight]);
             [tableView scrollRectToVisible : frame animated : YES];

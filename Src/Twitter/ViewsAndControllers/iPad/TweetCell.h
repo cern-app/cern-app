@@ -14,7 +14,7 @@
 - (void) layoutSubviews;
 - (void) setCellData : (MWFeedItem *) data forTweet : (NSString *) tweetName;
 
-- (void) addWebView;
+- (void) addWebView : (TwitterTableViewController<UIWebViewDelegate> *) delegate;
 - (void) removeWebView;
 
 @end
