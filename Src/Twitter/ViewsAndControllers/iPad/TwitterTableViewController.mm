@@ -331,7 +331,6 @@
 
 #pragma mark - UIWebViewDelegate.
 
-///*
 //________________________________________________________________________________________
 - (BOOL) webView : (UIWebView *) webView shouldStartLoadWithRequest : (NSURLRequest *) request navigationType : (UIWebViewNavigationType) navigationType
 {
@@ -339,7 +338,6 @@
       ArticleDetailViewController * const viewController = [self.storyboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailViewControllerID];
       [viewController setLink : request.URL.absoluteString title : @""];
       viewController.navigationItem.title = @"";
-
       viewController.canUseReadability = NO;
       [self.navigationController pushViewController : viewController animated : YES];
 
@@ -348,7 +346,6 @@
 
    return YES;
 }
-//*/
 
 #pragma mark - ConnectionController.
 
