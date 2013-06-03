@@ -230,6 +230,7 @@
    [tableView deselectRowAtIndexPath:indexPath animated : NO];
    tableView.animatingSelection = YES;
    
+   //1. Unselect the previous selected cell if any.
    if (selected) {
       NSArray * const cells = [tableView visibleCells];
       for (TweetCell *cell in cells) {
@@ -239,13 +240,10 @@
             break;
          }
       }
-      
-      if ([indexPath compare : selected] == NSOrderedSame)
-         selected = nil;
-      else
-         selected = indexPath;
-   } else
-      selected = indexPath;
+   }
+   
+   //2. Now select the new one or deselect at all, if the same cell was selected again.
+   selected = selected && [indexPath compare : selected] == NSOrderedSame ? nil : indexPath;
 
    [tableView beginUpdates];
    [tableView endUpdates];
