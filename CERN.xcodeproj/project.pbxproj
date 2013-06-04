@@ -191,9 +191,6 @@
 		70A5629A173A32F600145FEC /* PhotosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56291173A32F600145FEC /* PhotosGridViewController.mm */; };
 		70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56293173A32F600145FEC /* VideosGridViewController.mm */; };
 		70A5629C173A32F600145FEC /* WebcastsGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56295173A32F600145FEC /* WebcastsGridViewController.mm */; };
-		70A562A4173A35BB00145FEC /* RSSAggregator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A5629F173A35BB00145FEC /* RSSAggregator.mm */; };
-		70A562A5173A35BB00145FEC /* RSSArticle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562A1173A35BB00145FEC /* RSSArticle.mm */; };
-		70A562A6173A35BB00145FEC /* RSSFeed.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562A3173A35BB00145FEC /* RSSFeed.mm */; };
 		70A562C8173A35C300145FEC /* BulletinFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AA173A35C300145FEC /* BulletinFeedViewController.mm */; };
 		70A562C9173A35C300145FEC /* BulletinIssueTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AC173A35C300145FEC /* BulletinIssueTileView.mm */; };
 		70A562CA173A35C300145FEC /* BulletinIssueViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AE173A35C300145FEC /* BulletinIssueViewController.mm */; };
@@ -519,12 +516,6 @@
 		70A56293173A32F600145FEC /* VideosGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideosGridViewController.mm; sourceTree = "<group>"; };
 		70A56294173A32F600145FEC /* WebcastsGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsGridViewController.h; sourceTree = "<group>"; };
 		70A56295173A32F600145FEC /* WebcastsGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsGridViewController.mm; sourceTree = "<group>"; };
-		70A5629E173A35BB00145FEC /* RSSAggregator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSAggregator.h; sourceTree = "<group>"; };
-		70A5629F173A35BB00145FEC /* RSSAggregator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RSSAggregator.mm; sourceTree = "<group>"; };
-		70A562A0173A35BB00145FEC /* RSSArticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSArticle.h; sourceTree = "<group>"; };
-		70A562A1173A35BB00145FEC /* RSSArticle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RSSArticle.mm; sourceTree = "<group>"; };
-		70A562A2173A35BB00145FEC /* RSSFeed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSSFeed.h; sourceTree = "<group>"; };
-		70A562A3173A35BB00145FEC /* RSSFeed.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RSSFeed.mm; sourceTree = "<group>"; };
 		70A562A9173A35C300145FEC /* BulletinFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinFeedViewController.h; sourceTree = "<group>"; };
 		70A562AA173A35C300145FEC /* BulletinFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinFeedViewController.mm; sourceTree = "<group>"; };
 		70A562AB173A35C300145FEC /* BulletinIssueTileView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTileView.h; sourceTree = "<group>"; };
@@ -1191,19 +1182,6 @@
 			path = iPhone;
 			sourceTree = "<group>";
 		};
-		70A5629D173A35BB00145FEC /* RSSAggregator */ = {
-			isa = PBXGroup;
-			children = (
-				70A5629E173A35BB00145FEC /* RSSAggregator.h */,
-				70A5629F173A35BB00145FEC /* RSSAggregator.mm */,
-				70A562A0173A35BB00145FEC /* RSSArticle.h */,
-				70A562A1173A35BB00145FEC /* RSSArticle.mm */,
-				70A562A2173A35BB00145FEC /* RSSFeed.h */,
-				70A562A3173A35BB00145FEC /* RSSFeed.mm */,
-			);
-			path = RSSAggregator;
-			sourceTree = "<group>";
-		};
 		70A562A7173A35C300145FEC /* ViewsAndControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1338,7 +1316,6 @@
 			isa = PBXGroup;
 			children = (
 				70A562A7173A35C300145FEC /* ViewsAndControllers */,
-				70A5629D173A35BB00145FEC /* RSSAggregator */,
 				706EB8B7175E069E00493B04 /* FeedParserOperation.h */,
 				706EB8B8175E069E00493B04 /* FeedParserOperation.mm */,
 				706EB8BB175E1F7800493B04 /* PageThumbnailDownloader.h */,
@@ -1670,9 +1647,6 @@
 				70A5629A173A32F600145FEC /* PhotosGridViewController.mm in Sources */,
 				70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */,
 				70A5629C173A32F600145FEC /* WebcastsGridViewController.mm in Sources */,
-				70A562A4173A35BB00145FEC /* RSSAggregator.mm in Sources */,
-				70A562A5173A35BB00145FEC /* RSSArticle.mm in Sources */,
-				70A562A6173A35BB00145FEC /* RSSFeed.mm in Sources */,
 				70A562C8173A35C300145FEC /* BulletinFeedViewController.mm in Sources */,
 				70A562C9173A35C300145FEC /* BulletinIssueTileView.mm in Sources */,
 				70A562CA173A35C300145FEC /* BulletinIssueViewController.mm in Sources */,
