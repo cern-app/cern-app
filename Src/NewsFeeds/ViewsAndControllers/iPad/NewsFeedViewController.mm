@@ -335,12 +335,12 @@
       for (NSUInteger i = currRange.location, e = i + currRange.length; i < e; ++i) {
          MWFeedItem * const article = (MWFeedItem *)dataItems[i];
          if (article.image && ![currPage tileHasThumbnail:i - currRange.location]) {
-            currPageUpdated = true;
+            currPageUpdated = YES;
             [currPage setThumbnail : article.image forTile:i - currRange.location doLayout : NO];
          }
       }
    }
-   
+  
    [downloaders removeObjectForKey : [NSNumber numberWithUnsignedInteger : thumbnailsDownloader.pageNumber]];
    
    if (currPageUpdated) {
