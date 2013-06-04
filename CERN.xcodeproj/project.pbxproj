@@ -153,6 +153,7 @@
 		706A401E1754FBE000FD8685 /* CreditsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A401C1754FBE000FD8685 /* CreditsViewController.mm */; };
 		706A40231754FD0A00FD8685 /* EventDisplayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A40221754FD0A00FD8685 /* EventDisplayViewController.mm */; };
 		706EB8B9175E069E00493B04 /* FeedParserOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706EB8B8175E069E00493B04 /* FeedParserOperation.mm */; };
+		706EB8BC175E1F7800493B04 /* PageThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706EB8BA175E1F7800493B04 /* PageThumbnailDownloader.mm */; };
 		706FEFC1175379950079468A /* VideoThumbnailCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706FEFC0175379950079468A /* VideoThumbnailCell.mm */; };
 		7072B2C11758E7C3002ACD75 /* TwitterTableView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7072B2C01758E7C3002ACD75 /* TwitterTableView.mm */; };
 		70767DC716CE8F4D00164516 /* MWFeedParserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */; };
@@ -200,7 +201,6 @@
 		70A562CC173A35C300145FEC /* FeedItemTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B2173A35C300145FEC /* FeedItemTileView.mm */; };
 		70A562CD173A35C300145FEC /* FeedPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B4173A35C300145FEC /* FeedPageView.mm */; };
 		70A562CE173A35C300145FEC /* NewsFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B6173A35C300145FEC /* NewsFeedViewController.mm */; };
-		70A562CF173A35C300145FEC /* PageThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562B8173A35C300145FEC /* PageThumbnailDownloader.mm */; };
 		70A562D1173A35C300145FEC /* BulletinIssueTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562BD173A35C300145FEC /* BulletinIssueTableViewController.mm */; };
 		70A562D2173A35C300145FEC /* BulletinTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562BF173A35C300145FEC /* BulletinTableViewController.mm */; };
 		70A562D3173A35C300145FEC /* CellBackgroundView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562C1173A35C300145FEC /* CellBackgroundView.mm */; };
@@ -452,6 +452,8 @@
 		706A40221754FD0A00FD8685 /* EventDisplayViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EventDisplayViewController.mm; sourceTree = "<group>"; };
 		706EB8B7175E069E00493B04 /* FeedParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedParserOperation.h; sourceTree = "<group>"; };
 		706EB8B8175E069E00493B04 /* FeedParserOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedParserOperation.mm; sourceTree = "<group>"; };
+		706EB8BA175E1F7800493B04 /* PageThumbnailDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageThumbnailDownloader.mm; sourceTree = "<group>"; };
+		706EB8BB175E1F7800493B04 /* PageThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageThumbnailDownloader.h; sourceTree = "<group>"; };
 		706FEFBF175379950079468A /* VideoThumbnailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoThumbnailCell.h; sourceTree = "<group>"; };
 		706FEFC0175379950079468A /* VideoThumbnailCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoThumbnailCell.mm; sourceTree = "<group>"; };
 		7072B2BF1758E7C3002ACD75 /* TwitterTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterTableView.h; sourceTree = "<group>"; };
@@ -537,8 +539,6 @@
 		70A562B4173A35C300145FEC /* FeedPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedPageView.mm; sourceTree = "<group>"; };
 		70A562B5173A35C300145FEC /* NewsFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsFeedViewController.h; sourceTree = "<group>"; };
 		70A562B6173A35C300145FEC /* NewsFeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NewsFeedViewController.mm; sourceTree = "<group>"; };
-		70A562B7173A35C300145FEC /* PageThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageThumbnailDownloader.h; sourceTree = "<group>"; };
-		70A562B8173A35C300145FEC /* PageThumbnailDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PageThumbnailDownloader.mm; sourceTree = "<group>"; };
 		70A562BC173A35C300145FEC /* BulletinIssueTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinIssueTableViewController.h; sourceTree = "<group>"; };
 		70A562BD173A35C300145FEC /* BulletinIssueTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BulletinIssueTableViewController.mm; sourceTree = "<group>"; };
 		70A562BE173A35C300145FEC /* BulletinTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinTableViewController.h; sourceTree = "<group>"; };
@@ -1231,8 +1231,6 @@
 				70A562B4173A35C300145FEC /* FeedPageView.mm */,
 				70A562B5173A35C300145FEC /* NewsFeedViewController.h */,
 				70A562B6173A35C300145FEC /* NewsFeedViewController.mm */,
-				70A562B7173A35C300145FEC /* PageThumbnailDownloader.h */,
-				70A562B8173A35C300145FEC /* PageThumbnailDownloader.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1345,6 +1343,8 @@
 				70A5629D173A35BB00145FEC /* RSSAggregator */,
 				706EB8B7175E069E00493B04 /* FeedParserOperation.h */,
 				706EB8B8175E069E00493B04 /* FeedParserOperation.mm */,
+				706EB8BA175E1F7800493B04 /* PageThumbnailDownloader.mm */,
+				706EB8BB175E1F7800493B04 /* PageThumbnailDownloader.h */,
 			);
 			path = NewsFeeds;
 			sourceTree = "<group>";
@@ -1682,7 +1682,6 @@
 				70A562CC173A35C300145FEC /* FeedItemTileView.mm in Sources */,
 				70A562CD173A35C300145FEC /* FeedPageView.mm in Sources */,
 				70A562CE173A35C300145FEC /* NewsFeedViewController.mm in Sources */,
-				70A562CF173A35C300145FEC /* PageThumbnailDownloader.mm in Sources */,
 				70A562D1173A35C300145FEC /* BulletinIssueTableViewController.mm in Sources */,
 				70A562D2173A35C300145FEC /* BulletinTableViewController.mm in Sources */,
 				70A562D3173A35C300145FEC /* CellBackgroundView.mm in Sources */,
@@ -1714,6 +1713,7 @@
 				705185BE17561EA200CE9EB8 /* TwitterTableViewController.mm in Sources */,
 				7072B2C11758E7C3002ACD75 /* TwitterTableView.mm in Sources */,
 				706EB8B9175E069E00493B04 /* FeedParserOperation.mm in Sources */,
+				706EB8BC175E1F7800493B04 /* PageThumbnailDownloader.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
