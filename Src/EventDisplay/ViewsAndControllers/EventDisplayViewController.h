@@ -8,13 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-#import "PageControllerProtocol.h"
 #import "PhotoBrowserProtocol.h"
 #import "MBProgressHUD.h"
 
-@interface EventDisplayViewController : UIViewController<NSURLConnectionDelegate, PageController,
-                                                         MBProgressHUDDelegate, UIScrollViewDelegate,
-                                                         PhotoBrowserProtocol>
+@interface EventDisplayViewController : UIViewController<NSURLConnectionDelegate, MBProgressHUDDelegate,
+                                                         UIScrollViewDelegate, PhotoBrowserProtocol>
 {
    IBOutlet UIScrollView *scrollView;
    IBOutlet UIPageControl *pageControl;
@@ -27,7 +25,6 @@
 
 - (void) refresh;
 
-//PageController protocol:
 - (void) reloadPage;
 - (void) reloadPageFromRefreshControl;
 @property (nonatomic) BOOL pageLoaded;

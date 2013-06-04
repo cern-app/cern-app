@@ -563,7 +563,6 @@
 		70A562EB173A382A00145FEC /* StaticInfoScrollViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoScrollViewController.mm; sourceTree = "<group>"; };
 		70B22F0416F9DCAA007D88EF /* action_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action_blue.png; sourceTree = "<group>"; };
 		70B2A75016DBBD5200BC8657 /* ConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionController.h; sourceTree = "<group>"; };
-		70B2A75116DBBD5200BC8657 /* PageControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageControllerProtocol.h; sourceTree = "<group>"; };
 		70B2A75216DBBE5E00BC8657 /* HUDRefreshProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDRefreshProtocol.h; sourceTree = "<group>"; };
 		70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HUDRefreshProtocol.mm; sourceTree = "<group>"; };
 		70B3B63C174B9138002DDD78 /* ImageStackViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageStackViewCell.h; sourceTree = "<group>"; };
@@ -1313,7 +1312,6 @@
 			children = (
 				7072B3271713F72F00515DA8 /* TiledPage.h */,
 				70B2A75016DBBD5200BC8657 /* ConnectionController.h */,
-				70B2A75116DBBD5200BC8657 /* PageControllerProtocol.h */,
 				70B2A75216DBBE5E00BC8657 /* HUDRefreshProtocol.h */,
 				70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */,
 			);
@@ -1343,8 +1341,8 @@
 				70A5629D173A35BB00145FEC /* RSSAggregator */,
 				706EB8B7175E069E00493B04 /* FeedParserOperation.h */,
 				706EB8B8175E069E00493B04 /* FeedParserOperation.mm */,
-				706EB8BA175E1F7800493B04 /* PageThumbnailDownloader.mm */,
 				706EB8BB175E1F7800493B04 /* PageThumbnailDownloader.h */,
+				706EB8BA175E1F7800493B04 /* PageThumbnailDownloader.mm */,
 			);
 			path = NewsFeeds;
 			sourceTree = "<group>";

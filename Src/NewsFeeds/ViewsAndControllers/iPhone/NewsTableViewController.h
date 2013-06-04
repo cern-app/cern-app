@@ -9,15 +9,14 @@
 
 #import <UIKit/UIKit.h>
 
-#import "PageControllerProtocol.h"
 #import "ConnectionController.h"
 #import "ImageDownloader.h"
 #import "RSSAggregator.h"
 #import "MBProgressHUD.h"
 
 @interface NewsTableViewController : UITableViewController<UITableViewDataSource, UITableViewDelegate,
-                                                           RSSAggregatorDelegate, PageController,
-                                                           ImageDownloaderDelegate, ConnectionController>
+                                                           RSSAggregatorDelegate, ImageDownloaderDelegate,
+                                                           ConnectionController>
 {
 @protected
    BOOL canUseCache;
@@ -27,7 +26,6 @@
 
 + (NSString *) firstImageURLFromHTMLString : (NSString *) htmlString;
 
-//From PageController protocol:
 - (void) reloadPage;
 - (void) reloadPageFromRefreshControl;
 
@@ -38,7 +36,6 @@
 //
 @property (nonatomic, copy) NSString *feedStoreID;
 //
-
 - (IBAction) revealMenu : (id) sender;
 //
 - (void) cancelAllImageDownloaders;

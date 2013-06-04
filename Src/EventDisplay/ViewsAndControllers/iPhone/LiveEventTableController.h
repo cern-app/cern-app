@@ -1,6 +1,5 @@
 #import <UIKit/UIKit.h>
 
-#import "PageControllerProtocol.h"
 #import "ConnectionController.h"
 
 @class LiveEventsProvider;
@@ -11,7 +10,7 @@
 //if there is no network. Images, sure, require a network connection to be downloaded.
 
 @interface LiveEventTableController : UITableViewController<NSURLConnectionDelegate, UITableViewDataSource, UITableViewDelegate,
-                                                            PageController, ConnectionController>
+                                                            ConnectionController>
 
 //These are the keys to be used when setting table's data -
 //array of dictionaries.
@@ -22,7 +21,6 @@
 - (void) setTableContents : (NSArray *) contents experimentName : (NSString *) name;
 - (void) refresh;
 
-//PageController protocol.
 - (void) reloadPage;
 - (void) reloadPageFromRefreshControl;
 
