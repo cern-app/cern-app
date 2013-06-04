@@ -97,7 +97,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="Rlf-C4-ums">
                             <connections>
-                                <action selector="reloadPageFromRefreshControl" destination="lV2-nJ-7jY" id="jdw-cC-161"/>
+                                <action selector="refresh:" destination="lV2-nJ-7jY" id="K0H-Qp-ieB"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -167,7 +167,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="D1G-Az-C5Z">
                             <connections>
-                                <action selector="reloadPageFromRefreshControl" destination="L8H-w6-D96" id="Qge-9G-SZm"/>
+                                <action selector="refresh:" destination="L8H-w6-D96" id="ZNJ-Mi-qea"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -796,7 +796,7 @@
         <class className="NewsFeedViewController" superclassName="TileViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NewsFeedViewController.h"/>
             <relationships>
-                <relationship kind="action" name="reloadPageFromRefreshControl"/>
+                <relationship kind="action" name="refresh:"/>
             </relationships>
         </class>
         <class className="PhotoAlbumCoverView" superclassName="UICollectionViewCell">

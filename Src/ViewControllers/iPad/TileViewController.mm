@@ -19,27 +19,21 @@ using namespace FlipAnimation;
 #pragma mark - Lifecycle.
 
 //________________________________________________________________________________________
-- (void) doInitTileViewController
-{
-   //Shared method for different "ctors".
-   dataItems = nil;
-   prevPage = nil;
-   currPage = nil;
-   nextPage = nil;
-
-   panGesture = nil;
-   panRegion = nil;
-
-   nPages = 0;
-   pageBeforeRotation = 0;
-   viewDidAppear = NO;
-}
-
-//________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
-   if (self = [super initWithCoder : aDecoder])
-      [self doInitTileViewController];
+   if (self = [super initWithCoder : aDecoder]) {
+      dataItems = nil;
+      prevPage = nil;
+      currPage = nil;
+      nextPage = nil;
+
+      panGesture = nil;
+      panRegion = nil;
+
+      nPages = 0;
+      pageBeforeRotation = 0;
+      viewDidAppear = NO;
+   }
 
    return self;
 }

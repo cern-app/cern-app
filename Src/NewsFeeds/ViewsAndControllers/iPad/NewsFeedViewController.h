@@ -8,38 +8,67 @@
 
 
 #import "PageThumbnailDownloader.h"
-#import "PageControllerProtocol.h"
 #import "ConnectionController.h"
+#import "FeedParserOperation.h"
 #import "TileViewController.h"
 #import "HUDRefreshProtocol.h"
 #import "ImageDownloader.h"
-#import "RSSAggregator.h"
 
-@interface NewsFeedViewController : TileViewController<HUDRefreshProtocol, RSSAggregatorDelegate, PageController,
-                                                       PageThumbnailDownloaderDelegate, ConnectionController>
+
+//NewsFeedViewController - shows feed items on a "newspaper's page".
+//Created by in two steps:
+//1) - (id) initWithCoder : (NSCoder *) aDecoder; //This is called by UIKit.
+//and the next function must be called before view is presented -
+//2) - (void) setFeedURLString : (NSString) urlString;
+
+//Controller works in several steps:
+//1) download the feed.
+//2) parse the feed.
+//3) download images for a page (on demand).
+//
+//MWFeedParser can download the xml asynchronously, but after that
+//it immediately starts parsing on a main thread. This parsing
+//can take up to several seconds, making the app non-responsive.
+//So, I'll MWFeedParser in a separate thread (NSOperation) in a synchronous mode
+//(not to create another thread from a background thread).
+
+@interface NewsFeedViewController : TileViewController<HUDRefreshProtocol, PageThumbnailDownloaderDelegate,
+                                                       ConnectionController, FeedParserOperationDelegate>
 {
 @protected
-   NSMutableDictionary *downloaders;
+   NSMutableDictionary *downloaders;//image downloaders.
    NSArray *feedCache;
 }
 
-//Page controller.
-- (IBAction) reloadPageFromRefreshControl;
+- (void) setFeedURLString : (NSString *) urlString;
 
-//Aux.
+//Reachability.
+- (BOOL) hasConnection;
+
+//Aux. methods, can be overriden.
+
+//Create views: prevPage, currPage, nextPage.
 - (void) createPages;
+
+//Add self as a notification observer for tile tap notification.
 - (void) addTileTapObserver;
+
+//If controller supports caching, read data from the cache and fill pages.
 - (void) initTilesFromCache;
+
+//This is a trick to make tiles' layout more interesting depending on data.
 - (void) setTilesLayoutHints;
 
-@property (nonatomic, strong) RSSAggregator *aggregator;
-@property (nonatomic, copy) NSString *feedStoreID;//Cache ID.
-
-//HUD/GUI
-@property (nonatomic, strong) MBProgressHUD *noConnectionHUD;
-@property (nonatomic, strong) UIActivityIndicatorView *spinner;
-
+//When pages were loaded from the cache and we update from the real feed, spinner is shown in a nav. bar.
 - (void) hideNavBarSpinner;
 
+@property (nonatomic, copy) NSString *feedStoreID;//Cache ID.
+
+//HUD/UI
+- (IBAction) refresh : (id) sender;//The action for a nav. bar button.
+
+//HUDRefreshProtocol.
+@property (nonatomic, strong) MBProgressHUD *noConnectionHUD;//Error messages.
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
 @end

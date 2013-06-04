@@ -32,13 +32,38 @@
    UIView *panRegion;   
 }
 
+- (id) initWithCoder : (NSCoder *) aDecoder;
+
+//Create additional views: flipView, panRegion,
+//create and setup a flipAnimator.
+- (void) viewDidLoad;
+
+//This is a trick: check number of pages loaded and
+//check the geometry, if it has to be reset:
+//sometimes, after controller is presented on the top
+//of a tile view, interface orientation change is not processed
+//correctly. In such a case this method resets flipView, panRegion,
+//pages.
+- (void) viewWillAppear : (BOOL) animated;
+
+
+//After dataItems were loaded (either the first time
+//or after refreshing, this function (re)sets pages.
 - (void) setPagesData;//To be overriden.
+//Lazy download - we load (for example images)
+//only for a visible page.
 - (void) loadVisiblePageData;//To be overriden.
+
+//Set the page's geometry and (probably) tiles' geometry also.
 - (void) layoutPages : (BOOL) layoutTiles;
+//Set the flip view's geometry and flip anilmation frames.
 - (void) layoutFlipView;
+//Set pan view's geometry.
 - (void) layoutPanRegion;
 
-- (NSRange) findItemRangeForPage : (NSUInteger) page;
+//Using dataItems and page layout identify, how many items
+//fit the page.
+- (NSRange) findItemRangeForPage : (NSUInteger) pageIndex;
 
 //ECSlidingViewController:
 - (IBAction) revealMenu : (id) sender;

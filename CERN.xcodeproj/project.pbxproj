@@ -152,6 +152,7 @@
 		706A401B1754FB9E00FD8685 /* ArticleDetailViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A401A1754FB9E00FD8685 /* ArticleDetailViewController.mm */; };
 		706A401E1754FBE000FD8685 /* CreditsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A401C1754FBE000FD8685 /* CreditsViewController.mm */; };
 		706A40231754FD0A00FD8685 /* EventDisplayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A40221754FD0A00FD8685 /* EventDisplayViewController.mm */; };
+		706EB8B9175E069E00493B04 /* FeedParserOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706EB8B8175E069E00493B04 /* FeedParserOperation.mm */; };
 		706FEFC1175379950079468A /* VideoThumbnailCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706FEFC0175379950079468A /* VideoThumbnailCell.mm */; };
 		7072B2C11758E7C3002ACD75 /* TwitterTableView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7072B2C01758E7C3002ACD75 /* TwitterTableView.mm */; };
 		70767DC716CE8F4D00164516 /* MWFeedParserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */; };
@@ -449,6 +450,8 @@
 		706A401D1754FBE000FD8685 /* CreditsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreditsViewController.h; sourceTree = "<group>"; };
 		706A40211754FD0A00FD8685 /* EventDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDisplayViewController.h; sourceTree = "<group>"; };
 		706A40221754FD0A00FD8685 /* EventDisplayViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EventDisplayViewController.mm; sourceTree = "<group>"; };
+		706EB8B7175E069E00493B04 /* FeedParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedParserOperation.h; sourceTree = "<group>"; };
+		706EB8B8175E069E00493B04 /* FeedParserOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedParserOperation.mm; sourceTree = "<group>"; };
 		706FEFBF175379950079468A /* VideoThumbnailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoThumbnailCell.h; sourceTree = "<group>"; };
 		706FEFC0175379950079468A /* VideoThumbnailCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoThumbnailCell.mm; sourceTree = "<group>"; };
 		7072B2BF1758E7C3002ACD75 /* TwitterTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterTableView.h; sourceTree = "<group>"; };
@@ -1340,6 +1343,8 @@
 			children = (
 				70A562A7173A35C300145FEC /* ViewsAndControllers */,
 				70A5629D173A35BB00145FEC /* RSSAggregator */,
+				706EB8B7175E069E00493B04 /* FeedParserOperation.h */,
+				706EB8B8175E069E00493B04 /* FeedParserOperation.mm */,
 			);
 			path = NewsFeeds;
 			sourceTree = "<group>";
@@ -1708,6 +1713,7 @@
 				705185BB17561E4E00CE9EB8 /* TweetCell.mm in Sources */,
 				705185BE17561EA200CE9EB8 /* TwitterTableViewController.mm in Sources */,
 				7072B2C11758E7C3002ACD75 /* TwitterTableView.mm in Sources */,
+				706EB8B9175E069E00493B04 /* FeedParserOperation.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

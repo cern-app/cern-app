@@ -7,6 +7,7 @@
 //
 
 #import <cstdlib>
+#import <cassert>
 
 #import "ArticleDetailViewController.h"
 #import "NewsTableViewController.h"
@@ -14,7 +15,9 @@
 #import "StoryboardIdentifiers.h"
 #import "ApplicationErrors.h"
 #import "FeedItemTileView.h"
+#import "Reachability.h"
 #import "FeedPageView.h"
+#import "MWFeedParser.h"
 #import "MWFeedItem.h"
 #import "FeedCache.h"
 #import "FlipView.h"
@@ -22,31 +25,45 @@
 
 @implementation NewsFeedViewController {
    BOOL viewDidAppear;
-
    UIActivityIndicatorView *navBarSpinner;
+   Reachability *internetReach;
+   
+   //The queue with only one operation - parsing.
+   NSOperationQueue *parserQueue;
+   FeedParserOperation *parserOp;
+   
+   NSString *feedURLString;
 }
 
-@synthesize aggregator, feedStoreID, noConnectionHUD, spinner;
+@synthesize feedStoreID, noConnectionHUD, spinner;
 
 #pragma mark - Life cycle.
 
 //________________________________________________________________________________________
-- (void) doInitController
+- (BOOL) hasConnection
 {
-   downloaders = nil;
-   viewDidAppear = NO;
-   
-   aggregator = [[RSSAggregator alloc] init];
-   aggregator.delegate = self;
-   
-   feedCache = nil;
+   assert(internetReach != nil && "hasConnection, internetReach is nil");
+
+   return [internetReach currentReachabilityStatus] != CernAPP::NetworkStatus::notReachable;
 }
 
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
-   if (self = [super initWithCoder : aDecoder])
-      [self doInitController];
+   if (self = [super initWithCoder : aDecoder]) {
+      downloaders = nil;
+      feedCache = nil;
+      viewDidAppear = NO;
+   
+      noConnectionHUD = nil;
+      spinner = nil;
+      navBarSpinner = nil;
+      
+      internetReach = [Reachability reachabilityForInternetConnection];
+      
+      parserQueue = [[NSOperationQueue alloc] init];
+      parserOp = nil;
+   }
 
    return self;
 }
@@ -55,6 +72,16 @@
 - (void) dealloc
 {
    [[NSNotificationCenter defaultCenter] removeObserver : self];
+}
+
+#pragma mark - Feed's setters.
+
+//________________________________________________________________________________________
+- (void) setFeedURLString : (NSString *) urlString
+{
+   assert(urlString != nil && "setFeedURLString:, parameter 'urlString' is nil");
+   
+   feedURLString = urlString;
 }
 
 #pragma mark - Overriders for UIViewController methods.
@@ -88,28 +115,29 @@
 
       [self initTilesFromCache];
       [self layoutPanRegion];
-      [self reloadPage];
+      [self refresh];
    }
 }
 
 #pragma mark - PageController protocol.
 
 //________________________________________________________________________________________
-- (void) reloadPage
+- (void) refresh
 {
-   if (aggregator.isLoadingData)
+   if (parserOp)
       return;
 
    //Stop any image download if we have any.
    [self cancelAllImageDownloaders];
 
-   if (!aggregator.hasConnection && !dataItems.count) {
+   if (![self hasConnection] && !dataItems.count) {
       //Network problems, we can not reload
       //and do not have any previous data to show.
       CernAPP::ShowErrorHUD(self, @"No network");
+
       return;
    }//If we do not have connection, but have articles,
-    //the network error will be reported by the RSS aggregator. (TODO: check this!)
+    //the network error will be reported by the feedParser. (TODO: check this!)
 
    [noConnectionHUD hide : YES];
 
@@ -123,37 +151,68 @@
       [self layoutPanRegion];
    }
 
-   [self.aggregator clearAllFeeds];
-   //It will re-parse feed and (probably) re-fill the tiled view.
-   [self.aggregator refreshAllFeeds];
+   [self startFeedParser];
 }
 
 //________________________________________________________________________________________
-- (void) reloadPageFromRefreshControl
+- (void) refresh : (id) sender
 {
-   if (aggregator.isLoadingData)//assert? can this ever happen?
+#pragma unused(sender)
+
+   if (parserOp)//assert? can this ever happen?
       return;
 
-   if (!aggregator.hasConnection) {
+   if (![self hasConnection]) {
       CernAPP::ShowErrorAlert(@"Please, check network", @"Close");
       CernAPP::HideSpinner(self);
       return;
    }
 
-   [self reloadPage];
+   [self refresh];
 }
 
-#pragma mark - RSSAggregatorDelegate.
+#pragma mark - FeedParserOperationDelegate and related methods.
 
 //________________________________________________________________________________________
-- (void) allFeedsDidLoadForAggregator : (RSSAggregator *) anAggregator
+- (void) startFeedParser
 {
-#pragma unused(anAggregator)
-   //In this mode we always write a cache into the storage.
-   assert(feedStoreID.length && "allFeedDidLoadForAggregator:, feedStoreID is invalid");
-   CernAPP::WriteFeedCache(feedStoreID, feedCache, aggregator.allArticles);
+   assert(parserOp == nil && "startFeedParser, parsing operation is still active");
+   assert(parserQueue != nil && "startFeedParser, operation queue is nil");
+   assert(feedURLString != nil && "startFeedParser, feedURLString is nil");
 
-   dataItems = [aggregator.allArticles mutableCopy];
+   parserOp = [[FeedParserOperation alloc] initWithFeedURLString : feedURLString];
+   parserOp.delegate = self;
+   [parserQueue addOperation : parserOp];
+}
+
+#pragma mark - FeedParseOperationDelegate
+
+//________________________________________________________________________________________
+- (void) parserDidFailWithError : (NSError *) error
+{
+#pragma unused(error)
+
+   //TODO: test this!
+   CernAPP::HideSpinner(self);
+   [self hideNavBarSpinner];
+   
+   CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+
+   if (!dataItems.count)
+      CernAPP::ShowErrorHUD(self, @"No network");//TODO: better error message?
+}
+
+//________________________________________________________________________________________
+- (void) parserDidFinishWithInfo : (MWFeedInfo *) info items : (NSArray *) items
+{
+#pragma unused(info)
+
+   assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
+   
+   assert(feedStoreID.length && "allFeedDidLoadForAggregator:, feedStoreID is invalid");
+   CernAPP::WriteFeedCache(feedStoreID, feedCache, items);
+
+   dataItems = [items mutableCopy];
 
    if (feedCache) {
       feedCache = nil;
@@ -171,28 +230,8 @@
    [self layoutFlipView];
    
    [self loadVisiblePageData];
-}
-
-//________________________________________________________________________________________
-- (void) aggregator : (RSSAggregator *) anAggregator didFailWithError : (NSString *) errorDescription
-{
-   //TODO: test this!
-   [self lostConnection : anAggregator];
-}
-
-//________________________________________________________________________________________
-- (void) lostConnection : (RSSAggregator *) anAggregator
-{
-#pragma unused(anAggregator)
-   //TODO: test this!
-   CernAPP::HideSpinner(self);
-   [self hideNavBarSpinner];
    
-   CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
-
-   if (!dataItems.count)
-      CernAPP::ShowErrorHUD(self, @"No network");//TODO: better error message?
-
+   parserOp = nil;
 }
 
 #pragma mark - Overriders for TileViewController's methods.
@@ -330,7 +369,7 @@
       navBarSpinner = nil;
       self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
                                                 initWithBarButtonSystemItem : UIBarButtonSystemItemRefresh
-                                                target : self action : @selector(reloadPageFromRefreshControl)];
+                                                target : self action : @selector(refresh:)];
    }
 }
 
@@ -360,7 +399,8 @@
 //________________________________________________________________________________________
 - (void) cancelAnyConnections
 {
-   [aggregator stopAggregator];
+   [parserQueue cancelAllOperations];
+   parserOp = nil;
    [self cancelAllImageDownloaders];
 }
 

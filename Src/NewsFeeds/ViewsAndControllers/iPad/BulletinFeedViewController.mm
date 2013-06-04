@@ -27,18 +27,19 @@
 
 //Observer is removed in the NewsFeedViewController's dealloc.
 
-#pragma mark - RSSAggregatorDelegate.
+#pragma mark - FeedParserOperationDelegate.
 
 //________________________________________________________________________________________
-- (void) allFeedsDidLoadForAggregator : (RSSAggregator *) anAggregator
+- (void) parserDidFinishWithInfo : (MWFeedInfo *) info items : (NSArray *) items
 {
-#pragma unused(anAggregator)
+#pragma unused(info)
 
-   //In this mode we always write a cache into the storage.
+   assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
+   
    assert(self.feedStoreID.length && "allFeedDidLoadForAggregator:, feedStoreID is invalid");
-   CernAPP::WriteFeedCache(self.feedStoreID, feedCache, self.aggregator.allArticles);
+   CernAPP::WriteFeedCache(self.feedStoreID, feedCache, items);
 
-   [self sortArticlesIntoIssues : self.aggregator.allArticles];
+   [self sortArticlesIntoIssues : items];
    
    if (feedCache) {
       feedCache = nil;
@@ -289,7 +290,7 @@
    
    if (currPage.pageNumber == pageIndex) {
       //We still can try to load the next thumbnail.
-      if (self.aggregator.hasConnection && articleIndex + 1 < articles.count) {//May be, download failed because of network problems?
+      if ([self hasConnection] && articleIndex + 1 < articles.count) {//May be, download failed because of network problems?
          for (NSUInteger i = articleIndex + 1, e = articles.count; i < e; ++i) {
             MWFeedItem * const nextArticle = (MWFeedItem *)articles[i];
             NSString * body = nextArticle.content;

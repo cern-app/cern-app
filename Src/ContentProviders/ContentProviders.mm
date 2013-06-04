@@ -166,7 +166,7 @@ UIViewController *FindController(UIView *view)
       NewsFeedViewController * const nt = (NewsFeedViewController *)navController.topViewController;
       nt.navigationItem.title = feedName;
       nt.feedStoreID = feedName;
-      [nt.aggregator addFeedForURL : [NSURL URLWithString : feed]];
+      [nt setFeedURLString : feed];
    } else {
       //Twitter feed on iPad.
       
@@ -702,7 +702,7 @@ UIViewController *FindController(UIView *view)
              "loadControllerTo:, top view controller is either nil or has a wrong type");
       BulletinFeedViewController * const nt = (BulletinFeedViewController *)navController.topViewController;
       nt.feedStoreID = @"CERN_Bulletin";
-      [nt.aggregator addFeedForURL : [NSURL URLWithString : url]];
+      [nt setFeedURLString : url];
    } else {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : BulletinTableViewControllerID];
       //Set the Url here.
