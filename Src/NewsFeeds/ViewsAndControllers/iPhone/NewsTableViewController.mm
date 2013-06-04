@@ -10,9 +10,42 @@
 #import "CellBackgroundView.h"
 #import "NewsTableViewCell.h"
 #import "ApplicationErrors.h"
+#import "Reachability.h"
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
 #import "FeedCache.h"
+
+namespace CernAPP {
+
+//________________________________________________________________________________________
+NSString *FirstImageURLFromHTMLString(NSString *htmlString)
+{
+   //This trick/code is taken from the v.1 of our app.
+   //Author - Eamon Ford (with my modifications).
+   if (!htmlString)
+      return nil;
+
+   NSScanner * const theScanner = [NSScanner scannerWithString : htmlString];
+   //Find the start of IMG tag
+   [theScanner scanUpToString : @"<img" intoString : nil];
+   
+   if (![theScanner isAtEnd]) {
+      [theScanner scanUpToString : @"src" intoString : nil];
+      NSCharacterSet * const charset = [NSCharacterSet characterSetWithCharactersInString : @"\"'"];
+      [theScanner scanUpToCharactersFromSet : charset intoString : nil];
+      [theScanner scanCharactersFromSet : charset intoString : nil];
+      NSString *urlString = nil;
+      [theScanner scanUpToCharactersFromSet : charset intoString : &urlString];
+      // "url" now contains the URL of the img
+      return urlString;
+   }
+
+   //No img url was found.
+   return nil;
+}
+
+}
+
 
 @implementation NewsTableViewController {
    NSMutableArray *allArticles;
@@ -23,9 +56,25 @@
    
    UIActivityIndicatorView *navBarSpinner;
    BOOL firstViewDidAppear;
+   
+   NSString *feedURLString;
+   NSOperationQueue *parseQueue;
+   
+   Reachability *internetReach;
 }
 
-@synthesize aggregator, imageDownloaders, nLoadedImages, feedStoreID, isTwitterFeed;
+@synthesize imageDownloaders, nLoadedImages, feedStoreID, isTwitterFeed;
+
+
+#pragma mark - Reachability.
+
+//________________________________________________________________________________________
+- (BOOL) hasConnection
+{
+   assert(internetReach != nil && "hasConnection, internetReach is nil");
+
+   return [internetReach currentReachabilityStatus] != CernAPP::NetworkStatus::notReachable;
+}
 
 #pragma mark - Construction/destruction.
 
@@ -44,12 +93,15 @@
    
    canUseCache = YES;
 
-   aggregator = [[RSSAggregator alloc] init];
-   aggregator.delegate = self;
+   feedURLString = nil;
+   parseQueue = [[NSOperationQueue alloc] init];
+   parseOp = nil;
 
    imageDownloaders = nil;
    nLoadedImages = 0;
    isTwitterFeed = NO;
+   
+   internetReach = [Reachability reachabilityForInternetConnection];
 }
 
 //________________________________________________________________________________________
@@ -78,6 +130,15 @@
       [self doInitTableViewController];
 
    return self;
+}
+
+
+//________________________________________________________________________________________
+- (void) setFeedURLString : (NSString *) urlString
+{
+   assert(urlString != nil && "setFeedURLString:, parameter 'urlString' is nil");
+   
+   feedURLString = urlString;
 }
 
 #pragma mark - viewDid/Will/Should/Must/Could/Would stuff.
@@ -127,8 +188,8 @@
             allArticles = CernAPP::ConvertFeedCache(feedCache);
          usingCache = feedCache != nil;
       }
-      //May be, we have a cache already.
-      [self.tableView reloadData];
+      
+      [self.tableView reloadData];//Load table with cached data, if any.
       [self reloadPage];
    }
 }
@@ -151,36 +212,18 @@
    //Remove the controller at all? What else?
 }
 
-#pragma mark - Aux. methods to work with aggregators/articles.
-
-//________________________________________________________________________________________
-- (void) copyArticlesFromAggregator
-{
-   assert(aggregator != nil && "copyArticlesFromAggregator, aggregator is nil");
-
-   allArticles = [aggregator.allArticles mutableCopy];
-}
-
-//________________________________________________________________________________________
-- (void) setAggregator : (RSSAggregator *) rssAggregator
-{
-   assert(aggregator != nil && "setAggregator:, parameter 'rssAggregator' is nil");
-
-   aggregator = rssAggregator;
-   aggregator.delegate = self;
-   [self copyArticlesFromAggregator];
-}
+#pragma mark - Reload/refresh logic.
 
 //________________________________________________________________________________________
 - (void) reloadPageFromRefreshControl
 {
-   if (aggregator.isLoadingData) {
+   if (parseOp) {
       //Do not try to reload if aggregator is still working.
       [self.refreshControl endRefreshing];
       return;
    }
 
-   if (!aggregator.hasConnection) {
+   if (![self hasConnection]) {
       CernAPP::ShowErrorAlert(@"Please, check network", @"Close");
       [self.refreshControl endRefreshing];
       [self hideActivityIndicators];
@@ -193,7 +236,7 @@
 //________________________________________________________________________________________
 - (void) reloadPage
 {
-   if (aggregator.isLoadingData)
+   if (parseOp)
       return;
 
    [self reloadPageShowHUD : YES];
@@ -207,13 +250,13 @@
    //and it can be also called after 'pull-refresh', in this case, we do not show
    //spinner (it's done by refreshControl).
 
-   if (aggregator.isLoadingData)
+   if (parseOp)
       return;
-   
+
    //Stop any image download if we have any.
    [self cancelAllImageDownloaders];
 
-   if (!aggregator.hasConnection) {
+   if (![self hasConnection]) {
       //Network problems, we can not reload
       //and do not have any previous data to show.
       if (!usingCache && !allArticles.count) {
@@ -235,14 +278,60 @@
       }
    }
 
-   [self.aggregator clearAllFeeds];
+   [self startFeedParsing];
+}
+
+#pragma mark - FeedParseOperationDelegate and related methods.
+
+//________________________________________________________________________________________
+- (void) startFeedParsing
+{
+   assert(parseOp == nil && "startFeedParsing, called while the previous operation is still active");
+   assert(parseQueue != nil && "startFeedParsing, operation queue is nil");
+   assert(feedURLString != nil && "startFeedParsing, feedURLString is nil");
    
-   //Before I was reloading the table, now, I do not touch
-   //allArticles/tableView - they are valid until our feed
-   //is re-parsed.
+   parseOp = [[FeedParserOperation alloc] initWithFeedURLString : feedURLString];
+   parseOp.delegate = self;
+   [parseQueue addOperation : parseOp];
+}
+
+//________________________________________________________________________________________
+- (void) parserDidFinishWithInfo : (MWFeedInfo *) info items : (NSArray *) items
+{
+#pragma unused(info)
+
+   assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
+
+   CernAPP::WriteFeedCache(feedStoreID, feedCache, items);
+   allArticles = [items mutableCopy];
+   feedCache = nil;
+
+   [self hideActivityIndicators];
+
+   usingCache = NO;
    
-   //It will re-parse feed and (probably) re-fill the table view.
-   [self.aggregator refreshAllFeeds];
+   parseOp = nil;
+
+   [self.refreshControl endRefreshing];//well, if we have it active.
+   [self.tableView reloadData];//we have new articles, now we can reload the table.
+}
+
+//________________________________________________________________________________________
+- (void) parserDidFailWithError : (NSError *) error
+{
+#pragma unused(error)
+   [self hideActivityIndicators];
+
+   parseOp = nil;
+
+   if (allArticles.count) {
+      //We have either cache, or articles from the previous parse.
+      //Do not use HUD (which hides the table's contents), just
+      //show an alert.
+      CernAPP::ShowErrorAlert(@"Please, check network connection", @"Close");
+   } else {
+      [self showErrorHUD];
+   }
 }
 
 #pragma mark - UITableViewDataSource.
@@ -307,55 +396,7 @@
 
 #pragma mark - RSSAggregatorDelegate methods
 
-//________________________________________________________________________________________
-- (void) allFeedsDidLoadForAggregator : (RSSAggregator *) theAggregator
-{
-   assert(theAggregator != nil && "allFeedsDidLoadForAggregator:, parameter 'theAggregator' is nil");
 
-   [self copyArticlesFromAggregator];
-   //
-   CernAPP::WriteFeedCache(feedStoreID, feedCache, allArticles);
-   feedCache = nil;
-
-   [self hideActivityIndicators];
-
-   usingCache = NO;
-
-   [self.refreshControl endRefreshing];//well, if we have it active.
-   [self.tableView reloadData];//we have new articles, now we can reload the table.
-}
-
-//________________________________________________________________________________________
-- (void) aggregator : (RSSAggregator *) anAggregator didFailWithError : (NSString *) error
-{
-#pragma unused(anAggregator, error)
-
-   [self hideActivityIndicators];
-
-   if (allArticles.count) {
-      //We have either cache, or articles from the previous parse.
-      //Do not use HUD (which hides the table's contents), just
-      //show an alert.
-      CernAPP::ShowErrorAlert(@"Please, check network connection", @"Close");
-   } else {
-      [self showErrorHUD];
-   }
-}
-
-//________________________________________________________________________________________
-- (void) lostConnection : (RSSAggregator *) rssAggregator
-{
-#pragma unused(rssAggregator)
-   
-   //Reachability reported network status change, while parser was still working.
-   //Show an alert message.
-   [self hideActivityIndicators];   
-   
-   CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
-
-   if (!allArticles.count)
-      [self showErrorHUD];
-}
 
 #pragma mark - Table view delegate
 
@@ -405,7 +446,7 @@
 //________________________________________________________________________________________
 - (void) cancelAnyConnections
 {
-   [aggregator stopAggregator];
+   [parseQueue cancelAllOperations];
    [self cancelAllImageDownloaders];
 }
 
@@ -479,7 +520,7 @@
          body = article.summary;
       
       if (body) {
-         if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+         if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
             downloader = [[ImageDownloader alloc] initWithURLString : urlString];
             downloader.indexPathInTableView = indexPath;
             downloader.delegate = self;
@@ -508,34 +549,6 @@
 }
 
 #pragma mark - ImageDownloaderDelegate.
-
-//________________________________________________________________________________________
-+ (NSString *) firstImageURLFromHTMLString : (NSString *) htmlString
-{
-   //This trick/method is taken from the v.1 of our app.
-   //Author - Eamon Ford (with my modifications).
-
-   if (!htmlString)
-      return nil;
-
-   NSScanner * const theScanner = [NSScanner scannerWithString : htmlString];
-   //Find the start of IMG tag
-   [theScanner scanUpToString : @"<img" intoString : nil];
-   
-   if (![theScanner isAtEnd]) {
-      [theScanner scanUpToString : @"src" intoString : nil];
-      NSCharacterSet * const charset = [NSCharacterSet characterSetWithCharactersInString : @"\"'"];
-      [theScanner scanUpToCharactersFromSet : charset intoString : nil];
-      [theScanner scanCharactersFromSet : charset intoString : nil];
-      NSString *urlString = nil;
-      [theScanner scanUpToCharactersFromSet : charset intoString : &urlString];
-      // "url" now contains the URL of the img
-      return urlString;
-   }
-
-   // if no img url was found, return nil
-   return nil;
-}
 
 //________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath

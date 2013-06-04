@@ -156,7 +156,7 @@ UIViewController *FindController(UIView *view)
       NewsTableViewController * const nt = (NewsTableViewController *)navController.topViewController;
       nt.navigationItem.title = feedName;
       nt.feedStoreID = feedName;
-      [nt.aggregator addFeedForURL : [NSURL URLWithString : feed]];
+      [nt setFeedURLString : feed];
       nt.isTwitterFeed = isTwitterFeed;
    } else if (!isTwitterFeed) {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
@@ -709,7 +709,7 @@ UIViewController *FindController(UIView *view)
       assert([navController.topViewController isKindOfClass : [BulletinTableViewController class]] &&
              "loadControllerTo:, top view controller expected to be a BulletinTableViewController");
       BulletinTableViewController * const bc = (BulletinTableViewController *)navController.topViewController;
-      [bc.aggregator addFeedForURL : [NSURL URLWithString : url]];
+      [bc setFeedURLString : url];
    }
    
    navController.topViewController.navigationItem.title = @"Bulletin";

@@ -99,7 +99,7 @@
       NewsTableViewController * const tableController = (NewsTableViewController *)aController;
       tableController.navigationItem.title = (NSString *)feedDict[@"Name"];
       tableController.feedStoreID = (NSString *)feedDict[@"Name"];
-      [tableController.aggregator addFeedForURL : [NSURL URLWithString : (NSString *)feedDict[@"Url"]]];
+      [tableController setFeedURLString : (NSString *)feedDict[@"Url"]];
    }
 }
 

@@ -67,13 +67,13 @@
    //and it can be also called after 'pull-refresh', in this case, we do not show
    //spinner (it's done by refreshControl).
 
-   if (self.aggregator.isLoadingData)
+   if (parseOp)
       return;
    
    //Stop any image download if we have any.
    [self cancelAllImageDownloaders];
 
-   if (!self.aggregator.hasConnection) {
+   if (![self hasConnection]) {
       //Network problems, we can not reload
       //and do not have any previous data to show.
       if (!bulletins || !bulletins.count) {
@@ -91,8 +91,7 @@
       [spinner startAnimating];
    }
 
-   [self.aggregator clearAllFeeds];
-   [self.aggregator refreshAllFeeds];
+   [self startFeedParsing];
 }
 
 #pragma mark - UITableViewDataSource.
@@ -157,24 +156,20 @@
    return [NewsTableViewCell calculateCellHeightWithText : title image : image];
 }
 
-#pragma mark - RSSAggregatorDelegate methods
+#pragma mark - FeedParserOperationDelegate.
 
 //________________________________________________________________________________________
-- (void) allFeedsDidLoadForAggregator : (RSSAggregator *) theAggregator
+- (void) parserDidFinishWithInfo : (MWFeedInfo *) info items : (NSArray *) articles
 {
-   assert(theAggregator != nil && "allFeedsDidLoadForAggregator:, parameter 'theAggregator' is nil");
+#pragma unused(info)
 
+   assert(articles != nil && "parserDidFinishWithInfo:, parameter 'articles' is nil");
+   
    [self hideActivityIndicators];
 
-   //
-   //Split articles into groups using week number.
-   //
-
-   if (theAggregator.allArticles.count) {
+   if (articles.count) {
       bulletins = [[NSMutableArray alloc] init];
       thumbnails = [[NSMutableDictionary alloc] init];
-   
-      NSArray * const articles = theAggregator.allArticles;//Aggregator already has sorted them by date.
    
       NSMutableArray *weekData = [[NSMutableArray alloc] init];
       MWFeedItem * const firstArticle = [articles objectAtIndex : 0];
@@ -204,38 +199,22 @@
       }
       
       [bulletins addObject : weekData];
-      
       [self.tableView reloadData];
    }
+   
+   parseOp = nil;
 }
 
 //________________________________________________________________________________________
-- (void) aggregator : (RSSAggregator *) aggregator didFailWithError : (NSString *) error
+- (void) parserDidFailWithError : (NSError *) error
 {
-   [MBProgressHUD hideAllHUDsForView : self.view animated : NO];
-   noConnectionHUD = [MBProgressHUD showHUDAddedTo : self.view animated : NO];
+#pragma unused(error)
+   [self hideActivityIndicators];
 
-   noConnectionHUD.mode = MBProgressHUDModeText;
-   if (error)
-      noConnectionHUD.labelText = error;
-   else
-      noConnectionHUD.labelText = @"Load error";
-   noConnectionHUD.removeFromSuperViewOnHide = YES;
-   
-   [spinner stopAnimating];
-   [spinner setHidden : YES];
-   [self.refreshControl  endRefreshing];
-}
+   parseOp = nil;
 
-//________________________________________________________________________________________
-- (void) lostConnection : (RSSAggregator *) rssAggregator
-{
-#pragma unused(rssAggregator)
-   
-   //Reachability reported network status change, while parser was still working.
-   //Show an alert message.
    CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
-
+   
    if (!bulletins || !bulletins.count)
       [self showErrorHUD];
 }
@@ -295,7 +274,7 @@
                body = article.summary;
             
             if (body) {
-               if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+               if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
                   downloader = [[ImageDownloader alloc] initWithURLString : urlString];
                   downloader.indexPathInTableView = indexPath;
                   downloader.delegate = self;

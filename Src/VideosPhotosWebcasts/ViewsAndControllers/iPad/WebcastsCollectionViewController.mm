@@ -497,7 +497,7 @@ using CernAPP::NetworkStatus;
       
       if (!downloaders[indexPath]) {
          if (feedItem.summary) {//TODO: verify and confirm where do we have a thumbnail link.
-            if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : feedItem.summary]) {
+            if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(feedItem.summary)) {
                //We need this key to later be able identify a collection view, and indexPath.seciton is always 0 here, since
                //all 3 our views have 1 section.
                NSIndexPath * const newKey = [NSIndexPath indexPathForRow : indexPath.row inSection : NSInteger(i)];

@@ -10,26 +10,29 @@
 #import <UIKit/UIKit.h>
 
 #import "ConnectionController.h"
+#import "FeedParserOperation.h"
 #import "ImageDownloader.h"
-#import "RSSAggregator.h"
 #import "MBProgressHUD.h"
 
 @interface NewsTableViewController : UITableViewController<UITableViewDataSource, UITableViewDelegate,
-                                                           RSSAggregatorDelegate, ImageDownloaderDelegate,
+                                                           FeedParserOperationDelegate, ImageDownloaderDelegate,
                                                            ConnectionController>
 {
 @protected
    BOOL canUseCache;
    UIActivityIndicatorView *spinner;
    MBProgressHUD *noConnectionHUD;
+   FeedParserOperation *parseOp;
 }
 
-+ (NSString *) firstImageURLFromHTMLString : (NSString *) htmlString;
+- (void) setFeedURLString : (NSString *) urlString;
+- (BOOL) hasConnection;
 
 - (void) reloadPage;
 - (void) reloadPageFromRefreshControl;
+//
+- (void) startFeedParsing;
 
-@property (nonatomic, strong) RSSAggregator *aggregator;
 @property (nonatomic, strong) NSMutableDictionary *imageDownloaders;
 @property (nonatomic) NSUInteger nLoadedImages;
 @property (nonatomic) BOOL isTwitterFeed;
@@ -38,7 +41,14 @@
 //
 - (IBAction) revealMenu : (id) sender;
 //
+- (void) hideActivityIndicators;
 - (void) cancelAllImageDownloaders;
 - (void) showErrorHUD;
 
 @end
+
+namespace CernAPP {
+
+NSString *FirstImageURLFromHTMLString(NSString *htmlString);
+
+}

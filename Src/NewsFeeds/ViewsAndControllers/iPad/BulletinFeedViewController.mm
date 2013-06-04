@@ -111,7 +111,7 @@
          if (!body)
             body = article.summary;
          
-         if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+         if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
             downloader = [[ImageDownloader alloc] initWithURLString : urlString];
             const NSUInteger indices[] = {currPage.pageNumber, i, articleIndex};
             downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
@@ -239,7 +239,7 @@
          if (!body)
             body = nextArticle.summary;
          
-         if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+         if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
             downloader = [[ImageDownloader alloc] initWithURLString : urlString];
             const NSUInteger indices[] = {pageIndex, tileIndex, i};
             downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
@@ -297,7 +297,7 @@
             if (!body)
                body = nextArticle.summary;
          
-            if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+            if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
                downloader = [[ImageDownloader alloc] initWithURLString : urlString];
                const NSUInteger indices[] = {pageIndex, tileIndex, i};
                downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];

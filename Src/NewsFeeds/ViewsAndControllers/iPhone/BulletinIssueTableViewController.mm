@@ -228,7 +228,7 @@
          body = article.summary;
       
       if (body) {
-         if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+         if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
             downloader = [[ImageDownloader alloc] initWithURLString : urlString];
             downloader.indexPathInTableView = indexPath;
             downloader.delegate = self;

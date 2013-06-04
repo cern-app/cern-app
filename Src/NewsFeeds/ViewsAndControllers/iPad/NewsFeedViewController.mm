@@ -37,7 +37,7 @@
 
 @synthesize feedStoreID, noConnectionHUD, spinner;
 
-#pragma mark - Life cycle.
+#pragma mark - Reachability.
 
 //________________________________________________________________________________________
 - (BOOL) hasConnection
@@ -46,6 +46,8 @@
 
    return [internetReach currentReachabilityStatus] != CernAPP::NetworkStatus::notReachable;
 }
+
+#pragma mark - Life cycle.
 
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
@@ -200,6 +202,8 @@
 
    if (!dataItems.count)
       CernAPP::ShowErrorHUD(self, @"No network");//TODO: better error message?
+   
+   parserOp = nil;
 }
 
 //________________________________________________________________________________________
@@ -259,7 +263,7 @@
          if (!body)
             body = article.summary;
 
-         if (NSString * const urlString = [NewsTableViewController firstImageURLFromHTMLString : body]) {
+         if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
             KeyVal * const newThumbnail = [[KeyVal alloc] init];
             newThumbnail.key = [NSIndexPath indexPathForRow : i inSection : currPage.pageNumber];
             newThumbnail.val = urlString;
