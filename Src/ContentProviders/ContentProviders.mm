@@ -175,29 +175,35 @@ UIViewController *FindController(UIView *view)
       
       AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
-      if (appDelegate.tweetOption == TwitterFeedShowOption::notSet && twitterUrl) {
-         if ([[UIApplication sharedApplication] canOpenURL : twitterUrl]) {
-            NSString *message = [NSString stringWithFormat : @"Do you want to use an external application to open %@?", feedName];
-            ActionSheetWithController *dialog = [[ActionSheetWithController alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
-                                                                                                                      destructiveButtonTitle : @"No, show in a built-in view"
-                                                                                                                      otherButtonTitles : @"Yes", nil];
+      if (appDelegate.tweetOption == TwitterFeedShowOption::notSet) {
+         //We open a twitter feed the first time or we had invalid (nil) twitterUrl before.
+         if (twitterUrl && [[UIApplication sharedApplication] canOpenURL : twitterUrl]) {
+            NSString * const message = [NSString stringWithFormat : @"Do you want to use an external application to open %@?"
+                                                                     " (you can change this option in the 'Settings')", feedName];
+            ActionSheetWithController * const dialog = [[ActionSheetWithController alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
+                                                                                 destructiveButtonTitle : @"No, show in a built-in view"
+                                                                                      otherButtonTitles : @"Yes", nil];
             dialog.controller = controller;
             [dialog showInView : controller.view];
             return;
          }
-      } else if (appDelegate.tweetOption == TwitterFeedShowOption::builtinView) {
-         navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier:
-                                                                            TwitterViewControllerID];
-         assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
-                "loadControllerTo:, top view controller is either nil or has a wrong type");
-         TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
-         tvc.navigationItem.title = feedName;
-         [tvc setFeedURL : feed];
-      } else {
+      }
+
+      if (appDelegate.tweetOption == TwitterFeedShowOption::externalView) {
+         //The previous time user selected "use an external application".
          if(![[UIApplication sharedApplication] openURL : twitterUrl])
             CernAPP::ShowErrorAlert(@"Failed to open twitter app", @"Close");
          return;
       }
+
+      //Either notSet (twitterUrl is nil or we can not open Url in an external app), or builtinView.
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
+                                                                         TwitterViewControllerID];
+      assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+      TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
+      tvc.navigationItem.title = feedName;
+      [tvc setFeedURL : feed];
    }
 
    if (controller.slidingViewController.topViewController)
@@ -220,12 +226,12 @@ UIViewController *FindController(UIView *view)
 
    assert(buttonIndex >= 0 && "actionSheet:didDisimssWithButtonIndex:, button index must be non-negative");
 
-   /*assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "actionSheet:didDisimssWithButtonIndex:, application delegate has a wrong type");
-   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;*/
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
    if (buttonIndex == 1) {
-      //appDelegate.tweetOption = TwitterFeedShowOption::externalView;
+      appDelegate.tweetOption = TwitterFeedShowOption::externalView;
       
       if(![[UIApplication sharedApplication] openURL : twitterUrl])
          CernAPP::ShowErrorAlert(@"actionSheet:didDisimssWithButtonIndex:, error: Failed to open twitter app", @"Close");
@@ -235,7 +241,7 @@ UIViewController *FindController(UIView *view)
       UIViewController * const controller = ((ActionSheetWithController *)actionSheet).controller;      
       assert(controller != nil && "actionSheet:didDisimssWithButtonIndex:, controller not found");
 
-      //appDelegate.tweetOption = CernAPP::TwitterFeedShowOption::builtinView;
+      appDelegate.tweetOption = CernAPP::TwitterFeedShowOption::builtinView;
 
 
       MenuNavigationController * const navController =
