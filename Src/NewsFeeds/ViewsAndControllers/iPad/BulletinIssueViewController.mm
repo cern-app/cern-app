@@ -42,7 +42,7 @@
 #pragma mark - PageController.
 
 //________________________________________________________________________________________
-- (void) reloadPage
+- (void) refresh
 {
    [self layoutPages : YES];
    [self layoutFlipView];

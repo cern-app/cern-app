@@ -61,7 +61,9 @@ enum class ThumbnailDownloadStage : unsigned char {
             NSLog(@"initWithItems:, no downloader for %@", (NSString *)item.val);
             continue;
          }
-
+         //
+         downloader.sizeLimit = 1000000;
+         //
          downloader.indexPathInTableView = indexPath;
          downloader.delegate = self;
          [imageDownloaders setObject : downloader forKey : indexPath];

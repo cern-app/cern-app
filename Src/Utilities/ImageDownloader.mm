@@ -17,7 +17,7 @@
    BOOL delayImageCreation;
 }
 
-@synthesize delegate, indexPathInTableView, image;
+@synthesize delegate, indexPathInTableView, image, sizeLimit;
 
 //________________________________________________________________________________________
 - (id) initWithURLString : (NSString *) urlString
@@ -32,6 +32,7 @@
       imageData = nil;
       imageConnection = nil;
       delayImageCreation = NO;
+      sizeLimit = 0;
    }
    
    return self;
@@ -109,7 +110,13 @@
       return;
    }
    
-   [imageData appendData : data];
+   if (sizeLimit && imageData.length > sizeLimit) {
+      assert(delegate != nil && "connetion:didReceiveData:, delegate is nil");
+      assert(indexPathInTableView != nil && "connection:didReceiveData:, indexPathInTableView is nil");
+      [self cancelDownload];
+      [delegate imageDownloadFailed : indexPathInTableView];
+   } else
+      [imageData appendData : data];
 }
 
 //________________________________________________________________________________________
@@ -151,7 +158,11 @@
    imageConnection = nil;
 
    if (imageData.length && !delayImageCreation) {
-      image = [[UIImage alloc] initWithData : imageData];
+      if (imageData.length > 1000000)
+         image = [[UIImage alloc] initWithData : imageData scale : 0.1f];
+      else
+         image = [[UIImage alloc] initWithData : imageData];
+
       imageData = nil;
    }
    

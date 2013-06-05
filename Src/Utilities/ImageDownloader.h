@@ -23,6 +23,8 @@
 
 - (void) cancelDownload;
 
+@property (nonatomic) NSUInteger sizeLimit;
+
 @property (weak) NSObject<ImageDownloaderDelegate> * delegate;
 
 @property (nonatomic, strong) NSIndexPath *indexPathInTableView;

@@ -277,6 +277,9 @@
                if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
                   downloader = [[ImageDownloader alloc] initWithURLString : urlString];
                   downloader.indexPathInTableView = indexPath;
+                  //
+                  downloader.sizeLimit = 1000000;
+                  //
                   downloader.delegate = self;
                   [self.imageDownloaders setObject : downloader forKey : indexPath];
                   [downloader startDownload];//Power on.
@@ -305,8 +308,7 @@
 //________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
-   //
-   assert(indexPath != nil && "imageDidLoad, parameter 'indexPath' is nil");
+   assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
    const NSInteger row = indexPath.row;
    assert(row >= 0 && row < bulletins.count && "imageDidLoad:, index is out of bounds");
    
@@ -314,12 +316,26 @@
    assert(thumbnails[indexPath] == nil && "imageDidLoad:, image was loaded already");
    
    ImageDownloader * const downloader = (ImageDownloader *)self.imageDownloaders[indexPath];
-   assert(downloader != nil && "imageDidLoad:, no downloader found for the given index path");
+   assert(downloader != nil && "imageDidLoad:, no downloader found for a given index path");
    
    if (downloader.image) {
       [thumbnails setObject : downloader.image forKey : indexPath];
       [self.tableView reloadRowsAtIndexPaths : @[indexPath] withRowAnimation : UITableViewRowAnimationNone];
    }
+   
+   ++self.nLoadedImages;
+   [self.imageDownloaders removeObjectForKey : indexPath];
+}
+
+//________________________________________________________________________________________
+- (void) imageDownloadFailed : (NSIndexPath *) indexPath
+{
+   assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
+   assert(indexPath.row >= 0 && indexPath.row < bulletins.count &&
+          "imageDownloadFailed:, row index is out of bounds");
+   
+   assert(self.imageDownloaders[indexPath] != nil &&
+          "imageDownloadFailed:, no downloader forund for a given index path");
    
    ++self.nLoadedImages;
    [self.imageDownloaders removeObjectForKey : indexPath];
