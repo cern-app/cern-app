@@ -204,8 +204,10 @@ enum class ThumbnailDownloadStage : unsigned char {
    @autoreleasepool {   
       NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
       for (id key in keyEnumerator) {
-         if (imageCreateOp.isCancelled)
+         if (imageCreateOp.isCancelled) {
+            imageCreateOp = nil;
             return;
+         }
          ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key];
          [downloader createUIImage];
       }
@@ -220,6 +222,9 @@ enum class ThumbnailDownloadStage : unsigned char {
    //This function is executed on a main GUI thread, cancelDownload (cancelled = YES)
    //is also called on a main GUI thread (and the order is guaranteed), so it's ok
    //to check cancelled.
+   
+   imageCreateOp = nil;
+   
    if (delegate && !cancelled)
       [delegate thumbnailsDownloadDidFihish : self];
 }
