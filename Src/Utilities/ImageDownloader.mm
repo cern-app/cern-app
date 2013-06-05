@@ -1,3 +1,4 @@
+#import <algorithm>
 #import <cassert>
 
 #import <UIKit/UIKit.h>
@@ -17,7 +18,7 @@
    BOOL delayImageCreation;
 }
 
-@synthesize delegate, indexPathInTableView, image, sizeLimit;
+@synthesize delegate, indexPathInTableView, image, dataSizeLimit, maxDim;
 
 //________________________________________________________________________________________
 - (id) initWithURLString : (NSString *) urlString
@@ -32,7 +33,9 @@
       imageData = nil;
       imageConnection = nil;
       delayImageCreation = NO;
-      sizeLimit = 0;
+      
+      dataSizeLimit = 0;
+      maxDim = 0.f;
    }
    
    return self;
@@ -48,6 +51,9 @@
       imageData = nil;
       imageConnection = nil;
       delayImageCreation = NO;
+      
+      dataSizeLimit = 0;
+      maxDim = 0.f;
    }
    
    return self;
@@ -80,8 +86,22 @@
 - (void) createUIImage
 {
    if (imageData && imageData.length) {
-      image = [[UIImage alloc] initWithData : imageData];
+      if (maxDim > 0.f) {
+         UIImage * const tempImage = [UIImage imageWithData : imageData];
+         const CGSize imageSize = tempImage.size;
+         
+         if (imageSize.width > maxDim && imageSize.height > maxDim) {
+            const CGFloat minDim = std::min(imageSize.width, imageSize.height);
+            image = [[UIImage alloc] initWithData : imageData scale : minDim / maxDim];
+         } else {
+            image = tempImage;
+         }
+      } else {
+         image = [[UIImage alloc] initWithData : imageData];
+      }
+
       imageData = nil;
+      
    }
 }
 
@@ -110,7 +130,7 @@
       return;
    }
    
-   if (sizeLimit && imageData.length > sizeLimit) {
+   if (dataSizeLimit && imageData.length > dataSizeLimit) {
       assert(delegate != nil && "connetion:didReceiveData:, delegate is nil");
       assert(indexPathInTableView != nil && "connection:didReceiveData:, indexPathInTableView is nil");
       [self cancelDownload];
@@ -157,14 +177,8 @@
 
    imageConnection = nil;
 
-   if (imageData.length && !delayImageCreation) {
-      if (imageData.length > 1000000)
-         image = [[UIImage alloc] initWithData : imageData scale : 0.1f];
-      else
-         image = [[UIImage alloc] initWithData : imageData];
-
-      imageData = nil;
-   }
+   if (!delayImageCreation)
+      [self createUIImage];
    
    [delegate imageDidLoad : indexPathInTableView];
 }

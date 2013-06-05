@@ -17,6 +17,15 @@
    [defaults synchronize];
    
    tweetOption = CernAPP::TwitterFeedShowOption::notSet;
+   
+   
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+   /*   const unsigned cacheSizeMemory = 4 * 1024 * 1024; // 4MB
+      const unsigned  cacheSizeDisk = 32 * 1024 * 1024; // 32MB
+      NSURLCache * const sharedCache = [[NSURLCache alloc] initWithMemoryCapacity : cacheSizeMemory diskCapacity : cacheSizeDisk diskPath : @"nsurlcache"];
+      [NSURLCache setSharedURLCache : sharedCache];*/
+   }
+   
    //
    return YES;
 }

@@ -24,7 +24,9 @@
 @interface PageThumbnailDownloader : NSObject<ImageDownloaderDelegate>
 
 //'items' are pairs [NSIndexPath *, NSString *]
-- (id) initWithItems : (NSArray *) items;
+//sizeLimit == 0 -> not limitation.
+- (id) initWithItems : (NSArray *) items sizeLimit : (NSUInteger) sizeLimit;
+- (id) initWithItems : (NSArray *) items sizeLimit : (NSUInteger) sizeLimit downscaleToSize : (CGFloat) maxDim;
 
 - (BOOL) startDownload;
 - (void) cancelDownload;

@@ -288,7 +288,7 @@
          [flipView replaceCurrentFrame : currPage];
       }
    } else {
-      PageThumbnailDownloader * const newDownloader = [[PageThumbnailDownloader alloc] initWithItems : thumbnails];
+      PageThumbnailDownloader * const newDownloader = [[PageThumbnailDownloader alloc] initWithItems : thumbnails sizeLimit : 500000];
       [downloaders setObject:newDownloader forKey : key];
       newDownloader.delegate = self;
       [newDownloader startDownload];

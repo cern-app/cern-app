@@ -36,9 +36,9 @@ enum class ThumbnailDownloadStage : unsigned char {
 @synthesize pageNumber, imageDownloaders, delegate;
 
 //________________________________________________________________________________________
-- (id) initWithItems : (NSArray *) items
+- (id) initWithItems : (NSArray *) items sizeLimit : (NSUInteger) sizeLimit
 {
-   assert(items.count != 0 && "initWithItems:, parameter 'items' is either nil or is empty");
+   assert(items.count != 0 && "initWithItems:sizeLimit:, parameter 'items' is either nil or is empty");
 
    if (self = [super init]) {
       imageDownloaders = [[NSMutableDictionary alloc] init];
@@ -62,7 +62,7 @@ enum class ThumbnailDownloadStage : unsigned char {
             continue;
          }
          //
-         downloader.sizeLimit = 500000;
+         downloader.dataSizeLimit = sizeLimit;
          //
          downloader.indexPathInTableView = indexPath;
          downloader.delegate = self;
@@ -74,6 +74,23 @@ enum class ThumbnailDownloadStage : unsigned char {
       
       opQueue = nil;
       imageCreateOp = nil;
+   }
+   
+   return self;
+}
+
+//________________________________________________________________________________________
+- (id) initWithItems : (NSArray *) items sizeLimit : (NSUInteger) sizeLimit downscaleToSize : (CGFloat) maxDim
+{
+   assert(items != nil && "initWithItems:sizeLimit:downscaleToSize:, parameter 'items' is nil");
+   assert(maxDim >= 0.f && "initWithItems:sizeLimit:downscaleToSize:, parameter 'maxDim' is negative");
+
+   if (self = [self initWithItems : items sizeLimit : sizeLimit]) {
+      NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
+      for (id key in keyEnumerator) {
+         ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key];
+         downloader.maxDim = maxDim;
+      }
    }
    
    return self;
@@ -184,12 +201,14 @@ enum class ThumbnailDownloadStage : unsigned char {
 {
    assert(stage == ThumbnailDownloadStage::imageCreation && "createUIImagesAux, wrong stage");
    
-   NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
-   for (id key in keyEnumerator) {
-      if (imageCreateOp.isCancelled)
-         return;
-      ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key];
-      [downloader createUIImage];
+   @autoreleasepool {   
+      NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
+      for (id key in keyEnumerator) {
+         if (imageCreateOp.isCancelled)
+            return;
+         ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key];
+         [downloader createUIImage];
+      }
    }
    
    [self performSelectorOnMainThread : @selector(informDelegate) withObject : nil waitUntilDone : NO];

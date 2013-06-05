@@ -113,7 +113,7 @@
          
          if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
             downloader = [[ImageDownloader alloc] initWithURLString : urlString];
-            downloader.sizeLimit = 1000000;
+            downloader.dataSizeLimit = 1000000;
             const NSUInteger indices[] = {currPage.pageNumber, i, articleIndex};
             downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
             downloader.delegate = self;
@@ -242,7 +242,7 @@
          
          if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
             downloader = [[ImageDownloader alloc] initWithURLString : urlString];
-            downloader.sizeLimit = 1000000;
+            downloader.dataSizeLimit = 1000000;
             const NSUInteger indices[] = {pageIndex, tileIndex, i};
             downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
             downloader.delegate = self;
@@ -301,7 +301,7 @@
          
             if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
                downloader = [[ImageDownloader alloc] initWithURLString : urlString];
-               downloader.sizeLimit = 1000000;
+               downloader.dataSizeLimit = 1000000;
                const NSUInteger indices[] = {pageIndex, tileIndex, i};
                downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
                downloader.delegate = self;

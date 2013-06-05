@@ -220,11 +220,16 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    
    NSLog(@"useless method, I'm dying now, bye-bye!");
 
+   
    [parseQueue cancelAllOperations];
    parseOp = nil;
    [self cancelAllImageDownloaders];
+   /*
    allArticles = nil;
    [self.tableView reloadData];
+   */
+   
+//   [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
 #pragma mark - Reload/refresh logic.
@@ -561,7 +566,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       }
          
       if (pairs.count) {
-         PageThumbnailDownloader * const pageDownloader = [[PageThumbnailDownloader alloc] initWithItems : pairs];
+         PageThumbnailDownloader * const pageDownloader = [[PageThumbnailDownloader alloc] initWithItems : pairs sizeLimit : 500000 downscaleToSize : 100.f];
          [rangeDownloaders addObject : pageDownloader];
          pageDownloader.delegate = self;
          [pageDownloader startDownload];

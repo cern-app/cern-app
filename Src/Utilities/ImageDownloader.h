@@ -23,7 +23,8 @@
 
 - (void) cancelDownload;
 
-@property (nonatomic) NSUInteger sizeLimit;
+@property (nonatomic) NSUInteger dataSizeLimit;
+@property (nonatomic) CGFloat maxDim;
 
 @property (weak) NSObject<ImageDownloaderDelegate> * delegate;
 
