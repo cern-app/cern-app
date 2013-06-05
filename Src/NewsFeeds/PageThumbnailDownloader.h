@@ -29,6 +29,8 @@
 - (BOOL) startDownload;
 - (void) cancelDownload;
 
+- (BOOL) containsIndexPath : (NSIndexPath *) path;
+
 @property (nonatomic) NSUInteger pageNumber;
 @property (nonatomic, readonly) NSMutableDictionary *imageDownloaders;
 @property (nonatomic) __weak NSObject<PageThumbnailDownloaderDelegate> *delegate;

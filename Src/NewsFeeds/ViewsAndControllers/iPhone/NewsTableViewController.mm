@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
 #import "FeedCache.h"
+#import "KeyVal.h"
 
 namespace CernAPP {
 
@@ -61,6 +62,10 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    NSOperationQueue *parseQueue;
    
    Reachability *internetReach;
+   
+   NSMutableArray *rangeDownloaders;
+   
+   BOOL lowMemory;
 }
 
 @synthesize imageDownloaders, nLoadedImages, feedStoreID, isTwitterFeed;
@@ -102,6 +107,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    isTwitterFeed = NO;
    
    internetReach = [Reachability reachabilityForInternetConnection];
+   
+   lowMemory = NO;
 }
 
 //________________________________________________________________________________________
@@ -207,9 +214,17 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 - (void) didReceiveMemoryWarning
 {
    [super didReceiveMemoryWarning];
-   // Dispose of any resources that can be recreated.
-   //TODO: memory warning??? Try to release images?
-   //Remove the controller at all? What else?
+
+   //Actually, nothing I can do here. I tried to release images - did not help,
+   //app keeps dying. Quite useless method.
+   
+   NSLog(@"useless method, I'm dying now, bye-bye!");
+
+   [parseQueue cancelAllOperations];
+   parseOp = nil;
+   [self cancelAllImageDownloaders];
+   allArticles = nil;
+   [self.tableView reloadData];
 }
 
 #pragma mark - Reload/refresh logic.
@@ -314,6 +329,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    [self.refreshControl endRefreshing];//well, if we have it active.
    [self.tableView reloadData];//we have new articles, now we can reload the table.
+   [self loadImagesForOnscreenRows];
 }
 
 //________________________________________________________________________________________
@@ -373,8 +389,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    [cell setCellData : article imageOnTheRight : (indexPath.row % 4) == 3];
 
-   if (!usingCache && !article.image)
-      [self startIconDownloadForIndexPath : indexPath];
+   //if (!usingCache && !article.image)
+   //   [self startIconDownloadForIndexPath : indexPath];
 
    return cell;
 }
@@ -447,6 +463,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 - (void) cancelAnyConnections
 {
    [parseQueue cancelAllOperations];
+   parseOp = nil;
    [self cancelAllImageDownloaders];
 }
 
@@ -456,7 +473,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    if (imageDownloaders && imageDownloaders.count) {
       NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
       for (id key in keyEnumerator) {
-         ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key];
+         PageThumbnailDownloader * const downloader = (PageThumbnailDownloader *)imageDownloaders[key];
          [downloader cancelDownload];
       }
       
@@ -498,60 +515,97 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma mark - Download images for news' items in a table.
 
 //________________________________________________________________________________________
-- (void) startIconDownloadForIndexPath : (NSIndexPath *) indexPath
+- (BOOL) hasDownloaderForIndexPath : (NSIndexPath *) indexPath
 {
-   assert(usingCache == NO && "startIconDownloadForIndexPath, controller is in a wrong mode");
-   assert(indexPath != nil && "startIconDownloadForIndexPath:, parameter 'indexPath' is nil");
+   assert(indexPath != nil && "hasDownloaderForIndexPath:, parameter 'indexPath' is nil");
+   assert(rangeDownloaders != nil && "hasDownloaderForIndexPath:, rangeDownloaders is nil");
    
-   const NSInteger row = indexPath.row;
-   assert(row >= 0 && row < allArticles.count &&
-          "startIconDownloadForIndexPath:, index is out of bounds");
-
-   if (!imageDownloaders)
-      imageDownloaders = [[NSMutableDictionary alloc] init];
-
-   ImageDownloader * downloader = (ImageDownloader *)imageDownloaders[indexPath];
-   if (!downloader) {//We did not start download for this image yet.
-      MWFeedItem * const article = (MWFeedItem *)allArticles[indexPath.row];
-      assert(article.image == nil && "startIconDownloadForIndexPath:, image was loaded already");
-      
-      NSString * body = article.content;
-      if (!body)
-         body = article.summary;
-      
-      if (body) {
-         if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
-            downloader = [[ImageDownloader alloc] initWithURLString : urlString];
-            downloader.indexPathInTableView = indexPath;
-            downloader.delegate = self;
-            //
-            downloader.sizeLimit = 1000000;
-            //
-            [imageDownloaders setObject : downloader forKey : indexPath];
-            [downloader startDownload];//Power on.
-         }
-      }
+   for (PageThumbnailDownloader *downloader in rangeDownloaders) {
+      if ([downloader containsIndexPath : indexPath])
+         return YES;
    }
+   
+   return NO;
 }
-
-// This method is used in case the user scrolled into a set of cells that don't have their thumbnails yet.
 
 //________________________________________________________________________________________
 - (void) loadImagesForOnscreenRows
 {
    assert(usingCache == NO && "loadImagesForOnscreenRows, controller is in a wrong mode");
+   
+   if (lowMemory)
+      return;
 
    if (allArticles.count) {
+      if (!rangeDownloaders)
+         rangeDownloaders = [[NSMutableArray alloc] init];
+   
+      NSMutableArray * const pairs = [[NSMutableArray alloc] init];
       NSArray * const visiblePaths = [self.tableView indexPathsForVisibleRows];
       for (NSIndexPath *indexPath in visiblePaths) {
          MWFeedItem * const article = allArticles[indexPath.row];
-         if (!article.image)
-            [self startIconDownloadForIndexPath : indexPath];
+         if (!article.image && ![self hasDownloaderForIndexPath : indexPath]) {
+            NSString * body = article.content;
+            if (!body)
+               body = article.summary;
+         
+            if (body) {
+               if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
+                  KeyVal * const newThumbnail = [[KeyVal alloc] init];
+                  newThumbnail.key = indexPath;
+                  newThumbnail.val = urlString;
+                  [pairs addObject : newThumbnail];
+               }
+            }
+         }
+      }
+         
+      if (pairs.count) {
+         PageThumbnailDownloader * const pageDownloader = [[PageThumbnailDownloader alloc] initWithItems : pairs];
+         [rangeDownloaders addObject : pageDownloader];
+         pageDownloader.delegate = self;
+         [pageDownloader startDownload];
       }
    }
 }
 
-#pragma mark - ImageDownloaderDelegate.
+#pragma mark - PageThumbnailDownloader delegate.
+
+//________________________________________________________________________________________
+- (void) thumbnailsDownloadDidFihish : (PageThumbnailDownloader *) downloader
+{
+   assert(downloader != nil && "thumbnailsDownloadDidFinish:, parameter 'downloader' is nil");
+   assert(rangeDownloaders != nil && "thumbnailsDownloadDidFinish:, rangeDownloaders is nil");
+   assert([rangeDownloaders containsObject : downloader] == YES &&
+          "thumbnailsDownloadDidFinish:, downloader not found");
+   //
+   NSMutableArray * const rowsToUpdate = [[NSMutableArray alloc] init];
+   NSMutableDictionary * const downloaders = downloader.imageDownloaders;
+   
+   NSEnumerator * const keyEnumerator = [downloaders keyEnumerator];
+   for (id key in keyEnumerator) {
+      ImageDownloader * const imageDownloader = (ImageDownloader *)downloaders[key];
+
+      if (imageDownloader.image) {
+         NSIndexPath * const path = imageDownloader.indexPathInTableView;
+         assert(path != nil &&
+                "thumbnailsDownloadDidFinish:, invalid image path");
+         const NSInteger articleIndex = path.row;
+         assert(articleIndex >= 0 && articleIndex < allArticles.count &&
+                "thumbnailsDownloadDidFinish:, article index is out of bounds");
+         
+         MWFeedItem * const article = (MWFeedItem *)allArticles[articleIndex];
+         article.image = imageDownloader.image;
+         
+         [rowsToUpdate addObject : [NSIndexPath indexPathForRow:articleIndex inSection : 0]];
+      }
+   }
+   
+   [rangeDownloaders removeObject : downloader];
+
+   if (rowsToUpdate.count)
+      [self.tableView reloadRowsAtIndexPaths : rowsToUpdate withRowAnimation : UITableViewRowAnimationNone];
+}
 
 //________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath

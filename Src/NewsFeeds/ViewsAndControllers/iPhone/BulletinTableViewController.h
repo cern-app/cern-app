@@ -7,8 +7,9 @@
 //
 
 #import "NewsTableViewController.h"
+#import "ImageDownloader.h"
 
-@interface BulletinTableViewController : NewsTableViewController
+@interface BulletinTableViewController : NewsTableViewController<ImageDownloaderDelegate>
 
 @end
 

@@ -9,14 +9,13 @@
 
 #import <UIKit/UIKit.h>
 
+#import "PageThumbnailDownloader.h"
 #import "ConnectionController.h"
 #import "FeedParserOperation.h"
-#import "ImageDownloader.h"
 #import "MBProgressHUD.h"
 
-@interface NewsTableViewController : UITableViewController<UITableViewDataSource, UITableViewDelegate,
-                                                           FeedParserOperationDelegate, ImageDownloaderDelegate,
-                                                           ConnectionController>
+@interface NewsTableViewController : UITableViewController<UITableViewDataSource, UITableViewDelegate, FeedParserOperationDelegate,
+                                                           PageThumbnailDownloaderDelegate, ConnectionController>
 {
 @protected
    BOOL canUseCache;

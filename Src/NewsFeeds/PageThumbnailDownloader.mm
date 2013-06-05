@@ -62,7 +62,7 @@ enum class ThumbnailDownloadStage : unsigned char {
             continue;
          }
          //
-         downloader.sizeLimit = 1000000;
+         downloader.sizeLimit = 500000;
          //
          downloader.indexPathInTableView = indexPath;
          downloader.delegate = self;
@@ -119,6 +119,13 @@ enum class ThumbnailDownloadStage : unsigned char {
    cancelled = YES;
    nCompleted = 0;
    stage = ThumbnailDownloadStage::none;
+}
+
+//________________________________________________________________________________________
+- (BOOL) containsIndexPath : (NSIndexPath *) indexPath
+{
+   assert(indexPath != nil && "containsIndexPath:, parameter 'indexPath' is nil");
+   return imageDownloaders[indexPath] != nil;
 }
 
 #pragma mark - ImageDownloader delegate.
