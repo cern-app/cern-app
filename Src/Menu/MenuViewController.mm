@@ -1048,8 +1048,10 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    if (inAnimation)//We have to wait.
       [self performSelector : @selector(reloadMenuAfterAnimationFinished) withObject : nil afterDelay : 0.5f];
-   else
+   else {
       [self loadMenuContents];
+      [self layoutMenuResetOffset : YES resetContentSize : YES];
+   }
 }
 
 @end
