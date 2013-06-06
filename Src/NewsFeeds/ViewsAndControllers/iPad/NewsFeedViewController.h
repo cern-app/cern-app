@@ -6,10 +6,9 @@
 //  Copyright (c) 2013 CERN. All rights reserved.
 //
 
-
-#import "PageThumbnailDownloader.h"
 #import "ConnectionController.h"
 #import "FeedParserOperation.h"
+#import "ThumbnailDownloader.h"
 #import "TileViewController.h"
 #import "HUDRefreshProtocol.h"
 #import "ImageDownloader.h"
@@ -32,7 +31,7 @@
 //So, I'll MWFeedParser in a separate thread (NSOperation) in a synchronous mode
 //(not to create another thread from a background thread).
 
-@interface NewsFeedViewController : TileViewController<HUDRefreshProtocol, PageThumbnailDownloaderDelegate,
+@interface NewsFeedViewController : TileViewController<HUDRefreshProtocol, ThumbnailDownloaderDelegate,
                                                        ConnectionController, FeedParserOperationDelegate>
 {
 @protected

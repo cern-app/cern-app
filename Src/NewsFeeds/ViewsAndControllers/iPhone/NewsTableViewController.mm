@@ -478,7 +478,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    if (imageDownloaders && imageDownloaders.count) {
       NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
       for (id key in keyEnumerator) {
-         PageThumbnailDownloader * const downloader = (PageThumbnailDownloader *)imageDownloaders[key];
+         ThumbnailDownloader * const downloader = (ThumbnailDownloader *)imageDownloaders[key];
          [downloader cancelDownload];
       }
       
@@ -525,7 +525,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    assert(indexPath != nil && "hasDownloaderForIndexPath:, parameter 'indexPath' is nil");
    assert(rangeDownloaders != nil && "hasDownloaderForIndexPath:, rangeDownloaders is nil");
    
-   for (PageThumbnailDownloader *downloader in rangeDownloaders) {
+   for (ThumbnailDownloader *downloader in rangeDownloaders) {
       if ([downloader containsIndexPath : indexPath])
          return YES;
    }
@@ -566,7 +566,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       }
          
       if (pairs.count) {
-         PageThumbnailDownloader * const pageDownloader = [[PageThumbnailDownloader alloc] initWithItems : pairs sizeLimit : 500000 downscaleToSize : 100.f];
+         ThumbnailDownloader * const pageDownloader = [[ThumbnailDownloader alloc] initWithItems : pairs sizeLimit : 500000 downscaleToSize : 150.f];
          [rangeDownloaders addObject : pageDownloader];
          pageDownloader.delegate = self;
          [pageDownloader startDownload];
@@ -577,7 +577,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma mark - PageThumbnailDownloader delegate.
 
 //________________________________________________________________________________________
-- (void) thumbnailsDownloadDidFihish : (PageThumbnailDownloader *) downloader
+- (void) thumbnailsDownloadDidFihish : (ThumbnailDownloader *) downloader
 {
    assert(downloader != nil && "thumbnailsDownloadDidFinish:, parameter 'downloader' is nil");
    assert(rangeDownloaders != nil && "thumbnailsDownloadDidFinish:, rangeDownloaders is nil");

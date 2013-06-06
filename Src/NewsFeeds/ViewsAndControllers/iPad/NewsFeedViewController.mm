@@ -288,7 +288,7 @@
          [flipView replaceCurrentFrame : currPage];
       }
    } else {
-      PageThumbnailDownloader * const newDownloader = [[PageThumbnailDownloader alloc] initWithItems : thumbnails sizeLimit : 500000];
+      ThumbnailDownloader * const newDownloader = [[ThumbnailDownloader alloc] initWithItems : thumbnails sizeLimit : 500000];
       [downloaders setObject:newDownloader forKey : key];
       newDownloader.delegate = self;
       [newDownloader startDownload];
@@ -298,7 +298,7 @@
 #pragma mark - PageThumbnailDownloaderDelegate
 
 //________________________________________________________________________________________
-- (void) thumbnailsDownloadDidFihish : (PageThumbnailDownloader *) thumbnailsDownloader
+- (void) thumbnailsDownloadDidFihish : (ThumbnailDownloader *) thumbnailsDownloader
 {
    assert(thumbnailsDownloader != nil &&
           "thumbnailsDownloadDidFinish:, parameter 'thumbnailsDownloader' is nil");
@@ -451,7 +451,7 @@
    if (downloaders && downloaders.count) {
       NSEnumerator * const keyEnumerator = [downloaders keyEnumerator];
       for (id key in keyEnumerator) {
-         PageThumbnailDownloader * const downloader = (PageThumbnailDownloader *)downloaders[key];
+         ThumbnailDownloader * const downloader = (ThumbnailDownloader *)downloaders[key];
          [downloader cancelDownload];
       }
       

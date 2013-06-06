@@ -11,6 +11,31 @@
 //LazyTableImages code sample.
 //
 
+namespace {
+
+//________________________________________________________________________________________
+bool ImageIsNonProportional(const CGSize &imageSize)
+{
+   //The definition of non-proportional is quite arbitrary,
+   //I simply do not want to touch/scale images, which has
+   //a significant difference between width/height.
+   
+   const CGFloat ratio = 3;
+   
+   if (!imageSize.width || !imageSize.height)//TODO: better test with CGFloats?
+      return true;
+   
+   if (imageSize.width / imageSize.height > ratio)
+      return true;
+   
+   if (imageSize.height / imageSize.width > ratio)
+      return true;
+   
+   return false;
+}
+
+}
+
 @implementation ImageDownloader {
    NSURLConnection *imageConnection;
    NSMutableData *imageData;
@@ -18,7 +43,7 @@
    BOOL delayImageCreation;
 }
 
-@synthesize delegate, indexPathInTableView, image, dataSizeLimit, maxDim;
+@synthesize delegate, indexPathInTableView, image, dataSizeLimit;
 
 //________________________________________________________________________________________
 - (id) initWithURLString : (NSString *) urlString
@@ -35,7 +60,6 @@
       delayImageCreation = NO;
       
       dataSizeLimit = 0;
-      maxDim = 0.f;
    }
    
    return self;
@@ -53,7 +77,6 @@
       delayImageCreation = NO;
       
       dataSizeLimit = 0;
-      maxDim = 0.f;
    }
    
    return self;
@@ -83,25 +106,57 @@
 }
 
 //________________________________________________________________________________________
+- (void) createThumbnailImageScaledTo : (CGFloat) dimension
+{
+   assert(dimension > 0.f &&
+          "createThumbnailImageScaledTo:, parameter 'dimension' must be positive");
+
+   image = nil;
+   
+   if (imageData && imageData.length) {
+      if (UIImage * const tempImage = [[UIImage alloc] initWithData : imageData]) {
+
+      
+         const CGSize imageSize = tempImage.size;
+         //1. I downscale image only if both w and h are > dimension.
+         //2. I do not downscale images, if w >> h or w << h. (it's not a shift :))
+         if (imageSize.width > dimension && imageSize.height > dimension && !ImageIsNonProportional(imageSize)) {
+            //Yes, I want the minimum dimension to fit into the downscaled size :)
+            const CGFloat scale = dimension / std::min(imageSize.width, imageSize.height);
+            const CGSize newSize = CGSizeMake(imageSize.width * scale, imageSize.height * scale);
+            //neither a width nor a height can be 0.
+            CGContextRef bitmapCtx = CGBitmapContextCreate(nullptr, newSize.width, newSize.height,
+                                                           CGImageGetBitsPerComponent(tempImage.CGImage), 0,
+                                                           CGImageGetColorSpace(tempImage.CGImage),
+                                                           CGImageGetBitmapInfo(tempImage.CGImage));
+            
+            if (bitmapCtx) {
+               CGContextSetInterpolationQuality(bitmapCtx, kCGInterpolationHigh);
+               CGContextDrawImage(bitmapCtx, CGRectMake(0.f, 0.f, newSize.width, newSize.height), tempImage.CGImage);
+               CGImageRef cgImage = CGBitmapContextCreateImage(bitmapCtx);
+               if (cgImage) {
+                  image = [UIImage imageWithCGImage : cgImage];
+                  CGImageRelease(cgImage);
+               }
+               
+               CGContextRelease(bitmapCtx);
+            }
+         }
+   
+         if (!image)
+            image = tempImage;
+      }
+
+      imageData = nil;      
+   }
+}
+
+//________________________________________________________________________________________
 - (void) createUIImage
 {
    if (imageData && imageData.length) {
-      if (maxDim > 0.f) {
-         UIImage * const tempImage = [UIImage imageWithData : imageData];
-         const CGSize imageSize = tempImage.size;
-         
-         if (imageSize.width > maxDim && imageSize.height > maxDim) {
-            const CGFloat minDim = std::min(imageSize.width, imageSize.height);
-            image = [[UIImage alloc] initWithData : imageData scale : minDim / maxDim];
-         } else {
-            image = tempImage;
-         }
-      } else {
-         image = [[UIImage alloc] initWithData : imageData];
-      }
-
-      imageData = nil;
-      
+      image = [[UIImage alloc] initWithData : imageData];
+      imageData = nil;      
    }
 }
 

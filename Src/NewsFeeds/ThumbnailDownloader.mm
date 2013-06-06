@@ -1,14 +1,6 @@
-//
-//  PageDataDownloader.m
-//  CERN
-//
-//  Created by Timur Pocheptsov on 5/6/13.
-//  Copyright (c) 2013 CERN. All rights reserved.
-//
-
 #import <cassert>
 
-#import "PageThumbnailDownloader.h"
+#import "ThumbnailDownloader.h"
 #import "KeyVal.h"
 
 namespace {
@@ -21,7 +13,7 @@ enum class ThumbnailDownloadStage : unsigned char {
 
 }
 
-@implementation PageThumbnailDownloader {
+@implementation ThumbnailDownloader {
    NSMutableDictionary *thumbnailsData;//NSMutableData
    NSMutableArray *thumbnailImages;//UIImage
    
@@ -31,6 +23,8 @@ enum class ThumbnailDownloadStage : unsigned char {
    NSOperationQueue *opQueue;
    NSInvocationOperation *imageCreateOp;
    BOOL cancelled;
+   
+   CGFloat downscaledSize;
 }
 
 @synthesize pageNumber, imageDownloaders, delegate;
@@ -74,23 +68,21 @@ enum class ThumbnailDownloadStage : unsigned char {
       
       opQueue = nil;
       imageCreateOp = nil;
+      
+      downscaledSize = 0.f;
    }
    
    return self;
 }
 
 //________________________________________________________________________________________
-- (id) initWithItems : (NSArray *) items sizeLimit : (NSUInteger) sizeLimit downscaleToSize : (CGFloat) maxDim
+- (id) initWithItems : (NSArray *) items sizeLimit : (NSUInteger) sizeLimit downscaleToSize : (CGFloat) dimension
 {
    assert(items != nil && "initWithItems:sizeLimit:downscaleToSize:, parameter 'items' is nil");
-   assert(maxDim >= 0.f && "initWithItems:sizeLimit:downscaleToSize:, parameter 'maxDim' is negative");
+   assert(dimension >= 0.f && "initWithItems:sizeLimit:downscaleToSize:, parameter 'maxDim' is negative");
 
    if (self = [self initWithItems : items sizeLimit : sizeLimit]) {
-      NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
-      for (id key in keyEnumerator) {
-         ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key];
-         downloader.maxDim = maxDim;
-      }
+      downscaledSize = dimension;
    }
    
    return self;
@@ -209,7 +201,10 @@ enum class ThumbnailDownloadStage : unsigned char {
             return;
          }
          ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key];
-         [downloader createUIImage];
+         if (downscaledSize > 0.f)
+            [downloader createThumbnailImageScaledTo : downscaledSize];
+         else
+            [downloader createUIImage];
       }
    }
    

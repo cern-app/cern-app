@@ -19,12 +19,13 @@
 - (id) initWithURL : (NSURL *) url;
 - (void) startDownload;
 - (void) startDownload : (BOOL) createUIImage;
+
+- (void) createThumbnailImageScaledTo : (CGFloat) dimension;
 - (void) createUIImage;
 
 - (void) cancelDownload;
 
 @property (nonatomic) NSUInteger dataSizeLimit;
-@property (nonatomic) CGFloat maxDim;
 
 @property (weak) NSObject<ImageDownloaderDelegate> * delegate;
 
