@@ -187,7 +187,6 @@
 		70A56296173A32F600145FEC /* CernMediaMARCParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56287173A32F600145FEC /* CernMediaMARCParser.mm */; };
 		70A56298173A32F600145FEC /* PhotoGridViewCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A5628D173A32F600145FEC /* PhotoGridViewCell.mm */; };
 		70A56299173A32F600145FEC /* PhotoSetInfoView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A5628F173A32F600145FEC /* PhotoSetInfoView.mm */; };
-		70A5629A173A32F600145FEC /* PhotosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56291173A32F600145FEC /* PhotosGridViewController.mm */; };
 		70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56293173A32F600145FEC /* VideosGridViewController.mm */; };
 		70A562C8173A35C300145FEC /* BulletinFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AA173A35C300145FEC /* BulletinFeedViewController.mm */; };
 		70A562C9173A35C300145FEC /* BulletinIssueTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AC173A35C300145FEC /* BulletinIssueTileView.mm */; };
@@ -506,8 +505,6 @@
 		70A5628D173A32F600145FEC /* PhotoGridViewCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoGridViewCell.mm; sourceTree = "<group>"; };
 		70A5628E173A32F600145FEC /* PhotoSetInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoSetInfoView.h; sourceTree = "<group>"; };
 		70A5628F173A32F600145FEC /* PhotoSetInfoView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoSetInfoView.mm; sourceTree = "<group>"; };
-		70A56290173A32F600145FEC /* PhotosGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosGridViewController.h; sourceTree = "<group>"; };
-		70A56291173A32F600145FEC /* PhotosGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotosGridViewController.mm; sourceTree = "<group>"; };
 		70A56292173A32F600145FEC /* VideosGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideosGridViewController.h; sourceTree = "<group>"; };
 		70A56293173A32F600145FEC /* VideosGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideosGridViewController.mm; sourceTree = "<group>"; };
 		70A562A9173A35C300145FEC /* BulletinFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinFeedViewController.h; sourceTree = "<group>"; };
@@ -1164,8 +1161,6 @@
 				70A5628D173A32F600145FEC /* PhotoGridViewCell.mm */,
 				70A5628E173A32F600145FEC /* PhotoSetInfoView.h */,
 				70A5628F173A32F600145FEC /* PhotoSetInfoView.mm */,
-				70A56290173A32F600145FEC /* PhotosGridViewController.h */,
-				70A56291173A32F600145FEC /* PhotosGridViewController.mm */,
 				70A56292173A32F600145FEC /* VideosGridViewController.h */,
 				70A56293173A32F600145FEC /* VideosGridViewController.mm */,
 			);
@@ -1633,7 +1628,6 @@
 				70A56296173A32F600145FEC /* CernMediaMARCParser.mm in Sources */,
 				70A56298173A32F600145FEC /* PhotoGridViewCell.mm in Sources */,
 				70A56299173A32F600145FEC /* PhotoSetInfoView.mm in Sources */,
-				70A5629A173A32F600145FEC /* PhotosGridViewController.mm in Sources */,
 				70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */,
 				70A562C8173A35C300145FEC /* BulletinFeedViewController.mm in Sources */,
 				70A562C9173A35C300145FEC /* BulletinIssueTileView.mm in Sources */,

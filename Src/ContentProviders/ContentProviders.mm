@@ -10,7 +10,6 @@
 #import "EventDisplayViewController.h"
 #import "VideosGridViewController.h"
 #import "MenuNavigationController.h"
-#import "PhotosGridViewController.h"
 #import "LiveEventTableController.h"
 #import "NewsTableViewController.h"
 #import "ECSlidingViewController.h"

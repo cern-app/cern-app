@@ -545,6 +545,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (BOOL) shouldAutorotate
 {
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+      return NO;
+
    assert(albumCollectionView != nil && "shouldAutorotate, albumCollectionView is nil");
    assert([albumCollectionView.collectionViewLayout isKindOfClass : [AnimatedStackLayout class]] &&
           "shouldAutorotate, albumCollectionView has a wrong layout");
