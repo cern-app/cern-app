@@ -339,61 +339,31 @@
             </objects>
             <point key="canvasLocation" x="-510" y="966"/>
         </scene>
-        <!--Photos Grid View Controller-->
+        <!--Photo Collections View Controller-->
         <scene sceneID="CJx-uY-29B">
             <objects>
-                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="eju-X2-ebY" customClass="PhotosGridViewController" sceneMemberID="viewController">
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="eju-X2-ebY" customClass="PhotoCollectionsViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="Wib-Yk-9mL">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="s7B-cD-3tG">
-                            <size key="itemSize" width="148" height="134"/>
-                            <size key="headerReferenceSize" width="50" height="76"/>
-                            <size key="footerReferenceSize" width="50" height="50"/>
+                            <size key="itemSize" width="226" height="222"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="1hx-yt-xcg" customClass="PhotoGridViewCell">
-                                <rect key="frame" x="0.0" y="76" width="148" height="134"/>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoAlbumCoverView" id="1hx-yt-xcg" customClass="PhotoAlbumCoverView">
+                                <rect key="frame" x="47" y="0.0" width="226" height="222"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="148" height="134"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="226" height="222"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="uhM-Wm-rDc">
-                                            <rect key="frame" x="0.0" y="0.0" width="148" height="134"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </imageView>
-                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="imageView" destination="uhM-Wm-rDc" id="dPN-Kw-yXx"/>
-                                </connections>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SetInfoView" id="Elo-Lf-Wdq" customClass="PhotoSetInfoView">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="76"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <subviews>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2gC-Jc-gcM">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="76"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                            <connections>
-                                <outlet property="descriptionLabel" destination="2gC-Jc-gcM" id="t6t-tN-bwe"/>
-                            </connections>
-                        </collectionReusableView>
-                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SetFooter" id="TkW-Mh-fKn" customClass="PhotoSetInfoView">
-                            <rect key="frame" x="0.0" y="210" width="320" height="50"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="eju-X2-ebY" id="7En-al-e58"/>
                             <outlet property="delegate" destination="eju-X2-ebY" id="TCU-HI-9ee"/>
@@ -403,12 +373,12 @@
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="ZjV-C7-2RT">
                             <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
-                                <action selector="revealMenu:" destination="eju-X2-ebY" id="Clj-WY-mwh"/>
+                                <action selector="revealMenu:" destination="eju-X2-ebY" id="IPD-aS-zNs"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="X0i-0g-Zhb">
                             <connections>
-                                <action selector="reloadImages:" destination="eju-X2-ebY" id="ZNm-su-AIw"/>
+                                <action selector="reloadImages:" destination="eju-X2-ebY" id="bVg-nI-n9a"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -834,7 +804,7 @@
         <!--Menu Navigation Controller-->
         <scene sceneID="IEF-6V-VUd">
             <objects>
-                <navigationController restorationIdentifier="PhotoGridControllerNavID" storyboardIdentifier="PhotoGridControllerNavID" definesPresentationContext="YES" id="YUT-nR-VZg" customClass="MenuNavigationController" sceneMemberID="viewController">
+                <navigationController restorationIdentifier="" storyboardIdentifier="PhotoCollectionsViewControllerID" definesPresentationContext="YES" id="YUT-nR-VZg" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="aYY-6n-r8Y">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1036,6 +1006,13 @@
         <class className="PhotoAlbumCoverView" superclassName="UICollectionViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoAlbumCoverView.h"/>
         </class>
+        <class className="PhotoCollectionsViewController" superclassName="UICollectionViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoCollectionsViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="reloadImages:"/>
+                <relationship kind="action" name="revealMenu:"/>
+            </relationships>
+        </class>
         <class className="PhotoGridViewCell" superclassName="UICollectionViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoGridViewCell.h"/>
             <relationships>
@@ -1046,13 +1023,6 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoSetInfoView.h"/>
             <relationships>
                 <relationship kind="outlet" name="descriptionLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="PhotosGridViewController" superclassName="UICollectionViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotosGridViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="reloadImages:"/>
-                <relationship kind="action" name="revealMenu:"/>
             </relationships>
         </class>
         <class className="SlideScrollView" superclassName="UIScrollView">

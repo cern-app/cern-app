@@ -313,27 +313,13 @@ UIViewController *FindController(UIView *view)
    
    using namespace CernAPP;
    
-   //TODO: remove if/else part as soon as PhotosCollectionViewController is ready for both iPad/iPhone.
-   
-   MenuNavigationController *navController = nil;
-   
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotoGridControllerNavID];
-      assert([navController.topViewController isKindOfClass : [PhotosGridViewController class]] &&
-              "loadControllerTo:, top view controller is either nil or has a wrong type");
+   MenuNavigationController *navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotoCollectionsViewControllerID];
+   assert([navController.topViewController isKindOfClass : [PhotoCollectionsViewController class]] &&
+          "loadControllerTo:, top view controller is either nil or has a wrong type");
 
-      PhotosGridViewController * const topController = (PhotosGridViewController *)navController.topViewController;
-      topController.photoDownloader.url = [NSURL URLWithString : (NSString *)info[@"Url"]];
-      topController.navigationItem.title = categoryName;
-   } else {
-      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotoCollectionsViewControllerID];
-      assert([navController.topViewController isKindOfClass : [PhotoCollectionsViewController class]] &&
-             "loadControllerTo:, top view controller is either nil or has a wrong type");
-
-      PhotoCollectionsViewController * const topController = (PhotoCollectionsViewController *)navController.topViewController;
-      [topController setURL : [NSURL URLWithString : (NSString *)info[@"Url"]]];
-      topController.navigationItem.title = categoryName;
-   }
+   PhotoCollectionsViewController * const topController = (PhotoCollectionsViewController *)navController.topViewController;
+   [topController setURL : [NSURL URLWithString : (NSString *)info[@"Url"]]];
+   topController.navigationItem.title = categoryName;
 
    if (controller.slidingViewController.topViewController)
       CancelConnections(controller.slidingViewController.topViewController);
@@ -344,7 +330,6 @@ UIViewController *FindController(UIView *view)
       controller.slidingViewController.topViewController.view.frame = frame;
       [controller.slidingViewController resetTopView];
    }];
-
 }
 
 @end
