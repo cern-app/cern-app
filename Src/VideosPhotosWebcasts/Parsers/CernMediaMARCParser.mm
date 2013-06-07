@@ -83,6 +83,7 @@
 - (void) connectionDidFinishLoading : (NSURLConnection *) connection
 {
    currentConnection = nil;
+
    xmlParser = [[NSXMLParser alloc] initWithData : asyncData];
    xmlParser.delegate = self;
    [xmlParser parse];

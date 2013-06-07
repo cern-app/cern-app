@@ -717,15 +717,22 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (void) parserDidFinish : (CernMediaMARCParser *) aParser
 {
 #pragma unused(aParser)
+
    photoAlbumsStatic = [photoAlbumsDynamic mutableCopy];
+
    [thumbnails removeAllObjects];
-   
    //It's possible, that self.collectionView is hidden now.
    //But anyway - first try to download the first image from
    //every album and set the 'cover', after that, download others.
    //If albumCollectionView is active and visible now, it stil shows data from the selectedAlbum (if any).
    [self loadFirstThumbnails];
    [self.collectionView reloadData];
+   
+   if (!photoAlbumsStatic.count) {
+      //Ufff.
+      self.navigationItem.rightBarButtonItem.enabled = YES;
+      CernAPP::HideSpinner(self);
+   }
 }
 
 //________________________________________________________________________________________
