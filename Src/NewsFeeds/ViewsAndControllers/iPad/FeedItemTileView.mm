@@ -91,6 +91,92 @@ bool IsWideImage(UIImage *image)
    return self.frame.size.height - y;
 }
 
+namespace {
+
+//________________________________________________________________________________________
+CGPathRef CreateTextPath(FeedItemTileView *view)
+{
+   assert(view != nil && "CreateTextPath, parameter 'view' is nil");
+
+   const CGFloat w = view.frame.size.width;
+   const CGFloat h = view.frame.size.height;
+
+   if (!view->thumbnailView.image) {
+      //The simplest possible case.
+      CGRect textRect = CGRectMake(wideImageMargin * w, [view translateY : titleH * h + textH * h], w - 2 * wideImageMargin * w, h * textH);
+
+      return CGPathCreateWithRect(textRect, &CGAffineTransformIdentity);
+   } else if (IsWideImage(view->thumbnailView.image)) {
+      CGRect textRect = {};
+      if (view->wideImageOnTop)
+         textRect = CGRectMake(wideImageMargin * w, [view translateY : titleH * h + textH * h], w - 2 * wideImageMargin * w, 0.5f * h * textH);
+      else
+         //NOTE: some space is required (vertically) between the text and image.
+         textRect = CGRectMake(wideImageMargin * w, [view translateY : titleH * h + 0.5f * textH * h], w - 2 * wideImageMargin * w, 0.5f * h * textH - verticalImageTextGap * h);
+
+      return CGPathCreateWithRect(textRect, &CGAffineTransformIdentity);
+      //Layout image view!
+   } else {
+      CGMutablePathRef path = CGPathCreateMutable();
+      const CGFloat y1 = [view translateY : textH * h * 0.5f + titleH * h];
+      const CGFloat y2 = [view translateY : textH * h + titleH * h];
+   
+      //At the beginning I was adding rectangle sub-paths, but ...
+      //there is a visible gap between text in these rectangles.
+
+      switch (view->imageCut) {
+      case 0 :
+         CGPathMoveToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y1 + view->textLineHeight * 0.7f);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y1 + view->textLineHeight * 0.7f);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y1 + textH * 0.5 * h);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y1 + textH * 0.5 * h);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y2);
+         CGPathCloseSubpath(path);
+
+         break;
+      case 1:
+         CGPathMoveToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2 + textH * h);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y2 + textH * h);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y1 + view->textLineHeight * 0.7f);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y1 + view->textLineHeight * 0.7f);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y2);
+         CGPathCloseSubpath(path);
+         
+         
+         break;
+      case 2:
+         CGPathMoveToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y1);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2 + textH * h);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y2 + textH * h);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y2);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y2);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y1);
+         CGPathCloseSubpath(path);
+
+         break;
+      case 3:
+         CGPathMoveToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2 + textH * h);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w -  w * wideImageMargin, y2 + textH * h);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w -  w * wideImageMargin, y1);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y1);
+         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y2);
+         CGPathCloseSubpath(path);
+
+         break;
+      default:
+         assert(0 && "createTextPath, unknown layout");
+         break;
+      }
+
+      return path;
+   }
+}
+//
+}
+
 //________________________________________________________________________________________
 - (id) initWithFrame : (CGRect) frame
 {
@@ -144,7 +230,6 @@ bool IsWideImage(UIImage *image)
                                                                                                                         (unsigned short)0x2028,
                                                                                                                         (unsigned short)0x2029]];
       tagNameCharacters = [NSCharacterSet characterSetWithCharactersInString : @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"];
-      
    }
 
    return self;
@@ -284,86 +369,6 @@ bool IsWideImage(UIImage *image)
 }
 
 //________________________________________________________________________________________
-- (CGPathRef) createTextPath
-{
-   const CGFloat w = self.frame.size.width;
-   const CGFloat h = self.frame.size.height;
-
-   if (!thumbnailView.image) {
-      //The simplest possible case.
-      CGRect textRect = CGRectMake(wideImageMargin * w, [self translateY : titleH * h + textH * h], w - 2 * wideImageMargin * w, h * textH);
-
-      return CGPathCreateWithRect(textRect, &CGAffineTransformIdentity);
-   } else if (IsWideImage(thumbnailView.image)) {
-      CGRect textRect = {};
-      if (wideImageOnTop)
-         textRect = CGRectMake(wideImageMargin * w, [self translateY : titleH * h + textH * h], w - 2 * wideImageMargin * w, 0.5f * h * textH);
-      else
-         //NOTE: some space is required (vertically) between the text and image.
-         textRect = CGRectMake(wideImageMargin * w, [self translateY : titleH * h + 0.5f * textH * h], w - 2 * wideImageMargin * w, 0.5f * h * textH - verticalImageTextGap * h);
-
-      return CGPathCreateWithRect(textRect, &CGAffineTransformIdentity);
-      //Layout image view!
-   } else {
-      CGMutablePathRef path = CGPathCreateMutable();
-      const CGFloat y1 = [self translateY : textH * h * 0.5f + titleH * h];
-      const CGFloat y2 = [self translateY : textH * h + titleH * h];
-   
-      //At the beginning I was adding rectangle sub-paths, but ...
-      //there is a visible gap between text in these rectangles.
-
-      switch (imageCut) {
-      case 0 :
-         CGPathMoveToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y1 + textLineHeight * 0.7f);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y1 + textLineHeight * 0.7f);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y1 + textH * 0.5 * h);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y1 + textH * 0.5 * h);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y2);
-         CGPathCloseSubpath(path);
-
-         break;
-      case 1:
-         CGPathMoveToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2 + textH * h);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y2 + textH * h);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y1 + textLineHeight * 0.7f);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y1 + textLineHeight * 0.7f);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y2);
-         CGPathCloseSubpath(path);
-         
-         
-         break;
-      case 2:
-         CGPathMoveToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y1);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2 + textH * h);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y2 + textH * h);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w - w * wideImageMargin, y2);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y2);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y1);
-         CGPathCloseSubpath(path);
-
-         break;
-      case 3:
-         CGPathMoveToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, wideImageMargin * w, y2 + textH * h);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w -  w * wideImageMargin, y2 + textH * h);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w -  w * wideImageMargin, y1);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y1);
-         CGPathAddLineToPoint(path, &CGAffineTransformIdentity, w / 2, y2);
-         CGPathCloseSubpath(path);
-
-         break;
-      default:
-         assert(0 && "createTextPath, unknown layout");
-         break;
-      }
-
-      return path;
-   }
-}
-
-//________________________________________________________________________________________
 - (void) layoutTitle
 {
    if (titleFrame)
@@ -388,7 +393,7 @@ bool IsWideImage(UIImage *image)
    if (textFrame)
       CFRelease(textFrame);
 
-   CGPathRef textPath = [self createTextPath];
+   CGPathRef textPath = CreateTextPath(self);
    if (textPath) {
       CTFramesetterRef textSetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)text);
       textFrame = CTFramesetterCreateFrame(textSetter, CFRangeMake(0, [text length]), textPath, nullptr);

@@ -425,7 +425,6 @@
 		705185BD17561EA200CE9EB8 /* TwitterTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TwitterTableViewController.mm; sourceTree = "<group>"; };
 		70533AEC16CA5B4C00077B0E /* PhotoBrowserProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserProtocol.h; sourceTree = "<group>"; };
 		7054DEEB169AFD7A00B025C7 /* MENU.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MENU.plist; sourceTree = "<group>"; };
-		705D9FB0166F3867007C7611 /* scrollerClick.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = scrollerClick.wav; path = Sounds/scrollerClick.wav; sourceTree = "<group>"; };
 		705D9FB3166F3A00007C7611 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		70600A07169AF9B300F9E833 /* about.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = about.png; sourceTree = "<group>"; };
 		70600A09169AF9B300F9E833 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
@@ -716,7 +715,6 @@
 		41E617C31614CEB700BAA7D4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				705D9FB2166F387D007C7611 /* Sounds */,
 				703FD35A161DDB2F00B8BB8C /* Fonts */,
 				41E617C41614CEB700BAA7D4 /* Images */,
 				41E618291614CEB700BAA7D4 /* MWPhotoBrowser.bundle */,
@@ -893,14 +891,6 @@
 				7072B2C01758E7C3002ACD75 /* TwitterTableView.mm */,
 			);
 			path = iPad;
-			sourceTree = "<group>";
-		};
-		705D9FB2166F387D007C7611 /* Sounds */ = {
-			isa = PBXGroup;
-			children = (
-				705D9FB0166F3867007C7611 /* scrollerClick.wav */,
-			);
-			name = Sounds;
 			sourceTree = "<group>";
 		};
 		7069F76016C14D6D006BC78B /* CustomViews */ = {
