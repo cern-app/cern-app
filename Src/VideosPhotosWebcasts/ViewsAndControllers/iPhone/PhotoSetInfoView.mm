@@ -1,11 +1,3 @@
-//
-//  PhotoSetInfoView.m
-//  CERN
-//
-//  Created by Timur Pocheptsov on 1/16/13.
-//  Copyright (c) 2013 CERN. All rights reserved.
-//
-
 #import "PhotoSetInfoView.h"
 
 @implementation PhotoSetInfoView

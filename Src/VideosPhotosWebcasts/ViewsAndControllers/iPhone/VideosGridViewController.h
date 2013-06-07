@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 CERN. All rights reserved.
 //
 
+//Modified for CERN.app by Timur Pocheptsov.
+//AQGridView controller was replaced by UICollectionViewController.
+
 #import <UIKit/UIKit.h>
 
 #import "ConnectionController.h"

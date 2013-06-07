@@ -6,12 +6,14 @@
 //  Copyright (c) 2012 CERN. All rights reserved.
 //
 
+//Modified for CERN.app by Timur Pocheptsov.
+//AQGridView controller was replaced by UICollectionViewController.
+
 #import <MediaPlayer/MediaPlayer.h>
 
 #import "VideosGridViewController.h"
 #import "ECSlidingViewController.h"
 #import "VideoThumbnailCell.h"
-#import "PhotoGridViewCell.h"
 #import "ApplicationErrors.h"
 #import "PhotoSetInfoView.h"
 #import "MBProgressHUD.h"
@@ -58,6 +60,8 @@
 
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
+   
+   [self.collectionView registerClass:[VideoThumbnailCell class] forCellWithReuseIdentifier:@"VideoThumbnailCell"];
 }
 
 //________________________________________________________________________________________
@@ -231,23 +235,20 @@
    assert(collectionView != nil && "collectionView:cellForItemAtIndexPath:, parameter 'collectionView' is nil");
    assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
 
-   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"VideoCell" forIndexPath : indexPath];
-   assert(!cell || [cell isKindOfClass : [PhotoGridViewCell class]] &&
+   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"VideoThumbnailCell" forIndexPath : indexPath];
+   assert([cell isKindOfClass : [VideoThumbnailCell class]] &&
           "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
    
-   if (!cell)
-      cell = [[PhotoGridViewCell alloc] initWithFrame : CGRect()];
-   
-   PhotoGridViewCell * const photoCell = (PhotoGridViewCell *)cell;
-   
+   VideoThumbnailCell * const videoCell = (VideoThumbnailCell *)cell;
+
    assert(indexPath.section >= 0 && indexPath.section < videoMetadata.count &&
           "collectionView:cellForItemAtIndexPath:, section is out of bounds");
    assert(indexPath.row == 0 && "collectionView:cellForItemAtIndexPath:, row is out of bounds");
 
    if (UIImage * const thumbnail = (UIImage *)videoThumbnails[indexPath])
-      photoCell.imageView.image = thumbnail;
+      videoCell.imageView.image = thumbnail;
    
-   return photoCell;
+   return videoCell;
 }
 
 //________________________________________________________________________________________
