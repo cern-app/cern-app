@@ -4,6 +4,8 @@
 
 @interface PhotoViewCell : UICollectionViewCell
 
++ (NSString *) cellReuseIdentifier;
+
 @property (nonatomic, strong, readonly) IBOutlet UIImageView *imageView;
 
 @end

@@ -11,11 +11,11 @@
 
 #import <MediaPlayer/MediaPlayer.h>
 
+#import "CollectionSupplementraryView.h"
 #import "VideosGridViewController.h"
 #import "ECSlidingViewController.h"
 #import "VideoThumbnailCell.h"
 #import "ApplicationErrors.h"
-#import "PhotoSetInfoView.h"
 #import "MBProgressHUD.h"
 #import "Reachability.h"
 #import "GUIHelpers.h"
@@ -61,7 +61,14 @@
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
    
-   [self.collectionView registerClass:[VideoThumbnailCell class] forCellWithReuseIdentifier:@"VideoThumbnailCell"];
+   [self.collectionView registerClass : [VideoThumbnailCell class] forCellWithReuseIdentifier : @"VideoThumbnailCell"];
+   
+   [self.collectionView registerClass : [CollectionSupplementraryView class]
+    forSupplementaryViewOfKind : UICollectionElementKindSectionHeader
+    withReuseIdentifier : [CollectionSupplementraryView reuseIdentifierHeader]];
+   [self.collectionView registerClass : [CollectionSupplementraryView class]
+    forSupplementaryViewOfKind : UICollectionElementKindSectionFooter
+     withReuseIdentifier : [CollectionSupplementraryView reuseIdentifierFooter]];
 }
 
 //________________________________________________________________________________________
@@ -262,37 +269,32 @@
    assert(indexPath.section < videoMetadata.count &&
          "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, section is out of bounds");
 
-   UICollectionReusableView *view = nil;
+   CollectionSupplementraryView *view = nil;
+   
    if ([kind isEqualToString : UICollectionElementKindSectionHeader]) {
       view = [collectionView dequeueReusableSupplementaryViewOfKind : kind
-                             withReuseIdentifier : @"VideoInfoView" forIndexPath : indexPath];
-
-      assert(!view || [view isKindOfClass : [PhotoSetInfoView class]] &&
-             "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, reusable view has a wrong type");
-      
-      if (!view)
-         view = [[PhotoSetInfoView alloc] initWithFrame : CGRect()];
-
-      PhotoSetInfoView * const infoView = (PhotoSetInfoView *)view;
-      
+              withReuseIdentifier : [CollectionSupplementraryView reuseIdentifierHeader]
+              forIndexPath : indexPath];
       NSDictionary * const metaData = (NSDictionary *)videoMetadata[indexPath.section];
-      
-      
-      infoView.descriptionLabel.text = (NSString *)metaData[@"title"];
-      
+      view.descriptionLabel.text = (NSString *)metaData[@"title"];
       UIFont * const font = [UIFont fontWithName : CernAPP::childMenuFontName size : 12.f];
       assert(font != nil && "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, font not found");
-      infoView.descriptionLabel.font = font;
+      view.descriptionLabel.font = font;
    } else {
-      //Footer.
       view = [collectionView dequeueReusableSupplementaryViewOfKind : kind
-                             withReuseIdentifier : @"VideoCellFooter" forIndexPath : indexPath];
-
-      assert(!view || [view isKindOfClass : [PhotoSetInfoView class]] &&
-             "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, reusable view has a wrong type");
+              withReuseIdentifier : [CollectionSupplementraryView reuseIdentifierFooter]
+              forIndexPath : indexPath];
    }
-   
+
    return view;
+}
+
+//________________________________________________________________________________________
+- (CGSize) collectionView : (UICollectionView *) collectionView layout : (UICollectionViewLayout*) collectionViewLayout
+           sizeForItemAtIndexPath : (NSIndexPath *) indexPath
+{
+#pragma unused(collectionView, collectionViewLayout, indexPath)
+   return CGSizeMake(250.f, 200.f);
 }
 
 #pragma mark - UICollectionViewDelegate

@@ -15,6 +15,12 @@
 @synthesize albumDescription;
 
 //________________________________________________________________________________________
++ (NSString *) cellReuseIdentifier
+{
+   return @"PhotoAlbumFooterView";
+}
+
+//________________________________________________________________________________________
 - (id) initWithFrame : (CGRect) frame
 {
    if (self = [super initWithFrame : frame]) {
@@ -39,6 +45,12 @@
    }
 
    return self;
+}
+
+//________________________________________________________________________________________
+- (NSString *) reuseIdentifier
+{
+   return [PhotoAlbumFooterView cellReuseIdentifier];
 }
 
 @end

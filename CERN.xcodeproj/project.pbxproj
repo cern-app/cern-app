@@ -189,7 +189,7 @@
 		70A2533E16BBED0F00F9898A /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 70A2533D16BBED0F00F9898A /* refresh.png */; };
 		70A2534016BBEF8F00F9898A /* bookmarks.png in Resources */ = {isa = PBXBuildFile; fileRef = 70A2533F16BBEF8F00F9898A /* bookmarks.png */; };
 		70A56296173A32F600145FEC /* CernMediaMARCParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56287173A32F600145FEC /* CernMediaMARCParser.mm */; };
-		70A56299173A32F600145FEC /* PhotoSetInfoView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A5628F173A32F600145FEC /* PhotoSetInfoView.mm */; };
+		70A56299173A32F600145FEC /* CollectionSupplementraryView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A5628F173A32F600145FEC /* CollectionSupplementraryView.mm */; };
 		70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56293173A32F600145FEC /* VideosGridViewController.mm */; };
 		70A562C8173A35C300145FEC /* BulletinFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AA173A35C300145FEC /* BulletinFeedViewController.mm */; };
 		70A562C9173A35C300145FEC /* BulletinIssueTileView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AC173A35C300145FEC /* BulletinIssueTileView.mm */; };
@@ -509,8 +509,8 @@
 		70A2533F16BBEF8F00F9898A /* bookmarks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bookmarks.png; sourceTree = "<group>"; };
 		70A56286173A32F600145FEC /* CernMediaMARCParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CernMediaMARCParser.h; sourceTree = "<group>"; };
 		70A56287173A32F600145FEC /* CernMediaMARCParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CernMediaMARCParser.mm; sourceTree = "<group>"; };
-		70A5628E173A32F600145FEC /* PhotoSetInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoSetInfoView.h; sourceTree = "<group>"; };
-		70A5628F173A32F600145FEC /* PhotoSetInfoView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoSetInfoView.mm; sourceTree = "<group>"; };
+		70A5628E173A32F600145FEC /* CollectionSupplementraryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionSupplementraryView.h; sourceTree = "<group>"; };
+		70A5628F173A32F600145FEC /* CollectionSupplementraryView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CollectionSupplementraryView.mm; sourceTree = "<group>"; };
 		70A56292173A32F600145FEC /* VideosGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideosGridViewController.h; sourceTree = "<group>"; };
 		70A56293173A32F600145FEC /* VideosGridViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideosGridViewController.mm; sourceTree = "<group>"; };
 		70A562A9173A35C300145FEC /* BulletinFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BulletinFeedViewController.h; sourceTree = "<group>"; };
@@ -1131,18 +1131,18 @@
 			children = (
 				70783B0817450265006635D8 /* iPad */,
 				70A5628B173A32F600145FEC /* iPhone */,
-				7040F0DC1761FD780050DEF6 /* PhotoAlbumFooterView.h */,
 				7040F0DD1761FD780050DEF6 /* VideoThumbnailCell.mm */,
 				7040F0DE1761FD780050DEF6 /* VideoThumbnailCell.h */,
-				7040F0DF1761FD780050DEF6 /* PhotoCollectionsViewController.mm */,
 				7040F0E01761FD780050DEF6 /* AnimatedStackLayout.h */,
 				7040F0E11761FD780050DEF6 /* AnimatedStackLayout.mm */,
 				7040F0E21761FD780050DEF6 /* ImageStackViewCell.h */,
 				7040F0E31761FD780050DEF6 /* ImageStackViewCell.mm */,
 				7040F0E41761FD780050DEF6 /* PhotoAlbumCoverView.h */,
 				7040F0E51761FD780050DEF6 /* PhotoAlbumCoverView.mm */,
+				7040F0DC1761FD780050DEF6 /* PhotoAlbumFooterView.h */,
 				7040F0E61761FD780050DEF6 /* PhotoAlbumFooterView.mm */,
 				7040F0E71761FD780050DEF6 /* PhotoCollectionsViewController.h */,
+				7040F0DF1761FD780050DEF6 /* PhotoCollectionsViewController.mm */,
 				7040F0E81761FD780050DEF6 /* PhotoViewCell.h */,
 				7040F0E91761FD780050DEF6 /* PhotoViewCell.mm */,
 				707720311761F23E001FE45F /* WebcastsCollectionViewController.mm */,
@@ -1154,8 +1154,8 @@
 		70A5628B173A32F600145FEC /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
-				70A5628E173A32F600145FEC /* PhotoSetInfoView.h */,
-				70A5628F173A32F600145FEC /* PhotoSetInfoView.mm */,
+				70A5628E173A32F600145FEC /* CollectionSupplementraryView.h */,
+				70A5628F173A32F600145FEC /* CollectionSupplementraryView.mm */,
 				70A56292173A32F600145FEC /* VideosGridViewController.h */,
 				70A56293173A32F600145FEC /* VideosGridViewController.mm */,
 			);
@@ -1621,7 +1621,7 @@
 				70C728461732C6E300992077 /* FlipView.mm in Sources */,
 				70BCD9B31733C560000BD91B /* FlipParentView.mm in Sources */,
 				70A56296173A32F600145FEC /* CernMediaMARCParser.mm in Sources */,
-				70A56299173A32F600145FEC /* PhotoSetInfoView.mm in Sources */,
+				70A56299173A32F600145FEC /* CollectionSupplementraryView.mm in Sources */,
 				70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */,
 				70A562C8173A35C300145FEC /* BulletinFeedViewController.mm in Sources */,
 				70A562C9173A35C300145FEC /* BulletinIssueTileView.mm in Sources */,

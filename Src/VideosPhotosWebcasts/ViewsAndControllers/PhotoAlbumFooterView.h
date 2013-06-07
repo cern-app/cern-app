@@ -10,6 +10,8 @@
 
 @interface PhotoAlbumFooterView : UICollectionReusableView
 
++ (NSString *) cellReuseIdentifier;
+
 @property (nonatomic, readonly) UILabel *albumDescription;
 
 @end

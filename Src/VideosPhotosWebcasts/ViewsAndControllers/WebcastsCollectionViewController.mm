@@ -105,14 +105,14 @@ using CernAPP::NetworkStatus;
       [self.view addSubview : auxParentViews[i]];
       
       [auxCollectionViews[i] registerClass : [VideoThumbnailCell class]
-           forCellWithReuseIdentifier : @"VideoThumbnailCell"];
+           forCellWithReuseIdentifier : [VideoThumbnailCell cellReuseIdentifier]];
       
       spinners[i + 1] = CernAPP::AddSpinner(auxParentViews[i]);
       CernAPP::HideSpinner(spinners[i + 1]);
    }
 
    [self.collectionView registerClass : [VideoThumbnailCell class]
-           forCellWithReuseIdentifier : @"VideoThumbnailCell"];
+           forCellWithReuseIdentifier : [VideoThumbnailCell cellReuseIdentifier]];
 
    spinners[0] = CernAPP::AddSpinner(self.view);
    CernAPP::HideSpinner(spinners[0]);
@@ -427,7 +427,7 @@ using CernAPP::NetworkStatus;
    assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
    assert(indexPath.section == 0 && "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
 
-   UICollectionViewCell *cell = [aCollectionView dequeueReusableCellWithReuseIdentifier : @"VideoThumbnailCell" forIndexPath : indexPath];
+   UICollectionViewCell *cell = [aCollectionView dequeueReusableCellWithReuseIdentifier : [VideoThumbnailCell cellReuseIdentifier] forIndexPath : indexPath];
    assert(!cell || [cell isKindOfClass : [VideoThumbnailCell class]] &&
           "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
 

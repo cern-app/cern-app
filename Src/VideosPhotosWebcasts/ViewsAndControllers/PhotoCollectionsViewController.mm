@@ -146,10 +146,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    [self.view addSubview : albumCollectionView];
    
    [albumCollectionView registerClass : [PhotoViewCell class]
-           forCellWithReuseIdentifier : @"PhotoViewCell"];
+           forCellWithReuseIdentifier : [PhotoViewCell cellReuseIdentifier]];
    [albumCollectionView registerClass: [PhotoAlbumFooterView class]
            forSupplementaryViewOfKind : UICollectionElementKindSectionFooter
-                  withReuseIdentifier : @"PhotoAlbumFooterView"];
+                  withReuseIdentifier : [PhotoAlbumFooterView cellReuseIdentifier]];
 
    albumCollectionView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
                                           UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
@@ -172,7 +172,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    [internetReach startNotifier];
 
    [self.collectionView registerClass : [PhotoAlbumCoverView class]
-           forCellWithReuseIdentifier : @"PhotoAlbumCoverView"];
+           forCellWithReuseIdentifier : [PhotoAlbumCoverView cellReuseIdentifier]];
    
 
 }
@@ -322,7 +322,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       return selectedAlbum.nImages;
    }
 
-   assert(section >= 0 && section < photoAlbumsStatic.count && "collectionView:numberOfItemsInSection:, index is out of bounds");
+   //assert(section >= 0 && section < photoAlbumsStatic.count && "collectionView:numberOfItemsInSection:, index is out of bounds");
 
    return photoAlbumsStatic.count;
 }
@@ -335,7 +335,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
 
    if (collectionView == albumCollectionView) {
-      UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"PhotoViewCell" forIndexPath : indexPath];
+      UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : [PhotoViewCell cellReuseIdentifier] forIndexPath : indexPath];
       assert(!cell || [cell isKindOfClass : [PhotoViewCell class]] &&
              "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
       if (!cell)
@@ -349,16 +349,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
       return photoCell;
    } else {
-      UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"PhotoAlbumCoverView" forIndexPath : indexPath];
-      assert(!cell || [cell isKindOfClass : [PhotoAlbumCoverView class]] &&
-             "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
-      
-      if (!cell) {
-         //TODO
-      }
-      
-      PhotoAlbumCoverView * const photoCell = (PhotoAlbumCoverView *)cell;
-      
+      PhotoAlbumCoverView * const photoCell = (PhotoAlbumCoverView *)[collectionView dequeueReusableCellWithReuseIdentifier : [PhotoAlbumCoverView cellReuseIdentifier]
+                                                                      forIndexPath : indexPath];
       assert(indexPath.section >= 0 && indexPath.section < photoAlbumsStatic.count &&
              "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
 
@@ -400,24 +392,16 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
             "collectionView:viewForSupplementaryElementOfKind:atIndexPath:, no album is selected");
       assert(indexPath.row < selectedAlbum.nImages &&
             "collectionView:viewForSupplementaryElementOfKind:atIndexPath:, row is out of bounds");
-      UICollectionViewCell *cell = [albumCollectionView dequeueReusableSupplementaryViewOfKind : kind
-                                                                           withReuseIdentifier : @"PhotoAlbumFooterView"
-                                                                                  forIndexPath : indexPath];
-      assert(!cell || [cell isKindOfClass : [PhotoAlbumFooterView class]] &&
-             "collectionView:viewForSupplementaryElementOfKind:atIndexPath:, no album is selected");
-      
-      if (!cell) {
-         //TODO
-      }
-      
-      PhotoAlbumFooterView * const photoCell = (PhotoAlbumFooterView *)cell;
+      PhotoAlbumFooterView * const photoCell = (PhotoAlbumFooterView *)[albumCollectionView dequeueReusableSupplementaryViewOfKind : kind
+                                                                        withReuseIdentifier : [PhotoAlbumFooterView cellReuseIdentifier]
+                                                                        forIndexPath : indexPath];
       if (selectedAlbum.title.length) {
          photoCell.albumDescription.text = selectedAlbum.title;
          photoCell.albumDescription.font = albumDescriptionCustomFont;
       } else
          photoCell.albumDescription.text = @"";
       
-      return cell;
+      return photoCell;
    }
    
    return nil;

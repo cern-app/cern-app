@@ -8,6 +8,12 @@
 @implementation VideoThumbnailCell
 
 //________________________________________________________________________________________
++ (NSString *) cellReuseIdentifier
+{
+   return @"VideoThumbnailCell";
+}
+
+//________________________________________________________________________________________
 - (id) initWithFrame : (CGRect) frame
 {
    if (self = [super initWithUIImageView : frame]) {
@@ -20,7 +26,7 @@
 //________________________________________________________________________________________
 - (NSString *) reuseIdentifier
 {
-   return @"VideoThumbnailCell";
+   return [VideoThumbnailCell cellReuseIdentifier];
 }
 
 //________________________________________________________________________________________

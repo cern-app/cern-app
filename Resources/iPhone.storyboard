@@ -632,7 +632,7 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoInfoView" id="MQS-3B-eJG" customClass="PhotoSetInfoView">
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionSupplementraryViewHeader" id="MQS-3B-eJG" customClass="CollectionSupplementraryView">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
@@ -648,7 +648,7 @@
                                 <outlet property="descriptionLabel" destination="GDf-fU-8k0" id="RDR-3q-lad"/>
                             </connections>
                         </collectionReusableView>
-                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoCellFooter" id="tqY-A7-B1r" customClass="PhotoSetInfoView">
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionSupplementraryViewFooter" id="tqY-A7-B1r" customClass="CollectionSupplementraryView">
                             <rect key="frame" x="0.0" y="189" width="320" height="32"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </collectionReusableView>
@@ -957,6 +957,12 @@
         <class className="BulletinTableViewController" superclassName="NewsTableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/BulletinTableViewController.h"/>
         </class>
+        <class className="CollectionSupplementraryView" superclassName="UICollectionReusableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CollectionSupplementraryView.h"/>
+            <relationships>
+                <relationship kind="outlet" name="descriptionLabel" candidateClass="UILabel"/>
+            </relationships>
+        </class>
         <class className="CreditsViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CreditsViewController.h"/>
             <relationships>
@@ -1011,18 +1017,6 @@
             <relationships>
                 <relationship kind="action" name="reloadImages:"/>
                 <relationship kind="action" name="revealMenu:"/>
-            </relationships>
-        </class>
-        <class className="PhotoGridViewCell" superclassName="UICollectionViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoGridViewCell.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="PhotoSetInfoView" superclassName="UICollectionReusableView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoSetInfoView.h"/>
-            <relationships>
-                <relationship kind="outlet" name="descriptionLabel" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="SlideScrollView" superclassName="UIScrollView">

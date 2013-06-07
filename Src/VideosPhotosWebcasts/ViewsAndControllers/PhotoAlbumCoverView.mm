@@ -19,6 +19,12 @@
    UILabel *titleLabel;
 }
 
+//________________________________________________________________________________________
++ (NSString *) cellReuseIdentifier
+{
+   return @"PhotoAlbumCoverView";
+}
+
 #pragma mark - Lifecycle.
 
 //________________________________________________________________________________________
@@ -150,7 +156,7 @@
 //________________________________________________________________________________________
 - (NSString *) reuseIdentifier
 {
-   return @"PhotoAlbumCoverView";
+   return [PhotoAlbumCoverView cellReuseIdentifier];
 }
 
 @end

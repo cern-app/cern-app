@@ -10,6 +10,8 @@
 
 @interface PhotoAlbumCoverView : UICollectionViewCell
 
++ (NSString *) cellReuseIdentifier;
+
 - (id) initWithFrame : (CGRect) frame;//Use ImageStackCellView to show a thumbnail.
 - (id) initWithUIImageView : (CGRect) frame;//Use UIImageView to show a thumbnail.
 
