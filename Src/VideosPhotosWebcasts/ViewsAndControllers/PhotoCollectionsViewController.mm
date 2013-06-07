@@ -336,12 +336,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
    if (collectionView == albumCollectionView) {
       UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : [PhotoViewCell cellReuseIdentifier] forIndexPath : indexPath];
-      assert(!cell || [cell isKindOfClass : [PhotoViewCell class]] &&
-             "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
-      if (!cell)
-         cell = [[PhotoViewCell alloc] initWithFrame : CGRect()];
-      
+      assert([cell isKindOfClass : [PhotoViewCell class]] && "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
       PhotoViewCell * const photoCell = (PhotoViewCell *)cell;
+
       if (selectedAlbum) {         
          if (UIImage * const image = [selectedAlbum getThumbnailImageForIndex : indexPath.row])
             photoCell.imageView.image = image;
@@ -349,8 +346,12 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
       return photoCell;
    } else {
-      PhotoAlbumCoverView * const photoCell = (PhotoAlbumCoverView *)[collectionView dequeueReusableCellWithReuseIdentifier : [PhotoAlbumCoverView cellReuseIdentifier]
-                                                                      forIndexPath : indexPath];
+      UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : [PhotoAlbumCoverView cellReuseIdentifier]
+                                    forIndexPath : indexPath];
+      assert([cell isKindOfClass : [PhotoAlbumCoverView class]] &&
+             "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
+      PhotoAlbumCoverView * const photoCell = (PhotoAlbumCoverView *)cell;
+
       assert(indexPath.section >= 0 && indexPath.section < photoAlbumsStatic.count &&
              "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
 
