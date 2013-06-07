@@ -68,7 +68,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    BOOL lowMemory;
 }
 
-@synthesize imageDownloaders, nLoadedImages, feedStoreID, isTwitterFeed;
+@synthesize feedStoreID, isTwitterFeed;
 
 
 #pragma mark - Reachability.
@@ -102,10 +102,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    parseQueue = [[NSOperationQueue alloc] init];
    parseOp = nil;
 
-   imageDownloaders = nil;
-   nLoadedImages = 0;
    isTwitterFeed = NO;
-   
    internetReach = [Reachability reachabilityForInternetConnection];
    
    lowMemory = NO;
@@ -216,18 +213,15 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    [super didReceiveMemoryWarning];
 
    //Actually, nothing I can do here. I tried to release images - did not help,
-   //app keeps dying. Quite useless method.
-   
-   NSLog(@"useless method, I'm dying now, bye-bye!");
-
+   //app keeps dying. Quite a useless method.
    
    [parseQueue cancelAllOperations];
    parseOp = nil;
    [self cancelAllImageDownloaders];
-   /*
+
+   lowMemory = YES;
    allArticles = nil;
    [self.tableView reloadData];
-   */
    
 //   [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
@@ -475,17 +469,10 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 //________________________________________________________________________________________
 - (void) cancelAllImageDownloaders
 {
-   if (imageDownloaders && imageDownloaders.count) {
-      NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
-      for (id key in keyEnumerator) {
-         ThumbnailDownloader * const downloader = (ThumbnailDownloader *)imageDownloaders[key];
-         [downloader cancelDownload];
-      }
-      
-      imageDownloaders = nil;
-   }
-   
-   nLoadedImages = 0;
+   for (ThumbnailDownloader *downloader in rangeDownloaders)
+      [downloader cancelDownload];
+
+   rangeDownloaders = nil;
 }
 
 #pragma mark - UIScrollView delegate.
@@ -498,10 +485,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    //Cached feeds do not have any images.
    if (!usingCache) {
-      if (!decelerate) {
-         if (nLoadedImages != allArticles.count)
-            [self loadImagesForOnscreenRows];
-      }
+      if (!decelerate)
+         [self loadImagesForOnscreenRows];
    }
 }
 
@@ -511,10 +496,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma unused(scrollView)
 
    //No images in a cached feed.
-   if (!usingCache) {
-      if (nLoadedImages != allArticles.count)
-         [self loadImagesForOnscreenRows];
-   }
+   if (!usingCache)
+      [self loadImagesForOnscreenRows];
 }
 
 #pragma mark - Download images for news' items in a table.
@@ -610,49 +593,6 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    if (rowsToUpdate.count)
       [self.tableView reloadRowsAtIndexPaths : rowsToUpdate withRowAnimation : UITableViewRowAnimationNone];
-}
-
-//________________________________________________________________________________________
-- (void) imageDidLoad : (NSIndexPath *) indexPath
-{
-   assert(usingCache == NO && "imageDidLoad:, controller is in a wrong mode");
-
-   assert(indexPath != nil && "imageDidLoad, parameter 'indexPath' is nil");
-   const NSInteger row = indexPath.row;
-   assert(row >= 0 && row < allArticles.count && "imageDidLoad:, index is out of bounds");
-   
-   MWFeedItem * const article = (MWFeedItem *)allArticles[row];
-   //We should not load any image more when once.
-   assert(article.image == nil && "imageDidLoad:, image was loaded already");
-   
-   ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath];
-   assert(downloader != nil && "imageDidLoad:, no downloader found for the given index path");
-
-   if (downloader.image) {
-      article.image = downloader.image;
-      [self.tableView reloadRowsAtIndexPaths : @[indexPath] withRowAnimation : UITableViewRowAnimationNone];
-   }
-   
-   ++nLoadedImages;
-   [imageDownloaders removeObjectForKey : indexPath];
-}
-
-//________________________________________________________________________________________
-- (void) imageDownloadFailed : (NSIndexPath *) indexPath
-{
-   assert(usingCache == NO && "imageDownloadFailed:, controller is in a wrong mode");
-   assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
-
-   const NSInteger row = indexPath.row;
-   //Even if download failed, index still must be valid.
-   assert(row >= 0 && row < allArticles.count &&
-          "imageDownloadFailed:, index is out of bounds");
-   assert(imageDownloaders[indexPath] != nil &&
-          "imageDownloadFailed:, no downloader for the given path");
-   
-   ++nLoadedImages;//Still, we count this image.
-   [imageDownloaders removeObjectForKey : indexPath];
-   //But no need to update the tableView.
 }
 
 #pragma mark - Interface rotation.

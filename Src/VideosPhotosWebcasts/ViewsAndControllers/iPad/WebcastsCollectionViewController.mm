@@ -36,49 +36,7 @@ using CernAPP::NetworkStatus;
    Reachability *internetReach;
 }
 
-#pragma mark - Network reachability.
-
-//TODO: check this part.
-
-//________________________________________________________________________________________
-- (void) showErrorHUDIfEmptyPage : (NSUInteger) pageIndex
-{
-   assert(pageIndex < 3 && "showErrorHUDIfEmptyPage:, parameter 'pageIndex' is out of bounds");
-   
-   if (!pageIndex && !feedData[0].count)
-      CernAPP::ShowErrorHUD(self.view, @"Network error");
-}
-
-//________________________________________________________________________________________
-- (void) reachabilityStatusChanged : (Reachability *) current
-{
-#pragma unused(current)
-   
-   if (internetReach && [internetReach currentReachabilityStatus] == NetworkStatus::notReachable) {
-      //Depending on what we do now and what we have now ...
-      for (unsigned i = 0; i < 3; ++i) {
-         [parsers[i] stopParsing];
-         feedDataTmp[i] = nil;
-      }
-      
-      [self cancelAllDownloaders : NO];
-      
-      for (NSUInteger i = 0; i < 3; ++i) {
-         [self hideSpinnerForView : i];
-         [self showErrorHUDIfEmptyPage : i];
-      }
-
-      const NSInteger index = segmentedControl.selectedSegmentIndex;
-      assert(index >= 0 && index < 3 && "reachabilityStatusChanged:, selected segment is out of bounds");
-      
-      if (feedData[index].count) {
-         //We did not show error HUD for the current page.
-         CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
-      }
-
-      self.navigationItem.rightBarButtonItem.enabled = YES;
-   }
-}
+#pragma mark - Reachability.
 
 //________________________________________________________________________________________
 - (bool) hasConnection
@@ -110,7 +68,7 @@ using CernAPP::NetworkStatus;
 
       viewDidAppear = NO;
       
-      [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
+      //[[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
       internetReach = [Reachability reachabilityForInternetConnection];
    }
    
@@ -120,7 +78,7 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (void) dealloc
 {
-   [[NSNotificationCenter defaultCenter] removeObserver : self];
+   //[[NSNotificationCenter defaultCenter] removeObserver : self];
 }
 
 #pragma mark - viewDid/Will/NeverDoes etc.
@@ -160,7 +118,7 @@ using CernAPP::NetworkStatus;
    CernAPP::HideSpinner(spinners[0]);
    
    
-   [internetReach startNotifier];
+   //[internetReach startNotifier];
 }
 
 //________________________________________________________________________________________
@@ -321,17 +279,13 @@ using CernAPP::NetworkStatus;
    const NSUInteger index = [self indexForParser : feedParser];
    feedDataTmp[index] = nil;
 
-   if (!feedData[index].count) {//feedData[index] is either nil or an empty array.
-      if (!index)
-         CernAPP::ShowErrorHUD(self.collectionView, @"Network error");
-      else
-         CernAPP::ShowErrorHUD(auxParentViews[index - 1], @"Network error");
-   } else
+   if (!feedData[index].count)//feedData[index] is either nil or an empty array.
+      CernAPP::ShowErrorHUD(!index ? self.collectionView : auxParentViews[index - 1], @"Network error");
+   else
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    
    if ([self allParsersFinished])
       self.navigationItem.rightBarButtonItem.enabled = YES;
-   
 }
 
 //________________________________________________________________________________________
@@ -382,7 +336,8 @@ using CernAPP::NetworkStatus;
       [self.collectionView reloadData];
    else
       [auxCollectionViews[feedN - 1] reloadData];
-   //
+   
+   [self downloadThumbnailsForPage : feedN];
 }
 
 //________________________________________________________________________________________
@@ -489,7 +444,7 @@ using CernAPP::NetworkStatus;
    [webcastCell setCellData : feedItem];
 
    //Check if we have a thumbnail and download it if not.
-   if (!feedItem.image) {
+   if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone && !feedItem.image) {
       //image downloader.
       NSMutableDictionary * const downloaders = imageDownloaders[i];
       assert(downloaders != nil &&
@@ -563,13 +518,51 @@ using CernAPP::NetworkStatus;
 #pragma mark - Thumbnails download.
 
 //________________________________________________________________________________________
+- (void) downloadThumbnailsForPage : (NSUInteger) pageIndex
+{
+   //On iPhone we see at max 2-3 cells (on iPad all
+   //cells usually visible),
+   //so on a small screen it's too obvious, that image downloaders are lazy,
+   //thus I skip the laziness.
+
+   assert(pageIndex < 3 && "downloadThumbnailsForPage:, parameter 'pageIndex' is out of bounds");
+
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+      return;
+   
+   assert(imageDownloaders[pageIndex] != nil && "downloadThumbnails, imageDownloaders was not initialized correctly");
+
+   if (NSArray * const data = feedData[pageIndex]) {
+      for (NSInteger j = 0, e = data.count; j < e; ++j) {
+         MWFeedItem * const feedItem = (MWFeedItem *)data[j];
+         if (feedItem.image)
+            continue;
+         
+         NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(feedItem.summary);
+         if (!urlString)
+            continue;
+         
+         NSIndexPath * const newKey = [NSIndexPath indexPathForRow : j inSection : NSInteger(pageIndex)];
+         if (imageDownloaders[pageIndex][newKey])
+            continue;
+         
+         ImageDownloader * const newDownloader = [[ImageDownloader alloc] initWithURLString : urlString];
+         newDownloader.delegate = self;
+         newDownloader.indexPathInTableView = newKey;
+         [imageDownloaders[pageIndex] setObject : newDownloader forKey : newKey];
+         [newDownloader startDownload];
+      }
+   }
+}
+
+//________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
    assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
    assert(indexPath.section >= 0 && indexPath.section < 3 &&
           "imageDidLoad:, section index is out of bounds");
    
-   ImageDownloader * const downloader = imageDownloaders[indexPath.section][indexPath];
+   ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath.section][indexPath];
    assert(downloader != nil && "imageDidLoad:, downloader not found for index path");
    
    if (downloader.image) {
@@ -607,7 +600,7 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (BOOL) shouldAutorotate
 {
-   return YES;
+   return UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone;
 }
 
 #pragma mark - UI.
@@ -699,11 +692,12 @@ using CernAPP::NetworkStatus;
 - (void) cancelAnyConnections
 {
    for (unsigned i = 0; i < 3; ++i) {
+      parsers[i].delegate = nil;//I do not want to receive didFinish message from the parser.
       [parsers[i] stopParsing];
       parsers[i] = nil;
       feedDataTmp[i] = nil;
    }
-   
+
    [self cancelAllDownloaders : NO];
 }
 

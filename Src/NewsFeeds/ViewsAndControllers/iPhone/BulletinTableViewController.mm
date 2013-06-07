@@ -26,12 +26,19 @@
 @implementation BulletinTableViewController {
    NSMutableArray *bulletins;
    NSMutableDictionary *thumbnails;
+   NSMutableDictionary *imageDownloaders;
 }
 
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
-   return self = [super initWithCoder : aDecoder];
+   if (self = [super initWithCoder : aDecoder]) {
+      bulletins = nil;
+      thumbnails = nil;
+      imageDownloaders = nil;
+   }
+
+   return self;
 }
 
 //________________________________________________________________________________________
@@ -250,10 +257,10 @@
    assert(row >= 0 && row < bulletins.count &&
           "startIconDownloadForIndexPath:, index is out of bounds");
 
-   if (!self.imageDownloaders)
-      self.imageDownloaders = [[NSMutableDictionary alloc] init];
+   if (!imageDownloaders)
+      imageDownloaders = [[NSMutableDictionary alloc] init];
 
-   ImageDownloader * downloader = (ImageDownloader *)self.imageDownloaders[indexPath];
+   ImageDownloader * downloader = (ImageDownloader *)imageDownloaders[indexPath];
    if (!downloader) {//We did not start download for this image yet.
       NSArray * const articles = (NSArray *)bulletins[indexPath.row];
       assert(articles.count > 0 && "startIconDownloadForIndexPath, no articles for issue found");
@@ -281,7 +288,7 @@
                   downloader.dataSizeLimit = 1000000;
                   //
                   downloader.delegate = self;
-                  [self.imageDownloaders setObject : downloader forKey : indexPath];
+                  [imageDownloaders setObject : downloader forKey : indexPath];
                   [downloader startDownload];//Power on.
                   break;
                }
@@ -296,7 +303,7 @@
 //________________________________________________________________________________________
 - (void) loadImagesForOnscreenRows
 {
-   if (bulletins.count && self.nLoadedImages != bulletins.count) {
+   if (bulletins.count) {
       NSArray * const visiblePaths = [self.tableView indexPathsForVisibleRows];
       for (NSIndexPath *indexPath in visiblePaths) {
          if (!thumbnails[indexPath])
@@ -315,7 +322,7 @@
    //We should not load any image more when once.
    assert(thumbnails[indexPath] == nil && "imageDidLoad:, image was loaded already");
    
-   ImageDownloader * const downloader = (ImageDownloader *)self.imageDownloaders[indexPath];
+   ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath];
    assert(downloader != nil && "imageDidLoad:, no downloader found for a given index path");
    
    if (downloader.image) {
@@ -323,8 +330,7 @@
       [self.tableView reloadRowsAtIndexPaths : @[indexPath] withRowAnimation : UITableViewRowAnimationNone];
    }
    
-   ++self.nLoadedImages;
-   [self.imageDownloaders removeObjectForKey : indexPath];
+   [imageDownloaders removeObjectForKey : indexPath];
 }
 
 //________________________________________________________________________________________
@@ -334,11 +340,24 @@
    assert(indexPath.row >= 0 && indexPath.row < bulletins.count &&
           "imageDownloadFailed:, row index is out of bounds");
    
-   assert(self.imageDownloaders[indexPath] != nil &&
+   assert(imageDownloaders[indexPath] != nil &&
           "imageDownloadFailed:, no downloader forund for a given index path");
    
-   ++self.nLoadedImages;
-   [self.imageDownloaders removeObjectForKey : indexPath];
+   [imageDownloaders removeObjectForKey : indexPath];
+}
+
+//________________________________________________________________________________________
+- (void) cancelAllImageDownloaders
+{
+   if (imageDownloaders && imageDownloaders.count) {
+      NSEnumerator * const keyEnumerator = [imageDownloaders keyEnumerator];
+      for (id key in keyEnumerator) {
+         ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key];
+         [downloader cancelDownload];
+      }
+      
+      imageDownloaders = nil;
+   }
 }
 
 #pragma mark - Interface rotation.
