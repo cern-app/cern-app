@@ -12,14 +12,17 @@
 
    IBOutlet UIView *guiSettingsView;
    IBOutlet UIView *rdbSettingsView;
+   IBOutlet UIView *twitterSettingsView;
    
    IBOutlet UISlider *guiFontSizeSlider;
    IBOutlet UISlider *rdbFontSizeSlider;
+   IBOutlet UISwitch *twitterSwitch;
 
 }
 
 - (IBAction) guiFontSizeChanged : (UISlider *) sender;
 - (IBAction) htmlFontSizeChanged : (UISlider *) sender;
+- (IBAction) twitterSwitchAction : (UISwitch *) sender;
 
 - (IBAction) donePressed : (id)sender;
 

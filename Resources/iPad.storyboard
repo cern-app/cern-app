@@ -478,15 +478,16 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="IGe-QO-7pJ" firstAttribute="top" secondItem="RcO-La-71m" secondAttribute="top" type="default" id="AQm-s6-SFY"/>
-                                            <constraint firstItem="JJW-39-XGr" firstAttribute="top" secondItem="sMq-cT-y7J" secondAttribute="top" constant="56" id="Aaj-6g-jh8"/>
-                                            <constraint firstItem="JJW-39-XGr" firstAttribute="bottom" secondItem="IGe-QO-7pJ" secondAttribute="bottom" type="default" id="CM1-nH-GXT"/>
-                                            <constraint firstItem="RcO-La-71m" firstAttribute="top" secondItem="JJW-39-XGr" secondAttribute="top" type="default" id="Eps-dH-xi2"/>
+                                            <constraint firstItem="RcO-La-71m" firstAttribute="bottom" secondItem="IGe-QO-7pJ" secondAttribute="bottom" type="default" id="Bwh-Yo-mRX"/>
                                             <constraint firstItem="6OR-k0-8mV" firstAttribute="leading" secondItem="sMq-cT-y7J" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Jqu-NA-drD"/>
                                             <constraint firstItem="IGe-QO-7pJ" firstAttribute="leading" secondItem="RcO-La-71m" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Jwb-d2-Zs8"/>
+                                            <constraint firstItem="RcO-La-71m" firstAttribute="centerY" secondItem="JJW-39-XGr" secondAttribute="centerY" type="default" id="Vo6-bn-gak"/>
                                             <constraint firstItem="6OR-k0-8mV" firstAttribute="top" secondItem="sMq-cT-y7J" secondAttribute="top" constant="55" id="ajv-dG-XeU"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" type="user" id="bUO-j4-t3i"/>
                                             <constraint firstAttribute="height" constant="120" type="user" id="dFh-ug-sT1"/>
+                                            <constraint firstItem="RcO-La-71m" firstAttribute="centerY" secondItem="IGe-QO-7pJ" secondAttribute="centerY" type="default" id="g4X-bc-YLk"/>
+                                            <constraint firstItem="RcO-La-71m" firstAttribute="bottom" secondItem="JJW-39-XGr" secondAttribute="bottom" type="default" id="hjh-3w-UMv"/>
+                                            <constraint firstItem="RcO-La-71m" firstAttribute="top" secondItem="6OR-k0-8mV" secondAttribute="top" type="default" id="k9F-I9-8fB"/>
                                             <constraint firstItem="JJW-39-XGr" firstAttribute="leading" secondItem="sMq-cT-y7J" secondAttribute="leading" constant="335" id="wtX-F5-DES"/>
                                             <constraint firstItem="RcO-La-71m" firstAttribute="leading" secondItem="sMq-cT-y7J" secondAttribute="leading" constant="355" id="yX7-Qa-o5J"/>
                                         </constraints>
@@ -504,6 +505,7 @@
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="20" translatesAutoresizingMaskIntoConstraints="NO" id="Qf1-KU-no8">
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="287" id="Yi3-hm-ojg"/>
+                                                    <constraint firstAttribute="height" constant="22" id="o9D-Gm-l5Z"/>
                                                 </constraints>
                                                 <connections>
                                                     <action selector="htmlFontSizeChanged:" destination="9UZ-Wz-VxU" eventType="valueChanged" id="YGJ-Py-am9"/>
@@ -520,7 +522,6 @@
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m0O-df-JdO">
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="23" id="dgv-7T-iNK"/>
-                                                    <constraint firstAttribute="height" constant="21" id="zSE-zu-Wfv"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="26"/>
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -531,15 +532,44 @@
                                         <constraints>
                                             <constraint firstItem="9cn-NV-gKO" firstAttribute="baseline" secondItem="Trm-Kt-RSB" secondAttribute="baseline" type="default" id="1zS-Qd-D4I"/>
                                             <constraint firstAttribute="height" constant="120" type="user" id="4WG-27-sjK"/>
+                                            <constraint firstItem="Qf1-KU-no8" firstAttribute="top" secondItem="Sai-ZJ-7qh" secondAttribute="top" constant="48" id="C9v-zp-UhS"/>
                                             <constraint firstItem="9cn-NV-gKO" firstAttribute="leading" secondItem="Sai-ZJ-7qh" secondAttribute="leading" constant="331" id="FLA-YL-FLQ"/>
-                                            <constraint firstItem="m0O-df-JdO" firstAttribute="top" secondItem="Qf1-KU-no8" secondAttribute="top" type="default" id="Ies-F8-d6B"/>
-                                            <constraint firstItem="Qf1-KU-no8" firstAttribute="top" secondItem="Trm-Kt-RSB" secondAttribute="top" type="default" id="KXA-PL-7YK"/>
-                                            <constraint firstItem="Qf1-KU-no8" firstAttribute="centerY" secondItem="Sai-ZJ-7qh" secondAttribute="centerY" type="default" id="VQw-Sg-kgb"/>
+                                            <constraint firstItem="Qf1-KU-no8" firstAttribute="centerY" secondItem="Trm-Kt-RSB" secondAttribute="centerY" type="default" id="PRb-pe-3tI"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" type="user" id="YAU-1k-RCM"/>
+                                            <constraint firstItem="Qf1-KU-no8" firstAttribute="centerY" secondItem="m0O-df-JdO" secondAttribute="centerY" type="default" id="axA-dB-ofK"/>
+                                            <constraint firstItem="Qf1-KU-no8" firstAttribute="bottom" secondItem="m0O-df-JdO" secondAttribute="bottom" type="default" id="bJy-Qg-orn"/>
                                             <constraint firstItem="Qf1-KU-no8" firstAttribute="leading" secondItem="9cn-NV-gKO" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="juY-As-hAk"/>
                                             <constraint firstItem="Trm-Kt-RSB" firstAttribute="leading" secondItem="Sai-ZJ-7qh" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="mCn-FC-38g"/>
                                             <constraint firstItem="m0O-df-JdO" firstAttribute="baseline" secondItem="9cn-NV-gKO" secondAttribute="baseline" type="default" id="oNH-NG-O34"/>
                                             <constraint firstItem="m0O-df-JdO" firstAttribute="leading" secondItem="Qf1-KU-no8" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="uBb-zB-jhP"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TxT-vP-UM1">
+                                        <subviews>
+                                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Use the external Twitter.app:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mtv-fZ-WF9">
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="358" id="KgH-Zg-ewU"/>
+                                                    <constraint firstAttribute="height" constant="21" id="j86-vC-aH8"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="UVn-ee-u1A">
+                                                <connections>
+                                                    <action selector="twitterSwitchAction:" destination="9UZ-Wz-VxU" eventType="valueChanged" id="hye-GZ-es5"/>
+                                                </connections>
+                                            </switch>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="UVn-ee-u1A" firstAttribute="leading" secondItem="mtv-fZ-WF9" secondAttribute="trailing" constant="103" type="user" id="ND6-Me-8kp"/>
+                                            <constraint firstItem="mtv-fZ-WF9" firstAttribute="top" secondItem="TxT-vP-UM1" secondAttribute="top" constant="49" id="V3L-7N-32g"/>
+                                            <constraint firstItem="mtv-fZ-WF9" firstAttribute="top" secondItem="UVn-ee-u1A" secondAttribute="top" type="default" id="VTu-Fl-JIK"/>
+                                            <constraint firstAttribute="trailing" secondItem="UVn-ee-u1A" secondAttribute="trailing" constant="170" type="user" id="ZCn-1T-nSN"/>
+                                            <constraint firstItem="mtv-fZ-WF9" firstAttribute="leading" secondItem="TxT-vP-UM1" secondAttribute="leading" constant="20" symbolic="YES" type="user" id="tAJ-YB-Wxe"/>
+                                            <constraint firstAttribute="height" constant="120" type="user" id="yPw-c9-DtS"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -547,21 +577,26 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Sai-ZJ-7qh" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="0o5-u0-i9b"/>
                                     <constraint firstItem="t0G-2D-rZS" firstAttribute="top" secondItem="al1-A6-0Fy" secondAttribute="top" type="default" id="BGZ-rp-TER"/>
-                                    <constraint firstItem="Sai-ZJ-7qh" firstAttribute="top" secondItem="al1-A6-0Fy" secondAttribute="top" constant="214" id="FPK-EI-gBM"/>
+                                    <constraint firstItem="Sai-ZJ-7qh" firstAttribute="top" secondItem="al1-A6-0Fy" secondAttribute="top" constant="214" type="user" id="FPK-EI-gBM"/>
+                                    <constraint firstItem="TxT-vP-UM1" firstAttribute="top" secondItem="Sai-ZJ-7qh" secondAttribute="bottom" constant="15" type="user" id="K9W-6O-5ve"/>
+                                    <constraint firstItem="TxT-vP-UM1" firstAttribute="leading" secondItem="al1-A6-0Fy" secondAttribute="leading" constant="20" symbolic="YES" type="user" id="MzS-nB-HjA"/>
+                                    <constraint firstItem="TxT-vP-UM1" firstAttribute="height" secondItem="Sai-ZJ-7qh" secondAttribute="height" type="user" id="Nza-WN-ZoR"/>
                                     <constraint firstItem="t0G-2D-rZS" firstAttribute="trailing" secondItem="al1-A6-0Fy" secondAttribute="trailing" type="default" id="Sut-vh-5F0"/>
                                     <constraint firstItem="sMq-cT-y7J" firstAttribute="leading" secondItem="al1-A6-0Fy" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="UZ8-ZF-79E"/>
                                     <constraint firstItem="t0G-2D-rZS" firstAttribute="leading" secondItem="al1-A6-0Fy" secondAttribute="leading" type="default" id="Wu0-aE-4tb"/>
                                     <constraint firstAttribute="trailing" secondItem="sMq-cT-y7J" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="l0i-EN-r3S"/>
                                     <constraint firstItem="sMq-cT-y7J" firstAttribute="top" secondItem="al1-A6-0Fy" secondAttribute="top" constant="78" id="mz9-8C-NgB"/>
                                     <constraint firstItem="Sai-ZJ-7qh" firstAttribute="leading" secondItem="al1-A6-0Fy" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="nPR-Jd-0u7"/>
+                                    <constraint firstAttribute="trailing" secondItem="TxT-vP-UM1" secondAttribute="trailing" constant="20" symbolic="YES" type="user" id="qxK-kF-Nld"/>
+                                    <constraint firstItem="TxT-vP-UM1" firstAttribute="top" secondItem="al1-A6-0Fy" secondAttribute="top" constant="349" type="user" id="r6i-o7-s4N"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="al1-A6-0Fy" firstAttribute="leading" secondItem="FdE-vA-1ua" secondAttribute="leading" type="default" id="M2Y-eO-DDC"/>
+                            <constraint firstItem="al1-A6-0Fy" firstAttribute="leading" secondItem="FdE-vA-1ua" secondAttribute="leading" type="user" id="M2Y-eO-DDC"/>
                             <constraint firstItem="al1-A6-0Fy" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" type="user" id="dco-va-bQK"/>
-                            <constraint firstItem="al1-A6-0Fy" firstAttribute="trailing" secondItem="FdE-vA-1ua" secondAttribute="trailing" type="default" id="ttF-wj-KsE"/>
+                            <constraint firstItem="al1-A6-0Fy" firstAttribute="trailing" secondItem="FdE-vA-1ua" secondAttribute="trailing" type="user" id="ttF-wj-KsE"/>
                             <constraint firstItem="al1-A6-0Fy" firstAttribute="bottom" secondItem="FdE-vA-1ua" secondAttribute="bottom" type="user" id="w9n-wb-VvB"/>
                         </constraints>
                     </view>
@@ -570,6 +605,8 @@
                         <outlet property="guiSettingsView" destination="sMq-cT-y7J" id="OaB-23-pLo"/>
                         <outlet property="rdbFontSizeSlider" destination="Qf1-KU-no8" id="4mx-uo-hFc"/>
                         <outlet property="rdbSettingsView" destination="Sai-ZJ-7qh" id="Vg0-CL-M7o"/>
+                        <outlet property="twitterSettingsView" destination="TxT-vP-UM1" id="zZG-S4-zre"/>
+                        <outlet property="twitterSwitch" destination="UVn-ee-u1A" id="dPY-RW-9t6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WMy-4U-1NJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -737,10 +774,13 @@
                 <relationship kind="action" name="donePressed:"/>
                 <relationship kind="action" name="guiFontSizeChanged:" candidateClass="UISlider"/>
                 <relationship kind="action" name="htmlFontSizeChanged:" candidateClass="UISlider"/>
+                <relationship kind="action" name="twitterSwitchAction:" candidateClass="UISwitch"/>
                 <relationship kind="outlet" name="guiFontSizeSlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="guiSettingsView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="rdbFontSizeSlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="rdbSettingsView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="twitterSettingsView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="twitterSwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>
         <class className="ArticleDetailViewController" superclassName="UIViewController">

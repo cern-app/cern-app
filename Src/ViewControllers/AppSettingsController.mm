@@ -11,6 +11,9 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "AppSettingsController.h"
+#import "AppDelegate.h"
+
+using CernAPP::TwitterFeedShowOption;
 
 @implementation AppSettingsController
 
@@ -56,6 +59,19 @@
    
    rdbSettingsView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent : 0.5f];
    rdbSettingsView.layer.cornerRadius = 10.f;
+   
+   if (twitterSettingsView) {
+      twitterSettingsView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent : 0.5f];
+      twitterSettingsView.layer.cornerRadius = 10.f;
+      
+      assert([[UIApplication sharedApplication].delegate isKindOfClass:[AppDelegate class]] &&
+             "viewDidLoad, application delegate has a wrong type");
+      AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+      twitterSwitch.on = appDelegate.tweetOption == TwitterFeedShowOption::externalView ? YES : NO;
+      
+      if (![[UIApplication sharedApplication] canOpenURL : [NSURL URLWithString : @"twitter://"]])
+         twitterSettingsView.hidden = YES;//Well, no need in this option, no external app to open tweets.
+   }
    
    //Read defaults for the sliders.
    NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
@@ -103,6 +119,20 @@
    
    [[NSUserDefaults standardUserDefaults] setFloat : sender.value forKey : @"HTMLBodyFontSize"];
    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+//________________________________________________________________________________________
+- (IBAction) twitterSwitchAction : (UISwitch *) sender
+{
+   assert(sender != nil && "twitterSwitchAction:, parameter 'sender' is nil");
+   
+   assert([[UIApplication sharedApplication].delegate isKindOfClass:[AppDelegate class]] &&
+          "twitterSwitchAction:, application delegate has a wrong type");
+
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   
+   sender.isOn ? appDelegate.tweetOption = TwitterFeedShowOption::externalView :
+                 appDelegate.tweetOption = TwitterFeedShowOption::builtinView;
 }
 
 #pragma mark - Interface orientation.
