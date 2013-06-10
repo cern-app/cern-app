@@ -94,7 +94,7 @@
       if (imageFound)
          continue;
 
-      if (!downloaders)//In the base class it was a dictionary with PageThumbnailDownloaders, now it's a dictionary with ImageDownloaders.
+      if (!downloaders)//In the base class it was a dictionary with ThumbnailDownloaders, now it's a dictionary with ImageDownloaders.
          downloaders = [[NSMutableDictionary alloc] init];
       
       NSUInteger articleIndex = 0;

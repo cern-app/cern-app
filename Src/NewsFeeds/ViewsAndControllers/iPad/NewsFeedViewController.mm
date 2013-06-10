@@ -288,8 +288,8 @@
          [flipView replaceCurrentFrame : currPage];
       }
    } else {
-      ThumbnailDownloader * const newDownloader = [[ThumbnailDownloader alloc] initWithItems : thumbnails sizeLimit : 500000];
-      [downloaders setObject:newDownloader forKey : key];
+      ThumbnailDownloader * const newDownloader = [[ThumbnailDownloader alloc] initWithItems : thumbnails sizeLimit : 500000  downscaleToSize : 200.f];
+      [downloaders setObject : newDownloader forKey : key];
       newDownloader.delegate = self;
       [newDownloader startDownload];
    }
