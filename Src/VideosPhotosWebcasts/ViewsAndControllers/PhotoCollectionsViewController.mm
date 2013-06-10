@@ -576,7 +576,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       return;
 
    ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL :
-                                         [album getImageURLWithIndex : indexPath.row + 1 forType : ResourceTypeThumbnail]];
+                                         [album getImageURLWithIndex : indexPath.row forType : ResourceTypeThumbnail]];
    downloader.delegate = self;
    downloader.indexPathInTableView = indexPath;
    [imageDownloaders setObject : downloader forKey : indexPath];
