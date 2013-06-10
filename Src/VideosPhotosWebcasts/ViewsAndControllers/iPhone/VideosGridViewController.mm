@@ -24,13 +24,23 @@
    MBProgressHUD *noConnectionHUD;
    BOOL loaded;
    
-   CernMediaMARCParser *parser;
+   //
+   NSOperationQueue *parserQueue;
+   VideoCollectionsParserOperation *operation;
    
    Reachability *internetReach;
    UIActivityIndicatorView *spinner;
 }
 
 @synthesize spinner, noConnectionHUD;
+
+#pragma mark - Reachability.
+
+//________________________________________________________________________________________
+- (BOOL) hasConnection
+{
+   return internetReach && [internetReach currentReachabilityStatus] != CernAPP::NetworkStatus::notReachable;
+}
 
 //________________________________________________________________________________________
 - (id) initWithCoder : (NSCoder *) aDecoder
@@ -39,13 +49,9 @@
       videoMetadata = [NSMutableArray array];
       videoThumbnails = [NSMutableDictionary dictionary];
 
-      parser = [[CernMediaMARCParser alloc] init];
-      parser.url = [NSURL URLWithString : @"http://cdsweb.cern.ch/search?ln=en&cc=Press+Office+Video+Selection&p"
-                                           "=internalnote%3A%22ATLAS%22&f=&action_search=Search&c=Press+Office+V"
-                                           "ideo+Selection&c=&sf=year&so=d&rm=&rg=100&sc=0&of=xm"];
-      parser.resourceTypes = @[@"mp40600", @"jpgposterframe"];
-      parser.delegate = self;
-
+      parserQueue = [[NSOperationQueue alloc] init];
+      operation = nil;
+      
       loaded = NO;
    }
 
@@ -80,11 +86,27 @@
    }
 }
 
+#pragma mark - Refresh logic.
+
+//________________________________________________________________________________________
+- (void) startParserOperation
+{
+   assert(parserQueue != nil && "startParserOperation, parserQueue is nil");
+   assert(operation == nil && "startParserOperation, called while parser operation is active");
+   
+   operation = [[VideoCollectionsParserOperation alloc] initWithURLString : @"http://cdsweb.cern.ch/search?ln=en&cc=Press+Office+Video+Selection&p"
+                                                                             "=internalnote%3A%22ATLAS%22&f=&action_search=Search&c=Press+Office+V"
+                                                                             "ideo+Selection&c=&sf=year&so=d&rm=&rg=100&sc=0&of=xm"
+                                                            resourceTypes : @[@"mp40600", @"jpgposterframe"]];
+   operation.delegate = self;
+   [parserQueue addOperation : operation];
+}
+
 //________________________________________________________________________________________
 - (IBAction) refresh : (id) sender
 {
 #pragma unused(sender)
-   if (internetReach && [internetReach currentReachabilityStatus] == CernAPP::NetworkStatus::notReachable) {
+   if (![self hasConnection]) {
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
       return;
    }
@@ -95,62 +117,40 @@
 //________________________________________________________________________________________
 - (void) refresh
 {
-   assert(parser.isFinishedParsing == YES && "refresh, called while parser is active");
+   assert(parserQueue != nil && "refresh, parserQueue is nil");
+   assert(operation == nil && "refresh, called while parsing operation is active");
    
    self.navigationItem.rightBarButtonItem.enabled = NO;
-   videoMetadata = [[NSMutableArray alloc] init];
-   videoThumbnails = [[NSMutableDictionary alloc] init];
-   
-   [self.collectionView reloadData];
-   
+ 
    [noConnectionHUD hide : YES];
    CernAPP::ShowSpinner(self);
-   [parser parse];
-}
-
-#pragma mark - CernMediaMARCParserDeleate methods
-
-//________________________________________________________________________________________
-- (void) parserDidFinish : (CernMediaMARCParser *) parser
-{
-   [MBProgressHUD hideHUDForView : self.view animated : YES];
-
-   [self downloadVideoThumbnails];
-   [self.collectionView reloadData];
-}
-
-//________________________________________________________________________________________
-- (void) parser : (CernMediaMARCParser *) parser didParseRecord : (NSDictionary *) record
-{
-   // Copy over just the title, the date, and the first url of each resource type
-   NSMutableDictionary * const video = [NSMutableDictionary dictionary];
-   [video setObject : record[@"title"] forKey : @"title"];
-   NSDate * const date = (NSDate *)record[@"date"];
-   if (date)
-      [video setObject : date forKey : @"VideoMetadataPropertyDate"];
-
-   NSDictionary * const resources = (NSDictionary *)record[@"resources"];
-   NSArray *resourceTypes = [resources allKeys];
-   for (NSString *currentResourceType in resourceTypes) {
-      NSURL * const url = [resources[currentResourceType] objectAtIndex : 0];
-      [video setObject : url forKey : currentResourceType];
-   }
    
-   [videoMetadata addObject : video];
+   [self startParserOperation];
 }
 
+#pragma mark - Parser operation delegate.
+
 //________________________________________________________________________________________
-- (void) parser : (CernMediaMARCParser *) aParser didFailWithError : (NSError *) error
+- (void) parserDidFailWithError : (NSError *) error
 {
 #pragma unused(error)
 
    CernAPP::HideSpinner(self);
    CernAPP::ShowErrorHUD(self, @"Network error");
-   
-   [aParser stop];
-   
+
+   [parserQueue cancelAllOperations];
+   operation = nil;
    //Refresh button.
    self.navigationItem.rightBarButtonItem.enabled = YES;
+}
+
+//________________________________________________________________________________________
+- (void) parserDidFinishWithItems:(NSArray *)items
+{
+   videoMetadata = [items copy];
+
+   [self downloadVideoThumbnails];
+   [self.collectionView reloadData];
 }
 
 #pragma mark - ImageDownloader.
@@ -342,9 +342,8 @@
 //________________________________________________________________________________________
 - (void) cancelAnyConnections
 {
-   if (!parser.isFinishedParsing)
-      [parser stop];
-   
+   [parserQueue cancelAllOperations];
+   operation = nil;
    [self cancelAllDownloaders];
 }
 

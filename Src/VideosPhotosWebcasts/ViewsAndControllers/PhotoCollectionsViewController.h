@@ -1,13 +1,10 @@
 #import <UIKit/UIKit.h>
 
 #import "ConnectionController.h"
-#import "CernMediaMARCParser.h"
+#import "MARCParserOperation.h"
 #import "HUDRefreshProtocol.h"
 #import "ImageDownloader.h"
 #import "MWPhotoBrowser.h"
-
-//TODO: This class (non-stacked mode) should also replace a PhotoGridViewController (iPhone version).
-
 
 //PhotosCollectionViewController shows images grouped into albums or "stacks".
 
@@ -15,11 +12,11 @@
 
 @interface PhotoCollectionsViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate,
                                                                       ImageDownloaderDelegate, HUDRefreshProtocol,
-                                                                      CernMediaMarcParserDelegate, ConnectionController,
+                                                                      MARCParserOperationDelegate, ConnectionController,
                                                                       MWPhotoBrowserDelegate>
 
 
-- (void) setURL : (NSURL *) url;
+- (void) setURLString : (NSString *) urlString;
 
 //UI actions (buttons on the navigation bar).
 - (IBAction) reloadImages : (id) sender;

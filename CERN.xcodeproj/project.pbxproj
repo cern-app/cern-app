@@ -149,6 +149,8 @@
 		70600A27169AF9B300F9E833 /* webcasts.png in Resources */ = {isa = PBXBuildFile; fileRef = 70600A16169AF9B300F9E833 /* webcasts.png */; };
 		70619D3016B042F900906E5C /* 106-sliders@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70619D2F16B042F900906E5C /* 106-sliders@2x.png */; };
 		7064A35D169DA177006405B9 /* menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7064A35C169DA177006405B9 /* menu@2x.png */; };
+		706877791765CB2C00A22123 /* FeedParserOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706877781765CB2C00A22123 /* FeedParserOperation.mm */; };
+		7068777C1765CC9E00A22123 /* MARCParserOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7068777B1765CC9E00A22123 /* MARCParserOperation.mm */; };
 		7069F33116C11517006BC78B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7069F33016C11517006BC78B /* Settings.bundle */; };
 		7069F76516C14D6D006BC78B /* OverlayView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7069F76216C14D6D006BC78B /* OverlayView.mm */; };
 		7069F76616C14D6D006BC78B /* PictureButtonView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7069F76416C14D6D006BC78B /* PictureButtonView.mm */; };
@@ -157,7 +159,6 @@
 		706A401B1754FB9E00FD8685 /* ArticleDetailViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A401A1754FB9E00FD8685 /* ArticleDetailViewController.mm */; };
 		706A401E1754FBE000FD8685 /* CreditsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A401C1754FBE000FD8685 /* CreditsViewController.mm */; };
 		706A40231754FD0A00FD8685 /* EventDisplayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A40221754FD0A00FD8685 /* EventDisplayViewController.mm */; };
-		706EB8B9175E069E00493B04 /* FeedParserOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706EB8B8175E069E00493B04 /* FeedParserOperation.mm */; };
 		706EB8BC175E1F7800493B04 /* ThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706EB8BA175E1F7800493B04 /* ThumbnailDownloader.mm */; };
 		7072B2C11758E7C3002ACD75 /* TwitterTableView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7072B2C01758E7C3002ACD75 /* TwitterTableView.mm */; };
 		70767DC716CE8F4D00164516 /* MWFeedParserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */; };
@@ -437,6 +438,10 @@
 		70600A16169AF9B300F9E833 /* webcasts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = webcasts.png; sourceTree = "<group>"; };
 		70619D2F16B042F900906E5C /* 106-sliders@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "106-sliders@2x.png"; sourceTree = "<group>"; };
 		7064A35C169DA177006405B9 /* menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu@2x.png"; sourceTree = "<group>"; };
+		706877771765CB2C00A22123 /* FeedParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedParserOperation.h; sourceTree = "<group>"; };
+		706877781765CB2C00A22123 /* FeedParserOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedParserOperation.mm; sourceTree = "<group>"; };
+		7068777A1765CC9E00A22123 /* MARCParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MARCParserOperation.h; sourceTree = "<group>"; };
+		7068777B1765CC9E00A22123 /* MARCParserOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MARCParserOperation.mm; sourceTree = "<group>"; };
 		7069F33016C11517006BC78B /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = ../Src/Menu/Settings.bundle; sourceTree = "<group>"; };
 		7069F76116C14D6D006BC78B /* OverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayView.h; sourceTree = "<group>"; };
 		7069F76216C14D6D006BC78B /* OverlayView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OverlayView.mm; sourceTree = "<group>"; };
@@ -452,8 +457,6 @@
 		706A401D1754FBE000FD8685 /* CreditsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreditsViewController.h; sourceTree = "<group>"; };
 		706A40211754FD0A00FD8685 /* EventDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventDisplayViewController.h; sourceTree = "<group>"; };
 		706A40221754FD0A00FD8685 /* EventDisplayViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EventDisplayViewController.mm; sourceTree = "<group>"; };
-		706EB8B7175E069E00493B04 /* FeedParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedParserOperation.h; sourceTree = "<group>"; };
-		706EB8B8175E069E00493B04 /* FeedParserOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedParserOperation.mm; sourceTree = "<group>"; };
 		706EB8BA175E1F7800493B04 /* ThumbnailDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ThumbnailDownloader.mm; sourceTree = "<group>"; };
 		706EB8BB175E1F7800493B04 /* ThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailDownloader.h; sourceTree = "<group>"; };
 		7072B2BF1758E7C3002ACD75 /* TwitterTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterTableView.h; sourceTree = "<group>"; };
@@ -893,6 +896,15 @@
 			path = iPad;
 			sourceTree = "<group>";
 		};
+		706877761765CB2C00A22123 /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				706877771765CB2C00A22123 /* FeedParserOperation.h */,
+				706877781765CB2C00A22123 /* FeedParserOperation.mm */,
+			);
+			path = Parsers;
+			sourceTree = "<group>";
+		};
 		7069F76016C14D6D006BC78B /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -1112,6 +1124,8 @@
 			children = (
 				70A56286173A32F600145FEC /* CernMediaMARCParser.h */,
 				70A56287173A32F600145FEC /* CernMediaMARCParser.mm */,
+				7068777A1765CC9E00A22123 /* MARCParserOperation.h */,
+				7068777B1765CC9E00A22123 /* MARCParserOperation.mm */,
 			);
 			path = Parsers;
 			sourceTree = "<group>";
@@ -1285,9 +1299,8 @@
 		70C884AA173958FA001D98D0 /* NewsFeeds */ = {
 			isa = PBXGroup;
 			children = (
+				706877761765CB2C00A22123 /* Parsers */,
 				70A562A7173A35C300145FEC /* ViewsAndControllers */,
-				706EB8B7175E069E00493B04 /* FeedParserOperation.h */,
-				706EB8B8175E069E00493B04 /* FeedParserOperation.mm */,
 				706EB8BB175E1F7800493B04 /* ThumbnailDownloader.h */,
 				706EB8BA175E1F7800493B04 /* ThumbnailDownloader.mm */,
 			);
@@ -1642,7 +1655,6 @@
 				705185BB17561E4E00CE9EB8 /* TweetCell.mm in Sources */,
 				705185BE17561EA200CE9EB8 /* TwitterTableViewController.mm in Sources */,
 				7072B2C11758E7C3002ACD75 /* TwitterTableView.mm in Sources */,
-				706EB8B9175E069E00493B04 /* FeedParserOperation.mm in Sources */,
 				706EB8BC175E1F7800493B04 /* ThumbnailDownloader.mm in Sources */,
 				707720331761F23E001FE45F /* WebcastsCollectionViewController.mm in Sources */,
 				7040F0EA1761FD780050DEF6 /* VideoThumbnailCell.mm in Sources */,
@@ -1652,6 +1664,8 @@
 				7040F0EE1761FD780050DEF6 /* PhotoAlbumCoverView.mm in Sources */,
 				7040F0EF1761FD780050DEF6 /* PhotoAlbumFooterView.mm in Sources */,
 				7040F0F01761FD780050DEF6 /* PhotoViewCell.mm in Sources */,
+				706877791765CB2C00A22123 /* FeedParserOperation.mm in Sources */,
+				7068777C1765CC9E00A22123 /* MARCParserOperation.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

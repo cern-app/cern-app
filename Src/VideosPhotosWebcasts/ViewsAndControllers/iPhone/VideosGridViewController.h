@@ -12,16 +12,16 @@
 #import <UIKit/UIKit.h>
 
 #import "ConnectionController.h"
-#import "CernMediaMARCParser.h"
+#import "MARCParserOperation.h"
 #import "HUDRefreshProtocol.h"
 #import "ImageDownloader.h"
 #import "MBProgressHUD.h"
 
-@interface VideosGridViewController : UICollectionViewController<CernMediaMarcParserDelegate, ImageDownloaderDelegate, ConnectionController,
+@interface VideosGridViewController : UICollectionViewController<MARCParserOperationDelegate, ImageDownloaderDelegate, ConnectionController,
                                                                  UICollectionViewDataSource, UICollectionViewDelegate, HUDRefreshProtocol>
 {
 @protected
-   NSMutableArray *videoMetadata;
+   NSArray *videoMetadata;
    NSMutableDictionary *videoThumbnails;
    NSMutableDictionary *imageDownloaders;
 }

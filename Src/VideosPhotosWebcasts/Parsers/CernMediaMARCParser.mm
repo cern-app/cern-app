@@ -1,16 +1,28 @@
+// The initial version by Eamon Ford on 6/25/12.
+
+//Modified by Timur Pocheptsov.
 //
-//  CernMediaMODSParser.m
-//  CERN App
+//Initially, CernMediaMARCParser was working in two
+//steps:
+//  1) asynchronously download xml file (this is done on a background thread);
+//  2) do xml parsing on a main thread.
 //
-//  Created by Eamon Ford on 6/25/12.
-//  Copyright (c) 2012 CERN. All rights reserved.
-//
+
+//While the first part is ok and does not affect UI-reponsiveness, unfortunately,
+//it looks like the second step can be quite a heavy-weight operation
+//and application becomes non-responsive. "This thing sucks!" ((c) D. Nukem.).
+//Now I'm using NSOperation and NSOperationQueue for this task. As it's inconvenient
+//to execute two steps (one implicitly in a background thread, created by NSURLConnection,
+//the second implicitly in a background thread created by NSOperationQueue), I'm using
+//synchronous NSURLConnection from NSOperation (well, anyway two background threads will
+//be created for this single task :( ) and as data received the same operation does parsing (if not cancelled).
+
+#import <cassert>
 
 #import "NSDateFormatter+DateFromStringOfUnknownFormat.h"
 #import "CernMediaMARCParser.h"
 
 @implementation CernMediaMARCParser {
-   NSMutableData *asyncData;
    NSString *currentResourceType;
    NSMutableDictionary *currentRecord;
    NSMutableString *currentUValue;
@@ -20,83 +32,45 @@
    BOOL foundX;
    BOOL foundU;
    
-   NSURLConnection *currentConnection;
    NSXMLParser *xmlParser;
 }
 
-@synthesize isFinishedParsing;
+@synthesize url, resourceTypes, delegate;
 
 //________________________________________________________________________________________
 - (id) init
 {
-   if (self = [super init]) {
-      asyncData = [[NSMutableData alloc] init];
-      self.url = [[NSURL alloc] init];
-      self.resourceTypes = [NSMutableArray array];
-      isFinishedParsing = YES;
-   }
-
-   return self;
-}
-
-//________________________________________________________________________________________
-- (void) dealloc
-{
-   [self stop];
+   return self = [super init];
 }
 
 //________________________________________________________________________________________
 - (void) parse
 {
-   if (isFinishedParsing) {
-      xmlParser = nil;
-      isFinishedParsing = NO;
-      NSURLRequest *request = [NSURLRequest requestWithURL : self.url];
-      currentConnection = [NSURLConnection connectionWithRequest : request delegate : self];
+   assert(url != nil && "parse, url is nil");
+   assert(resourceTypes != nil && "parser, resourceTypes is nil");
+   
+   NSURLRequest * const request = [NSURLRequest requestWithURL : url];
+   assert(request != nil && "parse, invalid url");
+
+   NSURLResponse *response = nil;
+   NSError *error = nil;
+   NSData * const receivedData = [NSURLConnection sendSynchronousRequest : request returningResponse : &response error : &error];
+   if (receivedData && !error) {
+      //
+      xmlParser = [[NSXMLParser alloc] initWithData : receivedData];
+      xmlParser.delegate = self;
+      [xmlParser parse];
+   } else {
+      assert(delegate != nil && "parse, delegate is nil");
+      [delegate parser : self didFailWithError : error];
    }
 }
 
 //________________________________________________________________________________________
 - (void) stop
 {
-   //TODO: test!
-   if (!isFinishedParsing) {
-      if (currentConnection)
-         [currentConnection cancel];
-      currentConnection = nil;
-      if (xmlParser)
-         [xmlParser abortParsing];
-      xmlParser = nil;
-      isFinishedParsing = YES;
-   }
-}
-
-#pragma mark NSURLConnectionDelegate methods
-
-//________________________________________________________________________________________
-- (void) connection : (NSURLConnection *) connection didReceiveData : (NSData *) data
-{
-   [asyncData appendData : data];
-}
-
-//________________________________________________________________________________________
-- (void) connectionDidFinishLoading : (NSURLConnection *) connection
-{
-   currentConnection = nil;
-
-   xmlParser = [[NSXMLParser alloc] initWithData : asyncData];
-   xmlParser.delegate = self;
-   [xmlParser parse];
-}
-
-//________________________________________________________________________________________
-- (void) connection : (NSURLConnection *) connection didFailWithError : (NSError *) error
-{
-   if (self.delegate && [self.delegate respondsToSelector : @selector(parser:didFailWithError:)])
-      [self.delegate parser : self didFailWithError : error];
-   currentConnection = nil;
-
-   isFinishedParsing = YES;//TODO: test!
+   if (xmlParser)
+      [xmlParser abortParsing];
 }
 
 #pragma mark NSXMLParserDelegate methods
@@ -104,7 +78,6 @@
 //________________________________________________________________________________________
 - (void) parserDidStartDocument : (NSXMLParser *) parser
 {
-   asyncData = [[NSMutableData alloc] init];
    currentUValue = [NSMutableString string];
 }
 
@@ -155,10 +128,10 @@
       if (foundSubfield == YES) {
          if ([currentSubfieldCode isEqualToString : @"x"]) {
             // if the subfield has code="x", it will contain a resource type descriptor
-            const NSUInteger numResourceTypes = self.resourceTypes.count;
+            const NSUInteger numResourceTypes = resourceTypes.count;
             if (numResourceTypes) {
                for (int i = 0; i < numResourceTypes; i++) {
-                  if ([string isEqualToString : [self.resourceTypes objectAtIndex : i]]) {
+                  if ([string isEqualToString : [resourceTypes objectAtIndex : i]]) {
                      currentResourceType = string;
                      foundX = YES;
                      break;
@@ -206,11 +179,9 @@
       }
    } else if ([elementName isEqualToString : @"record"]) {
       if (((NSMutableDictionary *)[currentRecord objectForKey : @"resources"]).count) {
-         if (self.delegate && [self.delegate respondsToSelector : @selector(parser:didParseRecord:)]) {
-            [self.delegate parser : self didParseRecord:currentRecord];
-         }
+         assert(delegate != nil && "parser:didEndElement:namespaceURI:qualifiedName:, delegate is nil");
+         [delegate parser : self didParseRecord : currentRecord];
       }
-
       currentRecord = nil;
    }
 }
@@ -218,9 +189,10 @@
 //________________________________________________________________________________________
 - (void) parserDidEndDocument : (NSXMLParser *) parser
 {
-   self.isFinishedParsing = YES;
-   if (self.delegate && [self.delegate respondsToSelector : @selector(parserDidFinish:)])
-      [self.delegate parserDidFinish : self];
+#pragma unused(parser)
+
+   assert(delegate != nil && "parserDidEndDocument:, delegate is nil");
+   [delegate parserDidFinish : self];
 }
 
 @end

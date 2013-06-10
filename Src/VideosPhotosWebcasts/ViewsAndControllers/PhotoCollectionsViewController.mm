@@ -15,11 +15,6 @@ using CernAPP::ResourceTypeImageForPhotoBrowserIPAD;
 using CernAPP::ResourceTypeThumbnail;
 using CernAPP::NetworkStatus;
 
-//TODO: This class or a some derived class should also replace a PhotoGridViewController (iPhone version, non-stacked mode).
-
-
-//TODO: image load logic is weird and must be fixed/clarified.
-
 namespace
 {
 
@@ -45,13 +40,18 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 @implementation PhotoCollectionsViewController {
    BOOL viewDidAppear;
    
-   CernMediaMARCParser *parser;
+   //
+   NSString *urlString;
    
    NSMutableDictionary *imageDownloaders;
    NSMutableDictionary *thumbnails;
-   NSMutableArray *photoAlbumsStatic;//Loaded.
-   NSMutableArray *photoAlbumsDynamic;//In process.
+   NSArray *photoAlbums;
    
+   //Parser-related:
+   NSOperationQueue *parserQueue;
+   PhotoCollectionsParserOperation *operation;
+   
+   //Photos manipulation:
    NSIndexPath *selected;
    PhotoAlbum *selectedAlbum;
    
@@ -67,27 +67,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 #pragma mark - Network reachability.
 
 //________________________________________________________________________________________
-- (void) reachabilityStatusChanged : (Reachability *) current
-{
-#pragma unused(current)
-   
-   if (internetReach && [internetReach currentReachabilityStatus] == NetworkStatus::notReachable) {
-      //Depending on what we do now and what we have now ...
-      if (!parser.isFinishedParsing)
-         [parser stop];
-      
-      [self cancelAllImageDownloaders];
-      self.navigationItem.rightBarButtonItem.enabled = YES;
-      
-      //TODO: inform about network error.
-      if (!photoAlbumsStatic.count)
-         CernAPP::ShowErrorHUD(self, @"Network error");
-      else
-         CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
-   }
-}
-
-//________________________________________________________________________________________
 - (bool) hasConnection
 {
    return internetReach && [internetReach currentReachabilityStatus] != NetworkStatus::notReachable;
@@ -99,36 +78,25 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
    if (self = [super initWithCoder : aDecoder]) {
-      parser = [[CernMediaMARCParser alloc] init];
-      parser.delegate = self;
-      parser.resourceTypes = @[@"jpgA4", @"jpgA5", @"jpgIcon"];
+      parserQueue = [[NSOperationQueue alloc] init];
+      operation = nil;
       //
       imageDownloaders = [[NSMutableDictionary alloc] init];
       thumbnails = [[NSMutableDictionary alloc] init];
-      photoAlbumsStatic = nil;
-      photoAlbumsDynamic = [[NSMutableArray alloc] init];
+      photoAlbums = nil;
       
       selected = nil;
       selectedAlbum = nil;
       
-      [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
       internetReach = [Reachability reachabilityForInternetConnection];
-      //[internetReach startNotifier];
 
       albumCollectionView = nil;
       
-      albumDescriptionCustomFont = [UIFont fontWithName:@"PTSans-Bold" size : 24];
+      albumDescriptionCustomFont = [UIFont fontWithName : @"PTSans-Bold" size : 24];
       assert(albumDescriptionCustomFont != nil && "initWithCoder:, custom font is nil");
    }
 
    return self;
-}
-
-//________________________________________________________________________________________
-- (void) dealloc
-{
-   [internetReach stopNotifier];
-   [[NSNotificationCenter defaultCenter] removeObserver : self];
 }
 
 #pragma mark - viewDid/Done/Does/Will etc.
@@ -197,29 +165,38 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 #pragma mark - Misc. methods.
 
 //________________________________________________________________________________________
-- (void) setURL : (NSURL *) url
+- (void) setURLString : (NSString *) anUrlString;
 {
-   assert(url != nil && "setURL:, parameter 'url' is nil");
-   assert(parser != nil && "setURL:, parser is uninitialized");
-   
-   parser.url = url;
+   assert(anUrlString != nil && "setURLString:, parameter 'anUrlString' is nil");   
+   urlString = anUrlString;
 }
 
 #pragma mark - General controller's logic.
 
 //________________________________________________________________________________________
+- (void) startParserOperation
+{
+   assert(parserQueue != nil && "startParserOperation, parserQueue is nil");
+   assert(operation == nil && "startParserOperation, parsing operation is still active");
+   
+   operation = [[PhotoCollectionsParserOperation alloc] initWithURLString : urlString
+                                                            resourceTypes : @[@"jpgA4", @"jpgA5", @"jpgIcon"]];
+   operation.delegate = self;
+   [parserQueue addOperation : operation];
+}
+
+//________________________________________________________________________________________
 - (void) refresh
 {
-   if (parser.isFinishedParsing) {
-      [photoAlbumsDynamic removeAllObjects];
-      //
-      [self cancelAllImageDownloaders];//TODO: test, can any of them be active if I can refresh??
-      //
-      [noConnectionHUD hide : YES];
-      self.navigationItem.rightBarButtonItem.enabled = NO;
-      CernAPP::ShowSpinner(self);
-      [parser parse];
-   }
+   assert(parserQueue != nil && "refresh, parserQueue is nil");
+   assert(operation == nil && "refresh, called while parsing operation is still active");
+   //
+   [self cancelAllImageDownloaders];//TODO: test, can any of them be active if I can refresh??
+   //
+   [noConnectionHUD hide : YES];
+   self.navigationItem.rightBarButtonItem.enabled = NO;
+   CernAPP::ShowSpinner(self);
+   [self startParserOperation];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -303,7 +280,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       return 1;
    }
 
-   if (!photoAlbumsStatic)
+   if (!photoAlbums)
       return 0;
 
    return 1;
@@ -322,9 +299,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       return selectedAlbum.nImages;
    }
 
-   //assert(section >= 0 && section < photoAlbumsStatic.count && "collectionView:numberOfItemsInSection:, index is out of bounds");
-
-   return photoAlbumsStatic.count;
+   return photoAlbums.count;
 }
 
 
@@ -352,12 +327,12 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
              "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
       PhotoAlbumCoverView * const photoCell = (PhotoAlbumCoverView *)cell;
 
-      assert(indexPath.section >= 0 && indexPath.section < photoAlbumsStatic.count &&
+      assert(indexPath.section >= 0 && indexPath.section < photoAlbums.count &&
              "collectionView:cellForItemAtIndexPath:, section index is out of bounds");
 
-      assert(indexPath.row >= 0 && indexPath.row < photoAlbumsStatic.count &&
+      assert(indexPath.row >= 0 && indexPath.row < photoAlbums.count &&
              "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
-      PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.row];
+      PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.row];
 
       CGRect cellFrame = photoCell.frame;
       if (UIImage * const image = (UIImage *)thumbnails[indexPath]) {
@@ -441,11 +416,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       layout.inAnimation = YES;
       layout.stackFactor = 0.f;
 
-      assert(indexPath.row < photoAlbumsStatic.count &&
+      assert(indexPath.row < photoAlbums.count &&
              "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
 
       selected = indexPath;
-      selectedAlbum = (PhotoAlbum *)photoAlbumsStatic[indexPath.row];
+      selectedAlbum = (PhotoAlbum *)photoAlbums[indexPath.row];
 
       [albumCollectionView reloadData];
 
@@ -559,7 +534,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) loadFirstThumbnails
 {
-   for (NSUInteger i = 0, e = photoAlbumsStatic.count; i < e; ++i)
+   for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i)
       [self loadNextThumbnail : [NSIndexPath indexPathForRow : 0 inSection : i]];
 }
 
@@ -567,9 +542,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (void) loadNextThumbnail : (NSIndexPath *) indexPath
 {
    assert(indexPath != nil && "loadNextThumbnail:, parameter 'indexPath' is nil");
-   assert(indexPath.section < photoAlbumsStatic.count && "loadNextThumbnail:, section index is out of bounds");
+   assert(indexPath.section < photoAlbums.count && "loadNextThumbnail:, section index is out of bounds");
 
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.section];
    assert(indexPath.row < album.nImages && "loadNextThumbnail:, row index is out of bounds");
 
    if (imageDownloaders[indexPath])//Downloading already.
@@ -586,9 +561,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) loadThumbnailsForAlbum : (NSUInteger) index
 {
-   assert(index < photoAlbumsStatic.count && "loadThumbnailsForAlbum:, parameter 'index' is out of bounds");
+   assert(index < photoAlbums.count && "loadThumbnailsForAlbum:, parameter 'index' is out of bounds");
    
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[index];
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[index];
    for (NSUInteger i = 0, e = album.nImages; i < e; ++i) {
       NSIndexPath * const key = [NSIndexPath indexPathForRow : i inSection : index];
       if ([album getThumbnailImageForIndex : i] || imageDownloaders[key])
@@ -606,10 +581,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
    assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
-   assert(indexPath.section < photoAlbumsStatic.count &&
+   assert(indexPath.section < photoAlbums.count &&
           "imageDidLoad:, section index is out of bounds");
    
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.section];
    assert(indexPath.row < album.nImages && "imageDidLoad:, row index is out of bounds");
    
    ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath];
@@ -648,10 +623,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (void) imageDownloadFailed : (NSIndexPath *) indexPath
 {
    assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
-   assert(indexPath.section < photoAlbumsStatic.count &&
+   assert(indexPath.section < photoAlbums.count &&
           "imageDownloadFailed:, section index is out of bounds");
 
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbumsStatic[indexPath.section];
+   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.section];
    assert(indexPath.row < album.nImages &&
           "imageDownloadFailed:, row index is out of bounds");
 
@@ -670,81 +645,43 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    }
 }
 
-#pragma mark - CERNMediaMARCParser delegate.
+#pragma mark - Parser operation delegate.
 
 //________________________________________________________________________________________
-- (void) parser : (CernMediaMARCParser *) aParser didParseRecord : (NSDictionary *) record
+- (void) parserDidFinishWithItems : (NSArray *) items
 {
-   assert(parser.isFinishedParsing == NO && "parser:didParseRecord:, not parsing at the moment");
-
-   //Eamon:
-   // "we will assume that each array in the dictionary has the same number of photo urls".
-   //Me:
-   // No, this assumption does not work :( some images can be omitted - for example, 'jpgIcon'.
-
-   assert(aParser != nil && "parser:didParseRecord:, parameter 'aParser' is null");
-   assert(record != nil && "parser:didParseRecord:, parameter 'record' is null");
-
-   //Now, we do some magic to fix bad assumptions.
-
-   NSDictionary * const resources = (NSDictionary *)record[@"resources"];
-   assert(resources != nil && "parser:didParseRecord:, no object for the key 'resources' was found");
+   assert(items != nil && "parserDidFinishWithItems:, parameter 'items' is nil");
    
-   const NSUInteger nPhotos = ((NSArray *)resources[aParser.resourceTypes[0]]).count;
-   for (NSUInteger i = 1, e = aParser.resourceTypes.count; i < e; ++i) {
-      NSArray * const typedData = (NSArray *)[resources objectForKey : [aParser.resourceTypes objectAtIndex : i]];
-      if (typedData.count != nPhotos) {
-         //I simply ignore this record - have no idea what to do with such a data.
-         return;
-      }
-   }
-
-   PhotoAlbum * const newAlbum = [[PhotoAlbum alloc] init];
-
-   NSArray * const a4Data = (NSArray *)resources[@"jpgA4"];
-   NSArray * const a5Data = (NSArray *)resources[@"jpgA5"];
-   NSArray * const iconData = (NSArray *)resources[@"jpgIcon"];
-
-   for (NSUInteger i = 0; i < nPhotos; i++) {
-      NSDictionary * const newImageData = @{@"jpgA4" : a4Data[i], @"jpgA5" : a5Data[i], @"jpgIcon" : iconData[i]};
-      [newAlbum addImageData : newImageData];
-   }
-   
-   newAlbum.title = record[@"title"];
-   [photoAlbumsDynamic addObject : newAlbum];
-}
-
-//________________________________________________________________________________________
-- (void) parserDidFinish : (CernMediaMARCParser *) aParser
-{
-#pragma unused(aParser)
-
-   photoAlbumsStatic = [photoAlbumsDynamic mutableCopy];
-
+   photoAlbums = [items copy];
    [thumbnails removeAllObjects];
+
    //It's possible, that self.collectionView is hidden now.
    //But anyway - first try to download the first image from
    //every album and set the 'cover', after that, download others.
    //If albumCollectionView is active and visible now, it stil shows data from the selectedAlbum (if any).
+
+   operation = nil;
+
    [self loadFirstThumbnails];
    [self.collectionView reloadData];
    
-   if (!photoAlbumsStatic.count) {
-      //Ufff.
+   if (!photoAlbums.count) {
       self.navigationItem.rightBarButtonItem.enabled = YES;
       CernAPP::HideSpinner(self);
    }
 }
 
 //________________________________________________________________________________________
-- (void) parser : (CernMediaMARCParser *) aParser didFailWithError : (NSError *) error
+- (void) parserDidFailWithError : (NSError *) error
 {
-#pragma unused(aParser)
    CernAPP::HideSpinner(self);
    
+   [parserQueue cancelAllOperations];
+   operation = nil;
+
    self.navigationItem.rightBarButtonItem.enabled = YES;
    
-   if (!photoAlbumsStatic.count)
+   if (!photoAlbums.count)
       CernAPP::ShowErrorHUD(self, @"Network error");
    else
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
@@ -769,7 +706,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) cancelAnyConnections
 {
-   [parser stop];
+   assert(parserQueue != nil && "cancelAnyConnections, parserQueue is nil");
+   [parserQueue cancelAllOperations];
+   operation = nil;
    [self cancelAllImageDownloaders];
 }
 
@@ -801,13 +740,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (IBAction) reloadImages : (id) sender
 {
 #pragma unused(sender)
-
-   if (parser.isFinishedParsing) {
-      if (![self hasConnection])
-         CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
-      else
-         [self refresh];
-   }
+   assert(operation == nil && "reloadImages:, called while parser is still active");
+   if (![self hasConnection])
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+   else
+      [self refresh];
 }
 
 #pragma mark - ECSlidingViewController.
@@ -833,7 +770,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    //2. before photo collections were refreshed selected one of loaded albums.
    //3. we are looking at the selected album, but it does not exist after refresh.
    
-   return selected.row < photoAlbumsStatic.count;
+   return selected.row < photoAlbums.count;
 }
 
 @end

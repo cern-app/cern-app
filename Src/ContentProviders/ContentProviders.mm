@@ -317,7 +317,7 @@ UIViewController *FindController(UIView *view)
           "loadControllerTo:, top view controller is either nil or has a wrong type");
 
    PhotoCollectionsViewController * const topController = (PhotoCollectionsViewController *)navController.topViewController;
-   [topController setURL : [NSURL URLWithString : (NSString *)info[@"Url"]]];
+   [topController setURLString : (NSString *)info[@"Url"]];
    topController.navigationItem.title = categoryName;
 
    if (controller.slidingViewController.topViewController)
