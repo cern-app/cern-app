@@ -145,7 +145,7 @@ void WriteFeedCache(NSString *feedStoreID, NSArray *feedCache, NSArray *allArtic
             [saveFeedItem setValue : summary forKey : @"itemSummary"];
          }
          
-         if (inserted == 20)//Enough, it takes to much time :)
+         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && inserted == 20)
             break;
       }
 

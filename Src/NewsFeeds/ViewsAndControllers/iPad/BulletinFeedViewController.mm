@@ -64,7 +64,7 @@
 {
    if (feedCache != nil)//Do not load images for a cache - we are refreshing the feed at the moment.
       return;
- 
+
    const CGFloat minImageSize = [BulletinIssueTileView minImageSize];
 
    bool updateFlip = false;
