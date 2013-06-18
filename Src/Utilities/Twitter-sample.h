@@ -1,29 +1,35 @@
 #import <cassert>
 
+namespace CernAPP {
+namespace TwitterAPI {
+
 //________________________________________________________________________________________
-+ (NSString *) consumerKey
+NSString *ConsumerKey()
 {
-   assert(0 && "consumerKey, dummy version");
+   assert(0 && "ConsumerKey, dummy version");
    return nil;
 }
 
 //________________________________________________________________________________________
-+ (NSString *) consumerSecret
+NSString *ConsumerSecret()
 {
-   assert(0 && "consumerSecret, dummy version");
+   assert(0 && "ConsumerSecret, dummy version");
    return nil;
 }
 
 //________________________________________________________________________________________
-+ (NSString *) oauthToken
+NSString *OauthToken()
 {
-   assert(0 && "oauthToken, dummy version");
+   assert(0 && "OauthToken, dummy version");
    return nil;
 }
 
 //________________________________________________________________________________________
-+ (NSString *)oauthTokenSecret
+NSString *OauthTokenSecret()
 {
-   assert(0 && "oauthTokenSecret, dummy version");
+   assert(0 && "OauthTokenSecret, dummy version");
    return nil;
+}
+
+}
 }
