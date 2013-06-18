@@ -1,8 +1,5 @@
 #import <cassert>
 
-#import <Accounts/Accounts.h>
-#import <Twitter/TWRequest.h>
-
 #import "ArticleDetailViewController.h"
 #import "TwitterTableViewController.h"
 #import "ECSlidingViewController.h"
@@ -10,27 +7,24 @@
 #import "ApplicationErrors.h"
 #import "TwitterTableView.h"
 #import "Reachability.h"
+#import "TwitterAPI.h"
 #import "TweetCell.h"
+#import "GCOAuth.h"
 
 @implementation TwitterTableViewController {
    TwitterTableView *tableView;
+
    NSIndexPath *selected;
-   
-   MWFeedParser *parser;
    NSMutableArray *tweets;
-   NSMutableArray *tmpData;
-   
+
    Reachability *internetReach;
+
    BOOL viewDidAppear;
    
    NSString *tweetName;
-   
-   BOOL selectingAccount;
+   NSURLConnection *urlConnection;
+   NSMutableData *asyncData;
 }
-
-#pragma mark - oauth tokens.
-
-#import "TwitterAPI.h"
 
 #pragma mark - Reachability.
 
@@ -48,51 +42,11 @@
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
    if (self = [super initWithCoder : aDecoder]) {
-      parser = nil;
+      tweetName = nil;
       internetReach = [Reachability reachabilityForInternetConnection];
-      
-      selectingAccount = NO;
    }
    
    return self;
-}
-
-#pragma mark - Other methods.
-
-//________________________________________________________________________________________
-- (void) setFeedURL : (NSString *) urlString
-{
-   assert(urlString != nil && "setFeedURL:, parameter 'urlString' is nil");
-
-   if (NSURL * const url = [NSURL URLWithString:urlString]) {
-      parser = [[MWFeedParser alloc] initWithFeedURL : url];
-      parser.delegate = self;
-      parser.connectionType = ConnectionTypeAsynchronously;
-   } else {
-      NSLog(@"setFeedURL:, error: bad url %@", urlString);
-      parser = nil;
-   }
-}
-
-//________________________________________________________________________________________
-- (void) refresh
-{
-   if (!parser) {
-      NSLog(@"refresh, error: parser is not initialized");
-      return;
-   }
-   
-   assert(parser.isParsing == NO && "refresh, parser is still parsing");
-   
-   [noConnectionHUD hide : YES];
-   self.navigationItem.rightBarButtonItem.enabled = NO;
-   
-   CernAPP::ShowSpinner(self);
-   
-   //TODO: [self cancellAllImageDownloaders];
-   
-   tmpData = [[NSMutableArray alloc] init];
-   [parser parse];
 }
 
 #pragma mark - viewDid/Will/Does/Never.
@@ -147,6 +101,128 @@
 {
    [super didReceiveMemoryWarning];
    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Refresh logic.
+
+//________________________________________________________________________________________
+- (void) setTwitterUserName : (NSString *) name
+{
+   assert(name != nil && "setTwitterUserName:, parameter 'name' is nil");
+
+   tweetName = name;
+}
+
+//________________________________________________________________________________________
+- (void) getUserTimeline
+{
+   assert(urlConnection == nil && "getUserTimeline, connection is still active");
+   assert(tweetName != nil && "getUserTimeline, tweetName is nil");
+   
+   namespace TwitterAPI = CernAPP::TwitterAPI;
+   
+   NSURLRequest * const xauth = [GCOAuth URLRequestForPath : @"user_timeline.json"
+                                 GETParameters : [NSDictionary dictionaryWithObjectsAndKeys : tweetName, @"screen_name", nil]
+                                 scheme : @"https" host : @"api.twitter.com/1.1/statuses/"
+                                 consumerKey : TwitterAPI::ConsumerKey() consumerSecret : TwitterAPI::ConsumerSecret()
+                                 accessToken : TwitterAPI::OauthToken() tokenSecret : TwitterAPI::OauthTokenSecret()];
+   if (xauth) {
+      asyncData = [[NSMutableData alloc] init];// Create data
+      urlConnection = [[NSURLConnection alloc] initWithRequest : xauth delegate : self];
+   }
+   
+   if (!xauth || !urlConnection) {
+      //Here, depending on the fact if we have data or not, we either show a HUD or an alert.
+      //TODO: Error messages are not actually good, it's not clear if it's a network problem or what.
+
+      asyncData = nil;
+      CernAPP::HideSpinner(self);
+      if (!tweets.count)//Also true if tweets is nil.
+         CernAPP::ShowErrorHUD(self, @"Twitter API problem");
+      else
+         CernAPP::ShowErrorAlert(@"Twitter API problem", @"Close");
+   }
+}
+
+//________________________________________________________________________________________
+- (void) refresh
+{
+   assert(urlConnection == nil && "refresh, connection is still active");
+   
+   [noConnectionHUD hide : YES];
+   self.navigationItem.rightBarButtonItem.enabled = NO;
+   
+   CernAPP::ShowSpinner(self);
+   
+   //TODO: [self cancellAllImageDownloaders];
+   [self getUserTimeline];
+}
+
+#pragma mark - NSURLConnectionDelegate.
+
+/*
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) connection didReceiveResponse : (NSURLResponse *) response
+{
+#pragma unused(connection, response)
+   assert(connection == urlConnection && "connection:didReceiveRespone:, unknown connection");
+   assert(asyncData != nil && "connection:didReceiveResponse:, asyncData is nil");
+
+	[asyncData setLength : 0];
+}
+*/
+
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) connection didReceiveData : (NSData *) data
+{
+#pragma unused(connection)
+
+   assert(connection == urlConnection && "connection:didReceiveData:, data from unknown connection");//:)
+   assert(asyncData != nil && "connection:didReceiveData:, asyncData is nil");
+   
+	[asyncData appendData : data];
+}
+
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) connection didFailWithError : (NSError *) error
+{
+#pragma unused(connection, error)
+
+   assert(connection == urlConnection && "connection:didFailWithError:, unknown connection");
+   
+   [urlConnection cancel];
+   urlConnection = nil;
+   asyncData = nil;
+   //
+   if (!tweets.count)//Also true if tweets is nil.
+      CernAPP::ShowErrorHUD(self, @"No network");
+   else
+      CernAPP::ShowErrorAlert(@"Please, check network connection", @"Close");
+}
+
+//________________________________________________________________________________________
+- (void) connectionDidFinishLoading : (NSURLConnection *) connection
+{
+#pragma unused(connection)
+
+   //Now we have a reply from the Twitter and can fill the table (if we have any data).
+   assert(connection == urlConnection && "connectionDidFinishLoading:, unknown connection");
+
+   //TODO: convert asyncData into tweet items.
+   urlConnection = nil;
+   asyncData = nil;
+   
+   CernAPP::HideSpinner(self);
+   self.navigationItem.rightBarButtonItem.enabled = YES;
+   
+   selected = nil;
+   [tableView reloadData];
+}
+
+//________________________________________________________________________________________
+- (NSCachedURLResponse *) connection : (NSURLConnection *) connection willCacheResponse : (NSCachedURLResponse *) cachedResponse
+{
+	return nil; //Don't cache.
 }
 
 #pragma mark - UITableViewDataSource.
@@ -226,84 +302,6 @@
 
 }
 
-//________________________________________________________________________________________
-- (BOOL) tableView : (UITableView *)tableView shouldHighlightRowAtIndexPath : (NSIndexPath *) indexPath
-{
-   return !selectingAccount;
-}
-
-#pragma mark - MWFeedParser delegate.
-
-//________________________________________________________________________________________
-- (void)feedParser : (MWFeedParser *) feedParser didParseFeedInfo : (MWFeedInfo *) info
-{
-   assert(feedParser != nil && "feedParser:didParseFeedInfo:, parameter 'feedParser' is nil");
-   assert(info != nil && "feedParser:didParseFeedInfo:, parameter 'info' is nil");
-   
-   if (info.title.length) {
-      const NSRange range = [info.title rangeOfString : @"/"];
-      if (range.location != NSNotFound && range.location + 1 < info.title.length)
-         tweetName = [[info.title substringFromIndex:range.location + 1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-      else
-         tweetName = info.title;
-   } else
-      tweetName = @"";
-}
-
-//________________________________________________________________________________________
-- (void) feedParser : (MWFeedParser *) feedParser didParseFeedItem : (MWFeedItem *) item
-{
-   assert(feedParser != nil && "feedParser:didParseFeedItem:, parameter 'feedParser' is nil");
-   assert(item != nil && "feedParser:didParseFeedItem:, parameter 'item' is nil");
-   assert(tmpData != nil && "feedParser:didParseFeedItem:, tmpData is nil");
-
-   [tmpData addObject : item];
-}
-
-
-//________________________________________________________________________________________
-- (void) feedParser : (MWFeedParser *) feedParser didFailWithError : (NSError *) error
-{
-#pragma unused(error)
-
-   assert(feedParser != nil && "feedParser:didFailWithError:, parameter 'feedParser' is nil");
-
-   CernAPP::HideSpinner(self);
-   self.navigationItem.rightBarButtonItem.enabled = YES;
-
-   //Here, depending on the fact if we have data or not, we either show a HUD or an alert.
-   if (!tweets.count)//Also true if tweets is nil.
-      CernAPP::ShowErrorHUD(self, @"No network");
-   else
-      CernAPP::ShowErrorAlert(@"Please, check network connection!", @"Close");
-}
-
-//________________________________________________________________________________________
-- (void) feedParserDidFinish : (MWFeedParser *) feedParser
-{
-   assert(feedParser != nil && "feedParserDidFinish:, parameter 'feedParser' is nil");
-   
-   tweets = tmpData;
-   /*
-   NSLog(@"<<<<< Feed's items:");
-   for (MWFeedItem *item in tmpData) {
-      NSLog(@"title: %@", item.title);
-      NSLog(@"content: %@", item.content);
-      NSLog(@"date: %@", item.date);
-      NSLog(@"link: %@", item.link);
-      NSLog(@"summary: %@", item.summary);
-   }
-   NSLog(@"End of feed>>>>>");
-   */
-   tmpData = nil;
-   
-   CernAPP::HideSpinner(self);
-   self.navigationItem.rightBarButtonItem.enabled = YES;
-   
-   selected = nil;
-   [tableView reloadData];
-}
-
 #pragma mark - UIWebViewDelegate.
 
 //________________________________________________________________________________________
@@ -328,10 +326,10 @@
 - (void) cancelAnyConnections
 {
    //This method is called before the controller/view are removed.
-   if (parser.isParsing)
-      [parser stopParsing];
+   if (urlConnection)
+      [urlConnection cancel];
    
-   parser = nil;
+   urlConnection = nil;
 }
 
 #pragma mark - Special tricks to work with web-views inside cells.
@@ -389,8 +387,8 @@
 - (IBAction) refresh : (id) sender
 {
 #pragma unused(sender)
-   assert(parser.isParsing == NO && "refresh:, parser is still parsing");
-   
+   assert(urlConnection == nil && "refresh:, parser is still parsing");
+
    if (![self hasConnection])
       CernAPP::ShowErrorAlert(@"Please, check netword!", @"Close");
    else

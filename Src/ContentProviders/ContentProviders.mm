@@ -281,7 +281,7 @@ UIViewController *FindController(UIView *view)
              "loadControllerTo:, top view controller is either nil or has a wrong type");
       TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
       tvc.navigationItem.title = feedName;
-      [tvc setFeedURL : feed];
+      [tvc setTwitterUserName : nil];
       
       if (controller.slidingViewController.topViewController)
          CancelConnections(controller.slidingViewController.topViewController);

@@ -2,16 +2,14 @@
 
 #import "ConnectionController.h"
 #import "HUDRefreshProtocol.h"
-#import "MWFeedParser.h"
 
 @class MBProgressHUD;
-@class MWFeedItem;
 
 @interface TwitterTableViewController : UIViewController<UITableViewDelegate, UITableViewDataSource,
-                                                         ConnectionController, MWFeedParserDelegate,
-                                                         HUDRefreshProtocol, UIWebViewDelegate>
+                                                         NSURLConnectionDelegate, UIWebViewDelegate,
+                                                         ConnectionController, HUDRefreshProtocol>
 
-- (void) setFeedURL : (NSString *) urlString;
+- (void) setTwitterUserName : (NSString *) name;
 - (void) cellAnimationFinished;
 
 @property (nonatomic) UIActivityIndicatorView *spinner;
