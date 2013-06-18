@@ -164,7 +164,6 @@ UIViewController *FindController(UIView *view)
       nt.navigationItem.title = feedName;
       nt.feedStoreID = feedName;
       [nt setFeedURLString : feed];
-      nt.isTwitterFeed = isTwitterFeed;
    } else {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
                                                                          FeedTileViewControllerID];

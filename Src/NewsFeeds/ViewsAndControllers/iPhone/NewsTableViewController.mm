@@ -68,7 +68,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    BOOL lowMemory;
 }
 
-@synthesize feedStoreID, isTwitterFeed;
+@synthesize feedStoreID;
 
 
 #pragma mark - Reachability.
@@ -102,7 +102,6 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    parseQueue = [[NSOperationQueue alloc] init];
    parseOp = nil;
 
-   isTwitterFeed = NO;
    internetReach = [Reachability reachabilityForInternetConnection];
    
    lowMemory = NO;
@@ -441,7 +440,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    if (feedItem.title && feedStoreID)
       viewController.articleID = [feedStoreID stringByAppendingString : feedItem.title];
 
-   viewController.canUseReadability = !isTwitterFeed;
+   viewController.canUseReadability = YES;
    [self.navigationController pushViewController : viewController animated : YES];
 
    [tableView deselectRowAtIndexPath : indexPath animated : NO];

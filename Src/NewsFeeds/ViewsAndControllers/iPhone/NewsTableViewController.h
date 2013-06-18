@@ -31,8 +31,6 @@
 - (void) reloadPageFromRefreshControl;
 //
 - (void) startFeedParsing;
-
-@property (nonatomic) BOOL isTwitterFeed;
 //
 @property (nonatomic, copy) NSString *feedStoreID;
 //
