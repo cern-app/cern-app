@@ -12,35 +12,6 @@
 #import "Reachability.h"
 #import "TweetCell.h"
 
-@protocol TwitterOperation<NSObject>
-@required
-
-- (void) executeOperation;
-
-@end
-
-@interface RetweetOperation : NSObject<TwitterOperation>
-
-@property (nonatomic, strong) MWFeedItem *tweet;
-@property (nonatomic, strong) ACAccount *account;
-
-@end
-
-@implementation RetweetOperation
-
-@synthesize tweet, account;
-
-//________________________________________________________________________________________
-- (void) executeOperation
-{
-   assert(tweet != nil && "executeOperation, tweet is nil");
-   assert(account != nil && "executeOperation, account is nil");
-   
-   //Retweet using Twitter API.
-}
-
-@end
-
 @implementation TwitterTableViewController {
    TwitterTableView *tableView;
    NSIndexPath *selected;
@@ -56,6 +27,10 @@
    
    BOOL selectingAccount;
 }
+
+#pragma mark - oauth tokens.
+
+#import "TwitterAPI.h"
 
 #pragma mark - Reachability.
 

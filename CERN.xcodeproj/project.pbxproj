@@ -560,6 +560,7 @@
 		70B6B0BD169DD6BE0058DADA /* cern_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_logo.png; sourceTree = "<group>"; };
 		70B7878B16B951B100048CC9 /* zoomin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoomin.png; sourceTree = "<group>"; };
 		70B7878C16B951B100048CC9 /* zoomout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoomout.png; sourceTree = "<group>"; };
+		70BC655C1770A92800358CD1 /* Twitter-sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Twitter-sample.h"; sourceTree = "<group>"; };
 		70BCD9B11733C560000BD91B /* FlipParentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlipParentView.h; sourceTree = "<group>"; };
 		70BCD9B21733C560000BD91B /* FlipParentView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FlipParentView.mm; sourceTree = "<group>"; };
 		70BE54AF169AFC2900A3E1B6 /* CERN-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CERN-Prefix.pch"; sourceTree = "<group>"; };
@@ -1073,6 +1074,7 @@
 		707B139D169AF07D00180E02 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				70BC655C1770A92800358CD1 /* Twitter-sample.h */,
 				700B978216AEB03D0006EAD3 /* ImageDownloader.h */,
 				700B978316AEB03D0006EAD3 /* ImageDownloader.mm */,
 				707B13F8169AF6AE00180E02 /* StoryboardIdentifiers.h */,
@@ -1561,7 +1563,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "tokens=$SRCROOT/Src/Utilities/Readability-tokens.h\nsample=$SRCROOT/Src/Utilities/Readability-sample.h\nout=$DERIVED_FILE_DIR/Readability.h\n\nif [ x${ACTION} = \"xbuild\" ]; then\n   echo \"Checking for Readability tokens header: $tokens\"\n   if test -f $tokens; then\n      cp $tokens $out\n      echo \"Found header with Readability tokens\"\n   else\n      cp $sample $out\n      echo \"No Readability tokens header found, ask developers for decryption password\"\n   fi\nfi\n\nexit 0\n";
+			shellScript = "tokens=$SRCROOT/Src/Utilities/Readability-tokens.h\nsample=$SRCROOT/Src/Utilities/Readability-sample.h\nout=$DERIVED_FILE_DIR/Readability.h\n\nif [ x${ACTION} = \"xbuild\" ]; then\n   echo \"Checking for Readability tokens header: $tokens\"\n   if test -f $tokens; then\n      cp $tokens $out\n      echo \"Found header with Readability tokens\"\n   else\n      cp $sample $out\n      echo \"No Readability tokens header found, ask developers for decryption password\"\n   fi\nfi\n\ntwitterTokens=$SRCROOT/Src/Utilities/Twitter-tokens.h\ntwitterSample=$SRCROOT/Src/Utilities/Twitter-sample.h\nout=$DERIVED_FILE_DIR/TwitterAPI.h\n\nif [ x${ACTION} = \"xbuild\" ]; then\n   echo \"Checking for Twitter tokens header: $twitterTokens\"\n   if test -f $twitterTokens; then\n      cp $twitterTokens $out\n      echo \"Found header with Twitter tokens\"\n   else\n      cp $twitterSample $out\n      echo \"No Twitter tokens header found, ask developers for decryption password\"\n   fi\nfi\n\nexit 0\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
