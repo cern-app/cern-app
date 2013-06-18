@@ -19,6 +19,7 @@
 #import "ApplicationErrors.h"
 #import "ContentProviders.h"
 #import "AppDelegate.h"
+#import "TwitterAPI.h"
 #import "KeyVal.h"
 
 using CernAPP::TwitterFeedShowOption;
@@ -145,7 +146,37 @@ UIViewController *FindController(UIView *view)
    assert(controller != nil && "loadControllerTo:, parameter controller is nil");
 
    MenuNavigationController *navController = nil;
- 
+   
+   if (isTwitterFeed) {
+#ifndef TWITTER_TOKENS_DEFINED
+      CernAPP::ShowErrorAlert(@"No oauth tokens found for a twitter API", @"Close");
+      return;
+#else
+      //
+#endif
+   } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
+                                                                         TableNavigationControllerNewsID];
+      assert([navController.topViewController isKindOfClass : [NewsTableViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+    
+      NewsTableViewController * const nt = (NewsTableViewController *)navController.topViewController;
+      nt.navigationItem.title = feedName;
+      nt.feedStoreID = feedName;
+      [nt setFeedURLString : feed];
+      nt.isTwitterFeed = isTwitterFeed;
+   } else {
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
+                                                                         FeedTileViewControllerID];
+      assert([navController.topViewController isKindOfClass : [NewsFeedViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+      NewsFeedViewController * const nt = (NewsFeedViewController *)navController.topViewController;
+      nt.navigationItem.title = feedName;
+      nt.feedStoreID = feedName;
+      [nt setFeedURLString : feed];
+   }
+   
+/*
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
                                                                          TableNavigationControllerNewsID];
@@ -203,7 +234,7 @@ UIViewController *FindController(UIView *view)
       TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
       tvc.navigationItem.title = feedName;
       [tvc setFeedURL : feed];
-   }
+   }*/
 
    if (controller.slidingViewController.topViewController)
       CancelConnections(controller.slidingViewController.topViewController);
