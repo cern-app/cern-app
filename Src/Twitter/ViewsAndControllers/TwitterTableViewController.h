@@ -5,9 +5,9 @@
 
 @class MBProgressHUD;
 
-@interface TwitterTableViewController : UIViewController<UITableViewDelegate, UITableViewDataSource,
-                                                         NSURLConnectionDelegate, UIWebViewDelegate,
-                                                         ConnectionController, HUDRefreshProtocol>
+@interface TwitterTableViewController : UITableViewController<UITableViewDelegate, UITableViewDataSource,
+                                                              NSURLConnectionDelegate, UIWebViewDelegate,
+                                                              ConnectionController, HUDRefreshProtocol>
 
 - (void) setTwitterUserName : (NSString *) name;
 - (void) cellAnimationFinished;

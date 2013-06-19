@@ -607,7 +607,7 @@
                         <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="Yzl-RM-q0v" kind="relationship" relationship="rootViewController" id="dMS-e5-9vf"/>
+                        <segue destination="sGt-c0-WCd" kind="relationship" relationship="rootViewController" id="kTn-1l-Gc4"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nOR-cn-q0i" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -615,30 +615,40 @@
             <point key="canvasLocation" x="-954" y="4946"/>
         </scene>
         <!--Twitter Table View Controller-->
-        <scene sceneID="WoK-6h-u5t">
+        <scene sceneID="A7c-hW-j2v">
             <objects>
-                <viewController id="Yzl-RM-q0v" customClass="TwitterTableViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="zgQ-aj-0W6">
+                <tableViewController id="sGt-c0-WCd" customClass="TwitterTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="79L-NO-FG3" customClass="TwitterTableView">
                         <rect key="frame" x="0.0" y="64" width="320" height="416"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="9vt-th-COS">
-                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="1s0-jF-4Ez">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TweetCell" id="7iQ-PI-Df5" customClass="TweetCell">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="sGt-c0-WCd" id="pNK-7r-mtU"/>
+                            <outlet property="delegate" destination="sGt-c0-WCd" id="GFM-Lh-ta9"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="Jvi-9o-SfN">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="f1W-Lj-6Jn">
                             <connections>
-                                <action selector="revealMenu:" destination="Yzl-RM-q0v" id="MGC-XS-bSk"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="vJ5-bS-jLj">
-                            <connections>
-                                <action selector="refresh:" destination="Yzl-RM-q0v" id="mzf-jO-FBp"/>
+                                <action selector="revealMenu:" destination="sGt-c0-WCd" id="9K9-wN-QVx"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="pTC-VB-Nov" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jek-8z-eAo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-487" y="4948"/>
+            <point key="canvasLocation" x="-510" y="4946"/>
         </scene>
         <!--Videos Grid View Controller-->
         <scene sceneID="c6R-3r-itA">
@@ -1084,7 +1094,13 @@
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>
-        <class className="TwitterTableViewController" superclassName="UIViewController">
+        <class className="TweetCell" superclassName="UITableViewCell">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TweetCell.h"/>
+        </class>
+        <class className="TwitterTableView" superclassName="UITableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TwitterTableView.h"/>
+        </class>
+        <class className="TwitterTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/TwitterTableViewController.h"/>
         </class>
         <class className="UICollectionReusableView" superclassName="UIView">
@@ -1113,6 +1129,8 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/WebcastsCollectionViewController.h"/>
             <relationships>
                 <relationship kind="action" name="reload:"/>
+                <relationship kind="action" name="revealMenu:"/>
+                <relationship kind="action" name="sectionSelected:" candidateClass="UISegmentedControl"/>
             </relationships>
         </class>
     </classes>

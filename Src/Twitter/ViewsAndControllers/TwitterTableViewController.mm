@@ -13,7 +13,7 @@
 #import "GCOAuth.h"
 
 @implementation TwitterTableViewController {
-   TwitterTableView *tableView;
+   //TwitterTableView *tableView;
 
    NSIndexPath *selected;
    NSMutableArray *tweets;
@@ -68,24 +68,30 @@
 	// Do any additional setup after loading the view, typically from a nib.
    self.view.backgroundColor = [UIColor lightGrayColor];
    
+   /*
    tableView = [[TwitterTableView alloc] initWithFrame : CGRect() style : UITableViewStylePlain];
    tableView.delegate = self;
    tableView.dataSource = self;
    tableView.backgroundColor = [UIColor lightGrayColor];
-
+   */
+  /*
    [self.view addSubview : tableView];
    
    tableView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
                                 UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
-                                UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
-   tableView.separatorColor = [UIColor clearColor];
+                                UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;*/
+   self.tableView.separatorColor = [UIColor clearColor];
    
-   [tableView registerClass : [TweetCell class] forCellReuseIdentifier : @"TweetCell"];
+   [self.tableView registerClass : [TweetCell class] forCellReuseIdentifier : [TweetCell reuseIdentifier]];
+   
+   self.refreshControl = [[UIRefreshControl alloc] init];
+   [self.refreshControl addTarget : self action : @selector(refresh:) forControlEvents : UIControlEventValueChanged];
    
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
 }
 
+/*
 //________________________________________________________________________________________
 - (void) viewWillAppear : (BOOL) animated
 {
@@ -94,6 +100,7 @@
    frame.origin = CGPoint();
    tableView.frame = frame;
 }
+*/
 
 //________________________________________________________________________________________
 - (void) viewDidAppear : (BOOL) animated
@@ -146,6 +153,8 @@
 
       asyncData = nil;
       CernAPP::HideSpinner(self);
+      [self.refreshControl endRefreshing];
+
       if (!tweets.count)//Also true if tweets is nil.
          CernAPP::ShowErrorHUD(self, @"Twitter API problem");
       else
@@ -159,7 +168,7 @@
    assert(urlConnection == nil && "refresh, connection is still active");
    
    [noConnectionHUD hide : YES];
-   self.navigationItem.rightBarButtonItem.enabled = NO;
+   //self.navigationItem.rightBarButtonItem.enabled = NO;
    
    CernAPP::ShowSpinner(self);
    
@@ -199,12 +208,15 @@
 
    assert(connection == urlConnection && "connection:didFailWithError:, unknown connection");
    
+   CernAPP::HideSpinner(self);
+   [self.refreshControl endRefreshing];
+   
    [urlConnection cancel];
    urlConnection = nil;
    asyncData = nil;
    //
    if (!tweets.count)//Also true if tweets is nil.
-      CernAPP::ShowErrorHUD(self, @"No network");
+      CernAPP::ShowErrorHUD(self, @"Network error, pull to refresh");
    else
       CernAPP::ShowErrorAlert(@"Please, check network connection", @"Close");
 }
@@ -218,10 +230,10 @@
    assert(connection == urlConnection && "connectionDidFinishLoading:, unknown connection");
 
    CernAPP::HideSpinner(self);
-   self.navigationItem.rightBarButtonItem.enabled = YES;
+   [self.refreshControl endRefreshing];
    
    [self readTweetsFromJSON];
-   [tableView reloadData];
+   [self.tableView reloadData];
 
    urlConnection = nil;
    asyncData = nil;
@@ -258,7 +270,7 @@
 
    assert(indexPath != nil && "tableView:cellForRowAtIndexPath:, parameter 'indexPath' is nil");
 
-   TweetCell * const cell = (TweetCell *)[tableView dequeueReusableCellWithIdentifier : @"TweetCell" forIndexPath : indexPath];
+   TweetCell * const cell = (TweetCell *)[self.tableView dequeueReusableCellWithIdentifier : @"TweetCell" forIndexPath : indexPath];
    cell.controller = self;
    UIView *bgColorView = [[UIView alloc] init];
    [bgColorView setBackgroundColor : [UIColor clearColor]];
@@ -288,14 +300,14 @@
 //________________________________________________________________________________________
 - (void) tableView : (UITableView *) aTableView didSelectRowAtIndexPath : (NSIndexPath *) indexPath
 {
-   [tableView deselectRowAtIndexPath:indexPath animated : NO];
-   tableView.animatingSelection = YES;
+   [self.tableView deselectRowAtIndexPath:indexPath animated : NO];
+   ((TwitterTableView *)self.tableView).animatingSelection = YES;
    
    //1. Unselect the previous selected cell if any.
    if (selected) {
-      NSArray * const cells = [tableView visibleCells];
+      NSArray * const cells = [self.tableView visibleCells];
       for (TweetCell *cell in cells) {
-         NSIndexPath * const cellPath = [tableView indexPathForCell : cell];
+         NSIndexPath * const cellPath = [self.tableView indexPathForCell : cell];
          if (cellPath && [cellPath compare : selected] == NSOrderedSame) {
             [cell removeWebView];
             break;
@@ -306,9 +318,8 @@
    //2. Now select the new one or deselect at all, if the same cell was selected again.
    selected = selected && [indexPath compare : selected] == NSOrderedSame ? nil : indexPath;
 
-   [tableView beginUpdates];
-   [tableView endUpdates];
-
+   [self.tableView beginUpdates];
+   [self.tableView endUpdates];
 }
 
 #pragma mark - UIWebViewDelegate.
@@ -347,15 +358,14 @@
 - (void) cellAnimationFinished
 {
    if (selected) {
-      NSArray * const cells = [tableView visibleCells];
+      NSArray * const cells = [self.tableView visibleCells];
       for (TweetCell * cell in cells) {
-         NSIndexPath * const indexPath = [tableView indexPathForCell : cell];
+         NSIndexPath * const indexPath = [self.tableView indexPathForCell : cell];
          if (indexPath && [indexPath compare : selected] == NSOrderedSame) {
             [cell addWebView : self];
             const CGRect frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y,
                                             cell.frame.size.width, [TweetCell expandedHeight]);
-            [tableView scrollRectToVisible : frame animated : YES];
-
+            [self.tableView scrollRectToVisible : frame animated : YES];
             break;
          }
       }
@@ -368,9 +378,9 @@
 #pragma unused(scrollView)
 
    if (selected) {
-      NSArray * const cells = [tableView visibleCells];
+      NSArray * const cells = [self.tableView visibleCells];
       for (TweetCell *cell in cells) {
-         NSIndexPath * const indexPath = [tableView indexPathForCell : cell];
+         NSIndexPath * const indexPath = [self.tableView indexPathForCell : cell];
          if (indexPath && [indexPath compare:selected] == NSOrderedSame) {
             [cell removeWebView];
             break;
@@ -378,8 +388,8 @@
       }
 
       selected = nil;
-      [tableView beginUpdates];
-      [tableView endUpdates];
+      [self.tableView beginUpdates];
+      [self.tableView endUpdates];
    }
 }
 
@@ -396,12 +406,21 @@
 - (IBAction) refresh : (id) sender
 {
 #pragma unused(sender)
-   assert(urlConnection == nil && "refresh:, parser is still parsing");
+   if (urlConnection != nil) {
+      [self.refreshControl endRefreshing];
+      return;
+   }
 
-   if (![self hasConnection])
-      CernAPP::ShowErrorAlert(@"Please, check netword!", @"Close");
-   else
-      [self refresh];
+   if (![self hasConnection]) {
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+      [self.refreshControl endRefreshing];
+      return;
+   }
+
+   [noConnectionHUD hide : YES];   
+   //TODO: [self cancellAllImageDownloaders];
+   [self getUserTimeline];
+
 }
 
 #pragma mark - Aux. methods.
