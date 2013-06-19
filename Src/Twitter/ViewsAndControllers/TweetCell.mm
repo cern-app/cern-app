@@ -62,6 +62,12 @@ const CGFloat largeSizeVMargin = 0.05f;
 }
 
 //________________________________________________________________________________________
++ (NSString *) reuseIdentifier
+{
+   return @"TweetCell";
+}
+
+//________________________________________________________________________________________
 - (void) createLabels
 {
    tweetNameLabel = [[UILabel alloc] initWithFrame : CGRect()];

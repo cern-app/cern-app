@@ -7,6 +7,8 @@
 + (CGFloat) collapsedHeight;
 + (CGFloat) expandedHeight;
 
++ (NSString *) reuseIdentifier;
+
 @property (nonatomic, readonly) BOOL cellExpanded;
 @property (nonatomic, weak) TwitterTableViewController *controller;
 

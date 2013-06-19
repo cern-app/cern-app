@@ -167,10 +167,10 @@ UIViewController *FindController(UIView *view)
       CernAPP::ShowErrorAlert(@"No oauth tokens found for a twitter API", @"Close");
       return;
 #else
-      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+ /*     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
          CernAPP::ShowErrorAlert(@"iPhone version is not implemented", @"Close");
          return;
-      }
+      }*/
       
       assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
              "loadControllerTo:, application delegate has a wrong type");

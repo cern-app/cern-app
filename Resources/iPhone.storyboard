@@ -598,6 +598,48 @@
             </objects>
             <point key="canvasLocation" x="-569" y="4239"/>
         </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="3Xe-aO-qnh">
+            <objects>
+                <navigationController storyboardIdentifier="TwitterViewControllerID" definesPresentationContext="YES" id="dr0-bO-vSV" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ggh-bY-p5M">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Yzl-RM-q0v" kind="relationship" relationship="rootViewController" id="dMS-e5-9vf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nOR-cn-q0i" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-954" y="4946"/>
+        </scene>
+        <!--Twitter Table View Controller-->
+        <scene sceneID="WoK-6h-u5t">
+            <objects>
+                <viewController id="Yzl-RM-q0v" customClass="TwitterTableViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zgQ-aj-0W6">
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="9vt-th-COS">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="1s0-jF-4Ez">
+                            <connections>
+                                <action selector="revealMenu:" destination="Yzl-RM-q0v" id="MGC-XS-bSk"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="vJ5-bS-jLj">
+                            <connections>
+                                <action selector="refresh:" destination="Yzl-RM-q0v" id="mzf-jO-FBp"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pTC-VB-Nov" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-487" y="4948"/>
+        </scene>
         <!--Videos Grid View Controller-->
         <scene sceneID="c6R-3r-itA">
             <objects>
@@ -938,10 +980,13 @@
                 <relationship kind="action" name="donePressed:"/>
                 <relationship kind="action" name="guiFontSizeChanged:" candidateClass="UISlider"/>
                 <relationship kind="action" name="htmlFontSizeChanged:" candidateClass="UISlider"/>
+                <relationship kind="action" name="twitterSwitchAction:" candidateClass="UISwitch"/>
                 <relationship kind="outlet" name="guiFontSizeSlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="guiSettingsView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="rdbFontSizeSlider" candidateClass="UISlider"/>
                 <relationship kind="outlet" name="rdbSettingsView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="twitterSettingsView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="twitterSwitch" candidateClass="UISwitch"/>
             </relationships>
         </class>
         <class className="ArticleDetailViewController" superclassName="UIViewController">
@@ -1039,6 +1084,9 @@
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>
+        <class className="TwitterTableViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/TwitterTableViewController.h"/>
+        </class>
         <class className="UICollectionReusableView" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
         </class>
@@ -1063,6 +1111,9 @@
         </class>
         <class className="WebcastsCollectionViewController" superclassName="UICollectionViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/WebcastsCollectionViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="reload:"/>
+            </relationships>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
