@@ -23,7 +23,7 @@ const CGFloat largeSizeVMargin = 0.05f;
    UIFont *smallFontBold;
    UIFont *largeFontBold;
       
-   MWFeedItem *tweet;
+   NSURLRequest *webViewRequest;
 }
 
 @synthesize controller;
@@ -107,6 +107,8 @@ const CGFloat largeSizeVMargin = 0.05f;
       assert(smallFontBold != nil && "initWithStyle:reuseIdentifier:, smallFontBold is nil");
       largeFontBold = [UIFont fontWithName:@"PTSans-Bold" size : 26.f];
       assert(largeFontBold != nil && "initWithStyle:reuseIdentifier:, largeFontBold is nil");
+      
+      webViewRequest = nil;
    }
 
    return self;
@@ -142,9 +144,13 @@ const CGFloat largeSizeVMargin = 0.05f;
 }
 
 //________________________________________________________________________________________
-- (void) setCellData : (MWFeedItem *) data forTweet : (NSString *) tweetName
+- (void) setCellData : (NSDictionary *) data forTweet : (NSString *) tweetName
 {
    assert(data != nil && "setCellData:forTweet:, parameter 'data' is nil");
+   assert(data[@"created_at"] != nil && "setCellData:forTweet:, no 'created_at'");
+   assert(data[@"text"] != nil && "setCellData:forTweet:, no 'text'");
+   assert(data[@"link"] != nil && "setCellData:forTweet:, no 'link'");
+   
    assert(tweetName != nil && "setCellData:forTweet:, parameter 'tweetName' is nil");
    
    assert(tweetNameLabel != nil && "setCellData:forTweet:, tweetNameLabel is nil");
@@ -156,16 +162,13 @@ const CGFloat largeSizeVMargin = 0.05f;
    else
       tweetNameLabel.text = @"";
    
-   if (data.title.length)
-      titleLabel.text = data.title;
-   else
-      titleLabel.text = @"";
+   titleLabel.text = (NSString *)data[@"text"];
 
    NSDateFormatter * const dateFormatter = [[NSDateFormatter alloc] init];
    [dateFormatter setDateFormat : @"d MMM. yyyy"];
-   dateLabel.text = [dateFormatter stringFromDate : data.date ? data.date : [NSDate date]];
+   dateLabel.text = [dateFormatter stringFromDate : (NSDate *)data[@"created_at"]];
    
-   tweet = data;
+   webViewRequest = (NSURLRequest *)data[@"link"];
 }
 
 //________________________________________________________________________________________
@@ -218,6 +221,8 @@ const CGFloat largeSizeVMargin = 0.05f;
 //________________________________________________________________________________________
 - (void) addWebView : (TwitterTableViewController<UIWebViewDelegate> *) delegate
 {
+   assert(webViewRequest != nil && "addWebView:, webViewRequest is nil");
+
    const CGFloat w = self.frame.size.width;
    const CGFloat h = self.frame.size.height;
 
@@ -229,9 +234,8 @@ const CGFloat largeSizeVMargin = 0.05f;
    [self addSubview : webView];
    webView.delegate = delegate;
    
-   NSURLRequest * const req = [NSURLRequest requestWithURL : [NSURL URLWithString : tweet.link]];
    //webView.delegate = self;
-   [webView loadRequest : req];
+   [webView loadRequest : webViewRequest];
 }
 
 //________________________________________________________________________________________

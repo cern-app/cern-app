@@ -6,6 +6,7 @@
 #import "StoryboardIdentifiers.h"
 #import "ApplicationErrors.h"
 #import "TwitterTableView.h"
+#import "NSString+HTML.h"
 #import "Reachability.h"
 #import "TwitterAPI.h"
 #import "TweetCell.h"
@@ -24,6 +25,8 @@
    NSString *tweetName;
    NSURLConnection *urlConnection;
    NSMutableData *asyncData;
+   
+   NSDateFormatter *dateFormatter;
 }
 
 #pragma mark - Reachability.
@@ -44,6 +47,12 @@
    if (self = [super initWithCoder : aDecoder]) {
       tweetName = nil;
       internetReach = [Reachability reachabilityForInternetConnection];
+      dateFormatter = [[NSDateFormatter alloc] init];
+      //From https://dev.twitter.com/docs/platform-objects/tweets:
+
+      //UTC time when this Tweet was created. Example:
+      //"created_at":"Wed Aug 27 13:08:45 +0000 2008"
+      [dateFormatter setDateFormat : @"EEE LLL d HH:mm:ss Z yyyy"];
    }
    
    return self;
@@ -120,7 +129,7 @@
    assert(tweetName != nil && "getUserTimeline, tweetName is nil");
    
    namespace TwitterAPI = CernAPP::TwitterAPI;
-   
+
    NSURLRequest * const xauth = [GCOAuth URLRequestForPath : @"user_timeline.json"
                                  GETParameters : [NSDictionary dictionaryWithObjectsAndKeys : tweetName, @"screen_name", nil]
                                  scheme : @"https" host : @"api.twitter.com/1.1/statuses/"
@@ -208,15 +217,15 @@
    //Now we have a reply from the Twitter and can fill the table (if we have any data).
    assert(connection == urlConnection && "connectionDidFinishLoading:, unknown connection");
 
-   //TODO: convert asyncData into tweet items.
-   urlConnection = nil;
-   asyncData = nil;
-   
    CernAPP::HideSpinner(self);
    self.navigationItem.rightBarButtonItem.enabled = YES;
    
-   selected = nil;
+   [self readTweetsFromJSON];
    [tableView reloadData];
+
+   urlConnection = nil;
+   asyncData = nil;
+   selected = nil;
 }
 
 //________________________________________________________________________________________
@@ -257,7 +266,7 @@
 
    assert(indexPath.row >= 0 && indexPath.row < tweets.count &&
           "tableView:cellForRowAtIndexPath:, row index is out of bounds");
-   [cell setCellData : (MWFeedItem *)tweets[indexPath.row] forTweet : tweetName ? tweetName : @""];
+   [cell setCellData : (NSDictionary *)tweets[indexPath.row] forTweet : tweetName ? tweetName : @""];
    
    [cell layoutSubviews];
 
@@ -393,6 +402,51 @@
       CernAPP::ShowErrorAlert(@"Please, check netword!", @"Close");
    else
       [self refresh];
+}
+
+#pragma mark - Aux. methods.
+
+//________________________________________________________________________________________
+- (void) readTweetsFromJSON
+{
+   assert(asyncData != nil && "readTweetsFromJSON, asyncData is nil");
+   
+   NSError *err = nil;
+   id jsonObject = [NSJSONSerialization JSONObjectWithData : asyncData options : NSJSONReadingAllowFragments error : &err];
+   if (jsonObject && !err && [jsonObject isKindOfClass : [NSArray class]]) {
+      NSArray * const tweetDicts = (NSArray *)jsonObject;
+      NSMutableArray *newTweets = [[NSMutableArray alloc] init];
+      for (id item in tweetDicts) {
+         if ([item isKindOfClass : [NSDictionary class]]) {
+            NSDictionary * const dict = (NSDictionary *)item;
+            //Now, let's create a TweetItem, something like MWFeedItem,
+            //but for a tweet.
+            NSDate *date = nil;
+            if ([dict[@"created_at"] isKindOfClass : [NSString class]])//false == either nil or has a wrong type
+               date = [dateFormatter dateFromString:(NSString *)dict[@"created_at"]];
+            if (!date)
+               date = [NSDate date];
+            NSString *text = nil;
+            if (dict[@"text" ] && [dict[@"text"] isKindOfClass : [NSString class]])
+               text = (NSString *)dict[@"text"];
+            if (!text)
+               text = @"";
+            
+            NSString *idStr = nil;
+            if (dict[@"id_str"] && [dict[@"id_str"] isKindOfClass : [NSString class]])
+               idStr = (NSString *)dict[@"id_str"];
+            if (idStr.length) {
+               NSString * const link = [NSString stringWithFormat : @"https://twitter.com/%@/statuses/%@", tweetName, idStr];
+               NSURLRequest * const req = [NSURLRequest requestWithURL : [NSURL URLWithString : link]];
+               if (req)
+                  [newTweets addObject : @{@"created_at" : date, @"text" : text, @"link" : req}];
+            }
+         }
+      }
+      
+      tweets = newTweets;
+   } //else - it's probably a dictionary with error message,
+     //I do not show this to a user, since it's quite ... useless.
 }
 
 @end

@@ -36,17 +36,32 @@ void CancelConnections(UIViewController *controller)
 }
 
 //________________________________________________________________________________________
-NSURL *TwitterURL(NSString *feed)
+NSString *TwitterUserName(NSString *htmlGet)
 {
-   assert(feed != nil && "TwitterURL, parameter 'feedUrl' is nil");
+   //our 'url' in a MENU.plist or CERNLive.plist has a form:
+   //http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=TwitterUserName
+   //(this is a now defunct API, but I want to extract the part after 'screen_name=' - TwitterUserName.
+
+   assert(htmlGet != nil && "TwitterUserName, parameter 'htmlGet' is nil");
    
-   const NSRange range = [feed rangeOfString : @"screen_name="];
+   const NSRange range = [htmlGet rangeOfString : @"screen_name="];
    if (range.location == NSNotFound)
       return nil;
 
-   NSString * const urlString = [NSString stringWithFormat : @"twitter://user?%@", [feed substringFromIndex : range.location]];
+   return [htmlGet substringFromIndex : range.location + 12];
+}
 
-   return [NSURL URLWithString : urlString];
+//________________________________________________________________________________________
+NSURL *TwitterURL(NSString *feed)
+{
+   assert(feed != nil && "TwitterURL, parameter 'feedUrl' is nil");
+
+   if (NSString * const name = TwitterUserName(feed)) {
+      NSString * const urlString = [NSString stringWithFormat : @"twitter://user?%@", name];
+      return [NSURL URLWithString : urlString];
+   }
+   
+   return nil;
 }
 
 //________________________________________________________________________________________
@@ -152,7 +167,48 @@ UIViewController *FindController(UIView *view)
       CernAPP::ShowErrorAlert(@"No oauth tokens found for a twitter API", @"Close");
       return;
 #else
-      //
+      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+         CernAPP::ShowErrorAlert(@"iPhone version is not implemented", @"Close");
+         return;
+      }
+      
+      assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+             "loadControllerTo:, application delegate has a wrong type");
+      
+      AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+
+      if (appDelegate.tweetOption == TwitterFeedShowOption::notSet) {
+         //We open a twitter feed the first time or we had invalid (nil) twitterUrl before.
+         if (twitterUrl && [[UIApplication sharedApplication] canOpenURL : twitterUrl]) {
+            NSString * const message = [NSString stringWithFormat : @"Do you want to use an external application to open %@?"
+                                                                     " (you can change this option in the 'Settings')", feedName];
+            ActionSheetWithController * const dialog = [[ActionSheetWithController alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
+                                                                                 destructiveButtonTitle : @"No, show in a built-in view"
+                                                                                      otherButtonTitles : @"Yes", nil];
+            dialog.controller = controller;
+            [dialog showInView : controller.view];
+            return;
+         }
+      }
+
+      if (appDelegate.tweetOption == TwitterFeedShowOption::externalView) {
+         //The previous time user selected "use an external application".
+         if(![[UIApplication sharedApplication] openURL : twitterUrl])
+            CernAPP::ShowErrorAlert(@"Failed to open twitter app", @"Close");
+         return;
+      }
+
+      NSString * const name = TwitterUserName(feed);
+      assert(name != nil && "loadControllerTo:, can not extract twitter user name from invalid get command");
+      //Either notSet (twitterUrl is nil or we can not open Url in an external app), or builtinView.
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
+                                                                         TwitterViewControllerID];
+      assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
+             "loadControllerTo:, top view controller is either nil or has a wrong type");
+      TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
+      tvc.navigationItem.title = feedName;
+      //[tvc setFeedURL : feed];
+      [tvc setTwitterUserName : name];      
 #endif
    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :

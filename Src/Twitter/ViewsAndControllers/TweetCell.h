@@ -1,7 +1,6 @@
 #import <UIKit/UIKit.h>
 
 @class TwitterTableViewController;
-@class MWFeedItem;
 
 @interface TweetCell : UITableViewCell
 
@@ -12,7 +11,7 @@
 @property (nonatomic, weak) TwitterTableViewController *controller;
 
 - (void) layoutSubviews;
-- (void) setCellData : (MWFeedItem *) data forTweet : (NSString *) tweetName;
+- (void) setCellData : (NSDictionary *) data forTweet : (NSString *) tweetName;
 
 - (void) addWebView : (TwitterTableViewController<UIWebViewDelegate> *) delegate;
 - (void) removeWebView;
