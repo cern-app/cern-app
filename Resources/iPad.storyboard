@@ -70,7 +70,7 @@
                 <navigationController storyboardIdentifier="FeedTileViewControllerID" definesPresentationContext="YES" id="vuC-nA-Hru" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="PiZ-K9-22d">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="lV2-nJ-7jY" kind="relationship" relationship="rootViewController" id="BVL-uS-tIZ"/>
@@ -140,7 +140,7 @@
                 <navigationController storyboardIdentifier="BulletinTileViewControllerID" definesPresentationContext="YES" id="EMI-sL-0NS" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="DpK-ej-iXd">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="L8H-w6-D96" kind="relationship" relationship="rootViewController" id="uZB-ed-4sN"/>
@@ -182,7 +182,7 @@
                 <navigationController storyboardIdentifier="StaticInfoTileViewControllerID" definesPresentationContext="YES" id="9OY-gO-3hz" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="9p3-r5-X7e">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="VYN-P4-2db" kind="relationship" relationship="rootViewController" id="hRi-SN-fMg"/>
@@ -219,7 +219,7 @@
                 <navigationController storyboardIdentifier="PhotoCollectionsViewControllerID" definesPresentationContext="YES" id="znT-bM-D1R" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Hr-O5-ixb">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="Fm4-vg-l4a" kind="relationship" relationship="rootViewController" id="3ui-P7-QSQ"/>
@@ -282,7 +282,7 @@
                 <navigationController storyboardIdentifier="WebcastsControllerID" definesPresentationContext="YES" id="fa8-sK-xye" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="v9x-uT-5HR">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="c9e-RJ-5cx" kind="relationship" relationship="rootViewController" id="Kdv-VY-KLg"/>
@@ -361,7 +361,7 @@
                 <navigationController storyboardIdentifier="VideoCollectionsViewControllerID" definesPresentationContext="YES" id="WNB-nu-GMH" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7mV-6t-VJu">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="MDs-b9-uRh" kind="relationship" relationship="rootViewController" id="tqA-5q-hwF"/>
@@ -428,7 +428,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="al1-A6-0Fy">
                                 <subviews>
                                     <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t0G-2D-rZS">
-                                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <items>
                                             <navigationItem title="Settings" id="M3H-Fr-28o">
                                                 <barButtonItem key="rightBarButtonItem" systemItem="done" id="Wcn-Qk-jO1">
@@ -443,6 +443,7 @@
                                         <subviews>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="13" minValue="13" maxValue="17" translatesAutoresizingMaskIntoConstraints="NO" id="RcO-La-71m">
                                                 <constraints>
+                                                    <constraint firstAttribute="height" constant="21" id="P0l-xT-8Iu"/>
                                                     <constraint firstAttribute="width" constant="287" id="VEE-mF-i3n"/>
                                                 </constraints>
                                                 <connections>
@@ -451,7 +452,6 @@
                                             </slider>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JJW-39-XGr">
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="21" id="644-XC-coA"/>
                                                     <constraint firstAttribute="width" constant="17" id="TUa-nf-VcP"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -478,16 +478,15 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="RcO-La-71m" firstAttribute="bottom" secondItem="IGe-QO-7pJ" secondAttribute="bottom" type="default" id="Bwh-Yo-mRX"/>
+                                            <constraint firstItem="IGe-QO-7pJ" firstAttribute="baseline" secondItem="6OR-k0-8mV" secondAttribute="baseline" type="default" id="5Wp-RJ-lKB"/>
+                                            <constraint firstItem="RcO-La-71m" firstAttribute="top" secondItem="sMq-cT-y7J" secondAttribute="top" constant="54" id="GA3-j7-0qt"/>
+                                            <constraint firstItem="IGe-QO-7pJ" firstAttribute="top" secondItem="JJW-39-XGr" secondAttribute="top" type="default" id="Heu-Yz-N3c"/>
                                             <constraint firstItem="6OR-k0-8mV" firstAttribute="leading" secondItem="sMq-cT-y7J" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Jqu-NA-drD"/>
                                             <constraint firstItem="IGe-QO-7pJ" firstAttribute="leading" secondItem="RcO-La-71m" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Jwb-d2-Zs8"/>
-                                            <constraint firstItem="RcO-La-71m" firstAttribute="centerY" secondItem="JJW-39-XGr" secondAttribute="centerY" type="default" id="Vo6-bn-gak"/>
+                                            <constraint firstItem="JJW-39-XGr" firstAttribute="top" secondItem="6OR-k0-8mV" secondAttribute="top" type="default" id="PB4-CX-xRz"/>
                                             <constraint firstItem="6OR-k0-8mV" firstAttribute="top" secondItem="sMq-cT-y7J" secondAttribute="top" constant="55" id="ajv-dG-XeU"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" type="user" id="bUO-j4-t3i"/>
                                             <constraint firstAttribute="height" constant="120" type="user" id="dFh-ug-sT1"/>
-                                            <constraint firstItem="RcO-La-71m" firstAttribute="centerY" secondItem="IGe-QO-7pJ" secondAttribute="centerY" type="default" id="g4X-bc-YLk"/>
-                                            <constraint firstItem="RcO-La-71m" firstAttribute="bottom" secondItem="JJW-39-XGr" secondAttribute="bottom" type="default" id="hjh-3w-UMv"/>
-                                            <constraint firstItem="RcO-La-71m" firstAttribute="top" secondItem="6OR-k0-8mV" secondAttribute="top" type="default" id="k9F-I9-8fB"/>
                                             <constraint firstItem="JJW-39-XGr" firstAttribute="leading" secondItem="sMq-cT-y7J" secondAttribute="leading" constant="335" id="wtX-F5-DES"/>
                                             <constraint firstItem="RcO-La-71m" firstAttribute="leading" secondItem="sMq-cT-y7J" secondAttribute="leading" constant="355" id="yX7-Qa-o5J"/>
                                         </constraints>
@@ -619,7 +618,7 @@
                 <navigationController storyboardIdentifier="EventDisplayControllerID" definesPresentationContext="YES" id="wLI-Pc-Phq" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ktS-HH-yJO">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="Cr0-3A-1RS" kind="relationship" relationship="rootViewController" id="M2j-L7-XMp"/>
@@ -682,7 +681,7 @@
                 <navigationController storyboardIdentifier="TwitterViewControllerID" definesPresentationContext="YES" id="vvZ-YM-7aN" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="A1x-Be-nlV">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="zFU-Oj-aJC" kind="relationship" relationship="rootViewController" id="fRm-c6-mco"/>
@@ -732,7 +731,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="45h-uQ-CJg">
-                                <color key="tintColor" red="0.09226929951" green="0.25776053339999999" blue="0.78025220790000005" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <items>
                                     <navigationItem title="Credits" id="KnG-eK-xIY">
                                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="wsS-JW-BGI">

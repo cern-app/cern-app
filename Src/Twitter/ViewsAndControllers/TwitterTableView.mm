@@ -15,9 +15,9 @@
 }
 
 //________________________________________________________________________________________
-- (void) setContentSize:(CGSize)contentSize
+- (void) setContentSize : (CGSize)contentSize
 {
-   [super setContentSize:contentSize];
+   [super setContentSize : contentSize];
    
    if (endUpdatesCalled) {
       endUpdatesCalled = NO;
@@ -29,6 +29,5 @@
       }
    }
 }
-
 
 @end
