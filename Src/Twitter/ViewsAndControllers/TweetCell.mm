@@ -39,14 +39,19 @@ const CGFloat largeSizeVMargin = 0.05f;
    CGContextSetRGBFillColor(ctx, 0.95f, 0.95f, 0.95f, 1.f);
    
    if (self.cellExpanded) {
+      //A cell is never expanded in the iPhone version, so I'm not checking idiom here.
       UIBezierPath * const path = [UIBezierPath bezierPathWithRoundedRect :
                                    CGRectMake(w * largeSizeHMargin, h * largeSizeVMargin, w - 2 * w * largeSizeHMargin, h - 2 * h * largeSizeVMargin)
                                    cornerRadius : 10.f];
       CGContextBeginPath(ctx);
       CGContextAddPath(ctx, path.CGPath);
       CGContextFillPath(ctx);
-   } else
-      CGContextFillRect(ctx, CGRectMake(w * smallSizeHMargin, h * smallSizeVMargin, w - 2 * w * smallSizeHMargin, h - 2 * h * smallSizeVMargin));
+   } else {
+      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+         CGContextFillRect(ctx, CGRectMake(w * smallSizeHMargin, h * smallSizeVMargin, w - 2 * w * smallSizeHMargin, h - 2 * h * smallSizeVMargin));
+      else
+         CGContextFillRect(ctx, CGRectMake(0.f, h * smallSizeVMargin, w, h - 2 * h * smallSizeVMargin));
+   }
 }
 
 //________________________________________________________________________________________

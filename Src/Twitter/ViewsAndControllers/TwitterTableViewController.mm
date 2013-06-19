@@ -68,20 +68,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
    self.view.backgroundColor = [UIColor lightGrayColor];
    
-   /*
-   tableView = [[TwitterTableView alloc] initWithFrame : CGRect() style : UITableViewStylePlain];
-   tableView.delegate = self;
-   tableView.dataSource = self;
-   tableView.backgroundColor = [UIColor lightGrayColor];
-   */
-  /*
-   [self.view addSubview : tableView];
-   
-   tableView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
-                                UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
-                                UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;*/
    self.tableView.separatorColor = [UIColor clearColor];
-   
    [self.tableView registerClass : [TweetCell class] forCellReuseIdentifier : [TweetCell reuseIdentifier]];
    
    self.refreshControl = [[UIRefreshControl alloc] init];
@@ -90,17 +77,6 @@
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
 }
-
-/*
-//________________________________________________________________________________________
-- (void) viewWillAppear : (BOOL) animated
-{
-   [super viewWillAppear : animated];
-   CGRect frame = self.view.frame;
-   frame.origin = CGPoint();
-   tableView.frame = frame;
-}
-*/
 
 //________________________________________________________________________________________
 - (void) viewDidAppear : (BOOL) animated
@@ -168,7 +144,6 @@
    assert(urlConnection == nil && "refresh, connection is still active");
    
    [noConnectionHUD hide : YES];
-   //self.navigationItem.rightBarButtonItem.enabled = NO;
    
    CernAPP::ShowSpinner(self);
    
@@ -272,9 +247,13 @@
 
    TweetCell * const cell = (TweetCell *)[self.tableView dequeueReusableCellWithIdentifier : @"TweetCell" forIndexPath : indexPath];
    cell.controller = self;
-   UIView *bgColorView = [[UIView alloc] init];
-   [bgColorView setBackgroundColor : [UIColor clearColor]];
-   [cell setSelectedBackgroundView : bgColorView];
+
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      UIView *bgColorView = [[UIView alloc] init];
+      [bgColorView setBackgroundColor : [UIColor clearColor]];
+      [cell setSelectedBackgroundView : bgColorView];
+   } else
+      cell.selectionStyle = UITableViewCellSelectionStyleGray;
 
    assert(indexPath.row >= 0 && indexPath.row < tweets.count &&
           "tableView:cellForRowAtIndexPath:, row index is out of bounds");
@@ -300,26 +279,45 @@
 //________________________________________________________________________________________
 - (void) tableView : (UITableView *) aTableView didSelectRowAtIndexPath : (NSIndexPath *) indexPath
 {
-   [self.tableView deselectRowAtIndexPath:indexPath animated : NO];
-   ((TwitterTableView *)self.tableView).animatingSelection = YES;
+   [self.tableView deselectRowAtIndexPath : indexPath animated : NO];
    
-   //1. Unselect the previous selected cell if any.
-   if (selected) {
-      NSArray * const cells = [self.tableView visibleCells];
-      for (TweetCell *cell in cells) {
-         NSIndexPath * const cellPath = [self.tableView indexPathForCell : cell];
-         if (cellPath && [cellPath compare : selected] == NSOrderedSame) {
-            [cell removeWebView];
-            break;
+   
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+      //Open tweet in with an ArticleDetailedViewController.
+      assert(indexPath.row >= 0 && indexPath.row < tweets.count &&
+             "tableView:didSelectRowAtIndexPath:, row index is out of bounds");
+      NSDictionary * const dict = (NSDictionary *)tweets[indexPath.row];
+      assert(dict[@"link_str"] != nil && "tableView:didSelectRowAtIndexPath:, no link found for this tweet");
+      
+      ArticleDetailViewController * const viewController = [self.storyboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailViewControllerID];
+      [viewController setLink : (NSString *)dict[@"link_str"] title : @""];
+      viewController.navigationItem.title = @"";
+      viewController.canUseReadability = NO;
+      [self.navigationController pushViewController : viewController animated : YES];
+   } else {   
+      assert([self.tableView isKindOfClass : [TwitterTableView class]] &&
+             "tableView:didSelectRowAtIndexPath:, self.tableView must be of a TwitterTableView type");
+      
+      ((TwitterTableView *)self.tableView).animatingSelection = YES;
+
+      //1. Unselect the previous selected cell if any.
+      if (selected) {
+         NSArray * const cells = [self.tableView visibleCells];
+         for (TweetCell *cell in cells) {
+            NSIndexPath * const cellPath = [self.tableView indexPathForCell : cell];
+            if (cellPath && [cellPath compare : selected] == NSOrderedSame) {
+               [cell removeWebView];
+               break;
+            }
          }
       }
-   }
-   
-   //2. Now select the new one or deselect at all, if the same cell was selected again.
-   selected = selected && [indexPath compare : selected] == NSOrderedSame ? nil : indexPath;
+      
+      //2. Now select the new one or deselect at all, if the same cell was selected again.
+      selected = selected && [indexPath compare : selected] == NSOrderedSame ? nil : indexPath;
 
-   [self.tableView beginUpdates];
-   [self.tableView endUpdates];
+      [self.tableView beginUpdates];
+      [self.tableView endUpdates];
+   }
 }
 
 #pragma mark - UIWebViewDelegate.
@@ -403,10 +401,13 @@
 }
 
 //________________________________________________________________________________________
-- (IBAction) refresh : (id) sender
+- (void) refresh : (id) sender
 {
 #pragma unused(sender)
-   if (urlConnection != nil) {
+   assert([self.tableView isKindOfClass : [TwitterTableView class]] &&
+          "tableView:didSelectRowAtIndexPath:, self.tableView must be of a TwitterTableView type");
+
+   if (urlConnection != nil || ((TwitterTableView *)self.tableView).animatingSelection) {
       [self.refreshControl endRefreshing];
       return;
    }
@@ -421,6 +422,14 @@
    //TODO: [self cancellAllImageDownloaders];
    [self getUserTimeline];
 
+}
+
+#pragma mark - interface rotation.
+
+//________________________________________________________________________________________
+- (BOOL) shouldAutorotate
+{
+   return UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone;
 }
 
 #pragma mark - Aux. methods.
@@ -458,7 +467,7 @@
                NSString * const link = [NSString stringWithFormat : @"https://twitter.com/%@/statuses/%@", tweetName, idStr];
                NSURLRequest * const req = [NSURLRequest requestWithURL : [NSURL URLWithString : link]];
                if (req)
-                  [newTweets addObject : @{@"created_at" : date, @"text" : text, @"link" : req}];
+                  [newTweets addObject : @{@"created_at" : date, @"text" : text, @"link" : req, @"link_str" : link}];
             }
          }
       }
