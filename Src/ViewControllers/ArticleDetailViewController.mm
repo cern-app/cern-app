@@ -168,7 +168,7 @@ const NSUInteger fontIncreaseStep = 4;
    NSString *responseEncoding;
 }
 
-@synthesize rdbView, pageView, rdbCache, articleID, title, canUseReadability;
+@synthesize rdbView, pageView, containerView, rdbCache, articleID, title, canUseReadability;
 
 //It has to be included here, since the file contains
 //methods.
@@ -348,6 +348,15 @@ const NSUInteger fontIncreaseStep = 4;
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
    internetReach = [Reachability reachabilityForInternetConnection];
    [internetReach startNotifier];
+   
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      rdbView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
+                                 UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
+                                 UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+      pageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
+                                  UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
+                                  UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+   }
    
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
 }
@@ -1089,7 +1098,7 @@ const NSUInteger fontIncreaseStep = 4;
    if (rdbView.superview)
       [rdbView removeFromSuperview];
    if (!pageView.superview)
-      [self.view addSubview : pageView];
+      [containerView addSubview : pageView];
    
    if (!spinner.hidden)
       [spinner.superview bringSubviewToFront : spinner];
@@ -1102,7 +1111,7 @@ const NSUInteger fontIncreaseStep = 4;
    if (pageView.superview)
       [pageView removeFromSuperview];
    if (!rdbView.superview)
-      [self.view addSubview : rdbView];
+      [containerView addSubview : rdbView];
 
    if (!spinner.hidden)
       [spinner.superview bringSubviewToFront : spinner];

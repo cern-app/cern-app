@@ -37,9 +37,21 @@
                     <view key="view" contentMode="scaleToFill" id="6Um-1B-xe9">
                         <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ICw-N4-s0S">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ICw-N4-s0S" firstAttribute="leading" secondItem="6Um-1B-xe9" secondAttribute="leading" type="default" id="3Oa-4w-bOI"/>
+                            <constraint firstItem="ICw-N4-s0S" firstAttribute="top" secondItem="6Um-1B-xe9" secondAttribute="top" type="default" id="3xQ-LT-Y9i"/>
+                            <constraint firstItem="ICw-N4-s0S" firstAttribute="bottom" secondItem="6Um-1B-xe9" secondAttribute="bottom" type="default" id="OZE-40-yPO"/>
+                            <constraint firstItem="ICw-N4-s0S" firstAttribute="trailing" secondItem="6Um-1B-xe9" secondAttribute="trailing" type="default" id="nd6-7U-P0L"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="containerView" destination="ICw-N4-s0S" id="j9p-LH-feJ"/>
                         <outlet property="pageView" destination="hfq-6o-5xc" id="aZf-bD-W21"/>
                         <outlet property="rdbView" destination="O6x-Hl-3pO" id="Q2s-fe-RzT"/>
                     </connections>
@@ -795,6 +807,7 @@
         <class className="ArticleDetailViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ArticleDetailViewController.h"/>
             <relationships>
+                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="pageView" candidateClass="UIWebView"/>
                 <relationship kind="outlet" name="rdbView" candidateClass="UIWebView"/>
             </relationships>

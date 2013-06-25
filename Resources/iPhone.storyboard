@@ -87,9 +87,17 @@
                     <view key="view" contentMode="scaleToFill" id="5OU-Kj-4aQ">
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="zS2-kr-OCa">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="containerView" destination="zS2-kr-OCa" id="yhM-HA-BMA"/>
                         <outlet property="pageView" destination="ImY-np-WJW" id="z1R-3Q-qHR"/>
                         <outlet property="rdbView" destination="lNs-hN-a6K" id="dHn-in-xEE"/>
                     </connections>
@@ -1002,6 +1010,7 @@
         <class className="ArticleDetailViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ArticleDetailViewController.h"/>
             <relationships>
+                <relationship kind="outlet" name="containerView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="pageView" candidateClass="UIWebView"/>
                 <relationship kind="outlet" name="rdbView" candidateClass="UIWebView"/>
             </relationships>
@@ -1127,11 +1136,6 @@
         </class>
         <class className="WebcastsCollectionViewController" superclassName="UICollectionViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/WebcastsCollectionViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="reload:"/>
-                <relationship kind="action" name="revealMenu:"/>
-                <relationship kind="action" name="sectionSelected:" candidateClass="UISegmentedControl"/>
-            </relationships>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

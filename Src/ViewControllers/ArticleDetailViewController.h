@@ -17,6 +17,7 @@
 
 @property (nonatomic, strong) IBOutlet UIWebView *rdbView;
 @property (nonatomic, strong) IBOutlet UIWebView *pageView;
+@property (nonatomic, strong) IBOutlet UIView *containerView;
 
 @property (nonatomic, strong) NSString *rdbCache;
 
