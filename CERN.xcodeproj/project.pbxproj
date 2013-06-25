@@ -1548,10 +1548,11 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Src/Utilities/Readability-sample.h",
-				"",
+				"$(SRCROOT)/Src/Utilities/Twitter-sample.h",
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Readability.h",
+				"$(DERIVED_FILE_DIR)/TwitterAPI.h",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
