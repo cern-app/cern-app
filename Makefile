@@ -5,7 +5,7 @@ all: Src/Utilities/Readability-tokens.h Src/Utilities/Twitter-tokens.h
 Src/Utilities/Readability-tokens.h: Src/Utilities/Readability-tokens.h.enc
 	openssl enc -base64 -aes-256-cbc -d -in $< > $@	
 
-Src/Utilities/Twitter-tokens.h:Src/Utilities/Twitter-tokens.h.enc
+Src/Utilities/Twitter-tokens.h: Src/Utilities/Twitter-tokens.h.enc
 	openssl enc -base64 -aes-256-cbc -d -in $< > $@
 
 encode:
