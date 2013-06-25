@@ -350,6 +350,9 @@ const NSUInteger fontIncreaseStep = 4;
    [internetReach startNotifier];
    
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      //TODO: find a right way - on iPad with have an auto layout enabled. And still these
+      //views are not resized correctly. On iPhone where is no autolayout, and ... they are
+      //resized correctly. Bullshit.
       rdbView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
                                  UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
                                  UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
