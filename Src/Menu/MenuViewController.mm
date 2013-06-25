@@ -552,8 +552,13 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       currentFrame.origin.y += add;
    }
 
-   if (resetOffset)
-      scrollView.contentOffset = CGPoint();
+   if (resetOffset && scrollView.contentOffset.y) {
+      if (selectedItemView) {
+         const CGRect visibleRect = [selectedItemView.superview convertRect : selectedItemView.frame toView : scrollView];
+         [scrollView scrollRectToVisible : visibleRect animated : NO];
+      } else
+         scrollView.contentOffset = CGPoint();
+   }
 
    if (resetContentSize)
       scrollView.contentSize = CGSizeMake(scrollView.frame.size.width, totalHeight);
