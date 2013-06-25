@@ -8,6 +8,11 @@
 
 //Modified by Timur Pocheptsov.
 
+
+//TODO: the description below is obsolete, since we're moving the Readability parse
+//from the application to our server.
+
+
 //
 //ArticleDefailtViewController can show either original page,
 //or both readability-processed version and original page.
@@ -90,6 +95,7 @@
 //and set the stage to the LoadStage::lostNetworkConnection, set the hood
 //and set the buttons (depend on data already loaded).
 //
+
 
 #import <Social/Social.h>
 
@@ -440,6 +446,9 @@ const NSUInteger fontIncreaseStep = 4;
    //We do not have a cached html from Readability yet,
    //try to either auth and parse, or pars (if auth was done already).
 
+   [self readabilityParseHtml];
+   /*
+   //Old version commented. To be deleted.
    id delegateBase = [UIApplication sharedApplication].delegate;
    assert([delegateBase isKindOfClass : [AppDelegate class]] &&
           "loadHtmlFromReadability, app delegate has a wrong type");
@@ -450,6 +459,7 @@ const NSUInteger fontIncreaseStep = 4;
       [self readabilityParseHtml];
    else
       [self readabilityAuth];
+   */
 }
 
 //________________________________________________________________________________________
