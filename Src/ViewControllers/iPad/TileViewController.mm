@@ -1,5 +1,6 @@
 #import <algorithm>
 #import <cstdlib>
+#import <cmath>
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -14,6 +15,7 @@ using namespace FlipAnimation;
 
    UIPanGestureRecognizer *panGesture;
    BOOL viewDidAppear;
+   BOOL autoFlipAnimation;
 }
 
 #pragma mark - Lifecycle.
@@ -33,6 +35,7 @@ using namespace FlipAnimation;
       nPages = 0;
       pageBeforeRotation = 0;
       viewDidAppear = NO;
+      autoFlipAnimation = NO;
    }
 
    return self;
@@ -387,6 +390,8 @@ using namespace FlipAnimation;
          // allow controlled flip only when touch begins within the pan region
          if (CGRectContainsPoint(panRegion.frame, [recognizer locationInView : self.view])) {
             if (flipAnimator.animationState == 0) {
+               autoFlipAnimation = NO;
+            
                flipView.hidden = NO;
                [flipView.superview bringSubviewToFront : flipView];
 
@@ -409,8 +414,17 @@ using namespace FlipAnimation;
                break;
             case AnimationType::flipHorizontal:
                {
-                  const CGFloat value = [recognizer translationInView : self.view].x / 2.f;//2 is some arbitrary value here.
-                  [flipAnimator setTransformValue : value delegating : NO];
+/*                  if (std::abs([recognizer velocityInView : self.view].x) > 2000.f) {
+                     if (!autoFlipAnimation) {
+                        autoFlipAnimation = YES;
+                        const DirectionType direction = [recognizer velocityInView : self.view].x > 0.f ? DirectionType::forward : DirectionType::backward;
+                        flipAnimator.sequenceType = SequenceType::triggered;
+                        [flipAnimator startAnimation : direction];
+                     }
+                  } else if (!autoFlipAnimation) {*/
+                     const CGFloat value = [recognizer translationInView : self.view].x / 2.f;//2 is some arbitrary value here.
+                     [flipAnimator setTransformValue : value delegating : NO];
+//                  }
                }
                break;
             default:
@@ -423,8 +437,10 @@ using namespace FlipAnimation;
       break;
    case UIGestureRecognizerStateEnded:
       {
-         if (flipAnimator.animationLock) {
+         if (flipAnimator.animationLock && !autoFlipAnimation) {
             // provide inertia to panning gesture
+            flipAnimator.sequenceType = SequenceType::controlled;
+            autoFlipAnimation = NO;
             const CGFloat value = sqrtf(fabsf([recognizer velocityInView : self.view].x))/10.0f;
             [flipAnimator endStateWithSpeed : value];
          }

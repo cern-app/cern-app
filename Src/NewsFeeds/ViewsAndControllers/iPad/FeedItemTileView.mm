@@ -749,13 +749,15 @@ CGPathRef CreateTextPath(FeedItemTileView *view)
       //Now we have to extract the author's name.
       const NSUInteger startLocation = scanner.scanLocation;
       if ([scanner scanUpToString : @"<" intoString : nil]) {
-         const NSUInteger endLocation = scanner.scanLocation - 1;//scalLocation is 1 past '<', so I can do location - 1.
-         NSString *authorInfo = [summary substringWithRange : NSMakeRange(startLocation, endLocation - startLocation)];
-         authorInfo = [authorInfo stringByDecodingHTMLEntities];
-         assert(authors != nil && "cutOutAuthors:result:, authors array is nil");
-         if (authors.length)
-            [authors appendString : @", "];
-         [authors appendString : authorInfo];
+         const NSUInteger endLocation = scanner.scanLocation;
+         if (endLocation - startLocation) {
+            NSString *authorInfo = [summary substringWithRange : NSMakeRange(startLocation, endLocation - startLocation)];
+            authorInfo = [authorInfo stringByDecodingHTMLEntities];
+            assert(authors != nil && "cutOutAuthors:result:, authors is nil");
+            if (authors.length)
+               [authors appendString : @", "];
+            [authors appendString : authorInfo];
+         }
       } else //Something malformed - no closing tag?
          break;
       
