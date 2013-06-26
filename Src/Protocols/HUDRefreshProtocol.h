@@ -32,4 +32,7 @@ void HideSpinner(UIActivityIndicatorView *spinner);
 void ShowErrorHUD(UIViewController<HUDRefreshProtocol> *controller, NSString *errorMessage);
 MBProgressHUD *ShowErrorHUD(UIView *parentView, NSString *errorMessage);
 
+//No version for a controller at the moment, will add it later.
+MBProgressHUD *ShowInfoHUD(UIView *parentView, NSString *infoMessage);
+
 }

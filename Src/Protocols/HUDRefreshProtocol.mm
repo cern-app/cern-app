@@ -102,13 +102,33 @@ MBProgressHUD *ShowErrorHUD(UIView *parentView, NSString *errorMessage)
 
    [MBProgressHUD hideHUDForView : parentView animated : YES];
 
-   MBProgressHUD *noConnectionHUD = [MBProgressHUD showHUDAddedTo : parentView animated : YES];
+   MBProgressHUD * const noConnectionHUD = [MBProgressHUD showHUDAddedTo : parentView animated : YES];
    noConnectionHUD.color = [UIColor redColor];
    noConnectionHUD.mode = MBProgressHUDModeText;
-   noConnectionHUD.labelText = @"Network error";
+   noConnectionHUD.labelText = errorMessage;
    noConnectionHUD.removeFromSuperViewOnHide = YES;
 
    return noConnectionHUD;
+}
+
+//
+
+//________________________________________________________________________________________
+MBProgressHUD *ShowInfoHUD(UIView *parentView, NSString *infoMessage)
+{
+   assert(parentView != nil && "ShowInfoHUD, parameter 'parentView' is nil");
+   assert(infoMessage != nil && "ShowInfoHUD, parameter 'infoMessage' is nil");
+   
+   [MBProgressHUD hideHUDForView : parentView animated : YES];
+   
+   MBProgressHUD * const infoHUD = [MBProgressHUD showHUDAddedTo : parentView animated : YES];
+   infoHUD.color = [UIColor colorWithRed : 0.f green : 83.f / 255.f blue : 161.f / 255.f alpha : 1.f];
+   infoHUD.mode = MBProgressHUDModeText;
+   infoHUD.labelText = infoMessage;
+   infoHUD.removeFromSuperViewOnHide = YES;
+
+   return infoHUD;
+
 }
 
 }

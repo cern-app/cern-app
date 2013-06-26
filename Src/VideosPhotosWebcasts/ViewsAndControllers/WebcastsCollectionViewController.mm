@@ -32,7 +32,8 @@ using CernAPP::NetworkStatus;
    
    UIActivityIndicatorView *spinners[3];
    MBProgressHUD *noConnectionHUDs[3];
-   
+   MBProgressHUD *noWebcastsHUDs[3];
+
    Reachability *internetReach;
 }
 
@@ -59,6 +60,7 @@ using CernAPP::NetworkStatus;
          
          spinners[i] = nil;
          noConnectionHUDs[i] = nil;
+         noWebcastsHUDs[i] = nil;
       }
 
       for (unsigned i = 0; i < 2; ++i) {
@@ -215,11 +217,20 @@ using CernAPP::NetworkStatus;
 
    [self cancelAllDownloaders : selectedSegmentOnly];
 
-   [MBProgressHUD hideAllHUDsForView : self.view animated : NO];
    assert(auxCollectionViews[0] != nil && auxCollectionViews[1] != nil &&
           "refresh:, aux. collection views were not initialized correctly");
-   [MBProgressHUD hideAllHUDsForView : auxCollectionViews[0] animated : NO];
-   [MBProgressHUD hideAllHUDsForView : auxCollectionViews[1] animated : NO];
+
+   if (!selectedSegmentOnly) {
+      [MBProgressHUD hideAllHUDsForView : self.collectionView animated : NO];
+      [MBProgressHUD hideAllHUDsForView : auxCollectionViews[0] animated : NO];
+      [MBProgressHUD hideAllHUDsForView : auxCollectionViews[1] animated : NO];
+   } else {
+      const NSInteger selected = segmentedControl.selectedSegmentIndex;
+      if (!selected)
+         [MBProgressHUD hideAllHUDsForView : self.collectionView animated : NO];
+      else
+         [MBProgressHUD hideAllHUDsForView : auxCollectionViews[selected - 1] animated : NO];
+   }
    
    self.navigationItem.rightBarButtonItem.enabled = NO;
    
@@ -314,28 +325,16 @@ using CernAPP::NetworkStatus;
    
    if ([self allParsersFinished])
       self.navigationItem.rightBarButtonItem.enabled = YES;
-   /*
+
    if (!feedN) {
-      NSLog(@" --------- got a feed:");
-
-      for (MWFeedItem *item in data) {
-         NSLog(@"title: %@", item.title);
-         NSLog(@"description: %@", item.description);
-         NSLog(@"link: %@", item.link);
-         NSLog(@"date: %@", item.date);
-         NSLog(@"updated: %@", item.updated);
-         NSLog(@"summary: %@", item.summary);
-         NSLog(@"content: %@", item.content);
-         NSLog(@"enclosures: %@", item.enclosures);
-      }
-         
-      NSLog(@"end of feed ---------- ");
-   }*/
-
-   if (!feedN)
       [self.collectionView reloadData];
-   else
+      if (!feedData[0].count)
+         CernAPP::ShowInfoHUD(self.collectionView, @"No webcasts in this category at the moment");
+   } else {
       [auxCollectionViews[feedN - 1] reloadData];
+      if (!feedData[feedN].count)
+         CernAPP::ShowInfoHUD(auxCollectionViews[feedN - 1], @"No webcasts in this category at the moment");
+   }
    
    [self downloadThumbnailsForPage : feedN];
 }
