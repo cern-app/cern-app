@@ -33,6 +33,7 @@
    FeedParserOperation *parserOp;
    
    NSString *feedURLString;
+   NSArray *feedFilters;
 }
 
 @synthesize feedStoreID, noConnectionHUD, spinner;
@@ -65,6 +66,7 @@
       
       parserQueue = [[NSOperationQueue alloc] init];
       parserOp = nil;
+      feedFilters = nil;
    }
 
    return self;
@@ -84,6 +86,18 @@
    assert(urlString != nil && "setFeedURLString:, parameter 'urlString' is nil");
    
    feedURLString = urlString;
+}
+
+//________________________________________________________________________________________
+- (void) setFilters : (NSObject *) filters
+{
+   assert(filters != nil && "setFilters:, parameter 'filters' is nil");
+   
+   //At the moment I filter only using strings (invalid urls to exclude).
+   assert([filters isKindOfClass : [NSArray class]] && "setFilters:, filters has a wrong type");
+   
+   feedFilters = (NSArray *)filters;
+   //filters[i] must be a string!
 }
 
 #pragma mark - Overriders for UIViewController methods.
@@ -216,7 +230,22 @@
    assert(feedStoreID.length && "allFeedDidLoadForAggregator:, feedStoreID is invalid");
    CernAPP::WriteFeedCache(feedStoreID, feedCache, items);
 
-   dataItems = [items mutableCopy];
+   dataItems = [[NSMutableArray alloc] init];
+   for (MWFeedItem *item in items) {
+      //Ooops, can be quite expensive :)
+      bool filterOut = false;
+      for (NSObject *filter in feedFilters) {
+         assert([filter isKindOfClass : [NSString class]] && "filter is expected to be a string");
+         const NSRange subRange = [item.link rangeOfString : (NSString *)filter];//filter must be a substring.
+         if (subRange.location != NSNotFound) {
+            filterOut = true;
+            break;
+         }
+      }
+      
+      if (!filterOut)
+         [dataItems addObject : item];
+   }
 
    if (feedCache) {
       feedCache = nil;

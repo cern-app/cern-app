@@ -66,6 +66,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    NSMutableArray *rangeDownloaders;
    
    BOOL lowMemory;
+
+   NSArray *feedFilters;
 }
 
 @synthesize feedStoreID;
@@ -142,6 +144,19 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    assert(urlString != nil && "setFeedURLString:, parameter 'urlString' is nil");
    
    feedURLString = urlString;
+}
+
+//________________________________________________________________________________________
+- (void) setFilters : (NSObject *) filters
+{
+   //We work only with 'invalid url substrings' as filters at the moment.
+   //filters is an NSArray of NSStrings.
+   
+   assert(filters != nil && "setFilters:, parameter 'filters' is nil");
+   assert([filters isKindOfClass : [NSArray class]] &&
+          "setFilters:, filters has a wrong type");
+   
+   feedFilters = (NSArray *)filters;
 }
 
 #pragma mark - viewDid/Will/Should/Must/Could/Would stuff.
@@ -316,7 +331,26 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
 
    CernAPP::WriteFeedCache(feedStoreID, feedCache, items);
-   allArticles = [items mutableCopy];
+
+   //allArticles = [items mutableCopy];
+   allArticles = [[NSMutableArray alloc] init];
+   for (MWFeedItem *item in items) {
+      //Hehehe :(
+      bool filterOut = false;
+      for (NSObject *filter in feedFilters) {
+         assert([filter isKindOfClass : [NSString class]] && "filter object has a wrong type");
+         const NSRange filterRange = [item.link rangeOfString : (NSString *)filter];
+         if (filterRange.location != NSNotFound) {
+            filterOut = true;
+            break;
+         }
+      }
+      
+      if (!filterOut)
+         [allArticles addObject : item];
+   }
+
+
    feedCache = nil;
 
    [self hideActivityIndicators];

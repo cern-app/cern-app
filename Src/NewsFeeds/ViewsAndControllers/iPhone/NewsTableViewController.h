@@ -25,6 +25,7 @@
 }
 
 - (void) setFeedURLString : (NSString *) urlString;
+- (void) setFilters : (NSObject *) filters;
 - (BOOL) hasConnection;
 
 - (void) reloadPage;

@@ -40,6 +40,7 @@
 }
 
 - (void) setFeedURLString : (NSString *) urlString;
+- (void) setFilters : (NSObject *) filters;
 
 //Reachability.
 - (BOOL) hasConnection;

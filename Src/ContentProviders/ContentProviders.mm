@@ -99,6 +99,8 @@ UIViewController *FindController(UIView *view)
    BOOL isTwitterFeed;
    
    NSURL *twitterUrl;
+   
+   NSObject *filters;
 }
 
 //________________________________________________________________________________________
@@ -129,7 +131,10 @@ UIViewController *FindController(UIView *view)
             twitterUrl = TwitterURL(feed);
          } else
             isTwitterFeed = NO;
-      }
+      } else
+         isTwitterFeed = NO;
+      
+      filters = feedInfo[@"Filters"];
    }
    
    return self;
@@ -220,6 +225,8 @@ UIViewController *FindController(UIView *view)
       nt.navigationItem.title = feedName;
       nt.feedStoreID = feedName;
       [nt setFeedURLString : feed];
+      if (filters)
+         [nt setFilters : filters];
    } else {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
                                                                          FeedTileViewControllerID];
@@ -229,6 +236,8 @@ UIViewController *FindController(UIView *view)
       nt.navigationItem.title = feedName;
       nt.feedStoreID = feedName;
       [nt setFeedURLString : feed];
+      if (filters)
+         [nt setFilters : filters];
    }
    
    if (controller.slidingViewController.topViewController)

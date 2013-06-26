@@ -181,6 +181,10 @@
 			<key>Items</key>
 			<array>
 				<dict>
+					<key>Filters</key>
+					<array>
+						<string>ert.cern.ch</string>
+					</array>
 					<key>Category name</key>
 					<string>Feed</string>
 					<key>Image</key>
