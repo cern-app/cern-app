@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 
+#import "HUDRefreshProtocol.h"
 #import "AnimationDelegate.h"
 #import "SlideScrollView.h"
 #import "TiledPage.h"
@@ -15,7 +16,7 @@
 @class AnimationDelegate;
 @class FlipView;
 
-@interface TileViewController : UIViewController<FlipAnimatedViewController> {
+@interface TileViewController : UIViewController<FlipAnimatedViewController, HUDRefreshProtocol> {
 @protected
    NSMutableArray *dataItems;
    NSUInteger nPages;
@@ -67,5 +68,10 @@
 
 //ECSlidingViewController:
 - (IBAction) revealMenu : (id) sender;
+
+//HUDRefreshProtocol.
+@property (nonatomic, strong) MBProgressHUD *noConnectionHUD;//Error messages.
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
+
 
 @end

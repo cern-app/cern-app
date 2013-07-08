@@ -36,7 +36,7 @@
    NSArray *feedFilters;
 }
 
-@synthesize feedStoreID, noConnectionHUD, spinner;
+@synthesize feedStoreID;
 
 #pragma mark - Reachability.
 
@@ -58,8 +58,6 @@
       feedCache = nil;
       viewDidAppear = NO;
    
-      noConnectionHUD = nil;
-      spinner = nil;
       navBarSpinner = nil;
       
       internetReach = [Reachability reachabilityForInternetConnection];
@@ -155,7 +153,7 @@
    }//If we do not have connection, but have articles,
     //the network error will be reported by the feedParser. (TODO: check this!)
 
-   [noConnectionHUD hide : YES];
+   [self.noConnectionHUD hide : YES];
 
    if (!feedCache) {
       self.navigationItem.rightBarButtonItem.enabled = NO;

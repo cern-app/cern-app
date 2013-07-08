@@ -10,7 +10,6 @@
 #import "FeedParserOperation.h"
 #import "ThumbnailDownloader.h"
 #import "TileViewController.h"
-#import "HUDRefreshProtocol.h"
 #import "ImageDownloader.h"
 
 
@@ -31,8 +30,8 @@
 //So, I'll MWFeedParser in a separate thread (NSOperation) in a synchronous mode
 //(not to create another thread from a background thread).
 
-@interface NewsFeedViewController : TileViewController<HUDRefreshProtocol, ThumbnailDownloaderDelegate,
-                                                       ConnectionController, FeedParserOperationDelegate>
+@interface NewsFeedViewController : TileViewController<ThumbnailDownloaderDelegate, ConnectionController,
+                                                       FeedParserOperationDelegate>
 {
 @protected
    NSMutableDictionary *downloaders;//image downloaders.
@@ -66,9 +65,5 @@
 
 //HUD/UI
 - (IBAction) refresh : (id) sender;//The action for a nav. bar button.
-
-//HUDRefreshProtocol.
-@property (nonatomic, strong) MBProgressHUD *noConnectionHUD;//Error messages.
-@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
 @end

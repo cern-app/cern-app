@@ -18,6 +18,8 @@ using namespace FlipAnimation;
    BOOL autoFlipAnimation;
 }
 
+@synthesize noConnectionHUD, spinner;
+
 #pragma mark - Lifecycle.
 
 //________________________________________________________________________________________
@@ -31,6 +33,9 @@ using namespace FlipAnimation;
 
       panGesture = nil;
       panRegion = nil;
+
+      noConnectionHUD = nil;
+      spinner = nil;
 
       nPages = 0;
       pageBeforeRotation = 0;
@@ -355,6 +360,10 @@ using namespace FlipAnimation;
       [self.view addSubview : currPage];
 
    [currPage.superview bringSubviewToFront : currPage];
+   
+   if (!spinner.hidden)
+      [spinner.superview bringSubviewToFront : spinner];
+   
    [self loadVisiblePageData];
 }
 
