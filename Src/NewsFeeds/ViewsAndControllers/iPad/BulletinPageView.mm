@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 CERN. All rights reserved.
 //
 
+#import <algorithm>
+
 #import <QuartzCore/QuartzCore.h>
 
 #import "BulletinTableViewController.h"
@@ -81,7 +83,7 @@ const CGFloat tileShift = 0.2f;
    pageRange = [BulletinPageView suggestRangeForward : items startingFrom : index];
    assert(pageRange.length <= 3 && "setPageItems:startingFrom:, the page range > 3 is not supported");
 
-   for (NSUInteger i = 0; i < pageRange.length; ++i, ++index) {
+   for (NSUInteger i = 0, e = std::min(NSUInteger(3), pageRange.length); i < e; ++i, ++index) {
       //Using the array of MWFeedItems, find the issue's date and create a tile.
       //Create a tile.
       BulletinIssueTileView * const newTile = [[BulletinIssueTileView alloc] initWithFrame : CGRect()];
