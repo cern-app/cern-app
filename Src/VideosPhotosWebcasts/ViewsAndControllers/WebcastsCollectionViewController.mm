@@ -274,7 +274,7 @@ using CernAPP::NetworkStatus;
          break;
       }
    }
-   
+
    assert(data != nil && "feedParser:didParseFeedItem:, unknown parser");
    [data addObject : item];
 }
@@ -451,7 +451,10 @@ using CernAPP::NetworkStatus;
       
       if (!downloaders[indexPath]) {
          if (feedItem.summary) {//TODO: verify and confirm where do we have a thumbnail link.
-            if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(feedItem.summary)) {
+            if (NSString *urlString = CernAPP::FirstImageURLFromHTMLString(feedItem.summary)) {
+               //TODO: this is, of course, is not a real solution. Fixit.
+               if ([urlString hasPrefix : @"//"])
+                  urlString = [@"http:" stringByAppendingString : urlString];
                //We need this key to later be able identify a collection view, and indexPath.seciton is always 0 here, since
                //all 3 our views have 1 section.
                NSIndexPath * const newKey = [NSIndexPath indexPathForRow : indexPath.row inSection : NSInteger(i)];
@@ -483,8 +486,11 @@ using CernAPP::NetworkStatus;
    MWFeedItem * const item = feedData[viewIndex][indexPath.row];
    if (viewIndex < 2) {
       //Live/upcoming webcast, open it in a Safari browser.
-      if (item.link)
-         [[UIApplication sharedApplication] openURL : [NSURL URLWithString : item.link]];
+      if (item.link) {
+         //TODO: this is obviously a crappy solution with relative urls from webcasts feed :(
+         NSString * const fixedURLString = [item.link hasPrefix : @"//"] ? [@"http:" stringByAppendingString : item.link] : item.link;
+         [[UIApplication sharedApplication] openURL : [NSURL URLWithString : fixedURLString]];
+      }
    } else {
       //For the 'recent' we have 'enclosures':
       if (item.enclosures) {
