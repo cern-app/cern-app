@@ -452,7 +452,6 @@ using CernAPP::NetworkStatus;
       if (!downloaders[indexPath]) {
          if (feedItem.summary) {//TODO: verify and confirm where do we have a thumbnail link.
             if (NSString *urlString = CernAPP::FirstImageURLFromHTMLString(feedItem.summary)) {
-               //TODO: this is, of course, is not a real solution. Fixit.
                if ([urlString hasPrefix : @"//"])
                   urlString = [@"http:" stringByAppendingString : urlString];
                //We need this key to later be able identify a collection view, and indexPath.seciton is always 0 here, since
@@ -487,9 +486,23 @@ using CernAPP::NetworkStatus;
    if (viewIndex < 2) {
       //Live/upcoming webcast, open it in a Safari browser.
       if (item.link) {
+         BOOL urlOpened = NO;
          //TODO: this is obviously a crappy solution with relative urls from webcasts feed :(
-         NSString * const fixedURLString = [item.link hasPrefix : @"//"] ? [@"http:" stringByAppendingString : item.link] : item.link;
-         [[UIApplication sharedApplication] openURL : [NSURL URLWithString : fixedURLString]];
+         if ([item.link hasPrefix : @"//"]) {
+            //Relative urls in the 'upcoming' category, UIApplication, obviously, can not handle them.
+            //-openURL supports 'http', 'https', 'file', 'mailto'
+            NSString *fixedUrl = [@"http:" stringByAppendingString : item.link];
+            urlOpened = [[UIApplication sharedApplication] openURL : [NSURL URLWithString : fixedUrl]];
+            if (!urlOpened) {
+               fixedUrl = [@"https:" stringByAppendingString : item.link];
+               urlOpened = [[UIApplication sharedApplication] openURL : [NSURL URLWithString : fixedUrl]];
+            }
+         } else {
+            urlOpened = [[UIApplication sharedApplication] openURL : [NSURL URLWithString : item.link]];
+         }
+         
+         if (!urlOpened)
+            CernAPP::ShowErrorAlert(@"Bad url", @"Close");
       }
    } else {
       //For the 'recent' we have 'enclosures':
