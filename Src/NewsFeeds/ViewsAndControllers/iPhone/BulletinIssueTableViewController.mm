@@ -32,6 +32,8 @@
 //________________________________________________________________________________________
 - (void) setTableData : (NSArray *) aData
 {
+   //In this table view/controller we do not parse any feeds, all MWFeedItems are set externally
+   //by the top-level BulletinTableViewController.
    tableData = aData;
    loaded = NO;
 }

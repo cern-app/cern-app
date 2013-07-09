@@ -62,7 +62,5 @@
 @property (nonatomic) unsigned char imageCut;
 @property (nonatomic) BOOL wideImageOnTop;
 @property (nonatomic, strong) UIImage *image;
-//Subset is a bulletin issue.
-@property (nonatomic) NSUInteger subsetIndex;
 
 @end

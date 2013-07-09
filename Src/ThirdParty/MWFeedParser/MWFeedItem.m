@@ -33,7 +33,7 @@
 
 @implementation MWFeedItem
 
-@synthesize identifier, title, link, date, updated, summary, content, enclosures, image, subsetIndex;
+@synthesize identifier, title, link, date, updated, summary, content, enclosures, image;
 @synthesize imageCut, wideImageOnTop;
 
 #pragma mark NSObject

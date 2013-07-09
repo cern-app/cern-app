@@ -161,13 +161,13 @@
    
    [self hideActivityIndicators];
 
+   //Here we split sorted (by date) articles into the bulletin's issues (by week).
    if (articles.count) {
       bulletins = [[NSMutableArray alloc] init];
       thumbnails = [[NSMutableDictionary alloc] init];
    
       NSMutableArray *weekData = [[NSMutableArray alloc] init];
       MWFeedItem * const firstArticle = [articles objectAtIndex : 0];
-      firstArticle.subsetIndex = 0;
       [weekData addObject : firstArticle];
    
       NSCalendar * const calendar = [NSCalendar currentCalendar];
@@ -187,8 +187,7 @@
             currentYear = dateComponents.year;
             weekData = [[NSMutableArray alloc] init];
          }
-         
-         article.subsetIndex = bulletins.count;
+
          [weekData addObject : article];
       }
       
@@ -255,8 +254,7 @@
       for (MWFeedItem *article in articles) {
          //If we are here, this means we do not have a thumbnail
          //yet, but in principle, some of articles in this issue
-         //can have an image downloaded already (I had an
-         //an assert here).
+         //can have an image downloaded already.
          if (article.image) {
             //
             [thumbnails setObject : article.image forKey : indexPath];
