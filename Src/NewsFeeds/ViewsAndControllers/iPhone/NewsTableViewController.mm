@@ -188,6 +188,9 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    //if combined with empty footer view, which is a standard trick to hide empty rows).
    self.refreshControl = [[UIRefreshControl alloc] init];
    [self.refreshControl addTarget : self action : @selector(reloadFromRefreshControl) forControlEvents : UIControlEventValueChanged];
+   
+   //
+   [self.tableView registerClass : [NewsTableViewCell class] forCellReuseIdentifier : [NewsTableViewCell cellReuseIdentifier]];
 }
 
 //________________________________________________________________________________________
@@ -404,9 +407,13 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    assert(indexPath != nil && "tableView:cellForRowAtIndexPath:, parameter 'indexPath' is nil");
 
-   NewsTableViewCell *cell = (NewsTableViewCell *)[tableView dequeueReusableCellWithIdentifier : @"NewsCell"];
+   UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier : [NewsTableViewCell cellReuseIdentifier]];
+   assert((!cell || [cell isKindOfClass : [NewsTableViewCell class]]) &&
+          "tableView:cellForRowAtIndexPath, reusable cell has a wrong type");
+   
    if (!cell)
       cell = [[NewsTableViewCell alloc] initWithFrame : [NewsTableViewCell defaultCellFrame]];
+
    if (![cell.selectedBackgroundView isKindOfClass : [CellBackgroundView class]])
       cell.backgroundView = [[CellBackgroundView alloc] initWithFrame : CGRect()];
 
@@ -414,7 +421,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    assert(row >= 0 && row < allArticles.count && "tableView:cellForRowAtIndexPath:, row is out of bounds");
 
    MWFeedItem * const article = (MWFeedItem *)allArticles[row];
-   [cell setCellData : article imageOnTheRight : (indexPath.row % 4) == 3];
+   [(NewsTableViewCell *)cell setCellData : article imageOnTheRight : (indexPath.row % 4) == 3];
 
    return cell;
 }

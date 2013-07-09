@@ -169,6 +169,12 @@ TextGeometry PlaceText(NSString *text, CGFloat fixedWidth, NSString *fontName)
 }
 
 //________________________________________________________________________________________
++ (NSString *) cellReuseIdentifier
+{
+   return @"NewsTableViewCell";
+}
+
+//________________________________________________________________________________________
 - (void) setImageView
 {
    if (!imageView) {

@@ -42,13 +42,6 @@
 }
 
 //________________________________________________________________________________________
-- (void) viewDidLoad
-{
-   [super viewDidLoad];
-	//Do any additional setup after loading the view.
-}
-
-//________________________________________________________________________________________
 - (void) viewDidAppear : (BOOL) animated
 {
    canUseCache = NO;
@@ -67,17 +60,15 @@
 //This method is overriden (it differs from what I have in NewsTableViewController.
 
 //________________________________________________________________________________________
-- (void) reloadPageShowHUD : (BOOL) show
+- (void) reloadShowHUD : (BOOL) show
 {
    //This function is called either the first time we are loading table
-   //(if we have a cache, we show spinner in a nav-bar, if no - in the center),
-   //and it can be also called after 'pull-refresh', in this case, we do not show
+   //or after 'pull-refresh', in this case, we do not show
    //spinner (it's done by refreshControl).
-
    if (parseOp)
       return;
-   
-   //Stop any image download if we have any.
+
+   //Stop an image download if we have any.
    [self cancelAllImageDownloaders];
 
    if (![self hasConnection]) {
@@ -92,8 +83,6 @@
    [noConnectionHUD hide : YES];
    
    if (show) {
-      //HUD: either spinner in the center
-      //or spinner in a navigation bar.
       [spinner setHidden : NO];
       [spinner startAnimating];
    }
@@ -128,19 +117,17 @@
    const NSInteger row = indexPath.row;
    assert(row >= 0 && row < bulletins.count && "tableView:cellForRowAtIndexPath:, index is out of bounds");
 
-   UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier : @"BulletinCell"];
-   assert(!cell || [cell isKindOfClass : [NewsTableViewCell class]] &&
-          "tableView:cellForRowAtIndexPath:, reusable cell has a wrong type");
-
+   UITableViewCell *cell = (NewsTableViewCell *)[tableView dequeueReusableCellWithIdentifier : [NewsTableViewCell cellReuseIdentifier]];
+   assert((!cell || [cell isKindOfClass : [NewsTableViewCell class]]) &&
+          "tableView:cellForRowAtIndexPath:, reusable cell is either nil or has a wrong type");
    if (!cell)
       cell = [[NewsTableViewCell alloc] initWithFrame : [NewsTableViewCell defaultCellFrame]];
 
    if (![cell.selectedBackgroundView isKindOfClass : [CellBackgroundView class]])
       cell.backgroundView = [[CellBackgroundView alloc] initWithFrame : CGRect()];
 
-   NewsTableViewCell * const newsCell = (NewsTableViewCell *)cell;
    UIImage * const image = [thumbnails objectForKey : indexPath];
-   [newsCell setTitle : CernAPP::BulletinTitleForWeek((NSArray *)bulletins[row]) image : image];
+   [(NewsTableViewCell *)cell setTitle : CernAPP::BulletinTitleForWeek((NSArray *)bulletins[row]) image : image];
 
    if (!image)
       [self startIconDownloadForIndexPath : indexPath];

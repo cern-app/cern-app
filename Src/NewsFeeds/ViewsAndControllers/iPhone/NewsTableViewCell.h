@@ -15,6 +15,7 @@
 + (CGFloat)    inset;
 + (CGSize)     bigImageSize;
 + (CGSize)     defaultImageSize;
++ (NSString *) cellReuseIdentifier;
 
 + (NSString *) authorLabelFontName;
 + (NSString *) titleLabelFontName;

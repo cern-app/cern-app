@@ -47,6 +47,8 @@
 {
    [super viewDidLoad];
    internetReach = [Reachability reachabilityForInternetConnection];
+   
+   [self.tableView registerClass : [NewsTableViewCell class] forCellReuseIdentifier : [NewsTableViewCell cellReuseIdentifier]];
 }
 
 //________________________________________________________________________________________
@@ -108,16 +110,17 @@
    MWFeedItem * const article = (MWFeedItem *)tableData[row];
    assert(article != nil && "tableView:cellForRowAtIndexPath:, article was not found");
 
-   NewsTableViewCell *cell = (NewsTableViewCell *)[tableView dequeueReusableCellWithIdentifier : @"BulletinIssueCell"];
-   if (!cell)
-      cell = [[NewsTableViewCell alloc] initWithFrame : [NewsTableViewCell defaultCellFrame]];
+   UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier : [NewsTableViewCell cellReuseIdentifier]];
+   assert((!cell || [cell isKindOfClass : [NewsTableViewCell class]]) &&
+          "tableView:cellForRowAtIndexPath:, reusable cell has a wrong type");
    
+   if (!cell)
+      cell = [[NewsTableViewCell alloc] initWithFrame : [NewsTableViewCell defaultCellFrame]];   
    //
    if (![cell.selectedBackgroundView isKindOfClass : [CellBackgroundView class]])
       cell.backgroundView = [[CellBackgroundView alloc] initWithFrame : CGRect()];
    //
-
-   [cell setCellData : article imageOnTheRight : (indexPath.row % 4) == 3];
+   [(NewsTableViewCell *)cell setCellData : article imageOnTheRight : (indexPath.row % 4) == 3];
    
    if (!article.image)
       [self startIconDownloadForIndexPath : indexPath];
