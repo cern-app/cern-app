@@ -105,7 +105,7 @@ enum class ThumbnailDownloadStage : unsigned char {
    for (id key in keyEnumerator) {
       ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[key];
       [downloader cancelDownload];//if it was started already
-      [downloader startDownload : YES];//Do not create the final UIImage object.
+      [downloader startDownload : YES];//YES == do not create the final UIImage.
    }
    
    return YES;
