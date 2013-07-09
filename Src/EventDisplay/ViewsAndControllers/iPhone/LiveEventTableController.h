@@ -21,9 +21,6 @@
 - (void) setTableContents : (NSArray *) contents experimentName : (NSString *) name;
 - (void) refresh;
 
-- (void) reloadPage;
-- (void) reloadPageFromRefreshControl;
-
 @property (nonatomic) __weak LiveEventsProvider *provider;
 @property (nonatomic) __weak UINavigationController *navController;
 

@@ -107,7 +107,7 @@ using CernAPP::NetworkStatus;
 {
    [super viewDidLoad];
    self.refreshControl = [[UIRefreshControl alloc] init];
-   [self.refreshControl addTarget : self action : @selector(reloadPageFromRefreshControl) forControlEvents : UIControlEventValueChanged];
+   [self.refreshControl addTarget : self action : @selector(reloadFromRefreshControl) forControlEvents : UIControlEventValueChanged];
    
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
    internetReach = [Reachability reachabilityForInternetConnection];
@@ -118,6 +118,8 @@ using CernAPP::NetworkStatus;
       self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle : @"Events" style : UIBarButtonItemStylePlain target : nil action : nil];
    else if ([self.navigationItem.title rangeOfString : @"Status"].location != NSNotFound)//Otherwise, name is too long.
       self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle : @"Status" style : UIBarButtonItemStylePlain target : nil action : nil];
+   
+   [self.tableView registerClass : [NewsTableViewCell class] forCellReuseIdentifier : [NewsTableViewCell cellReuseIdentifier]];
 }
 
 //________________________________________________________________________________________
@@ -127,7 +129,7 @@ using CernAPP::NetworkStatus;
 
    if (!firstViewDidAppear) {
       firstViewDidAppear = YES;
-      [self reloadPage];
+      [self refresh];
    }
 
 }
@@ -207,19 +209,13 @@ using CernAPP::NetworkStatus;
 }
 
 //________________________________________________________________________________________
-- (void) reloadPageFromRefreshControl
+- (void) reloadFromRefreshControl
 {
    if (![self hasConnection]) {
       [self.refreshControl endRefreshing];
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    } else
       [self refresh];
-}
-
-//________________________________________________________________________________________
-- (void) reloadPage
-{
-   [self refresh];
 }
 
 //________________________________________________________________________________________
@@ -293,13 +289,14 @@ using CernAPP::NetworkStatus;
    LiveImageData * const liveData = [self imageDataForFlatIndex : indexPath.row];
    assert(liveData != nil && "tableView:cellForRowAtIndexPath:, indexPath.row is out of bounds");
 
-   static NSString *CellIdentifier = @"NewsCell";
+   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier : [NewsTableViewCell cellReuseIdentifier]];
+   assert((!cell || [cell isKindOfClass : [NewsTableViewCell class]]) &&
+          "tableView:cellForRowAtIndexPath:, reusable cell has a wrong type");
    
-   NewsTableViewCell *cell = (NewsTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier : CellIdentifier];
    if (!cell)
       cell = [[NewsTableViewCell alloc] initWithFrame : [NewsTableViewCell defaultCellFrame]];
 
-   [cell setCellData : liveData.imageName source : sourceName image : liveData.image imageOnTheRight : (indexPath.row % 4) == 3];
+   [(NewsTableViewCell *)cell setCellData : liveData.imageName source : sourceName image : liveData.image imageOnTheRight : (indexPath.row % 4) == 3];
 
    return cell;
 }
@@ -473,7 +470,7 @@ using CernAPP::NetworkStatus;
 #pragma mark - Hack to remove empty rows
 
 //________________________________________________________________________________________
-- (UIView *) tableView : (UITableView *)tableView viewForFooterInSection : (NSInteger) section
+- (UIView *) tableView : (UITableView *) tableView viewForFooterInSection : (NSInteger) section
 {
    //Many thanks to J. Costa for this trick. (http://stackoverflow.com/questions/1369831/eliminate-extra-separators-below-uitableview-in-iphone-sdk)
    if (!section)
