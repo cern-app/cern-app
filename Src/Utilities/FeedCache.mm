@@ -91,7 +91,7 @@ void WriteFeedCache(NSString *feedStoreID, NSArray *feedCache, NSArray *allArtic
          }
       } else {
          //We still have to remove the old data for this feed!
-         //We're here if controller does no use the cache at the moment,
+         //We're here if controller does not use the cache at the moment,
          //but some data is in db.
          NSEntityDescription * const entityDesc = [NSEntityDescription entityForName : @"FeedItem"
                                                               inManagedObjectContext : context];

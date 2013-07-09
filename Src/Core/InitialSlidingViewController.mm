@@ -24,7 +24,7 @@
 //________________________________________________________________________________________
 - (void) loadFirstNewsFeed : (UIViewController *) aController
 {
-   assert(aController != nil && "loadFirstNewsFeed:, parameter 'tableController' is nil");
+   assert(aController != nil && "loadFirstNewsFeed:, parameter 'aController' is nil");
 
    NSString * const path = [[NSBundle mainBundle] pathForResource : @"MENU" ofType : @"plist"];
    NSDictionary * const plistDict = [NSDictionary dictionaryWithContentsOfFile : path];
@@ -37,7 +37,7 @@
    NSArray * const menuContents = (NSArray *)objBase;
    assert(menuContents.count != 0 && "viewDidLoad, menu contents array is empty");
 
-   //We are looking either tweet or news feed in our list.
+   //We are looking for either a tweet or a news feed in our list.
    NSDictionary *feedDict = nil;
 
    for (id item in menuContents) {
@@ -49,7 +49,6 @@
              "loadFirstNewsFeed:, 'Category Name' either not found, or has a wrong type");
    
       NSString * const catName = (NSString *)objBase;
-
       if ([catName isEqualToString : @"Feed"] || [catName isEqualToString : @"Tweet"]) {
          //It's a feed at the top level.
          feedDict = menuItemDict;
@@ -130,15 +129,14 @@
              "viewDidLoad:, top view controller is either nil or has a wrong type");
       //The very first view a user see - is a news table. We create a navigation controller
       //with such a table here, also, we have to add a news feed here.
-      [self loadFirstNewsFeed : top.topViewController];
    } else {
       top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
                                                     CernAPP::FeedTileViewControllerID];
       assert([top.topViewController isKindOfClass : [NewsFeedViewController class]] &&
              "viewDidLoad:, top view controller is either nil or has a wrong type");
-      [self loadFirstNewsFeed : top.topViewController];
    }
 
+   [self loadFirstNewsFeed : top.topViewController];
    self.topViewController = top;
 }
 

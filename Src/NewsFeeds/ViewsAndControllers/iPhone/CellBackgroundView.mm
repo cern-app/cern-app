@@ -11,8 +11,6 @@
 
 @implementation CellBackgroundView
 
-@synthesize selectedView;
-
 //________________________________________________________________________________________
 - (void) drawRect : (CGRect) rect
 {

@@ -1,12 +1,6 @@
 //Author: Timur Pocheptsov.
 //Developed for CERN app.
 
-//This is a code for a table view controller, which shows an author, a title, and a date for
-//an every news item.
-//It can be used ONLY for iPhone/iPod touch device, for iPad we'll have a different approach.
-
-#import <Availability.h>
-
 #import <UIKit/UIKit.h>
 
 #import "ConnectionController.h"
@@ -28,19 +22,11 @@
 - (void) setFilters : (NSObject *) filters;
 - (BOOL) hasConnection;
 
-- (void) reloadPage;
-- (void) reloadPageFromRefreshControl;
 //
 - (void) startFeedParsing;
 //
 @property (nonatomic, copy) NSString *feedStoreID;
 //
-- (IBAction) revealMenu : (id) sender;
-//
-- (void) hideActivityIndicators;
-- (void) cancelAllImageDownloaders;
-- (void) showErrorHUD;
-
 @end
 
 namespace CernAPP {

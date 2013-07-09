@@ -47,13 +47,10 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
 }
 
-
 @implementation NewsTableViewController {
    NSMutableArray *allArticles;
    
    NSArray *feedCache;
-   //TODO: do I really need the boolean value? Can I use feedCache in tests?
-   BOOL usingCache;
    
    UIActivityIndicatorView *navBarSpinner;
    BOOL firstViewDidAppear;
@@ -88,25 +85,28 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 //________________________________________________________________________________________
 - (void) doInitTableViewController
 {
-   //Data in Obj-C's object is zero-filled,
-   //but still I prefer explicit initialization here
-   //(and some ivars/props are not 0).
+   //ivars from the header (interface declaration).
+   canUseCache = YES;
+   spinner = nil;
+   noConnectionHUD = nil;
+   parseOp = nil;
+   feedStoreID = nil;
 
+   //'private' ivars (hidden in mm file).
    allArticles = nil;
    feedCache = nil;
-   usingCache = NO;
    navBarSpinner = nil;
    firstViewDidAppear = YES;
-   
-   canUseCache = YES;
 
    feedURLString = nil;
    parseQueue = [[NSOperationQueue alloc] init];
-   parseOp = nil;
 
    internetReach = [Reachability reachabilityForInternetConnection];
    
+   rangeDownloaders = nil;
+   
    lowMemory = NO;
+   feedFilters = nil;
 }
 
 //________________________________________________________________________________________
@@ -137,6 +137,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    return self;
 }
 
+#pragma mark - Setters.
 
 //________________________________________________________________________________________
 - (void) setFeedURLString : (NSString *) urlString
@@ -173,20 +174,20 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    self.tableView.showsVerticalScrollIndicator = NO;
    
    //Allocate/initialize UIActivityIndicatorView to show at the center of a tableview:
-   //only the first time the table is loading (and if we do not have our feed in cache -
+   //only the first time the table is loading (and if we do not have cache -
    //in this case activity indicator will be in a navigation bar).
 
    using CernAPP::spinnerSize;
    const CGPoint spinnerOrigin = CGPointMake(self.view.frame.size.width / 2 - spinnerSize / 2, self.view.frame.size.height / 2 - spinnerSize / 2);
-   spinner = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(spinnerOrigin.x, spinnerOrigin.y, spinnerSize, spinnerSize)];
+   spinner = [[UIActivityIndicatorView alloc] initWithFrame : CGRectMake(spinnerOrigin.x, spinnerOrigin.y, spinnerSize, spinnerSize)];
    spinner.color = [UIColor grayColor];
    [self.view addSubview : spinner];
    [spinner setHidden : YES];
-   
+
    //Nice refresh control at the top of a table-view (this shit kills application
    //if combined with empty footer view, which is a standard trick to hide empty rows).
    self.refreshControl = [[UIRefreshControl alloc] init];
-   [self.refreshControl addTarget : self action : @selector(reloadPageFromRefreshControl) forControlEvents : UIControlEventValueChanged];
+   [self.refreshControl addTarget : self action : @selector(reloadFromRefreshControl) forControlEvents : UIControlEventValueChanged];
 }
 
 //________________________________________________________________________________________
@@ -203,12 +204,12 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       //read a cache?
       if (canUseCache && feedStoreID) {
          if ((feedCache = CernAPP::ReadFeedCache(feedStoreID)))
+            //Convert persistent objects into feed items.
             allArticles = CernAPP::ConvertFeedCache(feedCache);
-         usingCache = feedCache != nil;
       }
       
       [self.tableView reloadData];//Load table with cached data, if any.
-      [self reloadPage];
+      [self reload];
    }
 }
 
@@ -243,7 +244,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma mark - Reload/refresh logic.
 
 //________________________________________________________________________________________
-- (void) reloadPageFromRefreshControl
+- (void) reloadFromRefreshControl
 {
    if (parseOp) {
       //Do not try to reload if aggregator is still working.
@@ -258,20 +259,20 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       return;
    }
 
-   [self reloadPageShowHUD : NO];
+   [self reloadShowHUD : NO];
 }
 
 //________________________________________________________________________________________
-- (void) reloadPage
+- (void) reload
 {
    if (parseOp)
       return;
 
-   [self reloadPageShowHUD : YES];
+   [self reloadShowHUD : YES];
 }
 
 //________________________________________________________________________________________
-- (void) reloadPageShowHUD : (BOOL) show
+- (void) reloadShowHUD : (BOOL) show
 {
    //This function is called either the first time we are loading table
    //(if we have a cache, we show spinner in a nav-bar, if no - in the center),
@@ -281,13 +282,13 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    if (parseOp)
       return;
 
-   //Stop any image download if we have any.
+   //Stop an image download if we have any.
    [self cancelAllImageDownloaders];
 
    if (![self hasConnection]) {
       //Network problems, we can not reload
       //and do not have any previous data to show.
-      if (!usingCache && !allArticles.count) {
+      if (!feedCache && !allArticles.count) {
          [self showErrorHUD];
          return;
       }
@@ -298,7 +299,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    if (show) {
       //HUD: either spinner in the center
       //or spinner in a navigation bar.
-      if (!usingCache) {
+      if (!feedCache) {
          [spinner setHidden : NO];
          [spinner startAnimating];
       } else {
@@ -332,7 +333,6 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    CernAPP::WriteFeedCache(feedStoreID, feedCache, items);
 
-   //allArticles = [items mutableCopy];
    allArticles = [[NSMutableArray alloc] init];
    for (MWFeedItem *item in items) {
       //Hehehe :(
@@ -355,8 +355,6 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    [self hideActivityIndicators];
 
-   usingCache = NO;
-   
    parseOp = nil;
 
    [self.refreshControl endRefreshing];//well, if we have it active.
@@ -413,16 +411,10 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       cell.backgroundView = [[CellBackgroundView alloc] initWithFrame : CGRect()];
 
    const NSInteger row = indexPath.row;
-
-   assert(row >= 0 && row < allArticles.count);
+   assert(row >= 0 && row < allArticles.count && "tableView:cellForRowAtIndexPath:, row is out of bounds");
 
    MWFeedItem * const article = (MWFeedItem *)allArticles[row];
-   assert(article != nil && "tableView:cellForRowAtIndexPath:, article was not found");
-
    [cell setCellData : article imageOnTheRight : (indexPath.row % 4) == 3];
-
-   //if (!usingCache && !article.image)
-   //   [self startIconDownloadForIndexPath : indexPath];
 
    return cell;
 }
@@ -435,16 +427,11 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    assert(indexPath != nil && "tableView:heightForRowAtIndexPath:, parameter 'indexPath' is nil");
 
    const NSInteger row = indexPath.row;
-
    assert(row >= 0 && row < allArticles.count && "tableView:heightForRowAtIndexPath:, indexPath.row is out of bounds");
 
    MWFeedItem * const article = (MWFeedItem *)allArticles[row];
    return [NewsTableViewCell calculateCellHeightForData : article imageOnTheRight : (indexPath.row % 4) == 3];
 }
-
-#pragma mark - RSSAggregatorDelegate methods
-
-
 
 #pragma mark - Table view delegate
 
@@ -517,7 +504,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma unused(scrollView)
 
    //Cached feeds do not have any images.
-   if (!usingCache) {
+   if (!feedCache) {
       if (!decelerate)
          [self loadImagesForOnscreenRows];
    }
@@ -529,7 +516,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma unused(scrollView)
 
    //No images in a cached feed.
-   if (!usingCache)
+   if (!feedCache)
       [self loadImagesForOnscreenRows];
 }
 
@@ -552,8 +539,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 //________________________________________________________________________________________
 - (void) loadImagesForOnscreenRows
 {
-   assert(usingCache == NO && "loadImagesForOnscreenRows, controller is in a wrong mode");
-   
+   assert(feedCache == nil && "loadImagesForOnscreenRows, controller is in a wrong mode");
+
    if (lowMemory)
       return;
 

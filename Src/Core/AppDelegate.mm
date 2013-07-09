@@ -12,7 +12,7 @@
    [[UIBarButtonItem appearance] setTintColor : [UIColor colorWithRed : 0.f green : 83.f / 255.f blue : 161.f / 255.f alpha : 1.f]];
    //
    NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
-   NSDictionary * const appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:@13, @"GUIFontSize", @0, @"HTMLBodyFontSize", nil];
+   NSDictionary * const appDefaults = [NSDictionary dictionaryWithObjectsAndKeys : @13, @"GUIFontSize", @0, @"HTMLBodyFontSize", nil];
    [defaults registerDefaults : appDefaults];
    [defaults synchronize];
    

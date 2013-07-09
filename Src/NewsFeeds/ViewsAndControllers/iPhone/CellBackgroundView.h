@@ -10,6 +10,4 @@
 
 @interface CellBackgroundView : UIView
 
-@property (nonatomic) BOOL selectedView;
-
 @end
