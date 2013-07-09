@@ -130,7 +130,7 @@
              "viewDidLoad:, top view controller is either nil or has a wrong type");
       //The very first view a user see - is a news table. We create a navigation controller
       //with such a table here, also, we have to add a news feed here.
-      [self loadFirstNewsFeed : (NewsTableViewController *)top.topViewController];
+      [self loadFirstNewsFeed : top.topViewController];
    } else {
       top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
                                                     CernAPP::FeedTileViewControllerID];
