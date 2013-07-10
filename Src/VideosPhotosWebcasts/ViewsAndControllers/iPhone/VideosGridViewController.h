@@ -26,9 +26,6 @@
    NSMutableDictionary *imageDownloaders;
 }
 
-- (IBAction)refresh : (id) sender;
-- (IBAction) revealMenu : (id) sender;
-
 //HUD/Refresh protocol.
 @property (nonatomic, strong) MBProgressHUD *noConnectionHUD;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;

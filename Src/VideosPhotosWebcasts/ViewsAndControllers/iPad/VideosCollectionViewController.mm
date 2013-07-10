@@ -16,14 +16,6 @@
 }
 
 //________________________________________________________________________________________
-- (void) viewDidLoad
-{
-   [super viewDidLoad];
-   // Do any additional setup after loading the view.
-   [self.collectionView registerClass:[VideoThumbnailCell class] forCellWithReuseIdentifier : @"VideoThumbnailCell"];
-}
-
-//________________________________________________________________________________________
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -54,12 +46,9 @@
    assert(indexPath.row >= 0 && indexPath.row < videoMetadata.count &&
           "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
 
-   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"VideoThumbnailCell" forIndexPath : indexPath];
-   assert(!cell || [cell isKindOfClass : [VideoThumbnailCell class]] &&
+   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : [VideoThumbnailCell cellReuseIdentifier] forIndexPath : indexPath];
+   assert([cell isKindOfClass : [VideoThumbnailCell class]] &&
           "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
-   
-   if (!cell)
-      cell = [[VideoThumbnailCell alloc] initWithFrame : CGRect()];
    
    VideoThumbnailCell * const videoCell = (VideoThumbnailCell *)cell;
    
@@ -114,6 +103,7 @@
 {
    NSUInteger row = 0;
    imageDownloaders = [[NSMutableDictionary alloc] init];
+   videoThumbnails = [[NSMutableDictionary alloc] init];
    for (NSDictionary *metaData in videoMetadata) {
       ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : (NSURL *)metaData[@"jpgposterframe"]];
       NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : row inSection : 0];

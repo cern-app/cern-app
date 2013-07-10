@@ -21,18 +21,15 @@
 #import "GUIHelpers.h"
 
 @implementation VideosGridViewController {
-   MBProgressHUD *noConnectionHUD;
    BOOL loaded;
-   
    //
    NSOperationQueue *parserQueue;
    VideoCollectionsParserOperation *operation;
    
    Reachability *internetReach;
-   UIActivityIndicatorView *spinner;
 }
 
-@synthesize spinner, noConnectionHUD;
+@synthesize noConnectionHUD, spinner;
 
 #pragma mark - Reachability.
 
@@ -47,12 +44,16 @@
 {
    if (self = [super initWithCoder : aDecoder]) {
       videoMetadata = [NSMutableArray array];
-      videoThumbnails = [NSMutableDictionary dictionary];
+
+      videoThumbnails = nil;
+      imageDownloaders = nil;
+
+      loaded = NO;
 
       parserQueue = [[NSOperationQueue alloc] init];
       operation = nil;
       
-      loaded = NO;
+      internetReach = nil;
    }
 
    return self;
@@ -62,27 +63,30 @@
 - (void) viewDidLoad
 {
    [super viewDidLoad];
+
    internetReach = [Reachability reachabilityForInternetConnection];
 
    CernAPP::AddSpinner(self);
    CernAPP::HideSpinner(self);
    
-   [self.collectionView registerClass : [VideoThumbnailCell class] forCellWithReuseIdentifier : @"VideoThumbnailCell"];
-   
+   [self.collectionView registerClass : [VideoThumbnailCell class]
+    forCellWithReuseIdentifier : [VideoThumbnailCell cellReuseIdentifier]];
    [self.collectionView registerClass : [CollectionSupplementraryView class]
     forSupplementaryViewOfKind : UICollectionElementKindSectionHeader
     withReuseIdentifier : [CollectionSupplementraryView reuseIdentifierHeader]];
    [self.collectionView registerClass : [CollectionSupplementraryView class]
     forSupplementaryViewOfKind : UICollectionElementKindSectionFooter
-     withReuseIdentifier : [CollectionSupplementraryView reuseIdentifierFooter]];
+    withReuseIdentifier : [CollectionSupplementraryView reuseIdentifierFooter]];
 }
 
 //________________________________________________________________________________________
-- (void) viewWillAppear : (BOOL) animated
+- (void) viewDidAppear : (BOOL) animated
 {
+   [super viewDidAppear : animated];
+
    if (!loaded) {
-      [self refresh];
       loaded = YES;
+      [self refresh];
    }
 }
 
@@ -106,6 +110,7 @@
 - (IBAction) refresh : (id) sender
 {
 #pragma unused(sender)
+
    if (![self hasConnection]) {
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
       return;
@@ -119,7 +124,8 @@
 {
    assert(parserQueue != nil && "refresh, parserQueue is nil");
    assert(operation == nil && "refresh, called while parsing operation is active");
-   
+
+   [self cancelAllDownloaders];
    self.navigationItem.rightBarButtonItem.enabled = NO;
  
    [noConnectionHUD hide : YES];
@@ -135,22 +141,35 @@
 {
 #pragma unused(error)
 
+   if (!operation)//Was cancelled.
+      return;
+
    CernAPP::HideSpinner(self);
-   CernAPP::ShowErrorHUD(self, @"Network error");
 
    [parserQueue cancelAllOperations];
    operation = nil;
+
+   if (!videoMetadata.count)
+      CernAPP::ShowErrorHUD(self, @"Network error");
+   else
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+   
    //Refresh button.
    self.navigationItem.rightBarButtonItem.enabled = YES;
 }
 
 //________________________________________________________________________________________
-- (void) parserDidFinishWithItems:(NSArray *)items
+- (void) parserDidFinishWithItems : (NSArray *) items
 {
+   if (!operation)//Was cancelled.
+      return;
+
    videoMetadata = [items copy];
 
    [self downloadVideoThumbnails];
    [self.collectionView reloadData];
+   
+   operation = nil;
 }
 
 #pragma mark - ImageDownloader.
@@ -160,6 +179,8 @@
 {
    NSUInteger section = 0;
    imageDownloaders = [[NSMutableDictionary alloc] init];
+   videoThumbnails = [NSMutableDictionary dictionary];
+
    for (NSDictionary *metaData in videoMetadata) {
       ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : (NSURL *)metaData[@"jpgposterframe"]];
       NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : 0 inSection : section];
@@ -242,7 +263,7 @@
    assert(collectionView != nil && "collectionView:cellForItemAtIndexPath:, parameter 'collectionView' is nil");
    assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
 
-   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : @"VideoThumbnailCell" forIndexPath : indexPath];
+   UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : [VideoThumbnailCell cellReuseIdentifier] forIndexPath : indexPath];
    assert([cell isKindOfClass : [VideoThumbnailCell class]] &&
           "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
    
