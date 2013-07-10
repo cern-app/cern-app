@@ -44,7 +44,7 @@
       [self addSubview : _photoImageView];
 
       // Spinner
-      _spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle : UIActivityIndicatorViewStyleWhiteLarge];
+      _spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle : UIActivityIndicatorViewStyleWhite];
       _spinner.hidesWhenStopped = YES;
       _spinner.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin |
                                   UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
