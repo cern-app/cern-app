@@ -636,8 +636,6 @@ using CernAPP::NetworkStatus;
       [self.view bringSubviewToFront : self.collectionView];
       if (!spinners[0].isHidden)
          [spinners[0].superview bringSubviewToFront : spinners[0]];
-      if (!noConnectionHUDs[0].isHidden)
-         [noConnectionHUDs[0].superview bringSubviewToFront : noConnectionHUDs[0]];
    } else
       [self.view bringSubviewToFront : auxParentViews[i - 1]];
 }
