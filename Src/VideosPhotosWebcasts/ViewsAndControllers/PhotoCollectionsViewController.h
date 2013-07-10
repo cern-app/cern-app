@@ -18,10 +18,6 @@
 
 - (void) setURLString : (NSString *) urlString;
 
-//UI actions (buttons on the navigation bar).
-- (IBAction) reloadImages : (id) sender;
-- (IBAction) revealMenu : (id) sender;
-
 //HUD/UI
 @property (nonatomic, strong) MBProgressHUD *noConnectionHUD;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;

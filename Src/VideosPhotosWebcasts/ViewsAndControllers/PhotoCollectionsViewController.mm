@@ -78,12 +78,18 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
    if (self = [super initWithCoder : aDecoder]) {
-      parserQueue = [[NSOperationQueue alloc] init];
-      operation = nil;
-      //
+      noConnectionHUD = nil;
+      spinner = nil;
+   
+      viewDidAppear = NO;
+      urlString = nil;
+
       imageDownloaders = [[NSMutableDictionary alloc] init];
       thumbnails = [[NSMutableDictionary alloc] init];
       photoAlbums = nil;
+   
+      parserQueue = [[NSOperationQueue alloc] init];
+      operation = nil;
       
       selected = nil;
       selectedAlbum = nil;
@@ -91,7 +97,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       internetReach = [Reachability reachabilityForInternetConnection];
 
       albumCollectionView = nil;
-      
+
       albumDescriptionCustomFont = [UIFont fontWithName : @"PTSans-Bold" size : 24];
       assert(albumDescriptionCustomFont != nil && "initWithCoder:, custom font is nil");
    }
@@ -137,12 +143,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    [self createAlbumViewWithFrame : CGRect()];   
    [self.collectionView.superview bringSubviewToFront : self.collectionView];
    
-   [internetReach startNotifier];
-
    [self.collectionView registerClass : [PhotoAlbumCoverView class]
            forCellWithReuseIdentifier : [PhotoAlbumCoverView cellReuseIdentifier]];
-   
-
 }
 
 //________________________________________________________________________________________
@@ -650,6 +652,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) parserDidFinishWithItems : (NSArray *) items
 {
+   if (!operation)//Was cancelled.
+      return;
+
    assert(items != nil && "parserDidFinishWithItems:, parameter 'items' is nil");
    
    photoAlbums = [items copy];
@@ -674,6 +679,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) parserDidFailWithError : (NSError *) error
 {
+   if (!operation)
+      return;
+
    CernAPP::HideSpinner(self);
    
    [parserQueue cancelAllOperations];
