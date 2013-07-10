@@ -31,11 +31,11 @@ UIActivityIndicatorView *AddSpinner(UIView *parentView)
    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithFrame : CGRectMake(spinnerOrigin.x, spinnerOrigin.y, spinnerSize, spinnerSize)];
    spinner.color = [UIColor grayColor];
    
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+  // if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
       spinner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight |
                                  UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
                                  UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-   }
+//   }
    
    [parentView addSubview : spinner];
 
@@ -110,8 +110,6 @@ MBProgressHUD *ShowErrorHUD(UIView *parentView, NSString *errorMessage)
 
    return noConnectionHUD;
 }
-
-//
 
 //________________________________________________________________________________________
 MBProgressHUD *ShowInfoHUD(UIView *parentView, NSString *infoMessage)

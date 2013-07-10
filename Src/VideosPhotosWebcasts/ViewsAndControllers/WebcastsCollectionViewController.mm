@@ -118,9 +118,6 @@ using CernAPP::NetworkStatus;
 
    spinners[0] = CernAPP::AddSpinner(self.view);
    CernAPP::HideSpinner(spinners[0]);
-   
-   
-   //[internetReach startNotifier];
 }
 
 //________________________________________________________________________________________
@@ -289,9 +286,10 @@ using CernAPP::NetworkStatus;
 
    const NSUInteger index = [self indexForParser : feedParser];
    feedDataTmp[index] = nil;
+   [self hideSpinnerForView : index];
 
    if (!feedData[index].count)//feedData[index] is either nil or an empty array.
-      CernAPP::ShowErrorHUD(!index ? self.collectionView : auxParentViews[index - 1], @"Network error");
+      CernAPP::ShowErrorHUD(!index ? self.collectionView : auxCollectionViews[index - 1], @"Network error");
    else
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    
@@ -556,9 +554,12 @@ using CernAPP::NetworkStatus;
          if (feedItem.image)
             continue;
          
-         NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(feedItem.summary);
+         NSString *urlString = CernAPP::FirstImageURLFromHTMLString(feedItem.summary);
          if (!urlString)
             continue;
+
+         if ([urlString hasPrefix : @"//"])//relative urls in the 'upcoming' feed.
+            urlString = [@"http:" stringByAppendingString : urlString];
          
          NSIndexPath * const newKey = [NSIndexPath indexPathForRow : j inSection : NSInteger(pageIndex)];
          if (imageDownloaders[pageIndex][newKey])
@@ -631,9 +632,13 @@ using CernAPP::NetworkStatus;
    const NSInteger i = sender.selectedSegmentIndex;
    assert(i >= 0 && i < 3 && "sectionSelected:, invalid segment index");
    
-   if (!i)
+   if (!i) {
       [self.view bringSubviewToFront : self.collectionView];
-   else
+      if (!spinners[0].isHidden)
+         [spinners[0].superview bringSubviewToFront : spinners[0]];
+      if (!noConnectionHUDs[0].isHidden)
+         [noConnectionHUDs[0].superview bringSubviewToFront : noConnectionHUDs[0]];
+   } else
       [self.view bringSubviewToFront : auxParentViews[i - 1]];
 }
 
