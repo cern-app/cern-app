@@ -30,6 +30,8 @@
    
    AnimationDelegate *flipAnimator;
    FlipView *flipView;
+
+   UIPanGestureRecognizer *panGesture;   
    UIView *panRegion;   
 }
 

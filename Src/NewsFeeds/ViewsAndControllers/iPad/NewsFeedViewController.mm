@@ -375,8 +375,10 @@
    [downloaders removeObjectForKey : [NSNumber numberWithUnsignedInteger : thumbnailsDownloader.pageNumber]];
    
    if (currPageUpdated) {
+      panGesture.enabled = NO;
       [currPage layoutTiles];
       [flipView replaceCurrentFrame : currPage];
+      panGesture.enabled = YES;
    }
 }
 

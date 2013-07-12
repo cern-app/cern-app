@@ -1,6 +1,5 @@
 #import <algorithm>
 #import <cstdlib>
-#import <cmath>
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -13,7 +12,6 @@ using namespace FlipAnimation;
 @implementation TileViewController {
    NSUInteger pageBeforeRotation;
 
-   UIPanGestureRecognizer *panGesture;
    BOOL viewDidAppear;
    BOOL autoFlipAnimation;
 }
@@ -294,6 +292,8 @@ using namespace FlipAnimation;
 {
    assert(nPages > 1 && "animationDidFinish:, wrong number of pages");
    
+   panGesture.enabled = NO;
+   
    if (nPages > 3) {
       if (direction == -1) {
          //We are moving to the next page (for the flip view it's "backward" though).
@@ -365,6 +365,8 @@ using namespace FlipAnimation;
       [spinner.superview bringSubviewToFront : spinner];
    
    [self loadVisiblePageData];
+   
+   panGesture.enabled = YES;
 }
 
 //________________________________________________________________________________________
@@ -423,17 +425,8 @@ using namespace FlipAnimation;
                break;
             case AnimationType::flipHorizontal:
                {
-/*                  if (std::abs([recognizer velocityInView : self.view].x) > 2000.f) {
-                     if (!autoFlipAnimation) {
-                        autoFlipAnimation = YES;
-                        const DirectionType direction = [recognizer velocityInView : self.view].x > 0.f ? DirectionType::forward : DirectionType::backward;
-                        flipAnimator.sequenceType = SequenceType::triggered;
-                        [flipAnimator startAnimation : direction];
-                     }
-                  } else if (!autoFlipAnimation) {*/
-                     const CGFloat value = [recognizer translationInView : self.view].x / 2.f;//2 is some arbitrary value here.
-                     [flipAnimator setTransformValue : value delegating : NO];
-//                  }
+                  const CGFloat value = [recognizer translationInView : self.view].x / 2.f;//2 is some arbitrary value here.
+                  [flipAnimator setTransformValue : value delegating : NO];
                }
                break;
             default:
