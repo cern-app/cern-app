@@ -67,6 +67,8 @@ enum class DirectionType : char {
 
 @interface AnimationDelegate : NSObject
 
+@property (nonatomic) bool flipStartedOnTheLeft;
+
 @property (nonatomic, assign) FlipView *transformView;
 @property (nonatomic, assign) NSObject<FlipAnimatedViewController> *controller;
 

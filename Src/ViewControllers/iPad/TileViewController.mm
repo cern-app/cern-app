@@ -14,6 +14,8 @@ using namespace FlipAnimation;
 
    BOOL viewDidAppear;
    BOOL autoFlipAnimation;
+   
+   CGPoint panStartPoint;
 }
 
 @synthesize noConnectionHUD, spinner;
@@ -399,7 +401,8 @@ using namespace FlipAnimation;
    case UIGestureRecognizerStateBegan:
       {
          // allow controlled flip only when touch begins within the pan region
-         if (CGRectContainsPoint(panRegion.frame, [recognizer locationInView : self.view])) {
+         panStartPoint = [recognizer locationInView : self.view];
+         if (CGRectContainsPoint(panRegion.frame, panStartPoint)) {
             if (flipAnimator.animationState == 0) {
                autoFlipAnimation = NO;
             
@@ -409,6 +412,8 @@ using namespace FlipAnimation;
                [NSObject cancelPreviousPerformRequestsWithTarget : self];
                flipAnimator.sequenceType = SequenceType::controlled;
                flipAnimator.animationLock = YES;
+               
+               flipAnimator.flipStartedOnTheLeft = panStartPoint.x < self.view.frame.size.width / 2;
             }
          }
       }
@@ -426,7 +431,16 @@ using namespace FlipAnimation;
             case AnimationType::flipHorizontal:
                {
                   const CGFloat value = [recognizer translationInView : self.view].x / 2.f;//2 is some arbitrary value here.
-                  [flipAnimator setTransformValue : value delegating : NO];
+                  
+                  bool skipFrame = false;
+                  const CGPoint currentPoint = [recognizer locationInView : self.view];
+                  if (flipAnimator.flipStartedOnTheLeft)
+                     skipFrame = currentPoint.x < panStartPoint.x;
+                  else
+                     skipFrame = currentPoint.x > panStartPoint.x;
+
+                  if (!skipFrame)
+                     [flipAnimator setTransformValue : value delegating : NO];
                }
                break;
             default:

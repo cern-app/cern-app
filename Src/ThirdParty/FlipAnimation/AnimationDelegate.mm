@@ -59,6 +59,7 @@ using FlipAnimation::DirectionType;
    CGFloat oldOpacityValue;
 }
 
+@synthesize flipStartedOnTheLeft;
 @synthesize transformView;
 @synthesize controller;
 @synthesize nextDuration;
