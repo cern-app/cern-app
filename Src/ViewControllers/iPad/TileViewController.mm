@@ -383,6 +383,30 @@ using namespace FlipAnimation;
 }
 
 //________________________________________________________________________________________
+- (BOOL) canStartFlipAnimation : (UIPanGestureRecognizer *) recognizer
+{
+   assert(recognizer != nil && "canStartFlipAnimation:, parameter 'recognizer' is nil");
+   
+   if (flipAnimator.flipStartedOnTheLeft)
+      return currPage.pageNumber;
+   
+   return currPage.pageNumber != nPages - 1;
+}
+
+//________________________________________________________________________________________
+- (BOOL) shouldSkipAnimationFrame : (UIPanGestureRecognizer *) recognizer
+{
+   assert(recognizer != nil && "shouldSkipAnimationFrame:, parametere 'recognizer' is nil");
+   
+   const CGPoint currentPoint = [recognizer locationInView : self.view];
+
+   if (flipAnimator.flipStartedOnTheLeft)
+      return currentPoint.x < panStartPoint.x;
+
+   return currentPoint.x > panStartPoint.x;
+}
+
+//________________________________________________________________________________________
 - (void) panned : (UIPanGestureRecognizer *) recognizer
 {
    assert(recognizer != nil && "panned:, parameter 'recognizer' is nil");
@@ -403,14 +427,9 @@ using namespace FlipAnimation;
          // allow controlled flip only when touch begins within the pan region
          panStartPoint = [recognizer locationInView : self.view];
          if (CGRectContainsPoint(panRegion.frame, panStartPoint)) {
-            bool skipAnimation = false;
+            flipAnimator.flipStartedOnTheLeft = panStartPoint.x < self.view.frame.size.width / 2;
             
-            if ((flipAnimator.flipStartedOnTheLeft = panStartPoint.x < self.view.frame.size.width / 2))
-               skipAnimation = !currPage.pageNumber;
-            else
-               skipAnimation = currPage.pageNumber == nPages - 1;
-            
-            if (!skipAnimation && !flipAnimator.animationState) {
+            if ([self canStartFlipAnimation : recognizer] && !flipAnimator.animationState) {
                autoFlipAnimation = NO;
             
                flipView.hidden = NO;
@@ -420,7 +439,8 @@ using namespace FlipAnimation;
                flipAnimator.sequenceType = SequenceType::controlled;
                flipAnimator.animationLock = YES;
             }
-         }
+         } else
+            flipAnimator.flipStartedOnTheLeft = false;
       }
       break;
    case UIGestureRecognizerStateChanged:
@@ -435,17 +455,10 @@ using namespace FlipAnimation;
                break;
             case AnimationType::flipHorizontal:
                {
-                  const CGFloat value = [recognizer translationInView : self.view].x / 2.f;//2 is some arbitrary value here.
-                  
-                  bool skipFrame = false;
-                  const CGPoint currentPoint = [recognizer locationInView : self.view];
-                  if (flipAnimator.flipStartedOnTheLeft)
-                     skipFrame = currentPoint.x < panStartPoint.x;
-                  else
-                     skipFrame = currentPoint.x > panStartPoint.x;
-
-                  if (!skipFrame)
+                  if (![self shouldSkipAnimationFrame : recognizer]) {
+                     const CGFloat value = [recognizer translationInView : self.view].x / 2.f;//2 is some arbitrary value here.
                      [flipAnimator setTransformValue : value delegating : NO];
+                  }
                }
                break;
             default:
@@ -462,8 +475,12 @@ using namespace FlipAnimation;
             // provide inertia to panning gesture
             flipAnimator.sequenceType = SequenceType::controlled;
             autoFlipAnimation = NO;
-            const CGFloat value = sqrtf(fabsf([recognizer velocityInView : self.view].x))/10.0f;
-            [flipAnimator endStateWithSpeed : value];
+            if (![self shouldSkipAnimationFrame : recognizer]) {
+               const CGFloat value = sqrtf(fabsf([recognizer velocityInView : self.view].x))/10.0f;
+               [flipAnimator endStateWithSpeed : value];
+            } else {
+               [flipAnimator endStateWithSpeed : 1.f];
+            }
          }
       }
       break;
