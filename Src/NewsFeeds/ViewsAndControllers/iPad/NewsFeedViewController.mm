@@ -163,6 +163,8 @@
       [self layoutPages : YES];
       [self layoutFlipView];
       [self layoutPanRegion];
+      if (nPages)
+         [self showRightFlipHintAnimated];
    }
 
    [self startFeedParser];
@@ -261,7 +263,9 @@
    [self layoutFlipView];
    
    [self loadVisiblePageData];
-   
+   if (nPages > 1)
+      [self showRightFlipHintAnimated];
+
    parserOp = nil;
 }
 

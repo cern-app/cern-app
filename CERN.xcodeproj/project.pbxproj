@@ -115,6 +115,8 @@
 		70221E4416B1722B007AE923 /* videos.png in Resources */ = {isa = PBXBuildFile; fileRef = 70221E4316B1722B007AE923 /* videos.png */; };
 		702A4B7C1678E4D7005EBD1B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 702A4B7B1678E4D7005EBD1B /* SystemConfiguration.framework */; };
 		7034C63D178DB81D00711D87 /* MemUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7034C63C178DB81D00711D87 /* MemUtils.mm */; };
+		703ED51E17957D3700F37E0C /* flip_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 703ED51C17957D3700F37E0C /* flip_left.png */; };
+		703ED51F17957D3700F37E0C /* flip_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 703ED51D17957D3700F37E0C /* flip_right.png */; };
 		703FD35C161DDB4F00B8BB8C /* PTS75F.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 703FD35B161DDB4F00B8BB8C /* PTS75F.ttf */; };
 		7040F0EA1761FD780050DEF6 /* VideoThumbnailCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7040F0DD1761FD780050DEF6 /* VideoThumbnailCell.mm */; };
 		7040F0EB1761FD780050DEF6 /* PhotoCollectionsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7040F0DF1761FD780050DEF6 /* PhotoCollectionsViewController.mm */; };
@@ -390,6 +392,8 @@
 		702A4B7B1678E4D7005EBD1B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7034C63B178DB81D00711D87 /* MemUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemUtils.h; sourceTree = "<group>"; };
 		7034C63C178DB81D00711D87 /* MemUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MemUtils.mm; sourceTree = "<group>"; };
+		703ED51C17957D3700F37E0C /* flip_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flip_left.png; sourceTree = "<group>"; };
+		703ED51D17957D3700F37E0C /* flip_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flip_right.png; sourceTree = "<group>"; };
 		703FD35B161DDB4F00B8BB8C /* PTS75F.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PTS75F.ttf; sourceTree = "<group>"; };
 		7040F0DC1761FD780050DEF6 /* PhotoAlbumFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbumFooterView.h; sourceTree = "<group>"; };
 		7040F0DD1761FD780050DEF6 /* VideoThumbnailCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoThumbnailCell.mm; sourceTree = "<group>"; };
@@ -752,6 +756,8 @@
 		41E617C41614CEB700BAA7D4 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				703ED51C17957D3700F37E0C /* flip_left.png */,
+				703ED51D17957D3700F37E0C /* flip_right.png */,
 				707B136D169AEA4700180E02 /* GUI */,
 				41E617C91614CEB700BAA7D4 /* Cards */,
 				41C0659316271ED1000DC176 /* iTunesArtwork */,
@@ -1540,6 +1546,8 @@
 				701AE10216D26AEE003F6533 /* glyphspro_4_license.txt in Resources */,
 				70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */,
 				70E69AC1170EC2D700384523 /* ArticleiPadCSS.css in Resources */,
+				703ED51E17957D3700F37E0C /* flip_left.png in Resources */,
+				703ED51F17957D3700F37E0C /* flip_right.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

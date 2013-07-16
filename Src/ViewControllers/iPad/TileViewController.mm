@@ -26,6 +26,8 @@ const NSUInteger nAutoAnimationSteps = 10;
    CGFloat lastTranslationX;
    CGFloat autoPanStepX;
    NSUInteger autoAnimationStep;
+   
+   UIImageView *flipHintView;
 }
 
 @synthesize noConnectionHUD, spinner;
@@ -51,6 +53,9 @@ const NSUInteger nAutoAnimationSteps = 10;
       pageBeforeRotation = 0;
       viewDidAppear = NO;
       autoFlipAnimation = NO;
+      
+      flipHintView = [[UIImageView alloc] initWithImage : [UIImage imageNamed : @"flip_right.png"]];
+      flipHintView.hidden = YES;
    }
 
    return self;
@@ -200,6 +205,58 @@ const NSUInteger nAutoAnimationSteps = 10;
    panRegion.frame = frame;
 }
 
+#pragma mark - "UI".
+
+//________________________________________________________________________________________
+- (void) showFlipHintAnimated
+{
+   [self.view bringSubviewToFront : flipHintView];
+   flipHintView.hidden = NO;
+   flipHintView.alpha = 1.f;
+   hintAnimationActive = YES;
+
+   [UIView animateWithDuration : 1.f
+    animations : ^(void)
+    {
+      flipHintView.alpha = 0.f;
+    }
+    completion : ^(BOOL finished)
+    {
+      hintAnimationActive = NO;
+      flipHintView.hidden = YES;
+    }
+    ];
+}
+
+//________________________________________________________________________________________
+- (void) showRightFlipHintAnimated
+{
+   flipHintView.image = [UIImage imageNamed : @"flip_left.png"];
+   if (!flipHintView.superview)
+      [self.view addSubview : flipHintView];
+
+   CGRect frame = flipHintView.frame;
+   frame.origin.y = self.view.frame.size.height / 2 - frame.size.height / 2;
+   frame.origin.x = self.view.frame.size.width - frame.size.width;
+   flipHintView.frame = frame;
+
+   [self showFlipHintAnimated];
+}
+
+//________________________________________________________________________________________
+- (void) showLeftFlipHintAnimated
+{
+   flipHintView.image = [UIImage imageNamed : @"flip_right.png"];
+   if (!flipHintView.superview)
+      [self.view addSubview : flipHintView];
+
+   CGRect frame = flipHintView.frame;
+   frame.origin.y = self.view.frame.size.height / 2 - frame.size.height / 2;
+   frame.origin.x = 0.f;
+   flipHintView.frame = frame;
+
+   [self showFlipHintAnimated];
+}
 
 //________________________________________________________________________________________
 - (NSRange) findItemRangeForPage : (NSUInteger) page
@@ -378,6 +435,13 @@ const NSUInteger nAutoAnimationSteps = 10;
    
    [self loadVisiblePageData];
    
+   if (nPages > 1) {
+      if (currPage.pageNumber == nPages - 1)
+         [self showLeftFlipHintAnimated];
+      else if (!currPage.pageNumber)
+         [self showRightFlipHintAnimated];
+   }
+
    panGesture.enabled = YES;
 }
 

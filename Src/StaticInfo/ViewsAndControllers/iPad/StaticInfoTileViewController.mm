@@ -84,6 +84,9 @@
       [self layoutPages : YES];
       [self layoutFlipView];
       [self layoutPanRegion];
+      
+      if (nPages > 1)
+         [self showRightFlipHintAnimated];
    }
 }
 

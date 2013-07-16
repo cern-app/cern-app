@@ -32,7 +32,9 @@
    FlipView *flipView;
 
    UIPanGestureRecognizer *panGesture;   
-   UIView *panRegion;   
+   UIView *panRegion;
+   
+   BOOL hintAnimationActive;
 }
 
 - (id) initWithCoder : (NSCoder *) aDecoder;
@@ -63,6 +65,10 @@
 - (void) layoutFlipView;
 //Set pan view's geometry.
 - (void) layoutPanRegion;
+
+//"UI".
+- (void) showRightFlipHintAnimated;
+- (void) showLeftFlipHintAnimated;
 
 //Using dataItems and page layout identify, how many items
 //fit the page.
