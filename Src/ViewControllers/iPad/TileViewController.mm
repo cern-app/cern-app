@@ -1,5 +1,6 @@
 #import <algorithm>
 #import <cstdlib>
+#import <cmath>
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -9,13 +10,22 @@
 
 using namespace FlipAnimation;
 
+const NSUInteger nAutoAnimationSteps = 10;
+
 @implementation TileViewController {
    NSUInteger pageBeforeRotation;
 
    BOOL viewDidAppear;
+   
+   //If our evil user has too fast fingers, we should breake th ... or, I sure
+   //mean we'll switch to the "automatic animation mode".
    BOOL autoFlipAnimation;
+   //
    
    CGPoint panStartPoint;
+   CGFloat lastTranslationX;
+   CGFloat autoPanStepX;
+   NSUInteger autoAnimationStep;
 }
 
 @synthesize noConnectionHUD, spinner;
@@ -425,6 +435,9 @@ using namespace FlipAnimation;
    case UIGestureRecognizerStateBegan:
       {
          // allow controlled flip only when touch begins within the pan region
+         if (flipAnimator.animationLock)
+            break;
+         
          panStartPoint = [recognizer locationInView : self.view];
          if (CGRectContainsPoint(panRegion.frame, panStartPoint)) {
             flipAnimator.flipStartedOnTheLeft = panStartPoint.x < self.view.frame.size.width / 2;
@@ -438,6 +451,8 @@ using namespace FlipAnimation;
                [NSObject cancelPreviousPerformRequestsWithTarget : self];
                flipAnimator.sequenceType = SequenceType::controlled;
                flipAnimator.animationLock = YES;
+               
+               lastTranslationX = [recognizer translationInView : self.view].x;
             }
          } else
             flipAnimator.flipStartedOnTheLeft = false;
@@ -455,9 +470,19 @@ using namespace FlipAnimation;
                break;
             case AnimationType::flipHorizontal:
                {
-                  if (![self shouldSkipAnimationFrame : recognizer]) {
-                     const CGFloat value = [recognizer translationInView : self.view].x / 2.f;//2 is some arbitrary value here.
-                     [flipAnimator setTransformValue : value delegating : NO];
+                  if (![self shouldSkipAnimationFrame : recognizer] && !autoFlipAnimation) {
+                     //Let's test the velocity of a gesture: if the user was too fast, ki... I 'mean,
+                     //start slow automatic animation to make him angry.
+                     
+                     const CGFloat velocityX = [recognizer velocityInView : self.view].x;
+                     
+                     if (std::abs(velocityX) > 3000.f) {
+                        [self startAutoFlipAnimation : recognizer];
+                     } else {
+                        lastTranslationX = [recognizer translationInView : self.view].x;
+                        const CGFloat value = [recognizer translationInView : self.view].x / 2.f;//2 is some arbitrary value here.
+                        [flipAnimator setTransformValue : value delegating : NO];
+                     }
                   }
                }
                break;
@@ -474,7 +499,6 @@ using namespace FlipAnimation;
          if (flipAnimator.animationLock && !autoFlipAnimation) {
             // provide inertia to panning gesture
             flipAnimator.sequenceType = SequenceType::controlled;
-            autoFlipAnimation = NO;
             if (![self shouldSkipAnimationFrame : recognizer]) {
                const CGFloat value = sqrtf(fabsf([recognizer velocityInView : self.view].x))/10.0f;
                [flipAnimator endStateWithSpeed : value];
@@ -489,5 +513,54 @@ using namespace FlipAnimation;
    }
 }
 
+//________________________________________________________________________________________
+- (void) autoAnimationStep
+{
+   assert(autoFlipAnimation == YES && "autoAnimationStep, called outside of auto animation sequence");
+   assert(flipAnimator.animationLock == YES && "autoAnimationStep, no animation lock is active");
+
+   if (autoAnimationStep == nAutoAnimationSteps - 1) {//10 animation steps.
+      [flipAnimator endStateWithSpeed : 1.f];
+   } else {
+      [flipAnimator setTransformValue : (lastTranslationX + autoAnimationStep * autoPanStepX) / 2 delegating : NO];
+      ++autoAnimationStep;
+      [self performSelector : @selector(autoAnimationStep) withObject : nil afterDelay : 0.03];
+   }
+}
+
+//________________________________________________________________________________________
+- (void) startAutoFlipAnimation : (UIPanGestureRecognizer *) recognizer
+{
+   assert(recognizer != nil && "startAutoFlipAnimation:, parameter 'recognizer' is nil");
+
+   autoFlipAnimation = YES;
+   autoAnimationStep = 0;
+
+   if (!flipAnimator.flipStartedOnTheLeft) {
+      if ([recognizer velocityInView : self.view].x < 0.f) {
+         if (std::abs(-M_PI - flipAnimator.currentAngle) < 0.1f)
+            [flipAnimator endStateWithSpeed : 1.f];
+         else {
+            //Flip to the left. The ending angle is -pi.
+            autoPanStepX = -50.f;//- M_PI * (lastPanPointX - panStartPoint.x) / flipAnimator.currentAngle;
+            [self autoAnimationStep];
+         }
+      } else {
+         //Flip to the right.
+         [flipAnimator endStateWithSpeed : 1.f];
+      }
+   } else {
+      if ([recognizer velocityInView : self.view].x > 0.f) {
+         if (std::abs(M_PI - flipAnimator.currentAngle) < 0.1f)
+            [flipAnimator endStateWithSpeed : 1.f];
+         else {
+            autoPanStepX = 50.f;
+            [self autoAnimationStep];
+         }
+      } else {
+         [flipAnimator endStateWithSpeed : 1.f];
+      }
+   }
+}
 
 @end

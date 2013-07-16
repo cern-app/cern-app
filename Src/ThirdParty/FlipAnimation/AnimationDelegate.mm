@@ -60,6 +60,7 @@ using FlipAnimation::DirectionType;
 }
 
 @synthesize flipStartedOnTheLeft;
+@synthesize currentAngle;
 @synthesize transformView;
 @synthesize controller;
 @synthesize nextDuration;
@@ -497,6 +498,10 @@ using FlipAnimation::DirectionType;
    [targetLayer removeAllAnimations];
     
    [CATransaction commit];
+   
+   //Let's add a bit more messy crappy code into this "masterpiece".
+   currentAngle = rotationAfterDirection / 10.f * adjustedValue;
+   //
     
     if (adjustedValue != value) {
       CATransform3D aTransform = CATransform3DIdentity;
