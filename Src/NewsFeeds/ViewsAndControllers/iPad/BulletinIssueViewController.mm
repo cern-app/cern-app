@@ -2,6 +2,10 @@
 
 #import "BulletinIssueViewController.h"
 
+@interface NewsFeedViewController(Private)
+- (void) cancelAllImageDownloaders;
+@end
+
 @implementation BulletinIssueViewController
 
 #pragma mark - Lifecycle.
@@ -10,6 +14,12 @@
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
    return self = [super initWithCoder : aDecoder];
+}
+
+//________________________________________________________________________________________
+- (void) dealloc
+{
+   [self cancelAllImageDownloaders];
 }
 
 #pragma mark - Overriders for UIViewController.
