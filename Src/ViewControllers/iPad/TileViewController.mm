@@ -403,7 +403,14 @@ using namespace FlipAnimation;
          // allow controlled flip only when touch begins within the pan region
          panStartPoint = [recognizer locationInView : self.view];
          if (CGRectContainsPoint(panRegion.frame, panStartPoint)) {
-            if (flipAnimator.animationState == 0) {
+            bool skipAnimation = false;
+            
+            if ((flipAnimator.flipStartedOnTheLeft = panStartPoint.x < self.view.frame.size.width / 2))
+               skipAnimation = !currPage.pageNumber;
+            else
+               skipAnimation = currPage.pageNumber == nPages - 1;
+            
+            if (!skipAnimation && !flipAnimator.animationState) {
                autoFlipAnimation = NO;
             
                flipView.hidden = NO;
@@ -412,8 +419,6 @@ using namespace FlipAnimation;
                [NSObject cancelPreviousPerformRequestsWithTarget : self];
                flipAnimator.sequenceType = SequenceType::controlled;
                flipAnimator.animationLock = YES;
-               
-               flipAnimator.flipStartedOnTheLeft = panStartPoint.x < self.view.frame.size.width / 2;
             }
          }
       }
