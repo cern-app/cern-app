@@ -510,7 +510,15 @@ using CernAPP::NetworkStatus;
                NSDictionary * const dict = (NSDictionary *)data;
                if ([dict[@"url"] isKindOfClass : [NSString class]]) {
                   if (NSURL * const url = [NSURL URLWithString : (NSString *)dict[@"url"]]) {
+                     //Hmm, I have to do this stupid Voodoo magic, otherwise, I have error messages
+                     //from the Quartz about invalid context.
+                     //Manu thanks to these guys: http://stackoverflow.com/questions/13203336/iphone-mpmovieplayerviewcontroller-cgcontext-errors
+                     //I beleive, at some point, BeginImageContext/EndImageContext can be removed after
+                     //Apple fixes the bug.
+                     UIGraphicsBeginImageContext(CGSizeMake(1.f, 1.f));
                      MPMoviePlayerViewController * const playerController = [[MPMoviePlayerViewController alloc] initWithContentURL : url];
+                     UIGraphicsEndImageContext();
+                     
                      [self presentMoviePlayerViewControllerAnimated : playerController];
                   }
                   break;
