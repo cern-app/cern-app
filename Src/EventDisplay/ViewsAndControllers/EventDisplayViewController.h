@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 
 #import "PhotoBrowserProtocol.h"
+#import "ConnectionController.h"
 #import "MBProgressHUD.h"
 
 @interface EventDisplayViewController : UIViewController<NSURLConnectionDelegate, MBProgressHUDDelegate,
-                                                         UIScrollViewDelegate, PhotoBrowserProtocol>
+                                                         UIScrollViewDelegate, PhotoBrowserProtocol,
+                                                         ConnectionController>
 {
    IBOutlet UIScrollView *scrollView;
    IBOutlet UIPageControl *pageControl;

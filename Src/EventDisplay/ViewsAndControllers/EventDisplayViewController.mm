@@ -112,6 +112,9 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (void) dealloc
 {
+   [self cancelAnyConnections];
+      
+
    [internetReach stopNotifier];
    [[NSNotificationCenter defaultCenter] removeObserver : self];
 }
@@ -629,6 +632,17 @@ using CernAPP::NetworkStatus;
 - (void) toggleControls
 {
    //Noop.
+}
+
+#pragma mark - ConnectionController.
+
+//________________________________________________________________________________________
+- (void) cancelAnyConnections
+{
+   if (currentConnection)
+      [currentConnection cancel];
+   
+   currentConnection = nil;
 }
 
 @end
