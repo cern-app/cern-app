@@ -638,14 +638,16 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    assert(view != nil && "itemViewWasSelected:, parameter 'view' is nil");
 
-   if (selectedItemView) {
+   if (selectedItemView != view) {
       selectedItemView.isSelected = NO;
       [selectedItemView setNeedsDisplay];
+      selectedItemView = view;
+      selectedItemView.isSelected = YES;
+      [selectedItemView setNeedsDisplay];
+   } else {
+      [self.slidingViewController resetTopView];
    }
    
-   selectedItemView = view;
-   selectedItemView.isSelected = YES;
-   [selectedItemView setNeedsDisplay];
 }
 
 //________________________________________________________________________________________

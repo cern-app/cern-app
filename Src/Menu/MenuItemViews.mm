@@ -208,8 +208,10 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 //________________________________________________________________________________________
 - (void) handleTap
 {
+   const BOOL wasSelectedAlready = isSelected;
    [controller itemViewWasSelected : self];
-   [menuItem itemPressedIn : controller];
+   if (!wasSelectedAlready)
+      [menuItem itemPressedIn : controller];
 }
 
 @end
