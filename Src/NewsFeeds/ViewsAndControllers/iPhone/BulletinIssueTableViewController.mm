@@ -11,7 +11,6 @@
 #import "BulletinTableViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "CellBackgroundView.h"
-#import "ApplicationErrors.h"
 #import "NewsTableViewCell.h"
 #import "Reachability.h"
 #import "MWFeedItem.h"

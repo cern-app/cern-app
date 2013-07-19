@@ -376,8 +376,9 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    if (allArticles.count) {
       //We have either cache, or articles from the previous parse.
       //Do not use HUD (which hides the table's contents), just
-      //show an alert.
-      CernAPP::ShowErrorAlert(@"Please, check network connection", @"Close");
+      //show an alert (only if 'self' is the current top view controller!)
+      if (self.navigationController.topViewController == self)
+         CernAPP::ShowErrorAlert(@"Please, check network connection", @"Close");
    } else {
       [self showErrorHUD];
    }

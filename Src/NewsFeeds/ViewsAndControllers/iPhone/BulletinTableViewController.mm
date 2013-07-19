@@ -206,7 +206,8 @@
 
    parseOp = nil;
 
-   CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+   if (self.navigationController.topViewController == self)//There can be bulletin issue view controller above 'self'.
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    
    if (!bulletins || !bulletins.count)
       [self showErrorHUD];
