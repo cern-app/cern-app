@@ -113,7 +113,7 @@ static BOOL GCOAuthUseHTTPSCookieStorage = YES;
     NSMutableURLRequest *request = [NSMutableURLRequest
                                     requestWithURL : self.URL
                                     cachePolicy : NSURLRequestReloadIgnoringLocalCacheData
-                                    timeoutInterval : 10.];
+                                    timeoutInterval : 20.];
    if (GCOAuthUserAgent)
       [request setValue : GCOAuthUserAgent forHTTPHeaderField : @"User-Agent"];
 

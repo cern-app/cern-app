@@ -133,8 +133,10 @@
 
       if (!tweets.count)//Also true if tweets is nil.
          CernAPP::ShowErrorHUD(self, @"Twitter API problem");
-      else
-         CernAPP::ShowErrorAlert(@"Twitter API problem", @"Close");
+      else {
+         if (self.navigationController.topViewController == self)
+            CernAPP::ShowErrorAlert(@"Twitter API problem", @"Close");
+      }
    }
 }
 
@@ -192,8 +194,10 @@
    //
    if (!tweets.count)//Also true if tweets is nil.
       CernAPP::ShowErrorHUD(self, @"Network error, pull to refresh");
-   else
-      CernAPP::ShowErrorAlert(@"Please, check network connection", @"Close");
+   else {
+      if (self.navigationController.topViewController == self)
+         CernAPP::ShowErrorAlert(@"Please, check network connection", @"Close");
+   }
 }
 
 //________________________________________________________________________________________
