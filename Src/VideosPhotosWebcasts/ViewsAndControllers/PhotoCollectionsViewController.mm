@@ -40,21 +40,22 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 @implementation PhotoCollectionsViewController {
    BOOL viewDidAppear;
    
-   //
    NSString *urlString;
    
+   //Image downloaders: either thumbnails for a cover view,
+   //or album's thumbnails.
    NSMutableDictionary *imageDownloaders;
    NSMutableDictionary *thumbnails;
    NSArray *photoAlbums;
-   
+
    //Parser-related:
    NSOperationQueue *parserQueue;
    PhotoCollectionsParserOperation *operation;
    
    //Photos manipulation:
-   NSIndexPath *selected;
-   PhotoAlbum *selectedAlbum;
-   
+   NSIndexPath *selected;     //Index of a selected stack.
+   PhotoAlbum *selectedAlbum; //Selected album.
+
    Reachability *internetReach;
    
    UICollectionView *albumCollectionView;
@@ -62,7 +63,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 }
 
 @synthesize noConnectionHUD, spinner;
-
 
 #pragma mark - Network reachability.
 
@@ -158,6 +158,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    albumCollectionView.frame = self.collectionView.frame;//TODO: test this!
 
    if ([self selectedIsValid]) {
+      //It's possible, that the device was rotated with photo browser on the top of
+      //all views/controllers. In this case, we have to re-adjust a stack center.
       UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : selected];
       [(AnimatedStackLayout *)albumCollectionView.collectionViewLayout setStackCenterNoUpdate :
          CGPointMake(cell.center.x, cell.center.y - self.collectionView.contentOffset.y)];
@@ -178,6 +180,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) startParserOperation
 {
+   assert(urlString != nil && "startParserOperation, urlString is nil");
    assert(parserQueue != nil && "startParserOperation, parserQueue is nil");
    assert(operation == nil && "startParserOperation, parsing operation is still active");
    
@@ -190,13 +193,14 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) refresh
 {
+   assert(urlString != nil && "refresh, urlString is nil");
    assert(parserQueue != nil && "refresh, parserQueue is nil");
    assert(operation == nil && "refresh, called while parsing operation is still active");
    //
    [self cancelAllImageDownloaders];
    //
    [noConnectionHUD hide : YES];
-   self.navigationItem.rightBarButtonItem.enabled = NO;
+   self.navigationItem.rightBarButtonItem.enabled = NO;//Disable the "Refresh" button.
    CernAPP::ShowSpinner(self);
    [self startParserOperation];
 }
@@ -246,7 +250,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
              "collectionView:layout:referenceSizeForFooterInSection:, wrong layout type");
 
       if (((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation)
-         return CGSize();
+         return CGSize();//There is a bug in a UICollectionView - too many footers are created :(
       
       assert(section == 0 &&
              "collectionView:layout:referenceSizeForFooterInSection:, section is invalid");
@@ -395,8 +399,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(indexPath != nil && "collectionView:didSelectItemAtIndexPath:, parameter 'indexPath' is nil");
 
    if (collectionView == albumCollectionView) {
+      //Image was selected from an album, open photo browser for this album
+      //with the selected image on the visible page.
       assert(selectedAlbum != nil && "collectionView:didSelectItemAtIndexPath:, no album selected");
-      assert(indexPath.row < selectedAlbum.nImages && "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
+      assert(indexPath.row >= 0 && indexPath.row < selectedAlbum.nImages &&
+             "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
       //Open MWPhotoBrowser.
       MWPhotoBrowser *browser = [[MWPhotoBrowser alloc] initWithDelegate : self];
       browser.displayActionButton = YES;
@@ -404,8 +411,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
       UINavigationController * const navController = [[UINavigationController alloc] initWithRootViewController : browser];
       navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-      [self presentViewController : navController animated : YES completion : nil];      
+      [self presentViewController : navController animated : YES completion : nil];
    } else {
+      //Album (stack of images) was selected. Show "un-stack" animation -
+      //hide stacked albums and show the selected album contents instead.
       self.navigationItem.rightBarButtonItem.enabled = NO;
       [self swapNavigationBarButtons : NO];//Switch to "Back to albums"
       self.navigationItem.rightBarButtonItem.enabled = NO;//Disable "Back to albums"
@@ -543,8 +552,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) loadFirstThumbnails
 {
-   for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i)
-      [self loadNextThumbnail : [NSIndexPath indexPathForRow : 0 inSection : i]];
+   for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i) {
+      if (((PhotoAlbum *)photoAlbums[i]).nImages)
+         [self loadNextThumbnail : [NSIndexPath indexPathForRow : 0 inSection : i]];
+      //Else we do not load anything for this album (neither the cover, nor the contents).
+   }
 }
 
 //________________________________________________________________________________________
@@ -758,6 +770,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 {
 #pragma unused(sender)
    assert(operation == nil && "reloadImages:, called while parser is still active");
+   
+   //This method can be called if any previous refresh operation was completed
+   //(either with a success or a failure (otherwise, refresh button is disabled).
+   
    if (![self hasConnection])
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    else
@@ -770,7 +786,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (IBAction) revealMenu : (id) sender
 {
 #pragma unused(sender)
-   //
+
    [self.slidingViewController anchorTopViewTo : ECRight];
 }
 
