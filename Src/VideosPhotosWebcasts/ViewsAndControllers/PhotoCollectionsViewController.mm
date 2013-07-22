@@ -193,7 +193,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(parserQueue != nil && "refresh, parserQueue is nil");
    assert(operation == nil && "refresh, called while parsing operation is still active");
    //
-   [self cancelAllImageDownloaders];//TODO: test, can any of them be active if I can refresh??
+   [self cancelAllImageDownloaders];
    //
    [noConnectionHUD hide : YES];
    self.navigationItem.rightBarButtonItem.enabled = NO;
@@ -485,7 +485,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
          if (spinner.isAnimating)//Do not forget to show the spinner again, we are still loading.
             [spinner.superview bringSubviewToFront : spinner];
-         else
+
+         if (!operation)
             self.navigationItem.rightBarButtonItem.enabled = YES;
 
          selected = nil;
@@ -664,7 +665,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(items != nil && "parserDidFinishWithItems:, parameter 'items' is nil");
 
    operation = nil;
-   CernAPP::HideSpinner(self);
    
    photoAlbums = [items copy];
    [thumbnails removeAllObjects];
@@ -680,6 +680,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
    if (albumCollectionView.hidden)                         //Otherwise, the right item is 'Back to albums'
       self.navigationItem.rightBarButtonItem.enabled = YES;//and it's probably enabled already.
+   
+   if (!photoAlbums.count)
+      CernAPP::HideSpinner(self);
 }
 
 //________________________________________________________________________________________
