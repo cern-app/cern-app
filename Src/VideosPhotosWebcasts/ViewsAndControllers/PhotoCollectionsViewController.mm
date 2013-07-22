@@ -407,6 +407,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       [self presentViewController : navController animated : YES completion : nil];      
    } else {
       self.navigationItem.rightBarButtonItem.enabled = NO;
+      [self swapNavigationBarButtons : NO];//Switch to "Back to albums"
+      self.navigationItem.rightBarButtonItem.enabled = NO;//Disable "Back to albums"
    
       //Here's the magic.
       UICollectionViewCell * const cell = [self.collectionView cellForItemAtIndexPath : indexPath];
@@ -436,7 +438,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
          if (finished) {
             ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation = NO;
             [albumCollectionView reloadData];//YESSSSSS :(
-            [self swapNavigationBarButtons : NO];
+            self.navigationItem.rightBarButtonItem.enabled = YES;
          }
       }];
    }
@@ -460,7 +462,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
          v.hidden = YES;
    }
 
-   self.navigationItem.rightBarButtonItem.enabled = NO;
+   self.navigationItem.rightBarButtonItem.enabled = NO;//Disable "Back to albums" button (so it can't be pressed more).
+   [self swapNavigationBarButtons : YES];//Switch to "Refresh" button.
+   self.navigationItem.rightBarButtonItem.enabled = NO; //Disable "Refresh" till the end of animation.
+
    layout.inAnimation = YES;
 
    if (selectedAlbum.nImages <= 36)
@@ -480,8 +485,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
          if (spinner.isAnimating)//Do not forget to show the spinner again, we are still loading.
             [spinner.superview bringSubviewToFront : spinner];
+         else
+            self.navigationItem.rightBarButtonItem.enabled = YES;
 
-         [self swapNavigationBarButtons : YES];
          selected = nil;
          selectedAlbum = nil;
       }
@@ -656,6 +662,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       return;
 
    assert(items != nil && "parserDidFinishWithItems:, parameter 'items' is nil");
+
+   operation = nil;
+   CernAPP::HideSpinner(self);
    
    photoAlbums = [items copy];
    [thumbnails removeAllObjects];
@@ -665,15 +674,12 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    //every album and set the 'cover', after that, download others.
    //If albumCollectionView is active and visible now, it stil shows data from the selectedAlbum (if any).
 
-   operation = nil;
 
    [self loadFirstThumbnails];
    [self.collectionView reloadData];
    
-   if (!photoAlbums.count) {
-      self.navigationItem.rightBarButtonItem.enabled = YES;
-      CernAPP::HideSpinner(self);
-   }
+   if (albumCollectionView.hidden)                         //Otherwise, the right item is 'Back to albums'
+      self.navigationItem.rightBarButtonItem.enabled = YES;//and it's probably enabled already.
 }
 
 //________________________________________________________________________________________
@@ -683,7 +689,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       return;
 
    CernAPP::HideSpinner(self);
-   
+
    [parserQueue cancelAllOperations];
    operation = nil;
 
