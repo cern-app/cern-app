@@ -772,7 +772,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(operation == nil && "reloadImages:, called while parser is still active");
    
    //This method can be called if any previous refresh operation was completed
-   //(either with a success or a failure (otherwise, refresh button is disabled).
+   //either with a success or a failure (otherwise, refresh button is disabled).
    
    if (![self hasConnection])
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
