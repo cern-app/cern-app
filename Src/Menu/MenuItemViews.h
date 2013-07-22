@@ -39,6 +39,8 @@ enum class ItemStyle {
 @property (nonatomic) CGFloat indent;
 @property (nonatomic) CGSize imageHint;
 
+- (BOOL) isModalViewItem;
+
 @end
 
 //View for a group item (title view).

@@ -74,8 +74,8 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 
 @implementation MenuItemView {
    //Weak, we do not have to control life time of these objects.
-   __weak NSObject<MenuItemProtocol> *menuItem;
    __weak MenuViewController *controller;
+   __weak NSObject<MenuItemProtocol> *menuItem;
 
    UILabel *itemLabel;
    UIImageView *iconView;
@@ -206,11 +206,20 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 }
 
 //________________________________________________________________________________________
+- (BOOL) isModalViewItem
+{
+   if ([menuItem respondsToSelector:@selector(contentProvider)]) {
+      NSObject<ContentProvider> * const provider = [menuItem performSelector : @selector(contentProvider)];
+      return [provider isKindOfClass : [ModalViewProvider class]];
+   }
+
+   return NO;
+}
+
+//________________________________________________________________________________________
 - (void) handleTap
 {
-   const BOOL wasSelectedAlready = isSelected;
-   [controller itemViewWasSelected : self];
-   if (!wasSelectedAlready)
+   if ([controller itemViewWasSelected : self])
       [menuItem itemPressedIn : controller];
 }
 

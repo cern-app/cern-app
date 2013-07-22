@@ -39,10 +39,9 @@ CGFloat DefaultGUIFontSize()
 //Single menu item, can be standalone or a group member.
 @implementation MenuItem {
    NSString *itemTitle;
-   NSObject<ContentProvider> *contentProvider;
 }
 
-@synthesize itemView, menuGroup;
+@synthesize itemView, menuGroup, contentProvider;
 
 //________________________________________________________________________________________
 - (id) initWithContentProvider : (NSObject<ContentProvider> *) provider

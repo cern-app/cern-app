@@ -634,18 +634,31 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 #pragma mark - Menu animations.
 
 //________________________________________________________________________________________
-- (void) itemViewWasSelected : (MenuItemView *) view
+- (BOOL) itemViewWasSelected : (MenuItemView *) view
 {
    assert(view != nil && "itemViewWasSelected:, parameter 'view' is nil");
 
-   if (selectedItemView != view) {
+   //Return YES if an action is required from the content provider
+   //(either a new menu item was selected, or menu item for
+   //a modal view was (re)selected).
+
+   if (selectedItemView != view || [view isModalViewItem]) {
+      //Quite an ugly ad-hoc solution for modal view controllers:
+      //they are not a part of our sliding view interface,
+      //so usuall logic does not work for them: if a menu is visible (and
+      //was selected) - always load a view/controller (in case
+      //of a modal view controller, the previous was dismissed.
       selectedItemView.isSelected = NO;
       [selectedItemView setNeedsDisplay];
       selectedItemView = view;
       selectedItemView.isSelected = YES;
       [selectedItemView setNeedsDisplay];
+
+      return YES;
    } else {
       [self.slidingViewController resetTopView];
+
+      return NO;
    }
    
 }

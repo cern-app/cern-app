@@ -57,6 +57,8 @@
 @property (nonatomic) __weak MenuItemsGroup *menuGroup;
 @property (nonatomic) __weak MenuItemView *itemView;
 
+@property (nonatomic) NSObject<ContentProvider> *contentProvider;
+
 @end
 
 //
