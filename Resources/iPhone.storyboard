@@ -524,7 +524,7 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" usesAttributedText="YES" id="Sbg-RT-egd">
                                 <rect key="frame" x="0.0" y="44" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
                                     <bool key="isElement" value="NO"/>
@@ -547,9 +547,10 @@
                                 </items>
                             </navigationBar>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                     </view>
                     <connections>
+                        <outlet property="navigationBar" destination="BNc-gm-B2c" id="mA8-ps-wlp"/>
                         <outlet property="textView" destination="Sbg-RT-egd" id="Utl-jL-0rH"/>
                     </connections>
                 </viewController>
@@ -982,6 +983,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CreditsViewController.h"/>
             <relationships>
                 <relationship kind="action" name="donePressed:"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
                 <relationship kind="outlet" name="textView" candidateClass="UITextView"/>
             </relationships>
         </class>
@@ -1026,10 +1028,6 @@
         </class>
         <class className="PhotoCollectionsViewController" superclassName="UICollectionViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoCollectionsViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="reloadImages:"/>
-                <relationship kind="action" name="revealMenu:"/>
-            </relationships>
         </class>
         <class className="SlideScrollView" superclassName="UIScrollView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SlideScrollView.h"/>
@@ -1077,10 +1075,6 @@
         </class>
         <class className="VideosGridViewController" superclassName="UICollectionViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/VideosGridViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="refresh:"/>
-                <relationship kind="action" name="revealMenu:"/>
-            </relationships>
         </class>
         <class className="WebcastsCollectionViewController" superclassName="UICollectionViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/WebcastsCollectionViewController.h"/>

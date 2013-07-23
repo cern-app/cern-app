@@ -233,4 +233,35 @@ CGFloat LicenseFontSize()
    }
 }
 
+#pragma mark - Interface orientation change.
+
+//________________________________________________________________________________________
+- (BOOL) shouldAutorotate
+{
+   return YES;
+}
+
+//________________________________________________________________________________________
+- (void) willRotateToInterfaceOrientation : (UIInterfaceOrientation) toInterfaceOrientation duration : (NSTimeInterval) duration
+{
+#pragma unused(duration)
+
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+      return;//We do not hide a navigation bar on iPad.
+
+   const CGRect barFrame = navigationBar.frame;
+   CGRect textFrame = textView.frame;
+   if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+      navigationBar.hidden = YES;
+      textFrame.origin.y -= barFrame.size.height;
+      textFrame.size.height += barFrame.size.height;
+   } else {
+      navigationBar.hidden = NO;
+      textFrame.origin.y += barFrame.size.height;
+      textFrame.size.height -= barFrame.size.height;
+   }
+
+   textView.frame = textFrame;
+}
+
 @end
