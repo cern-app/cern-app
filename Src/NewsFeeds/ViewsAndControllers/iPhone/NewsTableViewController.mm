@@ -232,14 +232,14 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    //Actually, nothing I can do here. I tried to release images - did not help,
    //app keeps dying. Quite a useless method.
-   
+   /*
    [parseQueue cancelAllOperations];
    parseOp = nil;
    [self cancelAllImageDownloaders];
 
    lowMemory = YES;
    allArticles = nil;
-   [self.tableView reloadData];
+   [self.tableView reloadData];*/
    
 //   [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
