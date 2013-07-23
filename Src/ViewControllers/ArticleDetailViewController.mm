@@ -262,6 +262,7 @@ const NSUInteger fontIncreaseStep = 4;
 //________________________________________________________________________________________
 - (void) dealloc
 {
+   [self cancelAnyConnections];
    [internetReach stopNotifier];
    [[NSNotificationCenter defaultCenter] removeObserver : self];
 }
@@ -326,23 +327,6 @@ const NSUInteger fontIncreaseStep = 4;
 }
 
 //________________________________________________________________________________________
-- (void) viewWillDisappear : (BOOL) animated
-{
-   [rdbView stopLoading];
-   [pageView stopLoading];
-   
-   [self stopSpinner];
-   
-   if (currentConnection) {
-      [currentConnection cancel];
-      currentConnection = nil;
-   }
-
-   stage = LoadStage::inactive;
-   status = 200;
-}
-
-//________________________________________________________________________________________
 - (void) viewDidLoad
 {
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
@@ -402,7 +386,6 @@ const NSUInteger fontIncreaseStep = 4;
 - (void) webView : (UIWebView *) webView didFailLoadWithError : (NSError *) error
 {
 #pragma unused(error)
-
    if (stage == LoadStage::originalPageLoad && webView == pageView) {
       [webView stopLoading];
 
@@ -487,7 +470,7 @@ const NSUInteger fontIncreaseStep = 4;
                                                 "href='file://%@'></head><body></p></body></html><h1>%@</h1>%@<p class='read'>",
                                                 cssPath, title, rdbCache];
 
-   [rdbView loadHTMLString:htmlString baseURL : nil];
+   [rdbView loadHTMLString : htmlString baseURL : nil];
 }
 
 //________________________________________________________________________________________
@@ -1362,5 +1345,28 @@ const NSUInteger fontIncreaseStep = 4;
    return NO;
 }
 
+//________________________________________________________________________________________
+- (void) cancelAnyConnections
+{
+   if (rdbView.isLoading) {
+      [rdbView stopLoading];
+      rdbView.delegate = nil;
+   }
+   
+   if (pageView.isLoading) {
+      [pageView stopLoading];
+      pageView.delegate = nil;
+   }
+   
+   [self stopSpinner];
+   
+   if (currentConnection) {
+      [currentConnection cancel];
+      currentConnection = nil;
+   }
+
+   stage = LoadStage::inactive;
+   status = 200;
+}
 
 @end

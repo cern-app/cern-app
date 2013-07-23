@@ -1,6 +1,7 @@
 #import <cassert>
 
 #import "StaticInfoScrollViewController.h"
+#import "ArticleDetailViewController.h"
 #import "MenuNavigationController.h"
 #import "NewsTableViewController.h"
 #import "ECSlidingViewController.h"
@@ -72,6 +73,17 @@
       if ([controller respondsToSelector : @selector(cancelAnyConnections)])
          [controller performSelector : @selector(cancelAnyConnections)];
    }
+}
+
+//________________________________________________________________________________________
+- (UIViewController *) popViewControllerAnimated : (BOOL) animated
+{
+   UIViewController * const controllerToPop = [super popViewControllerAnimated : animated];
+   if ([controllerToPop isKindOfClass : [ArticleDetailViewController class]]) {
+      [(ArticleDetailViewController *)controllerToPop cancelAnyConnections];
+   }
+   
+   return controllerToPop;
 }
 
 

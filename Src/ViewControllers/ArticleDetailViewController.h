@@ -9,11 +9,13 @@
 #import <MessageUI/MessageUI.h>
 #import <UIKit/UIKit.h>
 
+#import "ConnectionController.h"
 #import "OverlayView.h"
 #import "MWFeedItem.h"
 
 @interface ArticleDetailViewController : UIViewController <UIWebViewDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate,
-                                                           OverlayViewDelegate, MFMailComposeViewControllerDelegate>
+                                                           OverlayViewDelegate, MFMailComposeViewControllerDelegate,
+                                                           ConnectionController>
 
 @property (nonatomic, strong) IBOutlet UIWebView *rdbView;
 @property (nonatomic, strong) IBOutlet UIWebView *pageView;
