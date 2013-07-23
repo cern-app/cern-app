@@ -1345,6 +1345,8 @@ const NSUInteger fontIncreaseStep = 4;
    return NO;
 }
 
+#pragma mark - ConnectionController.
+
 //________________________________________________________________________________________
 - (void) cancelAnyConnections
 {
