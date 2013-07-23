@@ -512,7 +512,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma unused(scrollView)
 
    //Cached feeds do not have any images.
-   if (!feedCache) {
+   if (!feedCache && !parseOp) {
       if (!decelerate)
          [self loadImagesForOnscreenRows];
    }
@@ -524,7 +524,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma unused(scrollView)
 
    //No images in a cached feed.
-   if (!feedCache)
+   if (!feedCache && !parseOp)
       [self loadImagesForOnscreenRows];
 }
 
