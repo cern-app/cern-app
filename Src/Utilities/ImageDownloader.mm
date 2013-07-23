@@ -43,7 +43,7 @@ bool ImageIsNonProportional(const CGSize &imageSize)
    BOOL delayImageCreation;
 }
 
-@synthesize delegate, indexPathInTableView, image, dataSizeLimit;
+@synthesize delegate, indexPathInTableView, image, dataSizeLimit, downscaleToSize;
 
 //________________________________________________________________________________________
 - (id) initWithURLString : (NSString *) urlString
@@ -60,6 +60,7 @@ bool ImageIsNonProportional(const CGSize &imageSize)
       delayImageCreation = NO;
       
       dataSizeLimit = 0;
+      downscaleToSize = 0.f;
    }
    
    return self;
@@ -125,10 +126,28 @@ bool ImageIsNonProportional(const CGSize &imageSize)
             const CGFloat scale = dimension / std::min(imageSize.width, imageSize.height);
             const CGSize newSize = CGSizeMake(imageSize.width * scale, imageSize.height * scale);
             //neither a width nor a height can be 0.
+            
+            //TODO: the code below is a fugly hack for an image downscaling.
+            //The original code was taken from: https://gist.github.com/benilovj/2009030,
+            //but it does not work with some images: http://vocaro.com/trevor/blog/2009/10/12/resize-a-uiimage-the-right-way/  - aha-aha,
+            //"right way" my ass (see comments and the reply by Matt).
+            //Sure, this is not how real programmers solve their problems -
+            //to be investigated and REALLY fixed.
+            //But I have no time now to write an image processing library now.
+
             CGContextRef bitmapCtx = CGBitmapContextCreate(nullptr, newSize.width, newSize.height,
                                                            CGImageGetBitsPerComponent(tempImage.CGImage), 0,
                                                            CGImageGetColorSpace(tempImage.CGImage),
-                                                           CGImageGetBitmapInfo(tempImage.CGImage));
+                                                           CGImageGetBitmapInfo(tempImage.CGImage));//This shit generates error messages :(
+            if (!bitmapCtx) {
+               if (CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB()) {
+                  bitmapCtx = CGBitmapContextCreate(nullptr, newSize.width, newSize.height,
+                                                    8, 4 * size_t(newSize.width),
+                                                    colorSpace,
+                                                    kCGImageAlphaPremultipliedFirst);
+                  CGColorSpaceRelease(colorSpace);
+               }
+            }
             
             if (bitmapCtx) {
                CGContextSetInterpolationQuality(bitmapCtx, kCGInterpolationHigh);
@@ -232,8 +251,12 @@ bool ImageIsNonProportional(const CGSize &imageSize)
 
    imageConnection = nil;
 
-   if (!delayImageCreation)
-      [self createUIImage];
+   if (!delayImageCreation) {
+      if (!downscaleToSize)
+         [self createUIImage];
+      else
+         [self createThumbnailImageScaledTo : downscaleToSize];
+   }
    
    [delegate imageDidLoad : indexPathInTableView];
 }

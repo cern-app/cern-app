@@ -32,4 +32,6 @@
 @property (nonatomic, strong) NSIndexPath *indexPathInTableView;
 @property (nonatomic, strong) UIImage *image;
 
+@property (nonatomic) CGFloat downscaleToSize;
+
 @end

@@ -271,7 +271,8 @@
                   downloader = [[ImageDownloader alloc] initWithURLString : urlString];
                   downloader.indexPathInTableView = indexPath;
                   //
-                  downloader.dataSizeLimit = 1000000;
+                  downloader.dataSizeLimit = 500000;
+                  downloader.downscaleToSize = 150.f;
                   //
                   downloader.delegate = self;
                   [imageDownloaders setObject : downloader forKey : indexPath];

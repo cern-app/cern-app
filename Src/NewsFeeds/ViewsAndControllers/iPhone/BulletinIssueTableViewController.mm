@@ -243,7 +243,8 @@
             downloader.indexPathInTableView = indexPath;
             downloader.delegate = self;
             //
-            downloader.dataSizeLimit = 1000000;
+            downloader.dataSizeLimit = 500000;
+            downloader.downscaleToSize = 150.f;
             //
             [imageDownloaders setObject : downloader forKey : indexPath];
             [downloader startDownload];//Power on.
