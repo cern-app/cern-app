@@ -209,9 +209,7 @@ const NSUInteger fontIncreaseStep = 4;
       }
 
       [self stopSpinner];
-      
-      if (timeoutGuard)
-         [self stopTimer];
+      [self stopTimer];
 
       if ([self isInActiveStage]) {
          //We show the message and change buttons
@@ -395,15 +393,14 @@ const NSUInteger fontIncreaseStep = 4;
 #pragma unused(error)
 
    [self stopTimer];
-
+   [webView stopLoading];
+   
    if (stage == LoadStage::originalPageLoad && webView == pageView) {
-      [webView stopLoading];
       [self stopSpinner];
       [self showErrorHUD];
       stage = LoadStage::lostNetworkConnection;
       [self addWebBrowserButtons];
    } else if (stage == LoadStage::rdbCacheLoad && webView == rdbView) {
-      [webView stopLoading];
       //Due to some reason, we can not load html processed by readability.
       //I can not assume anything about it - may be, some part (e.g. referenced image)
       //not found, may be something else, since webViewDidFinishLoad was not called before,
@@ -413,9 +410,6 @@ const NSUInteger fontIncreaseStep = 4;
 
       [self switchToPageView];
       [self loadOriginalPage];
-   } else {
-      //Stop it!
-      [webView stopLoading];
    }
 }
 
@@ -425,14 +419,13 @@ const NSUInteger fontIncreaseStep = 4;
 #pragma unused(webView)
 
    [self stopTimer];
+   [self stopSpinner];
 
    if (stage == LoadStage::originalPageLoad && webView == pageView) {
-      [self stopSpinner];
       pageLoaded = YES;
       stage = LoadStage::inactive;
       [self addWebBrowserButtons];
    } else if (stage == LoadStage::rdbCacheLoad && webView == rdbView) {
-      [self stopSpinner];
       stage = LoadStage::inactive;
       [self addWebBrowserButtons];
       [self changeTextSize];
@@ -452,19 +445,6 @@ const NSUInteger fontIncreaseStep = 4;
    //try to either auth and parse, or pars (if auth was done already).
 
    [self readabilityParseHtml];
-   /*
-   //Old version commented. To be deleted.
-   id delegateBase = [UIApplication sharedApplication].delegate;
-   assert([delegateBase isKindOfClass : [AppDelegate class]] &&
-          "loadHtmlFromReadability, app delegate has a wrong type");
-   
-   AppDelegate * const appDelegate = (AppDelegate *)delegateBase;
-   if (appDelegate.OAuthToken && appDelegate.OAuthTokenSecret)
-      //We try to re-use OAuth tokens (if they don't expire yet).
-      [self readabilityParseHtml];
-   else
-      [self readabilityAuth];
-   */
 }
 
 //________________________________________________________________________________________
@@ -479,8 +459,7 @@ const NSUInteger fontIncreaseStep = 4;
                                                 @"<html><head><link rel='stylesheet' type='text/css' "
                                                 "href='file://%@'></head><body></p></body></html><h1>%@</h1>%@<p class='read'>",
                                                 cssPath, title, rdbCache];
-   
-   //TODO: Start the timer here ...
+
    [self stopTimer];
    [self startTimer];
    [rdbView loadHTMLString : htmlString baseURL : nil];
@@ -497,6 +476,7 @@ const NSUInteger fontIncreaseStep = 4;
       [self stopSpinner];
       
       stage = LoadStage::lostNetworkConnection;
+
       [self showErrorHUD];
       [self addWebBrowserButtons];
    } else {
