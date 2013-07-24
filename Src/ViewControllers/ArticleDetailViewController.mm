@@ -166,6 +166,8 @@ const NSUInteger fontIncreaseStep = 4;
    
    //I need this for Readability + CoreData.
    NSString *responseEncoding;
+   //
+   NSTimer *timeoutGuard;
 }
 
 @synthesize rdbView, pageView, containerView, rdbCache, articleID, title, canUseReadability;
@@ -207,6 +209,9 @@ const NSUInteger fontIncreaseStep = 4;
       }
 
       [self stopSpinner];
+      
+      if (timeoutGuard)
+         [self stopTimer];
 
       if ([self isInActiveStage]) {
          //We show the message and change buttons
@@ -254,6 +259,8 @@ const NSUInteger fontIncreaseStep = 4;
       stage = LoadStage::inactive;
       pageLoaded = NO;
       authDone = NO;
+      
+      timeoutGuard = nil;
    }
 
    return self;
@@ -386,16 +393,17 @@ const NSUInteger fontIncreaseStep = 4;
 - (void) webView : (UIWebView *) webView didFailLoadWithError : (NSError *) error
 {
 #pragma unused(error)
+
+   [self stopTimer];
+
    if (stage == LoadStage::originalPageLoad && webView == pageView) {
       [webView stopLoading];
-
       [self stopSpinner];
       [self showErrorHUD];
       stage = LoadStage::lostNetworkConnection;
       [self addWebBrowserButtons];
    } else if (stage == LoadStage::rdbCacheLoad && webView == rdbView) {
       [webView stopLoading];
-
       //Due to some reason, we can not load html processed by readability.
       //I can not assume anything about it - may be, some part (e.g. referenced image)
       //not found, may be something else, since webViewDidFinishLoad was not called before,
@@ -415,6 +423,8 @@ const NSUInteger fontIncreaseStep = 4;
 - (void) webViewDidFinishLoad : (UIWebView *) webView
 {
 #pragma unused(webView)
+
+   [self stopTimer];
 
    if (stage == LoadStage::originalPageLoad && webView == pageView) {
       [self stopSpinner];
@@ -469,7 +479,10 @@ const NSUInteger fontIncreaseStep = 4;
                                                 @"<html><head><link rel='stylesheet' type='text/css' "
                                                 "href='file://%@'></head><body></p></body></html><h1>%@</h1>%@<p class='read'>",
                                                 cssPath, title, rdbCache];
-
+   
+   //TODO: Start the timer here ...
+   [self stopTimer];
+   [self startTimer];
    [rdbView loadHTMLString : htmlString baseURL : nil];
 }
 
@@ -495,6 +508,9 @@ const NSUInteger fontIncreaseStep = 4;
       NSURL * const url = [NSURL URLWithString : articleLink];
       NSURLRequest * const request = [NSURLRequest requestWithURL : url];
       pageLoaded = NO;
+      
+      [self stopTimer];
+      [self startTimer];
       [pageView loadRequest : request];
    }
 }
@@ -682,6 +698,9 @@ const NSUInteger fontIncreaseStep = 4;
 
    } else {
       [pageView stopLoading];
+      //
+      [MBProgressHUD hideAllHUDsForView : self.view animated : NO];
+      //
       [UIView transitionFromView : pageView toView : rdbView duration : 1.f options : transitionOptions completion : ^(BOOL finished) {
          if (finished) {
             stage = LoadStage::inactive;
@@ -1081,10 +1100,13 @@ const NSUInteger fontIncreaseStep = 4;
 - (void) switchToPageView
 {
    //Non-animated switch.
-   if (rdbView.superview)
+   if (rdbView.superview) {
       [rdbView removeFromSuperview];
-   if (!pageView.superview)
+   }
+   
+   if (!pageView.superview) {
       [containerView addSubview : pageView];
+   }
    
    if (!spinner.hidden)
       [spinner.superview bringSubviewToFront : spinner];
@@ -1350,6 +1372,8 @@ const NSUInteger fontIncreaseStep = 4;
 //________________________________________________________________________________________
 - (void) cancelAnyConnections
 {
+   [self stopTimer];
+
    if (rdbView.isLoading) {
       [rdbView stopLoading];
       rdbView.delegate = nil;
@@ -1369,6 +1393,36 @@ const NSUInteger fontIncreaseStep = 4;
 
    stage = LoadStage::inactive;
    status = 200;
+}
+
+#pragma mark - Timeout guard.
+
+//________________________________________________________________________________________
+- (void) startTimer
+{
+   assert(timeoutGuard == nil && "startTime, timer is active already");
+   timeoutGuard = [NSTimer scheduledTimerWithTimeInterval : 60.f target : self selector : @selector(timeoutHandler) userInfo : nil repeats : NO];
+}
+
+//________________________________________________________________________________________
+- (void) stopTimer
+{
+   [timeoutGuard invalidate];
+   timeoutGuard = nil;
+}
+
+//________________________________________________________________________________________
+- (void) timeoutHandler
+{
+   //This can happen ONLY when we're loading either an html from the Readability or original page.
+   //We consider timeout as an error and stop loading anything at all.
+   if (stage == LoadStage::originalPageLoad) {
+      [self webView : pageView didFailLoadWithError : nil];
+   } else if (stage == LoadStage::rdbCacheLoad) {
+      [self webView : rdbView didFailLoadWithError : nil];
+   }
+   
+   timeoutGuard = nil;
 }
 
 @end
