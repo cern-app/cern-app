@@ -34,6 +34,10 @@
    
    NSString *feedURLString;
    NSArray *feedFilters;
+   
+   //If we are in the process of the flip animation,
+   //do not reload/re-create
+   BOOL flipRefreshDelayed;
 }
 
 @synthesize feedStoreID;
@@ -65,6 +69,8 @@
       parserQueue = [[NSOperationQueue alloc] init];
       parserOp = nil;
       feedFilters = nil;
+      
+      flipRefreshDelayed = NO;
    }
 
    return self;
@@ -253,7 +259,22 @@
       [self hideNavBarSpinner];
    } else
       CernAPP::HideSpinner(self);
+
+   parserOp = nil;
    
+   if (flipAnimator.animationLock)
+      delayedFlipRefresh = YES;
+   else {
+      delayedFlipRefresh = NO;
+      panGesture.enabled = NO;
+      [self refreshAfterFlip];
+      panGesture.enabled = YES;
+   }
+}
+
+//________________________________________________________________________________________
+- (void) refreshAfterFlip
+{
    self.navigationItem.rightBarButtonItem.enabled = YES;
 
    [self setTilesLayoutHints];
@@ -265,8 +286,6 @@
    [self loadVisiblePageData];
    if (nPages > 1)
       [self showRightFlipHintAnimated];
-
-   parserOp = nil;
 }
 
 #pragma mark - Overriders for TileViewController's methods.

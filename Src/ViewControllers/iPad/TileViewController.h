@@ -35,6 +35,8 @@
    UIView *panRegion;
    
    BOOL hintAnimationActive;
+   
+   BOOL delayedFlipRefresh;
 }
 
 - (id) initWithCoder : (NSCoder *) aDecoder;
@@ -80,6 +82,9 @@
 //HUDRefreshProtocol.
 @property (nonatomic, strong) MBProgressHUD *noConnectionHUD;//Error messages.
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
+
+//To be overriden:
+- (void) refreshAfterFlip;
 
 
 @end

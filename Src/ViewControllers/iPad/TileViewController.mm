@@ -56,6 +56,9 @@ const NSUInteger nAutoAnimationSteps = 10;
       
       flipHintView = [[UIImageView alloc] initWithImage : [UIImage imageNamed : @"flip_right.png"]];
       flipHintView.hidden = YES;
+      
+      hintAnimationActive = NO;
+      delayedFlipRefresh = NO;
    }
 
    return self;
@@ -363,83 +366,88 @@ const NSUInteger nAutoAnimationSteps = 10;
    
    panGesture.enabled = NO;
    
-   if (nPages > 3) {
-      if (direction == -1) {
-         //We are moving to the next page (for the flip view it's "backward" though).
-         const NSUInteger pageToLoad = prevPage.pageNumber + 1 < nPages ? prevPage.pageNumber + 1 : 0;
-         //curr becomes == prev
-         //next becomes == curr
-         //prev - new page loaded.
-         UIView<TiledPage> * const oldCurr = currPage;
-         UIView<TiledPage> * const oldPrev = prevPage;
-         
-         const NSRange newPageRange = [self findItemRangeForPage : pageToLoad];
-         [nextPage setPageItems : dataItems startingFrom : newPageRange.location];
-         nextPage.pageNumber = pageToLoad;
-         [nextPage layoutTiles];
+   if (delayedFlipRefresh) {
+      [self refreshAfterFlip];
+      delayedFlipRefresh = NO;
+   } else {   
+      if (nPages > 3) {
+         if (direction == -1) {
+            //We are moving to the next page (for the flip view it's "backward" though).
+            const NSUInteger pageToLoad = prevPage.pageNumber + 1 < nPages ? prevPage.pageNumber + 1 : 0;
+            //curr becomes == prev
+            //next becomes == curr
+            //prev - new page loaded.
+            UIView<TiledPage> * const oldCurr = currPage;
+            UIView<TiledPage> * const oldPrev = prevPage;
+            
+            const NSRange newPageRange = [self findItemRangeForPage : pageToLoad];
+            [nextPage setPageItems : dataItems startingFrom : newPageRange.location];
+            nextPage.pageNumber = pageToLoad;
+            [nextPage layoutTiles];
 
-         prevPage = nextPage;
-         nextPage = oldCurr;
-         currPage = oldPrev;
-         
-         [flipView shiftBackwardWithNewPage : prevPage];
+            prevPage = nextPage;
+            nextPage = oldCurr;
+            currPage = oldPrev;
+            
+            [flipView shiftBackwardWithNewPage : prevPage];
+         } else {
+            //We are moving to the previous page (and it's "forward" for the flip view).
+            const NSUInteger pageToLoad = nextPage.pageNumber ? nextPage.pageNumber - 1 : nPages - 1;
+            //curr becomes == next
+            //prev becomes == curr
+            //next - new page loaded.
+            UIView<TiledPage> * const oldCurr = currPage;
+            UIView<TiledPage> * const oldNext = nextPage;
+            
+            const NSRange newPageRange = [self findItemRangeForPage : pageToLoad];
+            
+            [prevPage setPageItems : dataItems startingFrom : newPageRange.location];
+            prevPage.pageNumber = pageToLoad;
+            [prevPage layoutTiles];
+
+            nextPage = prevPage;
+            prevPage = oldCurr;
+            currPage = oldNext;
+            
+            [flipView shiftForwardWithNewPage : nextPage];
+         }
       } else {
-         //We are moving to the previous page (and it's "forward" for the flip view).
-         const NSUInteger pageToLoad = nextPage.pageNumber ? nextPage.pageNumber - 1 : nPages - 1;
-         //curr becomes == next
-         //prev becomes == curr
-         //next - new page loaded.
-         UIView<TiledPage> * const oldCurr = currPage;
-         UIView<TiledPage> * const oldNext = nextPage;
-         
-         const NSRange newPageRange = [self findItemRangeForPage : pageToLoad];
-         
-         [prevPage setPageItems : dataItems startingFrom : newPageRange.location];
-         prevPage.pageNumber = pageToLoad;
-         [prevPage layoutTiles];
-
-         nextPage = prevPage;
-         prevPage = oldCurr;
-         currPage = oldNext;
-         
-         [flipView shiftForwardWithNewPage : nextPage];
+         //All pages are still actual, I only have to change the ordering.
+         if (nPages == 2) {
+            UIView<TiledPage> * const oldPrev = prevPage;
+            prevPage = currPage;
+            currPage = oldPrev;
+         } else if (direction == -1) {
+            UIView<TiledPage> * const oldNext = nextPage;
+            nextPage = currPage;
+            currPage = prevPage;
+            prevPage = oldNext;
+         } else {
+            UIView<TiledPage> * const oldCurr = currPage;
+            currPage = nextPage;
+            nextPage = prevPage;
+            prevPage = oldCurr;
+         }
       }
-   } else {
-      //All pages are still actual, I only have to change the ordering.
-      if (nPages == 2) {
-         UIView<TiledPage> * const oldPrev = prevPage;
-         prevPage = currPage;
-         currPage = oldPrev;
-      } else if (direction == -1) {
-         UIView<TiledPage> * const oldNext = nextPage;
-         nextPage = currPage;
-         currPage = prevPage;
-         prevPage = oldNext;
-      } else {
-         UIView<TiledPage> * const oldCurr = currPage;
-         currPage = nextPage;
-         nextPage = prevPage;
-         prevPage = oldCurr;
+      
+      flipView.hidden = YES;
+
+      if (!currPage.superview)
+         [self.view addSubview : currPage];
+
+      [currPage.superview bringSubviewToFront : currPage];
+      
+      if (!spinner.hidden)
+         [spinner.superview bringSubviewToFront : spinner];
+      
+      [self loadVisiblePageData];
+      
+      if (nPages > 1) {
+         if (currPage.pageNumber == nPages - 1)
+            [self showLeftFlipHintAnimated];
+         else if (!currPage.pageNumber)
+            [self showRightFlipHintAnimated];
       }
-   }
-   
-   flipView.hidden = YES;
-
-   if (!currPage.superview)
-      [self.view addSubview : currPage];
-
-   [currPage.superview bringSubviewToFront : currPage];
-   
-   if (!spinner.hidden)
-      [spinner.superview bringSubviewToFront : spinner];
-   
-   [self loadVisiblePageData];
-   
-   if (nPages > 1) {
-      if (currPage.pageNumber == nPages - 1)
-         [self showLeftFlipHintAnimated];
-      else if (!currPage.pageNumber)
-         [self showRightFlipHintAnimated];
    }
 
    panGesture.enabled = YES;
@@ -450,10 +458,17 @@ const NSUInteger nAutoAnimationSteps = 10;
 {
    flipView.hidden = YES;
 
-   if (!currPage.superview)
-      [self.view addSubview : currPage];
+   if (delayedFlipRefresh) {
+      panGesture.enabled = NO;
+      [self refreshAfterFlip];
+      delayedFlipRefresh = NO;
+      panGesture.enabled = YES;
+   } else {
+      if (!currPage.superview)
+         [self.view addSubview : currPage];
 
-   [currPage.superview bringSubviewToFront : currPage];
+      [currPage.superview bringSubviewToFront : currPage];
+   }
 }
 
 //________________________________________________________________________________________
@@ -625,6 +640,11 @@ const NSUInteger nAutoAnimationSteps = 10;
          [flipAnimator endStateWithSpeed : 1.f];
       }
    }
+}
+
+//________________________________________________________________________________________
+- (void) refreshAfterFlip
+{
 }
 
 @end
