@@ -468,6 +468,11 @@ const NSUInteger nAutoAnimationSteps = 10;
          [self.view addSubview : currPage];
 
       [currPage.superview bringSubviewToFront : currPage];
+
+      if (!spinner.hidden)
+         [spinner.superview bringSubviewToFront : spinner];
+
+      [self loadVisiblePageData];
    }
 }
 
