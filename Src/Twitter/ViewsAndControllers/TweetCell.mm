@@ -244,6 +244,10 @@ const CGFloat largeSizeVMargin = 0.05f;
    webView = [[UIWebView alloc] initWithFrame : adjustedFrame];
    [self addSubview : webView];
    webView.delegate = delegate;
+   webView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
+                              UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
+                              UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+   
    
    //webView.delegate = self;
    [webView loadRequest : webViewRequest];
