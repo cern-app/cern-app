@@ -23,5 +23,6 @@
 namespace CernAPP {
 
 extern NSString * const feedItemSelectionNotification;
+//extern NSString * const feedItemSendItemNotification;
 
 }

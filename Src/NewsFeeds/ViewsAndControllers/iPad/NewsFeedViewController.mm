@@ -450,6 +450,12 @@
    [self.navigationController pushViewController : viewController animated : YES];
 }
 
+//________________________________________________________________________________________
+- (void) sendSelectedArticle : (NSNotification *) notification
+{
+#pragma unused(notification)
+}
+
 #pragma mark - ConnectionController protocol.
 
 //________________________________________________________________________________________
@@ -474,6 +480,7 @@
 - (void) addTileTapObserver
 {
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(articleSelected:) name : CernAPP::feedItemSelectionNotification object : nil];
+//   [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(sendSelectedArticle:) name : CernAPP::feedItemSendItemNotification object : nil];
 }
 
 //________________________________________________________________________________________

@@ -23,6 +23,7 @@
 namespace CernAPP {
 
 NSString * const feedItemSelectionNotification = @"CernAPP_FeedItemSelectionNotification";
+//NSString * const feedItemSendItemNotification = @"CernAPP_FeedItemSendItemNotification";
 
 }
 
@@ -82,7 +83,7 @@ bool IsWideImage(UIImage *image)
    int imageCut;
    
    UILabel *infoLabel;//Article's date and author.
-   PictureButtonView *actionButton;
+   //PictureButtonView *actionButton;
 }
 
 //________________________________________________________________________________________
@@ -210,9 +211,9 @@ CGPathRef CreateTextPath(FeedItemTileView *view)
       infoLabel.font = font;
       [self addSubview : infoLabel];
       
-      actionButton = [[PictureButtonView alloc] initWithFrame:CGRect() image : [UIImage imageNamed : @"action_blue.png"]];
-      [actionButton addTarget : self selector : @selector(sendArticle)];
-      [self addSubview : actionButton];
+      //actionButton = [[PictureButtonView alloc] initWithFrame : CGRect() image : [UIImage imageNamed : @"action_blue.png"]];
+      //[actionButton addTarget : self selector : @selector(sendArticle)];
+      //[self addSubview : actionButton];
 
       //
       UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(showArticle)];
@@ -448,8 +449,8 @@ CGPathRef CreateTextPath(FeedItemTileView *view)
    const CGFloat y = footerY * viewSize.height + (1 - footerY) * viewSize.height * 0.5 - dateSize.height / 2;
    infoLabel.frame = CGRectMake(wideImageMargin * viewSize.width, y, dateSize.width, dateSize.height);
    
-   const CGFloat btnSz = (1 - footerY) * viewSize.height;//quite arbitrary choise
-   actionButton.frame = CGRectMake(viewSize.width - btnSz, viewSize.height - btnSz, btnSz, btnSz);
+   //const CGFloat btnSz = (1 - footerY) * viewSize.height * 0.5f;//quite arbitrary choise
+   //actionButton.frame = CGRectMake(viewSize.width - btnSz, viewSize.height - btnSz, btnSz, btnSz);
 }
 
 //________________________________________________________________________________________
@@ -468,6 +469,8 @@ CGPathRef CreateTextPath(FeedItemTileView *view)
 //________________________________________________________________________________________
 - (void) sendArticle
 {
+   //Open "Social netword/e-mail" view.
+   //[[NSNotificationCenter defaultCenter] postNotificationName : CernAPP::feedItemSendItemNotification object : feedItem];
 }
 
 //________________________________________________________________________________________
