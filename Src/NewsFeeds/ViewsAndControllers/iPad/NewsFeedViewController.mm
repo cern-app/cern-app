@@ -224,6 +224,7 @@
       CernAPP::ShowErrorHUD(self, @"No network");//TODO: better error message?
    
    parserOp = nil;
+   self.navigationItem.rightBarButtonItem.enabled = YES;   
 }
 
 //________________________________________________________________________________________
