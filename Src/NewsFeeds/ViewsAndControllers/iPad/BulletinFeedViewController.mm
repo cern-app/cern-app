@@ -48,6 +48,8 @@
    } else
       CernAPP::HideSpinner(self);
    
+   parserOp = nil;
+   
    self.navigationItem.rightBarButtonItem.enabled = YES;
    [self setPagesData];
 
