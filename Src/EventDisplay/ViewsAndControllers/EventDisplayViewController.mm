@@ -76,6 +76,8 @@ using CernAPP::NetworkStatus;
          loadingPage = 0;
          loadingSource = 0;
          imageData = nil;
+         
+         self.navigationItem.rightBarButtonItem.enabled = YES;
 
          [self checkCurrentPage];
       }

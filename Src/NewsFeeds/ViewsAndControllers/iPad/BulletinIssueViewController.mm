@@ -58,6 +58,11 @@
    [self layoutFlipView];
    [self layoutPanRegion];
    [self loadVisiblePageData];
+   
+   if (nPages > 1)
+      [self showRightFlipHint];
+   else
+      [self hideFlipHint];
 }
 
 //________________________________________________________________________________________
