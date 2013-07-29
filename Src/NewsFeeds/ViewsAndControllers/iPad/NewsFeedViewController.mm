@@ -340,6 +340,7 @@
    } else {
       ThumbnailDownloader * const newDownloader = [[ThumbnailDownloader alloc] initWithItems : thumbnails sizeLimit : 500000  downscaleToSize : 200.f];
       [downloaders setObject : newDownloader forKey : key];
+      newDownloader.pageNumber = currPage.pageNumber;
       newDownloader.delegate = self;
       [newDownloader startDownload];
    }
