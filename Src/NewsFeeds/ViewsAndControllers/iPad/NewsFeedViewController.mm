@@ -168,9 +168,12 @@
       [self layoutPages : YES];
       [self layoutFlipView];
       [self layoutPanRegion];
-      if (nPages > 1)
-         [self showRightFlipHint];
-      else
+      if (nPages > 1) {
+         if (!currPage.pageNumber)
+            [self showRightFlipHint];
+         else if (currPage.pageNumber == nPages - 1)
+            [self showLeftFlipHint];
+      } else
          [self hideFlipHint];
    }
 
