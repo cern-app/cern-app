@@ -65,8 +65,9 @@
 //________________________________________________________________________________________
 - (void) loadVisiblePageData
 {
-   if (feedCache != nil)//Do not load images for a cache - we are refreshing the feed at the moment.
-      return;
+   if (feedCache || parserOp)//We're refreshing, do not load images, anyway, at the end of refresh
+      return;                //operation they'll become invalid (potentially).
+   
 
    const CGFloat minImageSize = [BulletinIssueTileView minImageSize];
 

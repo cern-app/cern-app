@@ -36,6 +36,7 @@
 @protected
    NSMutableDictionary *downloaders;//image downloaders.
    NSArray *feedCache;
+   FeedParserOperation *parserOp;
 }
 
 - (void) setFeedURLString : (NSString *) urlString;

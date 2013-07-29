@@ -30,7 +30,6 @@
    
    //The queue with only one operation - parsing.
    NSOperationQueue *parserQueue;
-   FeedParserOperation *parserOp;
    
    NSString *feedURLString;
    NSArray *feedFilters;
@@ -294,8 +293,8 @@
 //________________________________________________________________________________________
 - (void) loadVisiblePageData
 {
-   if (feedCache)//We do not load images for a cached feed, since right now we are refreshing the feed.
-      return;
+   if (feedCache || parserOp)//Do not start any downloader while refreshing:
+      return;                //by the end of refresh all images will become (possibly) invalid.
 
    if (!downloaders)
       downloaders = [[NSMutableDictionary alloc] init];
