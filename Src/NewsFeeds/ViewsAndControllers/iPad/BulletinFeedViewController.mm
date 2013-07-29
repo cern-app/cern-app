@@ -50,6 +50,19 @@
    
    parserOp = nil;
    
+   if (flipAnimator.animationLock)
+      delayedFlipRefresh = YES;
+   else {
+      delayedFlipRefresh = NO;
+      panGesture.enabled = NO;
+      [self refreshAfterFlip];
+      panGesture.enabled = YES;
+   }
+}
+
+//________________________________________________________________________________________
+- (void) refreshAfterFlip
+{
    self.navigationItem.rightBarButtonItem.enabled = YES;
    [self setPagesData];
 
@@ -60,6 +73,8 @@
    
    if (nPages > 1)
       [self showRightFlipHint];
+   else
+      [self hideFlipHint];
 }
 
 #pragma mark - Overriders for TileViewController's methods.
