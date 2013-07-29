@@ -109,6 +109,8 @@ const NSUInteger nAutoAnimationSteps = 10;
             [self layoutPages : YES];
             [self layoutFlipView];
             [self layoutPanRegion];
+            
+            [self fixFlipHintGeometry];
          }
       }
    }
