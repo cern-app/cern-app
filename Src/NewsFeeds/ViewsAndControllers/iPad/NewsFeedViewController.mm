@@ -168,7 +168,7 @@
       [self layoutPages : YES];
       [self layoutFlipView];
       [self layoutPanRegion];
-      if (nPages)
+      if (nPages > 1)
          [self showRightFlipHint];
       else
          [self hideFlipHint];
