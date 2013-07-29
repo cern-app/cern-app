@@ -169,7 +169,7 @@
       [self layoutFlipView];
       [self layoutPanRegion];
       if (nPages)
-         [self showRightFlipHintAnimated];
+         [self showRightFlipHint];
    }
 
    [self startFeedParser];
@@ -285,7 +285,7 @@
    
    [self loadVisiblePageData];
    if (nPages > 1)
-      [self showRightFlipHintAnimated];
+      [self showRightFlipHint];
 }
 
 #pragma mark - Overriders for TileViewController's methods.

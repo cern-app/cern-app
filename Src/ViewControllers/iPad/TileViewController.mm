@@ -56,8 +56,7 @@ const NSUInteger nAutoAnimationSteps = 10;
       
       flipHintView = [[UIImageView alloc] initWithImage : [UIImage imageNamed : @"flip_right.png"]];
       flipHintView.hidden = YES;
-      
-      hintAnimationActive = NO;
+
       delayedFlipRefresh = NO;
    }
 
@@ -211,54 +210,57 @@ const NSUInteger nAutoAnimationSteps = 10;
 #pragma mark - "UI".
 
 //________________________________________________________________________________________
-- (void) showFlipHintAnimated
+- (void) fixFlipHintGeometry
 {
-   [self.view bringSubviewToFront : flipHintView];
-   flipHintView.hidden = NO;
-   flipHintView.alpha = 1.f;
-   hintAnimationActive = YES;
+   CGRect frame = flipHintView.frame;
 
-   [UIView animateWithDuration : 1.f
-    animations : ^(void)
-    {
-      flipHintView.alpha = 0.f;
-    }
-    completion : ^(BOOL finished)
-    {
-      hintAnimationActive = NO;
-      flipHintView.hidden = YES;
-    }
-    ];
+   if (!currPage.pageNumber) {
+      frame.origin.y = self.view.frame.size.height / 2 - frame.size.height / 2;
+      frame.origin.x = self.view.frame.size.width - frame.size.width;
+   } else {
+      frame.origin.y = self.view.frame.size.height / 2 - frame.size.height / 2;
+      frame.origin.x = 0.f;
+   }
+   
+   flipHintView.frame = frame;
 }
 
 //________________________________________________________________________________________
-- (void) showRightFlipHintAnimated
+- (void) showFlipHint
+{
+   [self.view bringSubviewToFront : flipHintView];
+   flipHintView.hidden = NO;
+   flipHintView.alpha = 0.3f;
+}
+
+//________________________________________________________________________________________
+- (void) showRightFlipHint
 {
    flipHintView.image = [UIImage imageNamed : @"flip_left.png"];
    if (!flipHintView.superview)
       [self.view addSubview : flipHintView];
 
-   CGRect frame = flipHintView.frame;
-   frame.origin.y = self.view.frame.size.height / 2 - frame.size.height / 2;
-   frame.origin.x = self.view.frame.size.width - frame.size.width;
-   flipHintView.frame = frame;
+   [self fixFlipHintGeometry];
 
-   [self showFlipHintAnimated];
+   [self showFlipHint];
 }
 
 //________________________________________________________________________________________
-- (void) showLeftFlipHintAnimated
+- (void) showLeftFlipHint
 {
    flipHintView.image = [UIImage imageNamed : @"flip_right.png"];
    if (!flipHintView.superview)
       [self.view addSubview : flipHintView];
 
-   CGRect frame = flipHintView.frame;
-   frame.origin.y = self.view.frame.size.height / 2 - frame.size.height / 2;
-   frame.origin.x = 0.f;
-   flipHintView.frame = frame;
+   [self fixFlipHintGeometry];
 
-   [self showFlipHintAnimated];
+   [self showFlipHint];
+}
+
+//________________________________________________________________________________________
+- (void) hideFlipHint
+{
+   flipHintView.hidden = YES;
 }
 
 //________________________________________________________________________________________
@@ -294,6 +296,8 @@ const NSUInteger nAutoAnimationSteps = 10;
 
    if (!nPages)
       return;
+
+   [self fixFlipHintGeometry];
 
    [self layoutPages : YES];
    [currPage explodeTiles : toInterfaceOrientation];
@@ -444,9 +448,11 @@ const NSUInteger nAutoAnimationSteps = 10;
       
       if (nPages > 1) {
          if (currPage.pageNumber == nPages - 1)
-            [self showLeftFlipHintAnimated];
+            [self showLeftFlipHint];
          else if (!currPage.pageNumber)
-            [self showRightFlipHintAnimated];
+            [self showRightFlipHint];
+         else
+            [self hideFlipHint];
       }
    }
 
@@ -473,6 +479,15 @@ const NSUInteger nAutoAnimationSteps = 10;
          [spinner.superview bringSubviewToFront : spinner];
 
       [self loadVisiblePageData];
+      
+      if (nPages > 1) {
+         if (currPage.pageNumber == nPages - 1)
+            [self showLeftFlipHint];
+         else if (!currPage.pageNumber)
+            [self showRightFlipHint];
+         else
+            [self hideFlipHint];
+      }
    }
 }
 

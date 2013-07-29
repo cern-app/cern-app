@@ -86,7 +86,7 @@
       [self layoutPanRegion];
       
       if (nPages > 1)
-         [self showRightFlipHintAnimated];
+         [self showRightFlipHint];
    }
 }
 

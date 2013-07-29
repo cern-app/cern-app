@@ -57,7 +57,7 @@
    [self loadVisiblePageData];
    
    if (nPages > 1)
-      [self showRightFlipHintAnimated];
+      [self showRightFlipHint];
 }
 
 #pragma mark - Overriders for TileViewController's methods.

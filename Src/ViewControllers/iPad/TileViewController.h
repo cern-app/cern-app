@@ -34,8 +34,6 @@
    UIPanGestureRecognizer *panGesture;   
    UIView *panRegion;
    
-   BOOL hintAnimationActive;
-   
    BOOL delayedFlipRefresh;
 }
 
@@ -69,8 +67,9 @@
 - (void) layoutPanRegion;
 
 //"UI".
-- (void) showRightFlipHintAnimated;
-- (void) showLeftFlipHintAnimated;
+- (void) showRightFlipHint;
+- (void) showLeftFlipHint;
+- (void) hideFlipHint;
 
 //Using dataItems and page layout identify, how many items
 //fit the page.
