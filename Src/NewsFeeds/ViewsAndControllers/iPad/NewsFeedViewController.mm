@@ -218,8 +218,9 @@
    //TODO: test this!
    CernAPP::HideSpinner(self);
    [self hideNavBarSpinner];
-   
-   CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+
+   if (self.navigationController.topViewController == self)
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
 
    if (!dataItems.count)
       CernAPP::ShowErrorHUD(self, @"No network");//TODO: better error message?
