@@ -168,6 +168,8 @@ const NSUInteger fontIncreaseStep = 4;
    NSString *responseEncoding;
    //
    NSTimer *timeoutGuard;
+   
+   BOOL isInTransition;
 }
 
 @synthesize rdbView, pageView, containerView, rdbCache, articleID, title, canUseReadability;
@@ -259,6 +261,8 @@ const NSUInteger fontIncreaseStep = 4;
       authDone = NO;
       
       timeoutGuard = nil;
+      
+      isInTransition = NO;
    }
 
    return self;
@@ -664,13 +668,19 @@ const NSUInteger fontIncreaseStep = 4;
 //________________________________________________________________________________________
 - (void) flipWebViews
 {
+   if (isInTransition)
+      return;
+
    const UIViewAnimationOptions transitionOptions = UIViewAnimationOptionTransitionFlipFromLeft;
+
+   isInTransition = YES;
 
    if (rdbView.superview) {
       //Switch to original web-page.
       [rdbView stopLoading];//?
       [UIView transitionFromView : rdbView toView : pageView duration : 1.f options : transitionOptions completion : ^(BOOL finished) {
          if (finished) {
+            isInTransition = NO;
             stage = LoadStage::inactive;
             if (!pageLoaded) {
                [self startSpinner];
@@ -688,6 +698,7 @@ const NSUInteger fontIncreaseStep = 4;
       //
       [UIView transitionFromView : pageView toView : rdbView duration : 1.f options : transitionOptions completion : ^(BOOL finished) {
          if (finished) {
+            isInTransition = NO;
             stage = LoadStage::inactive;
             [self addWebBrowserButtons];
          }
@@ -698,6 +709,9 @@ const NSUInteger fontIncreaseStep = 4;
 //________________________________________________________________________________________
 - (void) zoomIn
 {
+   if (isInTransition)
+      return;
+
    if (zoomLevel + 1 == 5)
       zoomInBtn.enabled = NO;
 
@@ -714,6 +728,9 @@ const NSUInteger fontIncreaseStep = 4;
 //________________________________________________________________________________________
 - (void) zoomOut
 {
+   if (isInTransition)
+      return;
+
    if (zoomLevel - 1 == 0)
       zoomOutBtn.enabled = NO;
 
@@ -730,7 +747,7 @@ const NSUInteger fontIncreaseStep = 4;
 //________________________________________________________________________________________
 - (void) sendArticle
 {
-   if (animatingOverlay)
+   if (animatingOverlay || isInTransition)
       return;
 
    //Woo-hoo.
@@ -792,6 +809,9 @@ const NSUInteger fontIncreaseStep = 4;
 //________________________________________________________________________________________
 - (void) refresh
 {
+   if (isInTransition)
+      return;
+
    assert(stage == LoadStage::lostNetworkConnection && "refresh, wrong stage");
    assert((rdbView.superview != nil || pageView.superview != nil) &&
           "refresh, neither rdbView, nor pageView is active");
