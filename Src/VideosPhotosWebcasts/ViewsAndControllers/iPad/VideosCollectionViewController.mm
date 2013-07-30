@@ -162,4 +162,12 @@
    }
 }
 
+#pragma mark - Interface orientation.
+
+//________________________________________________________________________________________
+- (BOOL) shouldAutorotate
+{
+   return YES;
+}
+
 @end

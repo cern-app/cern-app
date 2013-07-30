@@ -143,15 +143,10 @@
 //________________________________________________________________________________________
 - (BOOL) shouldAutorotate
 {
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && [self underLeftShowing])
+      return NO;
 
-      if ([self underLeftShowing])
-         return NO;
-      
-      return [self.topViewController shouldAutorotate];
-   }
-
-   return YES;
+   return [self.topViewController shouldAutorotate];
 }
 
 //________________________________________________________________________________________

@@ -58,6 +58,8 @@ const NSUInteger nAutoAnimationSteps = 10;
       flipHintView.hidden = YES;
 
       delayedFlipRefresh = NO;
+      
+      flipAnimator = [[AnimationDelegate alloc] initWithSequenceType : SequenceType::controlled directionType : DirectionType::forward];
    }
 
    return self;
@@ -82,7 +84,8 @@ const NSUInteger nAutoAnimationSteps = 10;
    panGesture.minimumNumberOfTouches = 1;
    [self.view addGestureRecognizer : panGesture];
    
-   flipAnimator = [[AnimationDelegate alloc] initWithSequenceType : SequenceType::controlled directionType : DirectionType::forward];
+   //flipAnimator = [[AnimationDelegate alloc] initWithSequenceType : SequenceType::controlled directionType : DirectionType::forward];
+   assert(flipAnimator != nil && "viewDidLoad, flipAnimator is not initialized properly");
    flipAnimator.transformView = flipView;
    flipAnimator.controller = self;
    flipAnimator.perspectiveDepth = 2000;
