@@ -8,6 +8,7 @@
 #import "NewsTableViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "CellBackgroundView.h"
+#import "HUDRefreshProtocol.h"
 #import "NewsTableViewCell.h"
 #import "ApplicationErrors.h"
 #import "Reachability.h"
@@ -61,8 +62,6 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    Reachability *internetReach;
    
    NSMutableArray *rangeDownloaders;
-   
-   BOOL lowMemory;
 
    NSArray *feedFilters;
 }
@@ -104,8 +103,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    internetReach = [Reachability reachabilityForInternetConnection];
    
    rangeDownloaders = nil;
-   
-   lowMemory = NO;
+
    feedFilters = nil;
 }
 
@@ -230,17 +228,14 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 {
    [super didReceiveMemoryWarning];
 
-   //Actually, nothing I can do here. I tried to release images - did not help,
-   //app keeps dying. Quite a useless method.
-   /*
    [parseQueue cancelAllOperations];
    parseOp = nil;
    [self cancelAllImageDownloaders];
 
-   lowMemory = YES;
    allArticles = nil;
-   [self.tableView reloadData];*/
-   
+   [self.tableView reloadData];
+   if (!noConnectionHUD || noConnectionHUD.hidden)
+      CernAPP::ShowInfoHUD(self.view, @"Please, pull to refresh");
 //   [[NSURLCache sharedURLCache] removeAllCachedResponses];
 }
 
@@ -298,6 +293,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    }
 
    [noConnectionHUD hide : YES];
+   [MBProgressHUD hideAllHUDsForView : self.view animated : NO];
    
    if (show) {
       //HUD: either spinner in the center
@@ -548,9 +544,6 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 - (void) loadImagesForOnscreenRows
 {
    assert(feedCache == nil && "loadImagesForOnscreenRows, controller is in a wrong mode");
-
-   if (lowMemory)
-      return;
 
    if (allArticles.count) {
       if (!rangeDownloaders)

@@ -363,6 +363,15 @@ const NSUInteger fontIncreaseStep = 4;
 }
 
 //________________________________________________________________________________________
+- (void) didReceiveMemoryWarning
+{
+   if (self.navigationController.topViewController == self)
+      [self.navigationController popViewControllerAnimated : NO];
+   else
+      [self cancelAnyConnections];//Well, this should never happen actually.
+}
+
+//________________________________________________________________________________________
 - (void) setContentForArticle : (MWFeedItem *) article
 {
    assert(article != nil && "setContentForArticle:, parameter 'article' is nil");

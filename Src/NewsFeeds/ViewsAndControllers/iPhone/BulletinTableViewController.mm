@@ -12,6 +12,7 @@
 #import "BulletinTableViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "CellBackgroundView.h"
+#import "HUDRefreshProtocol.h"
 #import "NewsTableViewCell.h"
 #import "ApplicationErrors.h"
 #import "GUIHelpers.h"
@@ -51,11 +52,16 @@
 //________________________________________________________________________________________
 - (void) didReceiveMemoryWarning
 {
-   [super didReceiveMemoryWarning];
-   //Dispose of any resources that can be recreated.
-}
+   thumbnails = nil;
+   bulletins = nil;
 
-//
+   //Super's method will stop parsing, will cancel image downloaders
+   //and will call tableView.reloadData.
+   [super didReceiveMemoryWarning];
+   //Just add a HUD with info.
+   if (!noConnectionHUD || noConnectionHUD.hidden)
+      CernAPP::ShowInfoHUD(self.view, @"Please, pull to refresh");
+}
 
 //This method is overriden (it differs from what I have in NewsTableViewController.
 
@@ -81,7 +87,8 @@
    }
 
    [noConnectionHUD hide : YES];
-   
+   [MBProgressHUD hideAllHUDsForView : self.view animated : NO];
+
    if (show) {
       [spinner setHidden : NO];
       [spinner startAnimating];
