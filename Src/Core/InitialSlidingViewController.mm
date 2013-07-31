@@ -22,7 +22,7 @@
 @implementation InitialSlidingViewController
 
 //________________________________________________________________________________________
-- (void) loadFirstNewsFeed : (UIViewController *) aController
+- (void) loadFirstNewsFeed : (UIViewController *) aController skip : (NSString *) feedToSkip
 {
    assert(aController != nil && "loadFirstNewsFeed:, parameter 'aController' is nil");
 
@@ -50,8 +50,11 @@
    
       NSString * const catName = (NSString *)objBase;
       if ([catName isEqualToString : @"Feed"] || [catName isEqualToString : @"Tweet"]) {
+         assert([menuItemDict[@"Name"] isKindOfClass : [NSString class]] &&
+                "loadFirstNewsFeed:, 'Name' not found or has a wrong type");
          //It's a feed at the top level.
-         feedDict = menuItemDict;
+         if (!feedToSkip || ![feedToSkip isEqualToString : (NSString *)menuItemDict[@"Name"]])
+            feedDict = menuItemDict;
       } else if ([catName isEqualToString : @"Menu group"]) {
          //Scan the menu group for a tweet.
          assert([menuItemDict[@"Items"] isKindOfClass : [NSArray class]] &&
@@ -68,8 +71,13 @@
 
             NSString * const childCategoryName = (NSString *)childItemInfo[@"Category name"];
             if ([childCategoryName isEqualToString : @"Feed"] || [childCategoryName isEqualToString : @"Tweet"]) {
-               feedDict = childItemInfo;
-               break;
+               assert([childItemInfo[@"Name"] isKindOfClass : [NSString class]] &&
+                      "loadFirstNewsFeed:, 'Name' not found or has a wrong type");
+               //It's a feed at the top level.
+               if (!feedToSkip || ![feedToSkip isEqualToString : (NSString *)childItemInfo[@"Name"]]) {
+                  feedDict = childItemInfo;
+                  break;
+               }
             }
          }
       }
@@ -103,7 +111,7 @@
 }
 
 //________________________________________________________________________________________
-- (void) initSlidingViewController
+- (void) initSlidingViewController : (NSString *) feedToSkip
 {
    UIStoryboard *storyboard = nil;
    
@@ -134,7 +142,7 @@
              "viewDidLoad:, top view controller is either nil or has a wrong type");
    }
 
-   [self loadFirstNewsFeed : top.topViewController];
+   [self loadFirstNewsFeed : top.topViewController skip : feedToSkip];
    self.topViewController = top;
 }
 
@@ -143,7 +151,7 @@
 {
    [super viewDidLoad];
   
-   [self initSlidingViewController];
+   [self initSlidingViewController : nil];
 }
 
 #pragma mark - Low memory warnings.
@@ -152,7 +160,7 @@
 - (void) didReceiveMemoryWarning
 {
  //  if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-   [self initSlidingViewController];
+   [self initSlidingViewController : @"General"];
 }
 
 //________________________________________________________________________________________
