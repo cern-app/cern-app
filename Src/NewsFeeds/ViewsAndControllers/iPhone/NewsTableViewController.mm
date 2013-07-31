@@ -8,7 +8,6 @@
 #import "NewsTableViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "CellBackgroundView.h"
-#import "HUDRefreshProtocol.h"
 #import "NewsTableViewCell.h"
 #import "ApplicationErrors.h"
 #import "Reachability.h"
@@ -223,22 +222,6 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
-//________________________________________________________________________________________
-- (void) didReceiveMemoryWarning
-{
-   [super didReceiveMemoryWarning];
-
-   [parseQueue cancelAllOperations];
-   parseOp = nil;
-   [self cancelAllImageDownloaders];
-
-   allArticles = nil;
-   [self.tableView reloadData];
-   if (!noConnectionHUD || noConnectionHUD.hidden)
-      CernAPP::ShowInfoHUD(self.view, @"Please, pull to refresh");
-//   [[NSURLCache sharedURLCache] removeAllCachedResponses];
-}
-
 #pragma mark - Reload/refresh logic.
 
 //________________________________________________________________________________________
@@ -293,7 +276,6 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    }
 
    [noConnectionHUD hide : YES];
-   [MBProgressHUD hideAllHUDsForView : self.view animated : NO];
    
    if (show) {
       //HUD: either spinner in the center

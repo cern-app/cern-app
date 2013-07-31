@@ -49,20 +49,6 @@
    [super viewDidAppear : animated];
 }
 
-//________________________________________________________________________________________
-- (void) didReceiveMemoryWarning
-{
-   thumbnails = nil;
-   bulletins = nil;
-
-   //Super's method will stop parsing, will cancel image downloaders
-   //and will call tableView.reloadData.
-   [super didReceiveMemoryWarning];
-   //Just add a HUD with info.
-   if (!noConnectionHUD || noConnectionHUD.hidden)
-      CernAPP::ShowInfoHUD(self.view, @"Please, pull to refresh");
-}
-
 //This method is overriden (it differs from what I have in NewsTableViewController.
 
 //________________________________________________________________________________________

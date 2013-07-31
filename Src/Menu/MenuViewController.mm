@@ -631,6 +631,16 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    [self layoutMenuResetOffset : YES resetContentSize : YES];
 }
 
+//________________________________________________________________________________________
+- (void) didReceiveMemoryWarning
+{
+   if (selectedItemView) {
+      selectedItemView.isSelected = NO;
+      [selectedItemView setNeedsDisplay];
+      selectedItemView = nil;
+   }
+}
+
 #pragma mark - Menu animations.
 
 //________________________________________________________________________________________

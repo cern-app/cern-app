@@ -628,7 +628,7 @@ const NSUInteger nAutoAnimationSteps = 10;
    } else {
       [flipAnimator setTransformValue : (lastTranslationX + autoAnimationStep * autoPanStepX) / 2 delegating : NO];
       ++autoAnimationStep;
-      [self performSelector : @selector(autoAnimationStep) withObject : nil afterDelay : 0.03];
+      [self performSelector : @selector(autoAnimationStep) withObject : nil afterDelay : 0.03f];
    }
 }
 

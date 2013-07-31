@@ -103,10 +103,8 @@
 }
 
 //________________________________________________________________________________________
-- (void) viewDidLoad
+- (void) initSlidingViewController
 {
-   [super viewDidLoad];
-  
    UIStoryboard *storyboard = nil;
    
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
@@ -138,6 +136,23 @@
 
    [self loadFirstNewsFeed : top.topViewController];
    self.topViewController = top;
+}
+
+//________________________________________________________________________________________
+- (void) viewDidLoad
+{
+   [super viewDidLoad];
+  
+   [self initSlidingViewController];
+}
+
+#pragma mark - Low memory warnings.
+
+//________________________________________________________________________________________
+- (void) didReceiveMemoryWarning
+{
+ //  if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+   [self initSlidingViewController];
 }
 
 //________________________________________________________________________________________

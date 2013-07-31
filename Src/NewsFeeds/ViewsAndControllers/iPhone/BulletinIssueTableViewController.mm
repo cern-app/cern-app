@@ -79,20 +79,6 @@
    }
 }
 
-//________________________________________________________________________________________
-- (void) didReceiveMemoryWarning
-{
-   [super didReceiveMemoryWarning];
-   // Dispose of any resources that can be recreated.
-   if (self.navigationController.topViewController == self)
-      [self.navigationController popViewControllerAnimated : NO];
-   else {
-      [self cancelAllImageDownloaders];
-      tableData = @[];
-      [self.tableView reloadData];
-   }
-}
-
 #pragma mark - Table view data source
 
 //________________________________________________________________________________________
