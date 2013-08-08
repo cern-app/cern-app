@@ -91,6 +91,16 @@
 					<key>Name</key>
 					<string>CERN Courier</string>
 				</dict>
+				<dict>
+					<key>Image</key>
+					<string>twitbird.png</string>
+					<key>Name</key>
+					<string>CERN Twitter</string>
+					<key>Url</key>
+					<string>screen_name=CERN</string>
+					<key>Category name</key>
+					<string>Tweet</string>
+				</dict>
 			</array>
 			<key>Name</key>
 			<string>News</string>
