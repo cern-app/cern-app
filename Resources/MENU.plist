@@ -62,6 +62,16 @@
 					<string>Opinion pieces</string>
 				</dict>
 				<dict>
+					<key>Image</key>
+					<string>press_release.png</string>
+					<key>Url</key>
+					<string>http://press.web.cern.ch/feed</string>
+					<key>Name</key>
+					<string>Press releases</string>
+					<key>Category name</key>
+					<string>Feed</string>
+				</dict>
+				<dict>
 					<key>Category name</key>
 					<string>Feed</string>
 					<key>Image</key>
