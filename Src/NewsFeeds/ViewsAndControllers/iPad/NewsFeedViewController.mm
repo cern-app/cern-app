@@ -18,6 +18,10 @@
 #import "Reachability.h"
 #import "FeedPageView.h"
 #import "MWFeedParser.h"
+
+//TODO: instead of TwitterAPI.h must be Details.h
+#import "TwitterAPI.h"
+
 #import "MWFeedItem.h"
 #import "FeedCache.h"
 #import "FlipView.h"
@@ -324,7 +328,7 @@
          if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
             KeyVal * const newThumbnail = [[KeyVal alloc] init];
             newThumbnail.key = [NSIndexPath indexPathForRow : i inSection : currPage.pageNumber];
-            newThumbnail.val = urlString;
+            newThumbnail.val = CernAPP::Details::GetThumbnailURL(urlString);
             [thumbnails addObject : newThumbnail];
          }
       }
