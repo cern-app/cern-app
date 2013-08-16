@@ -32,4 +32,19 @@ inline NSString *OauthTokenSecret()
 }
 
 }
+
+//I have to add the following definition here, since I do not want to have one more 'secret file'.
+//TODO: create a special source file for this.
+
+namespace Details {
+
+//________________________________________________________________________________________
+inline NSString *GetThumbnailURL(NSString *imageURL)
+{
+   //That's a dummy version which does nothing at all.
+   return imageURL;
 }
+
+}//namespace Details
+
+}//namespace CernAPP

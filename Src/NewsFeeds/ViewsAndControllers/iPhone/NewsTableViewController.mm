@@ -10,6 +10,11 @@
 #import "CellBackgroundView.h"
 #import "NewsTableViewCell.h"
 #import "ApplicationErrors.h"
+
+//TODO: This must be replaced in a future with Detail.h or something like this:
+//the file with the "hidden" source code.
+#import "TwitterAPI.h"
+
 #import "Reachability.h"
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
@@ -544,7 +549,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
                if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
                   KeyVal * const newThumbnail = [[KeyVal alloc] init];
                   newThumbnail.key = indexPath;
-                  newThumbnail.val = urlString;
+                  newThumbnail.val = CernAPP::Details::GetThumbnailURL(urlString);
                   [pairs addObject : newThumbnail];
                }
             }
