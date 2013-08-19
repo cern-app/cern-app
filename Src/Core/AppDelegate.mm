@@ -1,10 +1,24 @@
 #import "AppDelegate.h"
 
-@implementation AppDelegate
+//TODO: this should become 'Details.h' or something like this.
+#import "TwitterAPI.h"
+
+@implementation AppDelegate {
+   NSURLConnection *tokenServerConnection;
+}
 
 @synthesize window = _window;
 @synthesize tweetOption;
 @synthesize OAuthToken, OAuthTokenSecret, managedObjectContext, managedObjectModel, persistentStoreCoordinator;
+
+//________________________________________________________________________________________
+- (void) dealloc
+{
+   if (tokenServerConnection)
+      [tokenServerConnection cancel];
+
+   tokenServerConnection = nil;
+}
 
 //________________________________________________________________________________________
 - (BOOL) application : (UIApplication *) application didFinishLaunchingWithOptions : (NSDictionary *) launchOptions
@@ -26,7 +40,9 @@
       [NSURLCache setSharedURLCache : sharedCache];*/
    }
    
-   //
+   //APN.
+   [[UIApplication sharedApplication] registerForRemoteNotificationTypes : UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+   
    return YES;
 }
 
@@ -142,6 +158,51 @@
 {
    // Returns the URL to the application's Documents directory.
    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+#pragma mark - APN.
+
+//________________________________________________________________________________________
+- (void) application : (UIApplication*) application didRegisterForRemoteNotificationsWithDeviceToken : (NSData*) deviceToken
+{
+#pragma unused(application)
+
+   assert(deviceToken != nil && "application:didRegisterForRemoteNotificationsWithDeviceToken:, parameter 'deviceToken' is nil");
+   
+   NSString *tokenString = [deviceToken description];
+   tokenString = [tokenString stringByTrimmingCharactersInSet : [NSCharacterSet characterSetWithCharactersInString : @"<>"]];
+   tokenString = [tokenString stringByReplacingOccurrencesOfString : @" " withString : @""];
+   
+   if (NSString * const request = CernAPP::Details::GetAPNRegisterDeviceTokenRequest(tokenString))
+      tokenServerConnection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : request]] delegate : self];
+   else
+      NSLog(@"invalid token registration request for device token %@", deviceToken);
+}
+
+//________________________________________________________________________________________
+- (void) application : (UIApplication*) application didFailToRegisterForRemoteNotificationsWithError : (NSError*) error
+{
+#pragma unused(application)
+
+   NSLog(@"failed to register for APN: %@", error);
+}
+
+#pragma mark - NSURLConnectionDelegate.
+
+//________________________________________________________________________________________
+- (void) connectionDidFinishLoading : (NSURLConnection *) connection
+{
+   tokenServerConnection = nil;
+   //Registered now (?)
+}
+
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) connection didFailWithError : (NSError *) error
+{
+#pragma unused(connection)
+
+   tokenServerConnection = nil;
+   NSLog(@"failed to register device's token: %@", error);
 }
 
 @end

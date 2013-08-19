@@ -11,7 +11,7 @@ enum class TwitterFeedShowOption : char {
 
 }
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
