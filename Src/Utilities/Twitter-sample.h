@@ -45,6 +45,13 @@ inline NSString *GetThumbnailURL(NSString *imageURL)
    return imageURL;
 }
 
+//________________________________________________________________________________________
+inline NSString * GetAPNRegisterDeviceTokenRequest(NSString * /*deviceToken*/)
+{
+   //Noop.
+   return nil;
+}
+
 }//namespace Details
 
 }//namespace CernAPP
