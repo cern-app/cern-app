@@ -978,7 +978,7 @@ UIViewController *FindController(UIView *view)
    NSArray *itemData;
 }
 
-@synthesize categoryName;
+@synthesize categoryName, providerID;
 
 //________________________________________________________________________________________
 - (id) initWithDictionary : (NSDictionary *) dict
@@ -1006,6 +1006,13 @@ UIViewController *FindController(UIView *view)
       assert([dict[@"ControllerID"] isKindOfClass : [NSString class]] &&
              "'ControllerID' not found or has a wrong type");
       controllerID = (NSString *)dict[@"ControllerID"];
+      
+      if (dict[@"ItemID"]) {
+         assert([dict[@"ItemID"] isKindOfClass : [NSNumber class]] &&
+                "initWith:, ItemID has a wrong type");
+         providerID = [(NSNumber *)dict[@"ItemID"] unsignedIntegerValue];
+      } else
+         providerID = 0; 
    }
    
    return self;

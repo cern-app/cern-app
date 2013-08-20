@@ -141,6 +141,7 @@
 - (id) initWithDictionary : (NSDictionary *) dict;
 
 @property (nonatomic, retain) NSString *categoryName;
+@property (nonatomic) NSUInteger providerID;
 
 - (UIImage *) categoryImage;
 - (void) loadControllerTo : (UIViewController *) controller;
