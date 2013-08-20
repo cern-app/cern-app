@@ -622,6 +622,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    //Settings modifications.
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
    
+   [self checkPushNotifications];
    //TODO: We also have to subscribe for push notifications here - the 'MENU.plist' on a server can be updated.
    [self updateMenuFromServer];
 }
