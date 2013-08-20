@@ -1114,11 +1114,9 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                   }
                }
             }
-            
 
-            if (itemNames.length) {
+            if (itemNames.length)
                message = [@"CERN.app got new items in: " stringByAppendingString : itemNames];
-            }
          }
       }
       
