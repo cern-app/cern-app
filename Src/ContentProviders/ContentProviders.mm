@@ -103,6 +103,8 @@ UIViewController *FindController(UIView *view)
    NSObject *filters;
 }
 
+@synthesize providerID;
+
 //________________________________________________________________________________________
 - (id) initWith : (NSDictionary *) feedInfo
 {
@@ -135,6 +137,13 @@ UIViewController *FindController(UIView *view)
          isTwitterFeed = NO;
       
       filters = feedInfo[@"Filters"];
+      
+      if (feedInfo[@"ItemID"]) {
+         assert([feedInfo[@"ItemID"] isKindOfClass : [NSNumber class]] &&
+                "initWith:, ItemID has a wrong type");
+         providerID = [(NSNumber *)feedInfo[@"ItemID"] unsignedIntegerValue];
+      } else
+         providerID = 0;
    }
    
    return self;
@@ -678,7 +687,7 @@ UIViewController *FindController(UIView *view)
    NSString *url;
 }
 
-@synthesize categoryName;
+@synthesize categoryName, providerID;
 
 //________________________________________________________________________________________
 - (id) initWithDictionary : (NSDictionary *) info
@@ -697,6 +706,13 @@ UIViewController *FindController(UIView *view)
       assert([info[@"Url"] isKindOfClass : [NSString class]] &&
              "initWithDictionary:, 'Url' not found or has a wrong type");
       url = (NSString *)info[@"Url"];
+      
+      if (info[@"ItemID"]) {
+         assert([info[@"ItemID"] isKindOfClass : [NSNumber class]] &&
+                "initWith:, ItemID has a wrong type");
+         providerID = [(NSNumber *)info[@"ItemID"] unsignedIntegerValue];
+      } else
+         providerID = 0;
    }
    
    return self;
@@ -903,7 +919,7 @@ UIViewController *FindController(UIView *view)
    NSString *controllerID;
 }
 
-@synthesize categoryName;
+@synthesize categoryName, providerID;
 
 //________________________________________________________________________________________
 - (id) initWithDictionary : (NSDictionary *) info
@@ -925,6 +941,13 @@ UIViewController *FindController(UIView *view)
              "initWithDictionary:, 'ControllerID' is nil or has a wrong type");
       
       controllerID = (NSString *)info[@"ControllerID"];
+      
+      if (info[@"ItemID"]) {
+         assert([info[@"ItemID"] isKindOfClass : [NSNumber class]] &&
+                "initWith:, ItemID has a wrong type");
+         providerID = [(NSNumber *)info[@"ItemID"] unsignedIntegerValue];
+      } else
+         providerID = 0;      
    }
    
    return self;

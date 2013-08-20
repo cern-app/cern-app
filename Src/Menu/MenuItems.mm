@@ -127,6 +127,15 @@ CGFloat DefaultGUIFontSize()
 }
 
 //________________________________________________________________________________________
+- (NSUInteger) itemID
+{
+   if ([contentProvider respondsToSelector : @selector(providerID)])
+      return contentProvider.providerID;
+
+   return 0;
+}
+
+//________________________________________________________________________________________
 - (NSString *) textForID : (NSUInteger) anItemID
 {
    if (itemID == anItemID)

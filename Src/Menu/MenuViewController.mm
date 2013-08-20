@@ -174,7 +174,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    FeedProvider * const provider = [[FeedProvider alloc] initWith : desc];
    MenuItem * const newItem = [[MenuItem alloc] initWithContentProvider : provider];
    [items addObject : newItem];
-   
+
    return YES;
 }
 

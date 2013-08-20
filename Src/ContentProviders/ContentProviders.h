@@ -12,6 +12,7 @@
 - (void) loadControllerTo : (UIViewController *) controller;
 
 @property (nonatomic, retain) NSString *categoryName;
+@property (nonatomic) NSUInteger providerID;
 
 @end
 
@@ -23,6 +24,7 @@
 - (id) initWith : (NSDictionary *) feedInfo;
 
 @property (nonatomic, retain) NSString *categoryName;
+@property (nonatomic) NSUInteger providerID;
 
 - (UIImage *) categoryImage;
 
@@ -80,6 +82,7 @@
 - (id) initWithDictionary : (NSDictionary *) info;
 
 @property (nonatomic, retain) NSString *categoryName;
+@property (nonatomic) NSUInteger providerID;
 
 - (UIImage *) categoryImage;
 
@@ -123,6 +126,7 @@
 
 - (id) initWithDictionary : (NSDictionary *) info;
 @property (nonatomic, retain) NSString *categoryName;
+@property (nonatomic) NSUInteger providerID;
 - (UIImage *) categoryImage;
 - (void) loadControllerTo : (UIViewController *) controller;
 
