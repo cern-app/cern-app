@@ -6,6 +6,7 @@
 #import "MenuViewController.h"
 #import "ContentProviders.h"
 #import "MenuItemViews.h"
+#import "AppDelegate.h"
 #import "Experiments.h"
 #import "GUIHelpers.h"
 #import "MenuItems.h"
@@ -1082,6 +1083,55 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       [self loadMenuContents];
       [self layoutMenuResetOffset : YES resetContentSize : YES];
    }
+}
+
+#pragma mark - Check for APNs.
+//________________________________________________________________________________________
+- (void) checkPushNotifications
+{
+   //
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "checkPushNotifications, application delegate has a wrong type");
+   
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   
+   if (NSDictionary * const apn = appDelegate.APNdictionary) {
+      NSString * message = nil;
+      
+      if (NSString * const updatedItems = (NSString *)apn[@"updated"]) {
+         NSArray * const components = (NSArray *)[updatedItems componentsSeparatedByString : @" "];
+         NSString * itemNames = @"";
+         for (NSString * component in components) {
+            if (const NSInteger itemID = [component integerValue]) {
+               if (itemID > 0) {
+                  for (NSObject<MenuItemProtocol> * item in menuItems) {
+                     if (NSString * const itemName = [item textForID : itemID]) {
+                        if (itemNames.length)
+                           itemNames = [itemNames stringByAppendingFormat : @", %@", itemName];
+                        else
+                           itemNames = [itemNames stringByAppendingFormat : @"%@", itemName];
+                     }
+                  }
+               }
+            }
+            
+
+            if (itemNames.length) {
+               message = [@"CERN.app got new items in: " stringByAppendingString : itemNames];
+            }
+         }
+      }
+      
+      if (!message.length)
+         message = @"Check for the news update";//Bad, but this should never happen actually.
+      
+      UIAlertView * const alert = [[UIAlertView alloc] initWithTitle:@"CERN.app notification"
+                                    message : message delegate : self cancelButtonTitle : @"close"
+                                    otherButtonTitles : nil];
+      [alert show];
+      appDelegate.APNdictionary = nil;
+      [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+   }   
 }
 
 @end

@@ -10,4 +10,6 @@
 - (BOOL) itemViewWasSelected : (MenuItemView *) view;
 - (void) groupViewWasTapped : (MenuItemsGroupView *) view;
 
+- (void) checkPushNotifications;
+
 @end

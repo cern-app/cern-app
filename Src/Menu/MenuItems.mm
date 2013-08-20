@@ -51,6 +51,11 @@ CGFloat DefaultGUIFontSize()
    if (self = [super init]) {
       itemTitle = provider.categoryName;
       contentProvider = provider;
+      
+      if ([contentProvider respondsToSelector : @selector(providerID)])
+         itemID = contentProvider.providerID;
+      else
+         itemID = 0;
    }
 
    return self;
@@ -124,15 +129,6 @@ CGFloat DefaultGUIFontSize()
    assert(size > 0 && "setLabelFontSize:, parameter 'size' must be positive");
    assert(itemView != nil && "setLabelFontSize:, itemView is nil");
    [itemView setLabelFontSize : size];
-}
-
-//________________________________________________________________________________________
-- (NSUInteger) itemID
-{
-   if ([contentProvider respondsToSelector : @selector(providerID)])
-      return contentProvider.providerID;
-
-   return 0;
 }
 
 //________________________________________________________________________________________

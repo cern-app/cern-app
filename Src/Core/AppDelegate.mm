@@ -1,3 +1,5 @@
+#import "InitialSlidingViewController.h"
+#import "MenuViewController.h"
 #import "AppDelegate.h"
 
 //TODO: this should become 'Details.h' or something like this.
@@ -9,7 +11,7 @@
 
 @synthesize window = _window;
 @synthesize tweetOption;
-@synthesize OAuthToken, OAuthTokenSecret, managedObjectContext, managedObjectModel, persistentStoreCoordinator;
+@synthesize OAuthToken, OAuthTokenSecret, APNdictionary, managedObjectContext, managedObjectModel, persistentStoreCoordinator;
 
 //________________________________________________________________________________________
 - (void) dealloc
@@ -42,7 +44,8 @@
    
    //APN.
    [[UIApplication sharedApplication] registerForRemoteNotificationTypes : UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
-   
+   APNdictionary = (NSDictionary *)[launchOptions objectForKey : UIApplicationLaunchOptionsRemoteNotificationKey];
+
    return YES;
 }
 
@@ -185,6 +188,20 @@
 #pragma unused(application)
 
    NSLog(@"failed to register for APN: %@", error);
+}
+
+//________________________________________________________________________________________
+- (void) application : (UIApplication *) application didReceiveRemoteNotification : (NSDictionary *) userInfo
+{
+#pragma unused(application)
+   if (userInfo) {
+      APNdictionary = userInfo;
+      InitialSlidingViewController * controller = (InitialSlidingViewController *)_window.rootViewController;
+      if ([controller.underLeftViewController isKindOfClass : [MenuViewController class]]) {
+         MenuViewController * const mvc = (MenuViewController *)controller.underLeftViewController;
+         [mvc checkPushNotifications];
+      }
+   }
 }
 
 #pragma mark - NSURLConnectionDelegate.
