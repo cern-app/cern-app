@@ -41,7 +41,7 @@ CGFloat DefaultGUIFontSize()
    NSString *itemTitle;
 }
 
-@synthesize itemView, menuGroup, contentProvider;
+@synthesize itemView, menuGroup, contentProvider, itemID;
 
 //________________________________________________________________________________________
 - (id) initWithContentProvider : (NSObject<ContentProvider> *) provider
@@ -127,6 +127,15 @@ CGFloat DefaultGUIFontSize()
 }
 
 //________________________________________________________________________________________
+- (NSString *) textForID : (NSUInteger) anItemID
+{
+   if (itemID == anItemID)
+      return self.itemText;
+   
+   return nil;
+}
+
+//________________________________________________________________________________________
 - (void) itemPressedIn : (UIViewController *) controller
 {
    assert(controller != nil && "itemPressedIn:, parameter 'controller' is nil");
@@ -148,7 +157,7 @@ CGFloat DefaultGUIFontSize()
    UIImage *image;
 }
 
-@synthesize collapsed, shrinkable, titleView, containerView, groupView, parentGroup;
+@synthesize collapsed, shrinkable, titleView, containerView, groupView, parentGroup, itemID;
 
 //________________________________________________________________________________________
 - (id) initWithTitle : (NSString *) aTitle image : (UIImage *) anImage items : (NSArray *) anItems
@@ -347,6 +356,20 @@ CGFloat DefaultGUIFontSize()
 }
 
 //________________________________________________________________________________________
+- (NSString *) textForID : (NSUInteger) anItemID
+{
+   if (itemID == anItemID)
+      return self.itemText;
+   
+   for (NSObject<MenuItemProtocol> *item in items) {
+      if (NSString *text = [item textForID : anItemID])
+         return text;
+   }
+
+   return nil;
+}
+
+//________________________________________________________________________________________
 - (NSString *) itemText
 {
    return title;
@@ -379,7 +402,7 @@ CGFloat DefaultGUIFontSize()
 
 @implementation MenuSeparator
 
-@synthesize itemView;
+@synthesize itemView, itemID;
 
 //________________________________________________________________________________________
 - (void) addMenuItemViewInto : (UIView *) parentView controller : (MenuViewController *) controller
@@ -420,25 +443,35 @@ CGFloat DefaultGUIFontSize()
 - (void) setIndent : (CGFloat) indent imageHint : (CGSize) imageHint
 {
 #pragma unused(indent, imageHint)
-   //Noop - separator has no image, no text.
+   //NOOP.
 }
 
 //________________________________________________________________________________________
 - (void) setLabelFontSize : (CGFloat) sizeBase
 {
 #pragma unused(sizeBase)
-   //Noop, separators does not have a text.
+   //NOOP.
+}
+
+//________________________________________________________________________________________
+- (NSString *) textForID : (NSUInteger) itemID
+{
+#pragma unused(itemID)
+   //NOOP.
+   return nil;
 }
 
 //________________________________________________________________________________________
 - (NSString *) itemText
 {
+   //NOOP.
    return nil;
 }
 
 //________________________________________________________________________________________
 - (UIImage *) itemImage
 {
+   //NOOP.
    return nil;
 }
 

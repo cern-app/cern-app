@@ -25,6 +25,10 @@
 - (void) setLabelFontSize : (CGFloat) sizeBase;
 - (void) setIndent : (CGFloat) indent imageHint : (CGSize) imageHint;
 
+- (NSString *) textForID : (NSUInteger) itemID;
+
+@property (nonatomic) NSUInteger itemID;
+
 @optional
 - (void) itemPressedIn : (UIViewController *) controller;
 
@@ -52,7 +56,11 @@
 - (void) setLabelFontSize : (CGFloat) sizeBase;
 - (void) setIndent : (CGFloat) indent imageHint : (CGSize) imageHint;
 
+- (NSString *) textForID : (NSUInteger) itemID;
+
 - (void) itemPressedIn : (UIViewController *) controller;
+
+@property (nonatomic) NSUInteger itemID;
 
 @property (nonatomic) __weak MenuItemsGroup *menuGroup;
 @property (nonatomic) __weak MenuItemView *itemView;
@@ -78,6 +86,9 @@
 
 - (NSString *) itemText;
 - (UIImage *) itemImage;
+
+- (NSString *) textForID : (NSUInteger) itemID;
+@property (nonatomic) NSUInteger itemID;
 
 @property (nonatomic) BOOL collapsed;
 @property (nonatomic) BOOL shrinkable;
@@ -110,6 +121,9 @@
 
 - (NSString *) itemText;
 - (UIImage *) itemImage;
+
+- (NSString *) textForID : (NSUInteger) itemID;
+@property (nonatomic) NSUInteger itemID;
 
 @property (nonatomic) __weak MenuItemView *itemView;
 
