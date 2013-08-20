@@ -1009,7 +1009,7 @@ UIViewController *FindController(UIView *view)
       
       if (dict[@"ItemID"]) {
          assert([dict[@"ItemID"] isKindOfClass : [NSNumber class]] &&
-                "initWith:, ItemID has a wrong type");
+                "initWithDictionary:, ItemID has a wrong type");
          providerID = [(NSNumber *)dict[@"ItemID"] unsignedIntegerValue];
       } else
          providerID = 0; 
