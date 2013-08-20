@@ -169,7 +169,7 @@
 					<array>
 						<dict>
 							<key>ItemID</key>
-							<string>14</string>
+							<integer>14</integer>
 							<key>Url</key>
 							<string>http://cms.web.cern.ch/news/category/265/rss.xml</string>
 							<key>Name</key>

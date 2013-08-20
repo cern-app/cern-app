@@ -49,7 +49,7 @@
 				</dict>
 				<dict>
 					<key>ItemID</key>
-					<string>4</string>
+					<integer>4</integer>
 					<key>Category name</key>
 					<string>Feed</string>
 					<key>Image</key>
@@ -61,7 +61,7 @@
 				</dict>
 				<dict>
 					<key>ItemID</key>
-					<string>5</string>
+					<integer>5</integer>
 					<key>Category name</key>
 					<string>Feed</string>
 					<key>Image</key>
@@ -73,7 +73,7 @@
 				</dict>
 				<dict>
 					<key>ItemID</key>
-					<string>6</string>
+					<integer>6</integer>
 					<key>Image</key>
 					<string>press_release.png</string>
 					<key>Url</key>
@@ -85,7 +85,7 @@
 				</dict>
 				<dict>
 					<key>ItemID</key>
-					<string>7</string>
+					<integer>7</integer>
 					<key>Category name</key>
 					<string>Feed</string>
 					<key>Image</key>
@@ -97,7 +97,7 @@
 				</dict>
 				<dict>
 					<key>ItemID</key>
-					<string>8</string>
+					<integer>8</integer>
 					<key>Url</key>
 					<string>http://cdsweb.cern.ch/rss?p=980__a%3ABULLETINNEWS%20or%20980__a%3ABULLETINNEWSDRAFT&amp;ln=en</string>
 					<key>Name</key>
@@ -109,7 +109,7 @@
 				</dict>
 				<dict>
 					<key>ItemID</key>
-					<string>9</string>
+					<integer>9</integer>
 					<key>Category name</key>
 					<string>Feed</string>
 					<key>Image</key>
@@ -178,7 +178,7 @@
 				</dict>
 				<dict>
 					<key>ItemID</key>
-					<string>10</string>
+					<integer>10</integer>
 					<key>ItemData</key>
 					<array>
 						<dict>
@@ -222,7 +222,7 @@
 			<array>
 				<dict>
 					<key>ItemID</key>
-					<string>11</string>
+					<integer>11</integer>
 					<key>Filters</key>
 					<array>
 						<string>ert.cern.ch</string>
