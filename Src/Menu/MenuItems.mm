@@ -148,7 +148,7 @@ CGFloat DefaultGUIFontSize()
 {
    assert(anItemID != 0 && "addAPNHint, parameter 'anItemID' is invalid");
 
-   if (anItemID == itemID) {
+   if (anItemID == itemID && !hasAPN) {
       [itemView setHasAPN : YES];
       hasAPN = YES;
       return YES;
