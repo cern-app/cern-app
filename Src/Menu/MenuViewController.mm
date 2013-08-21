@@ -1129,8 +1129,9 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                                     otherButtonTitles : nil];
       [alert show];
       appDelegate.APNdictionary = nil;
-      [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-   }   
+   }
+   
+   [UIApplication sharedApplication].applicationIconBadgeNumber = 0;   
 }
 
 @end
