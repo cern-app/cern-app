@@ -161,7 +161,7 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
    if (hasAPN) {
       assert(apnIcon != nil && "drawRect:, apnIcon is not initialized");
       
-      const CGRect iconRect = CGRectMake(0.f, rect.size.height / 2 - 5.f, 10.f, 10.f);
+      const CGRect iconRect = CGRectMake(0.f, rect.size.height / 2 - 10.f, 20.f, 20.f);
       [apnIcon drawInRect : iconRect];
    }
 }
@@ -371,7 +371,7 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
    if (hasAPN) {
       assert(apnIcon != nil && "drawRect:, apnIcon is not initialized");
       
-      const CGRect iconRect = CGRectMake(0.f, rect.size.height / 2 - 5.f, 10.f, 10.f);
+      const CGRect iconRect = CGRectMake(0.f, rect.size.height / 2 - 10.f, 20.f, 20.f);
       [apnIcon drawInRect : iconRect];
    }
 }
