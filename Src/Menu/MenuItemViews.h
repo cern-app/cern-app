@@ -33,6 +33,10 @@ enum class ItemStyle {
 
 - (void) setLabelFontSize : (CGFloat) size;
 
+//
+@property (nonatomic) __weak NSObject<MenuItemProtocol> *menuItem;
+//
+
 @property (nonatomic) BOOL isSelected;
 @property (nonatomic) CernAPP::ItemStyle itemStyle;
 

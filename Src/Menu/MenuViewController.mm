@@ -1108,8 +1108,8 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                   for (NSObject<MenuItemProtocol> * item in menuItems) {
                      if (NSString * const itemName = [item textForID : itemID]) {
                         //
-                       // if (item.itemView != selectedItemView)
-                        [item addAPNHint : itemID];
+                        if (!selectedItemView || selectedItemView.menuItem.itemID != itemID)
+                           [item addAPNHint : itemID];
                         //
                         if (itemNames.length)
                            itemNames = [itemNames stringByAppendingFormat : @", %@", itemName];

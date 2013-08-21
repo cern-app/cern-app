@@ -75,7 +75,6 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 @implementation MenuItemView {
    //Weak, we do not have to control life time of these objects.
    __weak MenuViewController *controller;
-   __weak NSObject<MenuItemProtocol> *menuItem;
 
    UILabel *itemLabel;
    UIImageView *iconView;
@@ -84,7 +83,7 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
    UIImageView *apnView;
 }
 
-@synthesize isSelected, itemStyle, indent, imageHint;
+@synthesize menuItem, isSelected, itemStyle, indent, imageHint;
 
 //________________________________________________________________________________________
 - (id) initWithFrame : (CGRect) frame item : (NSObject<MenuItemProtocol> *) anItem
