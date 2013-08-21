@@ -166,6 +166,7 @@ CGFloat DefaultGUIFontSize()
    
    if (hasAPN && menuGroup) {
       hasAPN = NO;
+      [itemView setHasAPN : NO];
       [menuGroup removeAPNHint];
    }
 }
