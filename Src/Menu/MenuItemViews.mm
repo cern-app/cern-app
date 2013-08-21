@@ -79,6 +79,8 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 
    UILabel *itemLabel;
    UIImageView *iconView;
+   BOOL hasAPN;
+   UIImage *apnIcon;
 }
 
 @synthesize isSelected, itemStyle, indent, imageHint;
@@ -126,6 +128,9 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
          iconView.contentMode = UIViewContentModeScaleAspectFill;
          iconView.clipsToBounds = YES;
          [self addSubview : iconView];
+         
+         hasAPN = NO;
+         apnIcon = nil;
       }
       
       isSelected = NO;
@@ -151,6 +156,13 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
          DrawFrame(ctx, rect, 0.f);
       } else
          CernAPP::GradientFillRect(ctx, rect, CernAPP::menuItemHighlightColor[0]);
+   }
+   
+   if (hasAPN) {
+      assert(apnIcon != nil && "drawRect:, apnIcon is not initialized");
+      
+      const CGRect iconRect = CGRectMake(0.f, rect.size.height / 2 - 5.f, 10.f, 10.f);
+      [apnIcon drawInRect : iconRect];
    }
 }
 
@@ -217,6 +229,20 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 }
 
 //________________________________________________________________________________________
+- (void) setHasAPN : (BOOL) hasNotification
+{
+   if (hasAPN != hasNotification) {
+      iconView.hidden = hasNotification;
+      hasAPN = hasNotification;
+      
+      if (hasAPN && !apnIcon)
+         apnIcon = [UIImage imageNamed : @"updated.png"];
+      
+      [self setNeedsDisplay];
+   }
+}
+
+//________________________________________________________________________________________
 - (void) handleTap
 {
    if ([controller itemViewWasSelected : self])
@@ -232,6 +258,9 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
    UILabel *itemLabel;
    UIImageView *discloseImageView;
    UIImageView *iconView;
+   
+   BOOL hasAPN;
+   UIImage *apnIcon;
 }
 
 @synthesize indent, imageHint;
@@ -309,6 +338,9 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
       iconView.contentMode = UIViewContentModeScaleAspectFill;
       iconView.clipsToBounds = YES;
       [self addSubview : iconView];
+      
+      hasAPN = NO;
+      apnIcon = nil;
    }
    
    return self;
@@ -334,6 +366,13 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
       CGContextMoveToPoint(ctx, 0.f, rect.size.height);
       CGContextAddLineToPoint(ctx, rect.size.width, rect.size.height);
       CGContextStrokePath(ctx);
+   }
+   
+   if (hasAPN) {
+      assert(apnIcon != nil && "drawRect:, apnIcon is not initialized");
+      
+      const CGRect iconRect = CGRectMake(0.f, rect.size.height / 2 - 5.f, 10.f, 10.f);
+      [apnIcon drawInRect : iconRect];
    }
 }
 
@@ -386,6 +425,19 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
    UIFont * const font = [UIFont fontWithName : groupItem.parentGroup ? CernAPP::childMenuFontName : CernAPP::groupMenuFontName size : size];
    assert(font != nil && "initWithFrame:item:style:controller:, font not found");
    itemLabel.font = font;
+}
+
+//________________________________________________________________________________________
+- (void) setHasAPN : (BOOL) hasNotification
+{
+   if (hasAPN != hasNotification) {
+      iconView.hidden = hasNotification;
+      hasAPN = hasNotification;
+      if (hasAPN && !apnIcon)
+         apnIcon = [UIImage imageNamed : @"updated.png"];
+      
+      [self setNeedsDisplay];
+   }
 }
 
 //________________________________________________________________________________________
