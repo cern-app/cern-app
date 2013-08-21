@@ -26,6 +26,7 @@
 - (void) setIndent : (CGFloat) indent imageHint : (CGSize) imageHint;
 
 - (NSString *) textForID : (NSUInteger) itemID;
+- (BOOL) addAPNHint : (NSUInteger) itemID;
 
 @property (nonatomic) NSUInteger itemID;
 
@@ -56,6 +57,7 @@
 - (void) setLabelFontSize : (CGFloat) sizeBase;
 - (void) setIndent : (CGFloat) indent imageHint : (CGSize) imageHint;
 
+- (BOOL) addAPNHint : (NSUInteger) itemID;
 - (NSString *) textForID : (NSUInteger) itemID;
 
 - (void) itemPressedIn : (UIViewController *) controller;
@@ -88,6 +90,8 @@
 - (UIImage *) itemImage;
 
 - (NSString *) textForID : (NSUInteger) itemID;
+- (BOOL) addAPNHint : (NSUInteger) itemID;
+- (void) removeAPNHint;
 @property (nonatomic) NSUInteger itemID;
 
 @property (nonatomic) BOOL collapsed;
@@ -123,6 +127,7 @@
 - (UIImage *) itemImage;
 
 - (NSString *) textForID : (NSUInteger) itemID;
+- (BOOL) addAPNHint : (NSUInteger) itemID;
 @property (nonatomic) NSUInteger itemID;
 
 @property (nonatomic) __weak MenuItemView *itemView;

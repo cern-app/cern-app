@@ -39,6 +39,7 @@ CGFloat DefaultGUIFontSize()
 //Single menu item, can be standalone or a group member.
 @implementation MenuItem {
    NSString *itemTitle;
+   BOOL hasAPN;
 }
 
 @synthesize itemView, menuGroup, contentProvider, itemID;
@@ -56,6 +57,8 @@ CGFloat DefaultGUIFontSize()
          itemID = contentProvider.providerID;
       else
          itemID = 0;
+      
+      hasAPN = NO;
    }
 
    return self;
@@ -141,11 +144,30 @@ CGFloat DefaultGUIFontSize()
 }
 
 //________________________________________________________________________________________
+- (BOOL) addAPNHint : (NSUInteger) anItemID
+{
+   assert(anItemID != 0 && "addAPNHint, parameter 'anItemID' is invalid");
+
+   if (anItemID == itemID) {
+      [itemView setHasAPN : YES];
+      hasAPN = YES;
+      return YES;
+   }
+   
+   return NO;
+}
+
+//________________________________________________________________________________________
 - (void) itemPressedIn : (UIViewController *) controller
 {
    assert(controller != nil && "itemPressedIn:, parameter 'controller' is nil");
    //Ask content provider to load correct view/controller.
    [contentProvider loadControllerTo : controller];
+   
+   if (hasAPN && menuGroup) {
+      hasAPN = NO;
+      [menuGroup removeAPNHint];
+   }
 }
 
 @end
@@ -160,6 +182,8 @@ CGFloat DefaultGUIFontSize()
    NSArray *items;
    NSString *title;
    UIImage *image;
+   
+   NSUInteger apnHints;
 }
 
 @synthesize collapsed, shrinkable, titleView, containerView, groupView, parentGroup, itemID;
@@ -179,6 +203,8 @@ CGFloat DefaultGUIFontSize()
       collapsed = NO;//Opened by default.      
       shrinkable = YES;
       parentGroup = nil;
+      
+      apnHints = 0;
    }
 
    return self;
@@ -375,6 +401,40 @@ CGFloat DefaultGUIFontSize()
 }
 
 //________________________________________________________________________________________
+- (BOOL) addAPNHint : (NSUInteger) anItemID
+{
+   //Actually, menu group itself can never have APN, only some item inside.
+   assert(anItemID != 0 && "addAPNHint, parameter 'anItemID' is invalid");
+   
+   for (NSObject<MenuItemProtocol> *item in items) {
+      if ([item addAPNHint : anItemID]) {
+         //Ok, the group contains this item.
+         if (!apnHints)
+            [titleView setHasAPN : YES];
+
+         ++apnHints;
+         return YES;
+      }
+   }
+
+   return NO;
+}
+
+//________________________________________________________________________________________
+- (void) removeAPNHint
+{
+   assert(apnHints != 0 && "removeAPNHint, no hints to remove");
+   
+   --apnHints;
+   if (!apnHints) {
+      [titleView setHasAPN : NO];
+      if (parentGroup)
+         [parentGroup removeAPNHint];
+   }
+      
+}
+
+//________________________________________________________________________________________
 - (NSString *) itemText
 {
    return title;
@@ -464,6 +524,14 @@ CGFloat DefaultGUIFontSize()
 #pragma unused(itemID)
    //NOOP.
    return nil;
+}
+
+//________________________________________________________________________________________
+- (BOOL) addAPNHint : (NSUInteger) itemID
+{
+
+   //Seperator can never have APNs :)
+   return NO;
 }
 
 //________________________________________________________________________________________
