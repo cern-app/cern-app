@@ -80,7 +80,8 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
    UILabel *itemLabel;
    UIImageView *iconView;
    BOOL hasAPN;
-   UIImage *apnIcon;
+
+   UIImageView *apnView;
 }
 
 @synthesize isSelected, itemStyle, indent, imageHint;
@@ -130,7 +131,16 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
          [self addSubview : iconView];
          
          hasAPN = NO;
-         apnIcon = nil;
+
+         apnView = [[UIImageView alloc] initWithFrame : CGRect()];
+         apnView.image = [UIImage imageNamed : @"updated.png"];
+         [self addSubview : apnView];
+         apnView.hidden = YES;
+         
+         apnView.layer.shadowColor = [UIColor blackColor].CGColor;
+         //apnView.layer.shouldRasterize = YES;
+         apnView.layer.shadowOffset = CGSizeMake(3.5f, 3.5f);
+         apnView.layer.shadowOpacity = 0.7f;
       }
       
       isSelected = NO;
@@ -156,13 +166,6 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
          DrawFrame(ctx, rect, 0.f);
       } else
          CernAPP::GradientFillRect(ctx, rect, CernAPP::menuItemHighlightColor[0]);
-   }
-   
-   if (hasAPN) {
-      assert(apnIcon != nil && "drawRect:, apnIcon is not initialized");
-      
-      const CGRect iconRect = CGRectMake(0.f, rect.size.height / 2 - 10.f, 20.f, 20.f);
-      [apnIcon drawInRect : iconRect];
    }
 }
 
@@ -206,6 +209,9 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
       imageRect.origin.x = indent + (imageHint.width + 2 * itemImageMargin) / 2.f - imageRect.size.width / 2.f;
       iconView.frame = imageRect;
    }
+   
+   //Set APN icon frame.
+   apnView.frame = CGRectMake(0.f, self.frame.size.height / 2 - 8.f, 16.f, 16.f);
 }
 
 //________________________________________________________________________________________
@@ -233,10 +239,8 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 {
    if (hasAPN != hasNotification) {
       iconView.hidden = hasNotification;
+      apnView.hidden = !iconView.hidden;
       hasAPN = hasNotification;
-      
-      if (hasAPN && !apnIcon)
-         apnIcon = [UIImage imageNamed : @"updated.png"];
       
       [self setNeedsDisplay];
    }
@@ -260,7 +264,7 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
    UIImageView *iconView;
    
    BOOL hasAPN;
-   UIImage *apnIcon;
+   UIImageView *apnView;
 }
 
 @synthesize indent, imageHint;
@@ -340,7 +344,16 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
       [self addSubview : iconView];
       
       hasAPN = NO;
-      apnIcon = nil;
+    
+      apnView = [[UIImageView alloc] initWithFrame : CGRect()];
+      apnView.image = [UIImage imageNamed : @"updated.png"];
+      [self addSubview : apnView];
+      apnView.hidden = YES;
+      
+      apnView.layer.shadowColor = [UIColor blackColor].CGColor;
+      //apnView.layer.shouldRasterize = YES;
+      apnView.layer.shadowOffset = CGSizeMake(2.5f, 2.5f);
+      apnView.layer.shadowOpacity = 0.7f;
    }
    
    return self;
@@ -366,13 +379,6 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
       CGContextMoveToPoint(ctx, 0.f, rect.size.height);
       CGContextAddLineToPoint(ctx, rect.size.width, rect.size.height);
       CGContextStrokePath(ctx);
-   }
-   
-   if (hasAPN) {
-      assert(apnIcon != nil && "drawRect:, apnIcon is not initialized");
-      
-      const CGRect iconRect = CGRectMake(0.f, rect.size.height / 2 - 10.f, 20.f, 20.f);
-      [apnIcon drawInRect : iconRect];
    }
 }
 
@@ -416,6 +422,9 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
       imageRect.origin.x = indent + (imageHint.width + 2 * itemImageMargin) / 2.f - imageRect.size.width / 2.f;
       iconView.frame = imageRect;
    }
+   
+   //Set APN icon frame.
+   apnView.frame = CGRectMake(0.f, self.frame.size.height / 2 - 9.f, 18.f, 18.f);
 }
 
 //________________________________________________________________________________________
@@ -432,9 +441,8 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 {
    if (hasAPN != hasNotification) {
       iconView.hidden = hasNotification;
+      apnView.hidden = !iconView.hidden;
       hasAPN = hasNotification;
-      if (hasAPN && !apnIcon)
-         apnIcon = [UIImage imageNamed : @"updated.png"];
       
       [self setNeedsDisplay];
    }
