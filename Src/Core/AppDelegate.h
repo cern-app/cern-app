@@ -15,6 +15,7 @@ enum class TwitterFeedShowOption : char {
 
 - (void) cacheData : (NSMutableArray *) dataItems forFeed : (NSString *) feedID;
 - (NSMutableArray *) cacheForFeed : (NSString *) feedID;
+- (void) clearFeedCache;
 
 @property (strong, nonatomic) UIWindow *window;
 

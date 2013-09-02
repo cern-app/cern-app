@@ -17,6 +17,7 @@
 #import "NewsTableViewController.h"
 #import "NewsFeedViewController.h"
 #import "StoryboardIdentifiers.h"
+#import "AppDelegate.h"
 #import "GUIHelpers.h"
 
 @implementation InitialSlidingViewController
@@ -160,6 +161,10 @@
 - (void) didReceiveMemoryWarning
 {
  //  if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "didReceiveMemoryWarning, app delegate has a wrong type");
+   
+   [(AppDelegate *)[UIApplication sharedApplication].delegate clearFeedCache]; 
    [self initSlidingViewController : @"General"];
 }
 

@@ -133,6 +133,13 @@
    return (NSMutableArray *)cachedFeeds[feedID];
 }
 
+//________________________________________________________________________________________
+- (void) clearFeedCache
+{
+   [cachedFeeds removeAllObjects];
+   cachedFeeds = nil;
+}
+
 #pragma mark - Core data management.
 
 //________________________________________________________________________________________
