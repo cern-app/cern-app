@@ -54,9 +54,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
 @implementation NewsTableViewController {
    NSMutableArray *allArticles;
-   
-   NSArray *feedCache;
-   
+
    UIActivityIndicatorView *navBarSpinner;
    BOOL firstViewDidAppear;
    
@@ -89,7 +87,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 - (void) doInitTableViewController
 {
    //ivars from the header (interface declaration).
-   canUseCache = YES;
+   feedCache = nil;
    spinner = nil;
    noConnectionHUD = nil;
    parseOp = nil;
@@ -97,7 +95,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    //'private' ivars (hidden in mm file).
    allArticles = nil;
-   feedCache = nil;
+
    navBarSpinner = nil;
    firstViewDidAppear = YES;
 
@@ -196,6 +194,54 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 }
 
 //________________________________________________________________________________________
+- (BOOL) initFromAppCache
+{
+   //Read feed's contents from the app's cache, if any.
+
+   assert(feedStoreID != nil && "initFromAppCache, feedStoreID is nil");
+
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "initFromAppCache, app delegate has a wrong type");
+   
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   if ((allArticles = [appDelegate cacheForFeed : feedStoreID]))
+      return YES;
+   
+   return NO;
+}
+
+//________________________________________________________________________________________
+- (BOOL) initFromDBCache
+{
+   //Read feed's contents from DB, if any.
+
+   assert(feedStoreID != nil && "initFromDBCache, feedStoreID is nil");
+   
+   if ((feedCache = CernAPP::ReadFeedCache(feedStoreID))) {
+      //Convert persistent objects into feed items.
+      allArticles = CernAPP::ConvertFeedCache(feedCache);
+      return YES;
+   }
+   
+   return NO;
+}
+
+//________________________________________________________________________________________
+- (void) addContentsToAppCache
+{
+   //Save a feed's data into the app delegate.
+
+   assert(feedStoreID != nil && "addContentsToAppCache, feedStoreID is nil");
+
+   if (allArticles && allArticles.count) {
+      assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+             "addContentsToAppCache, app delegate has a wrong type");
+      
+      [(AppDelegate *)[UIApplication sharedApplication].delegate cacheData : allArticles forFeed : feedStoreID];
+   }
+}
+
+//________________________________________________________________________________________
 - (void) viewDidAppear : (BOOL)animated
 {
    [super viewDidAppear : animated];
@@ -206,15 +252,25 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    if (firstViewDidAppear) {
       firstViewDidAppear = NO;
-      //read a cache?
-      if (canUseCache && feedStoreID) {
-         if ((feedCache = CernAPP::ReadFeedCache(feedStoreID)))
-            //Convert persistent objects into feed items.
-            allArticles = CernAPP::ConvertFeedCache(feedCache);
+      //We can have two "types of cache":
+      //if we're loading some feed the first time,
+      //it's possible we have some data in the database for
+      //the given feedStoreID. So while the feed if being refreshed,
+      //we can already show something. Another case - if we are reading
+      //the same feed twice (selecting the same menu item) - there is no
+      //need to re-download/re-parse/re-download thumbnails, we can
+      //use the previous data and refresh only on demand.
+      assert(feedStoreID != nil && "viewDidAppear:, feedStoreID is nil");
+
+      if ([self initFromAppCache]) {
+         [self.tableView reloadData];//Load table with cached data, if any.
+         //No need to refresh unless user asks about it.
+         return;
       }
       
+      (void)[self initFromDBCache];
       [self.tableView reloadData];//Load table with cached data, if any.
-      [self reload];
+      [self reload];      
    }
 }
 
@@ -316,6 +372,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma unused(info)
 
    assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
+   assert(feedStoreID != nil && "parserDidFinishWithInfo:items:, feedStoreID is nil, can not write a DB cache");
 
    CernAPP::WriteFeedCache(feedStoreID, feedCache, items);
 
@@ -336,6 +393,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
          [allArticles addObject : item];
    }
 
+   [self addContentsToAppCache];
 
    feedCache = nil;
 

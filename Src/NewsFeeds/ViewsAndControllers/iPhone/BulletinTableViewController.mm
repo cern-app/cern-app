@@ -15,7 +15,9 @@
 #import "HUDRefreshProtocol.h"
 #import "NewsTableViewCell.h"
 #import "ApplicationErrors.h"
+#import "AppDelegate.h"
 #import "GUIHelpers.h"
+#import "FeedCache.h"
 
 @interface NewsTableViewController(Private)
 
@@ -42,14 +44,49 @@
    return self;
 }
 
+#pragma mark - some overrides from NewsTableViewController.
+
 //________________________________________________________________________________________
-- (void) viewDidAppear : (BOOL) animated
+- (BOOL) initFromAppCache
 {
-   canUseCache = NO;
-   [super viewDidAppear : animated];
+   assert(self.feedStoreID != nil && "initFromAppCache, feedStoreID is nil");
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "initFromAppCache, app delegate has a wrong type");
+   
+   bulletins = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForFeed : self.feedStoreID];
+   thumbnails = [[NSMutableDictionary alloc] init];
+   
+   return bulletins != nil;
 }
 
-//This method is overriden (it differs from what I have in NewsTableViewController.
+//________________________________________________________________________________________
+- (BOOL) initFromDBCache
+{
+   assert(self.feedStoreID != nil && "initFromDBCache, feedStoreID is nil");
+   
+   if ((feedCache = CernAPP::ReadFeedCache(self.feedStoreID))) {
+      //Convert persistent objects into feed items.
+      NSMutableArray * const articles = CernAPP::ConvertFeedCache(feedCache);
+      [self splitIntoIssues : articles];
+      thumbnails = [[NSMutableDictionary alloc] init];
+
+      return YES;
+   }
+   
+   return NO;
+}
+
+//________________________________________________________________________________________
+- (void) addContentsToAppCache
+{
+   //Add new articles to the app's cache (not split into the issues).
+   assert(self.feedStoreID != nil && "addContentsToAppCache:, feedStoreID is nil");
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "addContentsToAppCache:, app delegate has a wrong type");
+   assert(bulletins != nil && "addContentsToAppCache, nothing to add");
+   
+   [(AppDelegate *)[UIApplication sharedApplication].delegate cacheData : bulletins forFeed : self.feedStoreID];
+}
 
 //________________________________________________________________________________________
 - (void) reloadShowHUD : (BOOL) show
@@ -83,7 +120,7 @@
    [self startFeedParsing];
 }
 
-#pragma mark - UITableViewDataSource.
+#pragma mark - UITableViewDataSource and aux. methods.
 
 //________________________________________________________________________________________
 - (NSInteger) numberOfSectionsInTableView : (UITableView *) tableView
@@ -99,6 +136,28 @@
 #pragma unused(tableView)
    // Return the number of rows in the section.
    return bulletins.count;
+}
+
+//________________________________________________________________________________________
+- (UIImage *) imageForCell : (NSIndexPath *) indexPath
+{
+   assert(indexPath != nil && "imageForCell, parameter 'indexPath' is nil");
+   
+   if (UIImage * const thumbnailImage = (UIImage *)thumbnails[indexPath])
+      return thumbnailImage;
+   
+   assert(indexPath.row >= 0 && indexPath.row < bulletins.count &&
+          "imageForCell:, row index is out of bounds");
+   
+   NSArray * const articles = (NSArray *)bulletins[indexPath.row];
+   assert(articles.count > 0 && "imageForCell:, no articles for issue found");
+      
+   for (MWFeedItem *article in articles) {
+      if (article.image)
+         return article.image;
+   }
+   
+   return nil;
 }
 
 //________________________________________________________________________________________
@@ -143,7 +202,44 @@
    return [NewsTableViewCell calculateCellHeightWithText : title image : image];
 }
 
-#pragma mark - FeedParserOperationDelegate.
+#pragma mark - FeedParserOperationDelegate and aux. methods.
+
+//________________________________________________________________________________________
+- (void) splitIntoIssues : (NSArray *) articles
+{
+   assert(articles != nil && "splitIntoIssues:, parameter 'articles' is nil");
+   assert(articles.count > 0 && "splitIntoIssues:, no data to split");
+   
+   bulletins = [[NSMutableArray alloc] init];
+   thumbnails = [[NSMutableDictionary alloc] init];
+   
+   NSMutableArray *weekData = [[NSMutableArray alloc] init];
+   MWFeedItem * const firstArticle = [articles objectAtIndex : 0];
+   [weekData addObject : firstArticle];
+   
+   NSCalendar * const calendar = [NSCalendar currentCalendar];
+   const NSUInteger requiredComponents = NSWeekCalendarUnit | NSYearCalendarUnit;
+
+   NSDateComponents *dateComponents = [calendar components : requiredComponents fromDate : firstArticle.date];
+   NSInteger currentWeek = dateComponents.week;
+   NSInteger currentYear = dateComponents.year;
+   
+   for (NSUInteger i = 1, e = articles.count; i < e; ++i) {
+      MWFeedItem * const article = (MWFeedItem *)articles[i];
+      dateComponents = [calendar components : requiredComponents fromDate : article.date];
+
+      if (dateComponents.year != currentYear || dateComponents.week != currentWeek) {
+         [bulletins addObject : weekData];
+         currentWeek = dateComponents.week;
+         currentYear = dateComponents.year;
+         weekData = [[NSMutableArray alloc] init];
+      }
+
+      [weekData addObject : article];
+   }
+      
+   [bulletins addObject : weekData];
+}
 
 //________________________________________________________________________________________
 - (void) parserDidFinishWithInfo : (MWFeedInfo *) info items : (NSArray *) articles
@@ -156,35 +252,12 @@
 
    //Here we split sorted (by date) articles into the bulletin's issues (by week).
    if (articles.count) {
-      bulletins = [[NSMutableArray alloc] init];
-      thumbnails = [[NSMutableDictionary alloc] init];
-   
-      NSMutableArray *weekData = [[NSMutableArray alloc] init];
-      MWFeedItem * const firstArticle = [articles objectAtIndex : 0];
-      [weekData addObject : firstArticle];
-   
-      NSCalendar * const calendar = [NSCalendar currentCalendar];
-      const NSUInteger requiredComponents = NSWeekCalendarUnit | NSYearCalendarUnit;
-
-      NSDateComponents *dateComponents = [calendar components : requiredComponents fromDate : firstArticle.date];
-      NSInteger currentWeek = dateComponents.week;
-      NSInteger currentYear = dateComponents.year;
-   
-      for (NSUInteger i = 1, e = articles.count; i < e; ++i) {
-         MWFeedItem * const article = (MWFeedItem *)articles[i];
-         dateComponents = [calendar components : requiredComponents fromDate : article.date];
-
-         if (dateComponents.year != currentYear || dateComponents.week != currentWeek) {
-            [bulletins addObject : weekData];
-            currentWeek = dateComponents.week;
-            currentYear = dateComponents.year;
-            weekData = [[NSMutableArray alloc] init];
-         }
-
-         [weekData addObject : article];
-      }
+      [self splitIntoIssues : articles];
       
-      [bulletins addObject : weekData];
+      CernAPP::WriteFeedCache(self.feedStoreID, feedCache, articles);
+      feedCache = nil;
+      
+      [self addContentsToAppCache];
       [self.tableView reloadData];
    }
    
@@ -246,32 +319,23 @@
       assert(articles.count > 0 && "startIconDownloadForIndexPath, no articles for issue found");
       
       for (MWFeedItem *article in articles) {
-         //If we are here, this means we do not have a thumbnail
-         //yet, but in principle, some of articles in this issue
-         //can have an image downloaded already.
-         if (article.image) {
-            //
-            [thumbnails setObject : article.image forKey : indexPath];
-            [self.tableView reloadRowsAtIndexPaths : @[indexPath] withRowAnimation : UITableViewRowAnimationNone];
-            break;
-         } else {
-            NSString * body = article.content;
-            if (!body)
-               body = article.summary;
+         NSString * body = article.content;
+         if (!body)
+            body = article.summary;
+         
+         if (body) {
+            if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
             
-            if (body) {
-               if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
-                  downloader = [[ImageDownloader alloc] initWithURLString : urlString];
-                  downloader.indexPathInTableView = indexPath;
-                  //
-                  downloader.dataSizeLimit = 500000;
-                  downloader.downscaleToSize = 150.f;
-                  //
-                  downloader.delegate = self;
-                  [imageDownloaders setObject : downloader forKey : indexPath];
-                  [downloader startDownload];//Power on.
-                  break;
-               }
+               downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+               downloader.indexPathInTableView = indexPath;
+               //
+               downloader.dataSizeLimit = 500000;
+               downloader.downscaleToSize = 150.f;
+               //
+               downloader.delegate = self;
+               [imageDownloaders setObject : downloader forKey : indexPath];
+               [downloader startDownload];//Power on.
+               break;
             }
          }
       }

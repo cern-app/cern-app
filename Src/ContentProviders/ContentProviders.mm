@@ -747,6 +747,7 @@ UIViewController *FindController(UIView *view)
       assert([navController.topViewController isKindOfClass : [BulletinTableViewController class]] &&
              "loadControllerTo:, top view controller expected to be a BulletinTableViewController");
       BulletinTableViewController * const bc = (BulletinTableViewController *)navController.topViewController;
+      bc.feedStoreID = @"CERN_Bulletin";
       [bc setFeedURLString : url];
    }
    

@@ -12,7 +12,7 @@
                                                            ThumbnailDownloaderDelegate, ConnectionController>
 {
 @protected
-   BOOL canUseCache;
+   NSArray *feedCache;//Controller's specific data to cache in DB.
    UIActivityIndicatorView *spinner;
    MBProgressHUD *noConnectionHUD;
    FeedParserOperation *parseOp;
@@ -25,6 +25,12 @@
 //
 - (void) startFeedParsing;
 //
+- (BOOL) initFromAppCache;
+- (BOOL) initFromDBCache;//To be overriden if feedCache
+
+//Feed store ID must be set to some value before viewDidAppear called.
+//This must be an unique identifier to save feed's data in a DB or/an app's cache.
+//It's up to a user to verify that feedStoreID is unique.
 @property (nonatomic, copy) NSString *feedStoreID;
 //
 @end
