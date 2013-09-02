@@ -160,8 +160,10 @@
    assert(articles.count > 0 && "imageForCell:, no articles for issue found");
       
    for (MWFeedItem *article in articles) {
-      if (article.image)
+      if (article.image) {
+         [thumbnails setObject : article.image forKey : indexPath];
          return article.image;
+      }
    }
    
    return nil;
@@ -185,7 +187,7 @@
    if (![cell.selectedBackgroundView isKindOfClass : [CellBackgroundView class]])
       cell.backgroundView = [[CellBackgroundView alloc] initWithFrame : CGRect()];
 
-   UIImage * const image = [thumbnails objectForKey : indexPath];
+   UIImage * const image = [self imageForCell : indexPath];
    [(NewsTableViewCell *)cell setTitle : CernAPP::BulletinTitleForWeek((NSArray *)bulletins[row]) image : image];
 
    if (!image)
