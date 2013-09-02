@@ -13,6 +13,9 @@ enum class TwitterFeedShowOption : char {
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
+- (void) cacheData : (NSMutableArray *) dataItems forFeed : (NSString *) feedID;
+- (NSMutableArray *) cacheForFeed : (NSString *) feedID;
+
 @property (strong, nonatomic) UIWindow *window;
 
 //How to show tweets?

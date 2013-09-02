@@ -7,6 +7,7 @@
 
 @implementation AppDelegate {
    NSURLConnection *tokenServerConnection;
+   NSMutableDictionary *cachedFeeds;
 }
 
 @synthesize window = _window;
@@ -16,6 +17,9 @@
 //________________________________________________________________________________________
 - (void) dealloc
 {
+   //It's possible, that we still have an active NSURLConnection, sending
+   //our device's token for a registration. Cancell the connection.
+
    if (tokenServerConnection)
       [tokenServerConnection cancel];
 
@@ -25,8 +29,13 @@
 //________________________________________________________________________________________
 - (BOOL) application : (UIApplication *) application didFinishLaunchingWithOptions : (NSDictionary *) launchOptions
 {
+   //1. Set a tint color for a navigation bar's button.
+   //2. Read app's defaults: font sizes for GUI elements (a menu) and
+   //   for the "Readability" view.
+   //3. Register our device for APN.
+
    [[UIBarButtonItem appearance] setTintColor : [UIColor colorWithRed : 0.f green : 83.f / 255.f blue : 161.f / 255.f alpha : 1.f]];
-   //
+
    NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
    NSDictionary * const appDefaults = [NSDictionary dictionaryWithObjectsAndKeys : @13, @"GUIFontSize", @0, @"HTMLBodyFontSize", nil];
    [defaults registerDefaults : appDefaults];
@@ -44,6 +53,7 @@
    
    //APN.
    [[UIApplication sharedApplication] registerForRemoteNotificationTypes : UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+   //TODO: this should go away - in the nearest future all the data will be removed from the payload.
    APNdictionary = (NSDictionary *)[launchOptions objectForKey : UIApplicationLaunchOptionsRemoteNotificationKey];
 
    return YES;
@@ -91,6 +101,36 @@
    Save data if appropriate.
    See also applicationDidEnterBackground:.
    */
+}
+
+#pragma mark - Feed cache management.
+
+//________________________________________________________________________________________
+- (void) cacheData : (NSMutableArray *) dataItems forFeed : (NSString *) feedID
+{
+   //In order to save traffic/time, we're going to cache a result of successfull feed parse operation
+   //for future use (if a user again selects the same feed after some other items in a menu).
+
+   assert(dataItems != nil && "cacheData:forFeed:, parameter 'dataItems' is nil");
+   assert(feedID != nil && "cacheData:forFeed:, parameter 'feedID' is nil");
+
+   if (!cachedFeeds)
+      cachedFeeds = [[NSMutableDictionary alloc] init];
+
+   [cachedFeeds setObject : dataItems forKey : feedID];
+}
+
+//________________________________________________________________________________________
+- (NSMutableArray *) cacheForFeed : (NSString *) feedID
+{
+   //When feed view controller is loaded, reuse previous parsed items (if any).
+   
+   assert(feedID != nil && "cacheForFeed:, parameter 'feedID' is nil");
+   
+   if (!cachedFeeds)
+      return nil;
+
+   return (NSMutableArray *)cachedFeeds[feedID];
 }
 
 #pragma mark - Core data management.
