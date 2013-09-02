@@ -23,6 +23,7 @@
 
 - (void) hideActivityIndicators;
 - (void) showErrorHUD;
+- (void) addNavBarSpinner;
 
 @end
 
@@ -113,8 +114,14 @@
    [MBProgressHUD hideAllHUDsForView : self.view animated : NO];
 
    if (show) {
-      [spinner setHidden : NO];
-      [spinner startAnimating];
+      //HUD: either spinner in the center
+      //or spinner in a navigation bar.
+      if (!feedCache) {
+         [spinner setHidden : NO];
+         [spinner startAnimating];
+      } else {
+         [self addNavBarSpinner];
+      }
    }
 
    [self startFeedParsing];
