@@ -21,6 +21,9 @@
 //
 @interface FeedProvider : NSObject<ContentProvider, UIActionSheetDelegate>
 
+//Aux. fun to force the same id generation algorithm.
++ (NSString *) feedCacheID : (NSDictionary *) feedInfo;
+
 - (id) initWith : (NSDictionary *) feedInfo;
 
 @property (nonatomic, retain) NSString *categoryName;

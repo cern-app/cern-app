@@ -18,6 +18,7 @@
 #import "Reachability.h"
 #import "FeedPageView.h"
 #import "MWFeedParser.h"
+#import "AppDelegate.h"
 
 //TODO: instead of TwitterAPI.h must be Details.h
 #import "TwitterAPI.h"
@@ -43,7 +44,7 @@
    BOOL flipRefreshDelayed;
 }
 
-@synthesize feedStoreID;
+@synthesize feedCacheID, feedApnID;
 
 #pragma mark - Reachability.
 
@@ -243,15 +244,16 @@
 
    assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
    
-   assert(feedStoreID.length && "allFeedDidLoadForAggregator:, feedStoreID is invalid");
-   CernAPP::WriteFeedCache(feedStoreID, feedCache, items);
+   assert(feedCacheID.length && "parserDidFinishWithInfo:items:, feedCacheID is invalid");
+   CernAPP::WriteFeedCache(feedCacheID, feedCache, items);
 
    dataItems = [[NSMutableArray alloc] init];
    for (MWFeedItem *item in items) {
       //Ooops, can be quite expensive :)
       bool filterOut = false;
       for (NSObject *filter in feedFilters) {
-         assert([filter isKindOfClass : [NSString class]] && "filter is expected to be a string");
+         assert([filter isKindOfClass : [NSString class]] &&
+                "parserDidFinishWithInfo:items:, filter is expected to be a string");
          const NSRange subRange = [item.link rangeOfString : (NSString *)filter];//filter must be a substring.
          if (subRange.location != NSNotFound) {
             filterOut = true;
@@ -269,6 +271,14 @@
       [self hideNavBarSpinner];
    } else
       CernAPP::HideSpinner(self);
+   
+   //Cache data in app delegate.
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "parserDidFinishWithInfo:items:, app delegate has a wrong type");
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   assert(feedApnID > 0 && "parserDidFinishWithInfo:items:, feedApnID is invalid");
+   [appDelegate setLastUpdateTimeFor : feedApnID];
+   //
 
    parserOp = nil;
    
@@ -456,8 +466,8 @@
    [viewController setContentForArticle : feedItem];
    viewController.navigationItem.title = @"";
 
-   if (feedItem.title && feedStoreID)
-      viewController.articleID = [feedStoreID stringByAppendingString : feedItem.title];
+   if (feedItem.title && feedCacheID)
+      viewController.articleID = [feedCacheID stringByAppendingString : feedItem.title];
 
    viewController.canUseReadability = YES;
    [self.navigationController pushViewController : viewController animated : YES];
@@ -499,9 +509,9 @@
 //________________________________________________________________________________________
 - (void) initTilesFromCache
 {
-   assert(feedStoreID != nil && "initCache, invalid feedStoreID");
+   assert(feedCacheID != nil && "initCache, invalid feedCacheID");
 
-   if ((feedCache = CernAPP::ReadFeedCache(feedStoreID))) {
+   if ((feedCache = CernAPP::ReadFeedCache(feedCacheID))) {
       //Set the data from the cache at the beginning!
       dataItems = CernAPP::ConvertFeedCache(feedCache);
       [self setPagesData];

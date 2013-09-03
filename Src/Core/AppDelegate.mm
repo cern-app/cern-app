@@ -8,6 +8,7 @@
 @implementation AppDelegate {
    NSURLConnection *tokenServerConnection;
    NSMutableDictionary *cachedFeeds;
+   NSMutableDictionary *feedsUpdates;
 }
 
 @synthesize window = _window;
@@ -103,7 +104,7 @@
    */
 }
 
-#pragma mark - Feed cache management.
+#pragma mark - Feed cache management (and more general - update timestamps etc.).
 
 //________________________________________________________________________________________
 - (void) cacheData : (NSMutableArray *) dataItems forFeed : (NSString *) feedID
@@ -138,6 +139,30 @@
 {
    [cachedFeeds removeAllObjects];
    cachedFeeds = nil;
+}
+
+//________________________________________________________________________________________
+- (void) setLastUpdateTimeFor : (NSUInteger) apnID
+{
+   assert(apnID > 0 && "setLastUpdateTimeFor:, parameter 'apnID' is invalid");
+   if (!feedsUpdates)
+      feedsUpdates = [[NSMutableDictionary alloc] init];
+   
+   NSDate * const localDate = [NSDate date];
+   NSTimeZone * const currentTimeZone = [NSTimeZone localTimeZone];
+   const NSInteger currentGMTOffset = [currentTimeZone secondsFromGMT];
+   NSDate * const gmt = [localDate dateByAddingTimeInterval : -currentGMTOffset];
+   [feedsUpdates setObject : gmt forKey : [NSNumber numberWithUnsignedInteger : apnID]];
+}
+
+//________________________________________________________________________________________
+- (NSDate *) lastUpdateFor : (NSUInteger) apnID
+{
+   assert(apnID > 0 && "lastUpdateFor:, parameter 'apnID' is invalid");
+   if (!feedsUpdates)
+      return nil;
+   
+   return (NSDate *)feedsUpdates[[NSNumber numberWithUnsignedInteger : apnID]];
 }
 
 #pragma mark - Core data management.

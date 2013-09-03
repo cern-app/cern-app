@@ -31,7 +31,14 @@
 //Feed store ID must be set to some value before viewDidAppear called.
 //This must be an unique identifier to save feed's data in a DB or/an app's cache.
 //It's up to a user to verify that feedStoreID is unique.
-@property (nonatomic, copy) NSString *feedStoreID;
+
+//feedIDString is unique identifier: it's the name used for
+//caching feed data.
+@property (nonatomic) NSString *feedCacheID;
+//feedApnID is an integer (unique) to remember
+//the time view was update the last time.
+//It's the same integer identifier as APN uses.
+@property (nonatomic) NSUInteger feedApnID;
 //
 @end
 

@@ -50,11 +50,11 @@
 //________________________________________________________________________________________
 - (BOOL) initFromAppCache
 {
-   assert(self.feedStoreID != nil && "initFromAppCache, feedStoreID is nil");
+   assert(self.feedCacheID != nil && "initFromAppCache, feedCacheID is nil");
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "initFromAppCache, app delegate has a wrong type");
    
-   bulletins = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForFeed : self.feedStoreID];
+   bulletins = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForFeed : self.feedCacheID];
    thumbnails = [[NSMutableDictionary alloc] init];
    
    return bulletins != nil;
@@ -63,9 +63,9 @@
 //________________________________________________________________________________________
 - (BOOL) initFromDBCache
 {
-   assert(self.feedStoreID != nil && "initFromDBCache, feedStoreID is nil");
+   assert(self.feedCacheID != nil && "initFromDBCache, feedCacheID is nil");
    
-   if ((feedCache = CernAPP::ReadFeedCache(self.feedStoreID))) {
+   if ((feedCache = CernAPP::ReadFeedCache(self.feedCacheID))) {
       //Convert persistent objects into feed items.
       NSMutableArray * const articles = CernAPP::ConvertFeedCache(feedCache);
       [self splitIntoIssues : articles];
@@ -81,12 +81,15 @@
 - (void) addContentsToAppCache
 {
    //Add new articles to the app's cache (not split into the issues).
-   assert(self.feedStoreID != nil && "addContentsToAppCache:, feedStoreID is nil");
+   assert(self.feedCacheID != nil && "addContentsToAppCache:, feedStoreID is nil");
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "addContentsToAppCache:, app delegate has a wrong type");
    assert(bulletins != nil && "addContentsToAppCache, nothing to add");
-   
-   [(AppDelegate *)[UIApplication sharedApplication].delegate cacheData : bulletins forFeed : self.feedStoreID];
+
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;   
+   [appDelegate cacheData : bulletins forFeed : self.feedCacheID];
+   assert(self.feedApnID > 0 && "addContentsToAppCache, self.feedApnID is invalid");
+   [appDelegate setLastUpdateTimeFor : self.feedApnID];
 }
 
 //________________________________________________________________________________________
@@ -263,7 +266,9 @@
    if (articles.count) {
       [self splitIntoIssues : articles];
       
-      CernAPP::WriteFeedCache(self.feedStoreID, feedCache, articles);
+      assert(self.feedCacheID != nil && "parserDidFinishWithInfo:, feedCacheID is invalid");
+      
+      CernAPP::WriteFeedCache(self.feedCacheID, feedCache, articles);
       feedCache = nil;
       
       [self addContentsToAppCache];

@@ -10,6 +10,7 @@
 #import "ApplicationErrors.h"
 #import "MBProgressHUD.h"
 #import "Reachability.h"
+#import "AppDelegate.h"
 
 using CernAPP::NetworkStatus;
 
@@ -35,6 +36,7 @@ using CernAPP::NetworkStatus;
    MBProgressHUD *noWebcastsHUDs[3];
 
    Reachability *internetReach;
+   NSUInteger apnID;
 }
 
 #pragma mark - Reachability.
@@ -72,6 +74,8 @@ using CernAPP::NetworkStatus;
       
       //[[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
       internetReach = [Reachability reachabilityForInternetConnection];
+      
+      apnID = 0;
    }
    
    return self;
@@ -161,6 +165,15 @@ using CernAPP::NetworkStatus;
 }
 
 #pragma mark - Other methods.
+
+//________________________________________________________________________________________
+- (void) setApnID : (NSNumber *) anApnID
+{
+   assert(anApnID != nil && "setApnID:, parameter 'anApnID' is nil");
+   apnID = [anApnID unsignedIntegerValue];
+   //0 is not a valid id.
+   assert(apnID > 0 && "setApnID:, apnID is invalid");
+}
 
 //________________________________________________________________________________________
 - (void) setControllerData : (NSArray *) dataItems
@@ -321,8 +334,13 @@ using CernAPP::NetworkStatus;
    //TODO: remove, this is for the test only.
    [self hideSpinnerForView : feedN];
    
-   if ([self allParsersFinished])
+   if ([self allParsersFinished]) {
       self.navigationItem.rightBarButtonItem.enabled = YES;
+      assert([[UIApplication sharedApplication].delegate isKindOfClass:[AppDelegate class]] &&
+             "feedParserDidFinish:, app delegate has a wrong type");
+      assert(apnID > 0 && "feedParserDidFinish:, feedApnID is invalid");
+      [(AppDelegate *)[UIApplication sharedApplication].delegate setLastUpdateTimeFor : apnID];
+   }
 
    if (!feedN) {
       [self.collectionView reloadData];
@@ -333,7 +351,7 @@ using CernAPP::NetworkStatus;
       if (!feedData[feedN].count)
          CernAPP::ShowInfoHUD(auxCollectionViews[feedN - 1], @"No webcasts in this category at the moment");
    }
-   
+
    [self downloadThumbnailsForPage : feedN];
 }
 

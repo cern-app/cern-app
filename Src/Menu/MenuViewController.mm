@@ -13,6 +13,13 @@
 
 using CernAPP::ItemStyle;
 
+//TODO: this class and data structures must be refactored - at
+//the beginning things were quite logical, now it's a total mess:
+//the way menu structure is read from plist is completely non-generic,
+//for example, feed item has to be in a menu group item, etc. etc.
+
+//In the version 2 I hope we'll have, this must be completely rethought.
+
 namespace {
 
 enum class MenuUpdateStage {
@@ -166,9 +173,10 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(items != nil && "loadFeed:into:, parameter 'items' is nil");
    
    assert([desc[@"Category name"] isKindOfClass : [NSString class]] &&
-          "loadFeed:into:, 'Category name' not found or has a wrong type");
+          "loadFeed:into:storeIDBase:, 'Category name' not found or has a wrong type");
    
    NSString * const categoryName = (NSString *)desc[@"Category name"];
+
    if (![categoryName isEqualToString : @"Feed"] && ![categoryName isEqualToString : @"Tweet"])
       return NO;
 
@@ -253,7 +261,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(items != nil && "loadSpecialItem:into:, parameter 'items' is nil");
    
    assert([desc[@"Category name"] isKindOfClass : [NSString class]] &&
-          "loadStandaloneItem:, 'Category name' not found or has a wrong type");
+          "loadSpecialItem:into:, 'Category name' not found or has a wrong type");
    
    NSString * const catName = (NSString *)desc[@"Category name"];
    
@@ -328,14 +336,14 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    //Now, we need an array of either feeds or tweets.
    if (desc[@"Items"]) {
       assert([desc[@"Items"] isKindOfClass : [NSArray class]] &&
-             "loadNewsSection:, 'Items' must have a NSArray type");
+             "loadMenuGroup:, 'Items' must have a NSArray type");
       NSArray * const plistItems = (NSArray *)desc[@"Items"];
       if (plistItems.count) {
          //Read news feeds.
          NSMutableArray * const groupItems = [[NSMutableArray alloc] init];
          for (id info in plistItems) {
             assert([info isKindOfClass : [NSDictionary class]] &&
-                   "loadNewsSection, item info must be a dictionary");
+                   "loadMenuGroup:, item info must be a dictionary");
             
             NSDictionary * const itemInfo = (NSDictionary *)info;
             //Now, we try to initialize correct content provider,
@@ -740,12 +748,12 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       if (!group.collapsed) {
          group.containerView.hidden = NO;
          group.groupView.alpha = 1.f;
-         //Triangle animation.
+         //Triangle's animation.
          group.titleView.discloseImageView.transform = CGAffineTransformMakeRotation(0.f);//rotate the triangle.
       }
    } else if (group.collapsed) {
       group.groupView.alpha = 0.f;
-      //Triangle animation.
+      //Triangle's animation.
       group.titleView.discloseImageView.transform = CGAffineTransformMakeRotation(-M_PI / 2);//rotate the triangle.
    }
 }

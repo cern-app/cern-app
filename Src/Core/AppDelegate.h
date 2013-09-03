@@ -17,6 +17,9 @@ enum class TwitterFeedShowOption : char {
 - (NSMutableArray *) cacheForFeed : (NSString *) feedID;
 - (void) clearFeedCache;
 
+- (void) setLastUpdateTimeFor : (NSUInteger) apnID;
+- (NSDate *) lastUpdateFor : (NSUInteger) apnID;
+
 @property (strong, nonatomic) UIWindow *window;
 
 //How to show tweets?

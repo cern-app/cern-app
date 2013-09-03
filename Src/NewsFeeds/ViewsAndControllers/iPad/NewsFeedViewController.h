@@ -62,7 +62,8 @@
 //When pages were loaded from the cache and we update from the real feed, spinner is shown in a nav. bar.
 - (void) hideNavBarSpinner;
 
-@property (nonatomic, copy) NSString *feedStoreID;//Cache ID.
+@property (nonatomic, copy) NSString *feedCacheID;
+@property (nonatomic) NSUInteger feedApnID;
 
 //HUD/UI
 - (IBAction) refresh : (id) sender;//The action for a nav. bar button.

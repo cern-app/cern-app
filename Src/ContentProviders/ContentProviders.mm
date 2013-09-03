@@ -105,6 +105,19 @@ UIViewController *FindController(UIView *view)
 
 @synthesize providerID;
 
+//Aux. fun to force the same id generation algorithm.
+//________________________________________________________________________________________
++ (NSString *) feedCacheID : (NSDictionary *) feedInfo
+{
+   assert(feedInfo != nil && "feedCacheID:, parameter 'feedInfo' is nil");
+   assert([feedInfo[@"Name"] isKindOfClass : [NSString class]] &&
+          "feedCacheID:, Name is either nil or has a wrong type");
+   assert([feedInfo[@"ItemID"] isKindOfClass : [NSNumber class]] &&
+          "feedCacheID:, ItemID is either nil or has a wrong type");
+   
+   return [(NSString *)feedInfo[@"Name"] stringByAppendingString : [(NSNumber *)feedInfo[@"ItemID"] stringValue]];
+}
+
 //________________________________________________________________________________________
 - (id) initWith : (NSDictionary *) feedInfo
 {
@@ -140,8 +153,9 @@ UIViewController *FindController(UIView *view)
       
       if (feedInfo[@"ItemID"]) {
          assert([feedInfo[@"ItemID"] isKindOfClass : [NSNumber class]] &&
-                "initWith:, ItemID has a wrong type");
+                "initWith:, ItemID not found or has a wrong type");
          providerID = [(NSNumber *)feedInfo[@"ItemID"] unsignedIntegerValue];
+         assert(providerID > 0 && "initWith:, ItemID is invalid");
       } else
          providerID = 0;
    }
@@ -232,7 +246,11 @@ UIViewController *FindController(UIView *view)
     
       NewsTableViewController * const nt = (NewsTableViewController *)navController.topViewController;
       nt.navigationItem.title = feedName;
-      nt.feedStoreID = feedName;
+      //
+      assert(providerID > 0 && "loadControllerTo:, providerID is invalid");//required for caching.
+      nt.feedApnID = providerID;
+      nt.feedCacheID = [NSString stringWithFormat : @"%@%u", self.categoryName, providerID];
+      //
       [nt setFeedURLString : feed];
       if (filters)
          [nt setFilters : filters];
@@ -243,7 +261,11 @@ UIViewController *FindController(UIView *view)
              "loadControllerTo:, top view controller is either nil or has a wrong type");
       NewsFeedViewController * const nt = (NewsFeedViewController *)navController.topViewController;
       nt.navigationItem.title = feedName;
-      nt.feedStoreID = feedName;
+      //
+      assert(providerID > 0 && "loadControllerTo:, providerID is invalid");
+      nt.feedApnID = providerID;
+      nt.feedCacheID = [NSString stringWithFormat : @"%@%u", self.categoryName, providerID];
+      //
       [nt setFeedURLString : feed];
       if (filters)
          [nt setFilters : filters];
@@ -707,12 +729,10 @@ UIViewController *FindController(UIView *view)
              "initWithDictionary:, 'Url' not found or has a wrong type");
       url = (NSString *)info[@"Url"];
       
-      if (info[@"ItemID"]) {
-         assert([info[@"ItemID"] isKindOfClass : [NSNumber class]] &&
-                "initWith:, ItemID has a wrong type");
-         providerID = [(NSNumber *)info[@"ItemID"] unsignedIntegerValue];
-      } else
-         providerID = 0;
+      assert([info[@"ItemID"] isKindOfClass : [NSNumber class]] &&
+             "initWithDictionary:, ItemID is either nil or has a wrong type");
+      providerID = [(NSNumber *)info[@"ItemID"] unsignedIntegerValue];
+      assert(providerID > 0 && "initWithDictionary:, providerID is invalid");
    }
    
    return self;
@@ -739,7 +759,11 @@ UIViewController *FindController(UIView *view)
       assert([navController.topViewController isKindOfClass : [BulletinFeedViewController class]] &&
              "loadControllerTo:, top view controller is either nil or has a wrong type");
       BulletinFeedViewController * const nt = (BulletinFeedViewController *)navController.topViewController;
-      nt.feedStoreID = @"CERN_Bulletin";
+
+      assert(providerID > 0 && "loadControllerTo:, providerID is invalid");
+      nt.feedApnID = providerID;
+      nt.feedCacheID = [NSString stringWithFormat : @"%@%u", categoryName, providerID];
+
       [nt setFeedURLString : url];
    } else {
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : BulletinTableViewControllerID];
@@ -747,7 +771,11 @@ UIViewController *FindController(UIView *view)
       assert([navController.topViewController isKindOfClass : [BulletinTableViewController class]] &&
              "loadControllerTo:, top view controller expected to be a BulletinTableViewController");
       BulletinTableViewController * const bc = (BulletinTableViewController *)navController.topViewController;
-      bc.feedStoreID = @"CERN_Bulletin";
+
+      assert(providerID > 0 && "loadControllerTo:, providerID is invalid");
+
+      bc.feedApnID = providerID;
+      bc.feedCacheID = [NSString stringWithFormat : @"%@%u", categoryName, providerID];
       [bc setFeedURLString : url];
    }
    
@@ -967,7 +995,7 @@ UIViewController *FindController(UIView *view)
    
    using namespace CernAPP;
  
-   UIViewController * const vc = [controller.storyboard instantiateViewControllerWithIdentifier : controllerID];
+   UIViewController * const vc = [controller.storyboard instantiateViewControllerWithIdentifier : controllerID];   
    [controller presentViewController : vc animated : YES completion : nil];
 }
 
@@ -1038,6 +1066,14 @@ UIViewController *FindController(UIView *view)
 
    if (itemData && [navController.topViewController respondsToSelector:@selector(setControllerData:)])
       [navController.topViewController performSelector : @selector(setControllerData:) withObject : itemData];
+   
+   //This is to be used with APN, so controller also MUST have a valid (other than 0) providerID.
+   //The resulting storeID is used to save timestamps in app delegate.
+   if ([navController.topViewController respondsToSelector : @selector(setApnID:)]) {
+      assert(providerID > 0 && "loadControllerTo:, invalid providerID");
+      [navController.topViewController performSelector : @selector(setApnID:)
+       withObject : [NSNumber numberWithUnsignedInteger : providerID]];
+   }
 
    [controller.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete : ^ {
       CGRect frame = controller.slidingViewController.topViewController.view.frame;

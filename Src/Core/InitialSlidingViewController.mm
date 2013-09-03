@@ -17,6 +17,7 @@
 #import "NewsTableViewController.h"
 #import "NewsFeedViewController.h"
 #import "StoryboardIdentifiers.h"
+#import "ContentProviders.h"
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
 
@@ -40,7 +41,8 @@
 
    //We are looking for either a tweet or a news feed in our list.
    NSDictionary *feedDict = nil;
-
+   
+   NSString * storeID = @"";
    for (id item in menuContents) {
       assert([item isKindOfClass : [NSDictionary class]] && "loadFirstNewsFeed:, item in an array has a wrong type");
       NSDictionary * const menuItemDict = (NSDictionary *)item;
@@ -54,10 +56,12 @@
          assert([menuItemDict[@"Name"] isKindOfClass : [NSString class]] &&
                 "loadFirstNewsFeed:, 'Name' not found or has a wrong type");
          //It's a feed at the top level.
-         if (!feedToSkip || ![feedToSkip isEqualToString : (NSString *)menuItemDict[@"Name"]])
+         if (!feedToSkip || ![feedToSkip isEqualToString : (NSString *)menuItemDict[@"Name"]]) {
+            storeID = (NSString *)menuItemDict[@"Name"];
             feedDict = menuItemDict;
+         }
       } else if ([catName isEqualToString : @"Menu group"]) {
-         //Scan the menu group for a tweet.
+         //Scan the menu group for a feed.
          assert([menuItemDict[@"Items"] isKindOfClass : [NSArray class]] &&
                 "loadFirstNewsFeed:, 'Items' not found or has a wrong type");
 
@@ -77,6 +81,7 @@
                //It's a feed at the top level.
                if (!feedToSkip || ![feedToSkip isEqualToString : (NSString *)childItemInfo[@"Name"]]) {
                   feedDict = childItemInfo;
+                  storeID = [(NSString *)menuItemDict[@"Name"] stringByAppendingString:(NSString *)feedDict[@"Name"]];
                   break;
                }
             }
@@ -93,20 +98,26 @@
           "loadFirstNewsFeed:, 'Name' not found or has a wrong type");
    assert([feedDict[@"Url"] isKindOfClass : [NSString class]] &&
           "loadFirstNewsFeed:, 'Url' not found or has a wrong type");
+   assert([feedDict[@"ItemID"] isKindOfClass : [NSNumber class]] &&
+          "loadFirstNewsFeed:, ItemID is either nil or has a wrong type");
+   const NSUInteger apnID = [(NSNumber *)feedDict[@"ItemID"] unsignedIntegerValue];
+   assert(apnID > 0 && "loadFirstNewsFeed:, ItemID is invalid");
 
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
       assert([aController isKindOfClass : [NewsFeedViewController class]] &&
              "loadFirstNewsFeed:, controller has a wrong type");
       NewsFeedViewController * const tileController = (NewsFeedViewController *)aController;
       tileController.navigationItem.title = (NSString *)feedDict[@"Name"];
-      tileController.feedStoreID = (NSString *)feedDict[@"Name"];
+      tileController.feedCacheID = [FeedProvider feedCacheID : feedDict];
+      tileController.feedApnID = apnID;
       [tileController setFeedURLString : (NSString *)feedDict[@"Url"]];
    } else {
       assert([aController isKindOfClass : [NewsTableViewController class]] &&
              "loadFirstNewsFeed:, controller has a wrong type");
       NewsTableViewController * const tableController = (NewsTableViewController *)aController;
       tableController.navigationItem.title = (NSString *)feedDict[@"Name"];
-      tableController.feedStoreID = (NSString *)feedDict[@"Name"];
+      tableController.feedCacheID = [FeedProvider feedCacheID : feedDict];
+      tableController.feedApnID = apnID;
       [tableController setFeedURLString : (NSString *)feedDict[@"Url"]];
    }
 }

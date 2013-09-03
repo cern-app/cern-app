@@ -68,7 +68,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    NSArray *feedFilters;
 }
 
-@synthesize feedStoreID;
+@synthesize feedCacheID, feedApnID;
 
 
 #pragma mark - Reachability.
@@ -91,7 +91,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    spinner = nil;
    noConnectionHUD = nil;
    parseOp = nil;
-   feedStoreID = nil;
+   feedCacheID = nil;
+   feedApnID = 0;
 
    //'private' ivars (hidden in mm file).
    allArticles = nil;
@@ -198,15 +199,15 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 {
    //Read feed's contents from the app's cache, if any.
 
-   assert(feedStoreID != nil && "initFromAppCache, feedStoreID is nil");
+   assert(feedCacheID != nil && "initFromAppCache, feedCacheID is nil");
 
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "initFromAppCache, app delegate has a wrong type");
    
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-   if ((allArticles = [appDelegate cacheForFeed : feedStoreID]))
+   if ((allArticles = [appDelegate cacheForFeed : feedCacheID]))
       return YES;
-   
+
    return NO;
 }
 
@@ -215,9 +216,9 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 {
    //Read feed's contents from DB, if any.
 
-   assert(feedStoreID != nil && "initFromDBCache, feedStoreID is nil");
+   assert(feedCacheID != nil && "initFromDBCache, feedCacheID is nil");
    
-   if ((feedCache = CernAPP::ReadFeedCache(feedStoreID))) {
+   if ((feedCache = CernAPP::ReadFeedCache(feedCacheID))) {
       //Convert persistent objects into feed items.
       allArticles = CernAPP::ConvertFeedCache(feedCache);
       return YES;
@@ -231,13 +232,16 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 {
    //Save a feed's data into the app delegate.
 
-   assert(feedStoreID != nil && "addContentsToAppCache, feedStoreID is nil");
+   assert(feedCacheID != nil && "addContentsToAppCache, feedStoreID is nil");
 
    if (allArticles && allArticles.count) {
       assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
              "addContentsToAppCache, app delegate has a wrong type");
       
-      [(AppDelegate *)[UIApplication sharedApplication].delegate cacheData : allArticles forFeed : feedStoreID];
+      AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+      [appDelegate cacheData : allArticles forFeed : feedCacheID];
+      assert(feedApnID > 0 && "addContentsToAppCache, feedApnID is invalid");
+      [appDelegate setLastUpdateTimeFor : feedApnID];
    }
 }
 
@@ -260,7 +264,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       //the same feed twice (selecting the same menu item) - there is no
       //need to re-download/re-parse/re-download thumbnails, we can
       //use the previous data and refresh only on demand.
-      assert(feedStoreID != nil && "viewDidAppear:, feedStoreID is nil");
+      assert(feedCacheID != nil && "viewDidAppear:, feedCacheID is nil");
+      assert(feedApnID > 0 && "viewDidAppear:, feedApnID is invalid");
 
       if ([self initFromAppCache]) {
          [self.tableView reloadData];//Load table with cached data, if any.
@@ -372,9 +377,9 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma unused(info)
 
    assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
-   assert(feedStoreID != nil && "parserDidFinishWithInfo:items:, feedStoreID is nil, can not write a DB cache");
+   assert(feedCacheID != nil && "parserDidFinishWithInfo:items:, feedCacheID is nil, can not write a DB cache");
 
-   CernAPP::WriteFeedCache(feedStoreID, feedCache, items);
+   CernAPP::WriteFeedCache(feedCacheID, feedCache, items);
 
    allArticles = [[NSMutableArray alloc] init];
    for (MWFeedItem *item in items) {
@@ -507,8 +512,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    [viewController setContentForArticle : feedItem];
    viewController.navigationItem.title = @"";
 
-   if (feedItem.title && feedStoreID)
-      viewController.articleID = [feedStoreID stringByAppendingString : feedItem.title];
+   if (feedItem.title && feedCacheID)
+      viewController.articleID = [feedCacheID stringByAppendingString : feedItem.title];
 
    viewController.canUseReadability = YES;
    [self.navigationController pushViewController : viewController animated : YES];

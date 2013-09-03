@@ -7,6 +7,7 @@
 #import "StoryboardIdentifiers.h"
 #import "BulletinIssueTileView.h"
 #import "BulletinPageView.h"
+#import "AppDelegate.h"
 #import "MWFeedItem.h"
 #import "FeedCache.h"
 #import "FlipView.h"
@@ -36,8 +37,8 @@
 
    assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
    
-   assert(self.feedStoreID.length && "allFeedDidLoadForAggregator:, feedStoreID is invalid");
-   CernAPP::WriteFeedCache(self.feedStoreID, feedCache, items);
+   assert(self.feedCacheID.length && "allFeedDidLoadForAggregator:, feedCacheID is invalid");
+   CernAPP::WriteFeedCache(self.feedCacheID, feedCache, items);
 
    [self sortArticlesIntoIssues : items];
    
@@ -49,6 +50,14 @@
       CernAPP::HideSpinner(self);
    
    parserOp = nil;
+
+   //Cache data in app delegate.
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "parserDidFinishWithInfo:, app delegate has a wrong type");
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   assert(self.feedApnID > 0 && "parserDidFinishWithInfo:items:, feedApnID is invalid");
+   [appDelegate setLastUpdateTimeFor : self.feedApnID];
+   //
    
    if (flipAnimator.animationLock)
       delayedFlipRefresh = YES;
@@ -171,10 +180,10 @@
 //________________________________________________________________________________________
 - (void) initTilesFromCache
 {
-   assert(self.feedStoreID != nil && "initCache, invalid feedStoreID");
+   assert(self.feedCacheID != nil && "initCache, invalid feedCacheID");
 
    //
-   if ((feedCache = CernAPP::ReadFeedCache(self.feedStoreID))) {
+   if ((feedCache = CernAPP::ReadFeedCache(self.feedCacheID))) {
       //Set the data from the cache at the beginning!
       NSMutableArray * const cachedArticles = CernAPP::ConvertFeedCache(feedCache);
       [self sortArticlesIntoIssues : cachedArticles];
