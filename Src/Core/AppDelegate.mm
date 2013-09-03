@@ -217,13 +217,23 @@
 {
 #pragma unused(application)
 
+   using namespace CernAPP::Details;
+
    assert(deviceToken != nil && "application:didRegisterForRemoteNotificationsWithDeviceToken:, parameter 'deviceToken' is nil");
+
+   NSString * const deviceTokenKey = @"DeviceToken";
+   NSString * oldToken = [[NSUserDefaults standardUserDefaults] stringForKey : deviceTokenKey];
    
    NSString *tokenString = [deviceToken description];
    tokenString = [tokenString stringByTrimmingCharactersInSet : [NSCharacterSet characterSetWithCharactersInString : @"<>"]];
    tokenString = [tokenString stringByReplacingOccurrencesOfString : @" " withString : @""];
    
-   if (NSString * const request = CernAPP::Details::GetAPNRegisterDeviceTokenRequest(tokenString))
+   if (oldToken && [oldToken isEqualToString : tokenString])
+      return;
+   
+   NSString * const request = !oldToken ? GetAPNRegisterDeviceTokenRequest(tokenString) :
+                                          GetAPNUpdateDeviceTokenRequest(oldToken, tokenString);
+   if (request)
       tokenServerConnection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : request]] delegate : self];
    else
       NSLog(@"invalid token registration request for device token %@", deviceToken);
