@@ -14,8 +14,6 @@ const NSUInteger nAutoAnimationSteps = 10;
 
 @implementation TileViewController {
    NSUInteger pageBeforeRotation;
-
-   BOOL viewDidAppear;
    
    //If our evil user has too fast fingers, we should breake th ... or, I sure
    //mean we'll switch to the "automatic animation mode".
@@ -51,7 +49,6 @@ const NSUInteger nAutoAnimationSteps = 10;
 
       nPages = 0;
       pageBeforeRotation = 0;
-      viewDidAppear = NO;
       autoFlipAnimation = NO;
       
       flipHintView = [[UIImageView alloc] initWithImage : [UIImage imageNamed : @"flip_right.png"]];
