@@ -54,7 +54,8 @@
 - (void) addTileTapObserver;
 
 //If controller supports caching, read data from the cache and fill pages.
-- (void) initTilesFromCache;
+- (BOOL) initTilesFromDBCache;
+- (BOOL) initTilesFromAppCache;
 
 //This is a trick to make tiles' layout more interesting depending on data.
 - (void) setTilesLayoutHints;

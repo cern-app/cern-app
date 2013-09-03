@@ -136,14 +136,35 @@
 
    if (!viewDidAppear) {
       viewDidAppear = YES;
+      
+      if ([self initTilesFromAppCache]) {
+         [self layoutFeedViews];
+         return;//No need to refresh.
+      }
 
-      [self initTilesFromCache];
+      (void)[self initTilesFromDBCache];
       [self layoutPanRegion];
       [self refresh];
    }
 }
 
 #pragma mark - PageController protocol.
+
+//________________________________________________________________________________________
+- (void) layoutFeedViews
+{
+   [self layoutPages : YES];
+   [self layoutFlipView];
+   [self layoutPanRegion];
+
+   if (nPages > 1) {
+      if (!currPage.pageNumber)
+         [self showRightFlipHint];
+      else if (currPage.pageNumber == nPages - 1)
+         [self showLeftFlipHint];
+   } else
+      [self hideFlipHint];
+}
 
 //________________________________________________________________________________________
 - (void) refresh
@@ -170,16 +191,8 @@
       CernAPP::ShowSpinner(self);
    } else {
       [self addNavBarSpinner];//A spinner will replace a button in a navigation bar
-      [self layoutPages : YES];
-      [self layoutFlipView];
-      [self layoutPanRegion];
-      if (nPages > 1) {
-         if (!currPage.pageNumber)
-            [self showRightFlipHint];
-         else if (currPage.pageNumber == nPages - 1)
-            [self showLeftFlipHint];
-      } else
-         [self hideFlipHint];
+
+      [self layoutFeedViews];
    }
 
    [self startFeedParser];
@@ -273,11 +286,7 @@
       CernAPP::HideSpinner(self);
    
    //Cache data in app delegate.
-   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
-          "parserDidFinishWithInfo:items:, app delegate has a wrong type");
-   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-   assert(feedApnID > 0 && "parserDidFinishWithInfo:items:, feedApnID is invalid");
-   [appDelegate setLastUpdateTimeFor : feedApnID];
+   [self cacheInAppDelegate];
    //
 
    parserOp = nil;
@@ -507,15 +516,47 @@
 }
 
 //________________________________________________________________________________________
-- (void) initTilesFromCache
+- (BOOL) initTilesFromDBCache
 {
-   assert(feedCacheID != nil && "initCache, invalid feedCacheID");
+   assert(feedCacheID != nil && "initTilesFromDBCache, invalid feedCacheID");
 
    if ((feedCache = CernAPP::ReadFeedCache(feedCacheID))) {
       //Set the data from the cache at the beginning!
       dataItems = CernAPP::ConvertFeedCache(feedCache);
       [self setPagesData];
+      
+      return YES;
    }
+   
+   return NO;
+}
+
+//________________________________________________________________________________________
+- (BOOL) initTilesFromAppCache
+{
+   assert(feedCacheID != nil && "initTilesFromAppCache, feedCacheID is invalid");
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "initTilesFromAppCache, app delegate has a wrong type");
+   
+   dataItems = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForFeed : feedCacheID];
+   [self setPagesData];
+   
+   return dataItems != nil;//no ptr to BOOL conversion.
+}
+
+//________________________________________________________________________________________
+- (void) cacheInAppDelegate
+{
+   assert(feedCacheID != nil && "cacheInAppDelegate, feedCacheID is invalid");
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "cacheInAppDelegate, app delegate has a wrong type");
+   
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   [appDelegate cacheData : dataItems forFeed : feedCacheID];
+   [appDelegate setLastUpdateTimeFor : feedApnID];
+   
+   assert(feedApnID > 0 && "cacheInAppDelegate, feedApnID is invalid");
+   [appDelegate setLastUpdateTimeFor : feedApnID];
 }
 
 //________________________________________________________________________________________

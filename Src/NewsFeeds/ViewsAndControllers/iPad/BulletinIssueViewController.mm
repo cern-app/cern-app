@@ -74,10 +74,19 @@
 #pragma mark - Overriders for NewsFeedViewController.
 
 //________________________________________________________________________________________
-- (void) initTilesFromCache
+- (BOOL) initTilesFromDBCache
 {
    assert(dataItems != nil && "initTilesFromCache, dataItems is nil");
    [self setPagesData];
+   
+   return YES;
+}
+
+//________________________________________________________________________________________
+- (BOOL) initTilesFromAppCache
+{
+   //We are not caching, the data is set externally by the BulletinFeedViewController (who has the cache).
+   return NO;
 }
 
 @end

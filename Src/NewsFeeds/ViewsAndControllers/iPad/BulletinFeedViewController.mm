@@ -52,11 +52,7 @@
    parserOp = nil;
 
    //Cache data in app delegate.
-   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
-          "parserDidFinishWithInfo:, app delegate has a wrong type");
-   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-   assert(self.feedApnID > 0 && "parserDidFinishWithInfo:items:, feedApnID is invalid");
-   [appDelegate setLastUpdateTimeFor : self.feedApnID];
+   [self cacheInAppDelegate];
    //
    
    if (flipAnimator.animationLock)
@@ -178,9 +174,9 @@
 }
 
 //________________________________________________________________________________________
-- (void) initTilesFromCache
+- (BOOL) initTilesFromDBCache
 {
-   assert(self.feedCacheID != nil && "initCache, invalid feedCacheID");
+   assert(self.feedCacheID != nil && "initFromDBCache, invalid feedCacheID");
 
    //
    if ((feedCache = CernAPP::ReadFeedCache(self.feedCacheID))) {
@@ -188,7 +184,35 @@
       NSMutableArray * const cachedArticles = CernAPP::ConvertFeedCache(feedCache);
       [self sortArticlesIntoIssues : cachedArticles];
       [self setPagesData];
+      
+      return YES;
    }
+   
+   return NO;
+}
+
+//________________________________________________________________________________________
+- (BOOL) initTilesFromAppCache
+{
+   assert(self.feedCacheID != nil && "initTilesFromAppCache, feedCacheID is nil");
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "initTilesFromAppCache:, app delegate has a wrong type");
+   
+   if ((dataItems = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForFeed:self.feedCacheID]))
+      [self setPagesData];
+   
+   return dataItems != nil;
+}
+
+//________________________________________________________________________________________
+- (void) cacheInAppDelegate
+{
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "cacheInAppDelegate:, app delegate has a wrong type");
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   assert(self.feedApnID > 0 && "cacheInAppDelegate:, feedApnID is invalid");
+   [appDelegate cacheData:dataItems forFeed:self.feedCacheID];
+   [appDelegate setLastUpdateTimeFor : self.feedApnID];
 }
 
 //________________________________________________________________________________________
