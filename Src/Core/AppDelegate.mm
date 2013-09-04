@@ -5,10 +5,25 @@
 //TODO: this should become 'Details.h' or something like this.
 #import "TwitterAPI.h"
 
+namespace {
+
+enum class RequestType : unsigned char {
+    none,
+    tokenRegistration,
+    notificationRequest
+};
+
+NSString * const deviceTokenKey = @"DeviceToken";
+
+}
+
 @implementation AppDelegate {
-   NSURLConnection *tokenServerConnection;
+   NSURLConnection *connection;
    NSMutableDictionary *appCache;
    NSMutableDictionary *gmts;
+   
+   RequestType mode;
+   NSMutableData *connectionData;
 }
 
 @synthesize window = _window;
@@ -21,10 +36,10 @@
    //It's possible, that we still have an active NSURLConnection, sending
    //our device's token for a registration. Cancell the connection.
 
-   if (tokenServerConnection)
-      [tokenServerConnection cancel];
+   if (connection)
+      [connection cancel];
 
-   tokenServerConnection = nil;
+   connection = nil;
 }
 
 //________________________________________________________________________________________
@@ -53,6 +68,8 @@
    }
    
    //APN.
+   mode = RequestType::none;
+
    [[UIApplication sharedApplication] registerForRemoteNotificationTypes : UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
    //TODO: this should go away - in the nearest future all the data will be removed from the payload.
    APNdictionary = (NSDictionary *)[launchOptions objectForKey : UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -104,7 +121,7 @@
    */
 }
 
-#pragma mark - Feed cache management (and more general - update timestamps etc.).
+#pragma mark - Cache management (and more general - update timestamps etc.).
 
 //________________________________________________________________________________________
 - (void) cacheData : (NSObject *) data withKey : (NSObject<NSCopying> *) key
@@ -235,6 +252,20 @@
 #pragma mark - APN.
 
 //________________________________________________________________________________________
+- (void) checkForAPNUpdates
+{
+   assert(connection == nil && "checkForAPNUpdates, has active connection");
+   
+   if (NSString * const deviceToken = [[NSUserDefaults standardUserDefaults] stringForKey : deviceTokenKey]) {
+      if (NSString * const request = CernAPP::Details::GetAPNNotificationsRequest(deviceToken)) {
+         connectionData = [[NSMutableData alloc] init];
+         mode = RequestType::notificationRequest;
+         connection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : request]] delegate : self];         
+      }
+   }
+}
+
+//________________________________________________________________________________________
 - (void) application : (UIApplication*) application didRegisterForRemoteNotificationsWithDeviceToken : (NSData*) deviceToken
 {
 #pragma unused(application)
@@ -243,8 +274,7 @@
 
    assert(deviceToken != nil && "application:didRegisterForRemoteNotificationsWithDeviceToken:, parameter 'deviceToken' is nil");
 
-   NSString * const deviceTokenKey = @"DeviceToken";
-   NSString * oldToken = [[NSUserDefaults standardUserDefaults] stringForKey : deviceTokenKey];
+   NSString * const oldToken = [[NSUserDefaults standardUserDefaults] stringForKey : deviceTokenKey];
    
    NSString *tokenString = [deviceToken description];
    tokenString = [tokenString stringByTrimmingCharactersInSet : [NSCharacterSet characterSetWithCharactersInString : @"<>"]];
@@ -252,12 +282,17 @@
    
    if (oldToken && [oldToken isEqualToString : tokenString])
       return;
-   
+
+   //
+   [[NSUserDefaults standardUserDefaults] setObject : tokenString forKey : deviceTokenKey];
+   [[NSUserDefaults standardUserDefaults] synchronize];
+   //
    NSString * const request = !oldToken ? GetAPNRegisterDeviceTokenRequest(tokenString) :
                                           GetAPNUpdateDeviceTokenRequest(oldToken, tokenString);
-   if (request)
-      tokenServerConnection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : request]] delegate : self];
-   else
+   if (request) {
+      mode = RequestType::tokenRegistration;
+      connection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : request]] delegate : self];
+   } else
       NSLog(@"invalid token registration request for device token %@", deviceToken);
 }
 
@@ -283,22 +318,44 @@
    }
 }
 
+#pragma mark - NSURLConnectionDataDelegate.
+
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) aConnection didReceiveData : (NSData *) data
+{
+#pragma unused(aConnection)
+
+   if (mode == RequestType::notificationRequest) {
+      assert(data != nil && "connection:didReceiveData:, parameter 'data' is nil");
+      [connectionData appendData : data];
+   }
+}
+
 #pragma mark - NSURLConnectionDelegate.
 
 //________________________________________________________________________________________
-- (void) connectionDidFinishLoading : (NSURLConnection *) connection
+- (void) connectionDidFinishLoading : (NSURLConnection *) aConnection
 {
-   tokenServerConnection = nil;
-   //Registered now (?)
+#pragma unused(aConnection)
+   connection = nil;
+   if (mode == RequestType::notificationRequest) {
+      NSError *err = nil;
+      NSDictionary * const json = [NSJSONSerialization JSONObjectWithData : connectionData options : NSJSONReadingAllowFragments error : &err];
+      if (json)
+         NSLog(@"got notifications: %@", json);
+   }
 }
 
 //________________________________________________________________________________________
-- (void) connection : (NSURLConnection *) connection didFailWithError : (NSError *) error
+- (void) connection : (NSURLConnection *) aConnection didFailWithError : (NSError *) error
 {
-#pragma unused(connection)
+#pragma unused(aConnection)
 
-   tokenServerConnection = nil;
-   NSLog(@"failed to register device's token: %@", error);
+   connection = nil;
+   if (mode == RequestType::tokenRegistration)
+      NSLog(@"failed to register device's token: %@", error);
+   else
+      NSLog(@"failed to fetch notifications");
 }
 
 @end

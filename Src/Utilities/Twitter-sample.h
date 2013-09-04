@@ -59,6 +59,12 @@ inline NSString * GetAPNUpdateDeviceTokenRequest(NSString * /*oldDeviceToken*/, 
    return nil;
 }
 
+inline NSString * GetAPNNotificationsRequest(NSString * /*deviceToken*/)
+{
+   //Noop.
+   return nil;
+}
+
 }//namespace Details
 
 }//namespace CernAPP
