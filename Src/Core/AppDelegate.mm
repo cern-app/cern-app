@@ -7,8 +7,8 @@
 
 @implementation AppDelegate {
    NSURLConnection *tokenServerConnection;
-   NSMutableDictionary *cachedFeeds;
-   NSMutableDictionary *feedsUpdates;
+   NSMutableDictionary *appCache;
+   NSMutableDictionary *gmts;
 }
 
 @synthesize window = _window;
@@ -107,62 +107,59 @@
 #pragma mark - Feed cache management (and more general - update timestamps etc.).
 
 //________________________________________________________________________________________
-- (void) cacheData : (NSMutableArray *) dataItems forFeed : (NSString *) feedID
+- (void) cacheData : (NSObject *) data withKey : (NSObject<NSCopying> *) key
 {
-   //In order to save traffic/time, we're going to cache a result of successfull feed parse operation
-   //for future use (if a user again selects the same feed after some other items in a menu).
+   //Cache arbitrary data in the app delegate.
+   assert(data != nil && "cacheData:withKey:, parameter 'data' is nil");
+   assert(key != nil && "cacheData:withKey:, parameter 'key' is nil");
 
-   assert(dataItems != nil && "cacheData:forFeed:, parameter 'dataItems' is nil");
-   assert(feedID != nil && "cacheData:forFeed:, parameter 'feedID' is nil");
+   if (!appCache)
+      appCache = [[NSMutableDictionary alloc] init];
 
-   if (!cachedFeeds)
-      cachedFeeds = [[NSMutableDictionary alloc] init];
-
-   [cachedFeeds setObject : dataItems forKey : feedID];
+   [appCache setObject : data forKey : key];
 }
 
 //________________________________________________________________________________________
-- (NSMutableArray *) cacheForFeed : (NSString *) feedID
+- (NSObject *) cacheForKey : (NSObject<NSCopying> *) key
 {
-   //When feed view controller is loaded, reuse previous parsed items (if any).
+   assert(key != nil && "cacheForKey:, parameter 'key' is nil");
    
-   assert(feedID != nil && "cacheForFeed:, parameter 'feedID' is nil");
-   
-   if (!cachedFeeds)
+   if (!appCache)
       return nil;
 
-   return (NSMutableArray *)cachedFeeds[feedID];
+   return appCache[key];
 }
 
 //________________________________________________________________________________________
 - (void) clearFeedCache
 {
-   [cachedFeeds removeAllObjects];
-   cachedFeeds = nil;
+   [appCache removeAllObjects];
+   appCache = nil;
 }
 
 //________________________________________________________________________________________
-- (void) setLastUpdateTimeFor : (NSUInteger) apnID
+- (void) setGTMForKey : (NSObject<NSCopying> *) key
 {
-   assert(apnID > 0 && "setLastUpdateTimeFor:, parameter 'apnID' is invalid");
-   if (!feedsUpdates)
-      feedsUpdates = [[NSMutableDictionary alloc] init];
+   assert(key != nil && "setGMTForKey:, parameter 'key' is nil");
+   if (!gmts)
+      gmts = [[NSMutableDictionary alloc] init];
    
    NSDate * const localDate = [NSDate date];
    NSTimeZone * const currentTimeZone = [NSTimeZone localTimeZone];
    const NSInteger currentGMTOffset = [currentTimeZone secondsFromGMT];
    NSDate * const gmt = [localDate dateByAddingTimeInterval : -currentGMTOffset];
-   [feedsUpdates setObject : gmt forKey : [NSNumber numberWithUnsignedInteger : apnID]];
+   [gmts setObject : gmt forKey : key];
 }
 
 //________________________________________________________________________________________
-- (NSDate *) lastUpdateFor : (NSUInteger) apnID
+- (NSDate *) GMTForKey : (NSObject<NSCopying> *) key
 {
-   assert(apnID > 0 && "lastUpdateFor:, parameter 'apnID' is invalid");
-   if (!feedsUpdates)
+   assert(key != nil && "GMTForKey:, parameter 'key' is nil");
+   
+   if (!gmts)
       return nil;
    
-   return (NSDate *)feedsUpdates[[NSNumber numberWithUnsignedInteger : apnID]];
+   return (NSDate *)gmts[key];//well, if statement and return can be one return.
 }
 
 #pragma mark - Core data management.

@@ -54,8 +54,13 @@
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "initFromAppCache, app delegate has a wrong type");
    
-   bulletins = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForFeed : self.feedCacheID];
-   thumbnails = [[NSMutableDictionary alloc] init];
+   NSObject * const cache = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForKey : self.feedCacheID];
+   if (cache) {
+      assert([cache isKindOfClass : [NSMutableArray class]] &&
+             "initFromAppCache, cached object has a wrong type");
+      bulletins = (NSMutableArray *)cache;
+      thumbnails = [[NSMutableDictionary alloc] init];
+   }
    
    return bulletins != nil;
 }
@@ -87,9 +92,9 @@
    assert(bulletins != nil && "addContentsToAppCache, nothing to add");
 
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;   
-   [appDelegate cacheData : bulletins forFeed : self.feedCacheID];
+   [appDelegate cacheData : bulletins withKey : self.feedCacheID];
    assert(self.feedApnID > 0 && "addContentsToAppCache, self.feedApnID is invalid");
-   [appDelegate setLastUpdateTimeFor : self.feedApnID];
+   [appDelegate setGTMForKey : [NSNumber numberWithUnsignedInteger : self.feedApnID]];
 }
 
 //________________________________________________________________________________________

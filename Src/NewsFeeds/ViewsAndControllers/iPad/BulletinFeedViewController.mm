@@ -198,8 +198,12 @@
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "initTilesFromAppCache:, app delegate has a wrong type");
    
-   if ((dataItems = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForFeed:self.feedCacheID]))
+   if (NSObject * const cache = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForKey : self.feedCacheID]) {
+      assert([cache isKindOfClass : [NSMutableArray class]] &&
+             "initTilesFromAppCache, cached object has a wrong type");
+      dataItems = (NSMutableArray *)cache;
       [self setPagesData];
+   }
    
    return dataItems != nil;
 }
@@ -210,9 +214,9 @@
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "cacheInAppDelegate:, app delegate has a wrong type");
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   [appDelegate cacheData : dataItems withKey : self.feedCacheID];
    assert(self.feedApnID > 0 && "cacheInAppDelegate:, feedApnID is invalid");
-   [appDelegate cacheData:dataItems forFeed:self.feedCacheID];
-   [appDelegate setLastUpdateTimeFor : self.feedApnID];
+   [appDelegate setGTMForKey : [NSNumber numberWithUnsignedInteger : self.feedApnID]];
 }
 
 //________________________________________________________________________________________

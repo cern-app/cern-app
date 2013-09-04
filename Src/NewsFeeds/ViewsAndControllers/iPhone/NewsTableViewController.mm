@@ -205,8 +205,12 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
           "initFromAppCache, app delegate has a wrong type");
    
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-   if ((allArticles = [appDelegate cacheForFeed : feedCacheID]))
+   if (NSObject * const cache = [appDelegate cacheForKey : feedCacheID]) {
+      assert([cache isKindOfClass : [NSMutableArray class]] &&
+             "initFromAppCache, cached object has a wrong type");
+      allArticles = (NSMutableArray *)cache;
       return YES;
+   }
 
    return NO;
 }
@@ -239,9 +243,9 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
              "addContentsToAppCache, app delegate has a wrong type");
       
       AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-      [appDelegate cacheData : allArticles forFeed : feedCacheID];
+      [appDelegate cacheData : allArticles withKey : feedCacheID];
       assert(feedApnID > 0 && "addContentsToAppCache, feedApnID is invalid");
-      [appDelegate setLastUpdateTimeFor : feedApnID];
+      [appDelegate setGTMForKey : [NSNumber numberWithUnsignedInteger : feedApnID]];
    }
 }
 
