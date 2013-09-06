@@ -1135,6 +1135,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    if (NSDictionary * const apn = appDelegate.APNdictionary) {
       NSString * message = nil;
       //Date from the notification:
+      /*
       NSDate *apnDate = nil;
       if (NSString * const timestampAsString = (NSString *)apn[@"timestamp"]) {
          NSDateFormatter * const formatter = [[NSDateFormatter alloc] init];
@@ -1142,7 +1143,8 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          if (NSDate * const tmp = [formatter dateFromString : timestampAsString])
             apnDate = tmp;
       }
-      
+      */
+
       if (NSString * const updatedItems = (NSString *)apn[@"updated"]) {
          NSArray * const components = (NSArray *)[updatedItems componentsSeparatedByString : @" "];
          NSString * itemNames = @"";
@@ -1152,14 +1154,16 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                   for (NSObject<MenuItemProtocol> * item in menuItems) {
                      if (NSString * const itemName = [item textForID : itemID]) {
                         //We found updated menu item.
+                        /*
                         if (apnDate) {
                            //Let's compare the apn date and the last item's timestamp.
                            NSDate * const itemTimestamp = [appDelegate GMTForKey : [NSString stringWithFormat : @"%d", itemID]];
+                           NSLog(@"compare dates: %@ %@", apnDate, itemTimestamp);
                            if (itemTimestamp && [itemTimestamp compare:apnDate] == NSOrderedDescending) {
                               //This item was updated by user AFTER notification (== some update) was sent.
                               continue;//Skip it!
                            }
-                        }
+                        }*/
                         
                         [item addAPNHint : itemID];
 
@@ -1187,13 +1191,15 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
       appDelegate.APNdictionary = nil;
       
-      //Now, many thank to Apple for this SHI...T:
+      //Now, many thanks to Apple for this SHI...T:
       //1. If I do not touch this thing, the notification will stay in the notification center's panel +
       //   red circle with a number will stick forever to our app.
       //2. If I do this ... despite the name, resetting application's badge will
       //   also remove all notifications from the notificationi center.
       //Do whatever you want, but it works like a crap in any way,
       //so we just have to "think different" and embrace it.
+      //Thanks to Apple again for this, sometimes notifications are not
+      //deleted even if you set a badge to 0.
       [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
    }
 }
