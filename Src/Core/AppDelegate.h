@@ -9,6 +9,8 @@ enum class TwitterFeedShowOption : char {
    builtinView
 };
 
+NSDate *GetCurrentGMT();
+
 }
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate>
@@ -17,8 +19,8 @@ enum class TwitterFeedShowOption : char {
 - (NSObject *) cacheForKey : (NSObject<NSCopying> *) key;
 - (void) clearFeedCache;
 
-- (void) setGTMForKey : (NSObject<NSCopying> *) key;
-- (NSDate *) GMTForKey : (NSObject<NSCopying> *) key;
+- (void) setGMTForKey : (NSString *) key;
+- (NSDate *) GMTForKey : (NSString *) key;
 
 @property (strong, nonatomic) UIWindow *window;
 

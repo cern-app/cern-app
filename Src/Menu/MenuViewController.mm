@@ -587,6 +587,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 - (void) dealloc
 {
    [[NSNotificationCenter defaultCenter] removeObserver : self];
+   [NSObject cancelPreviousPerformRequestsWithTarget : self];
 }
 
 //________________________________________________________________________________________
@@ -630,9 +631,10 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    //Settings modifications.
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
    
-   [self checkPushNotifications];
    //TODO: We also have to subscribe for push notifications here - the 'MENU.plist' on a server can be updated.
    [self updateMenuFromServer];
+   //
+   //[self checkPushNotifications];
 }
 
 //________________________________________________________________________________________
@@ -1086,11 +1088,16 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 //________________________________________________________________________________________
 - (void) reloadMenuAfterAnimationFinished
 {
+   updateStage = MenuUpdateStage::none;
+
    if (inAnimation)//We have to wait.
       [self performSelector : @selector(reloadMenuAfterAnimationFinished) withObject : nil afterDelay : 0.5f];
    else {
       [self loadMenuContents];
       [self layoutMenuResetOffset : YES resetContentSize : YES];
+      //We update the menu only once, after the app started.
+      //So now we can, probably, check if we have any notifications.
+      [self checkPushNotifications];
    }
 }
 
@@ -1099,6 +1106,11 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 - (void) checkPushNotifications
 {
    //
+   if (updateStage != MenuUpdateStage::none || inAnimation) {
+      [self performSelector : @selector(checkPushNotifications) withObject : nil afterDelay : 1.f];
+      return;
+   }
+
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "checkPushNotifications, application delegate has a wrong type");
    
@@ -1106,6 +1118,14 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    
    if (NSDictionary * const apn = appDelegate.APNdictionary) {
       NSString * message = nil;
+      //Date from the notification:
+      NSDate *apnDate = nil;
+      if (NSString * const timestampAsString = (NSString *)apn[@"timestamp"]) {
+         NSDateFormatter * const formatter = [[NSDateFormatter alloc] init];
+         [formatter setDateFormat : @"yyyy-MM-dd hh:mm:ss"];
+         if (NSDate * const tmp = [formatter dateFromString : timestampAsString])
+            apnDate = tmp;
+      }
       
       if (NSString * const updatedItems = (NSString *)apn[@"updated"]) {
          NSArray * const components = (NSArray *)[updatedItems componentsSeparatedByString : @" "];
@@ -1115,10 +1135,18 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                if (itemID > 0) {
                   for (NSObject<MenuItemProtocol> * item in menuItems) {
                      if (NSString * const itemName = [item textForID : itemID]) {
-                        //
-                        if (!selectedItemView || selectedItemView.menuItem.itemID != itemID)
-                           [item addAPNHint : itemID];
-                        //
+                        //We found updated menu item.
+                        if (apnDate) {
+                           //Let's compare the apn date and the last item's timestamp.
+                           NSDate * const itemTimestamp = [appDelegate GMTForKey : [NSString stringWithFormat : @"%d", itemID]];
+                           if (itemTimestamp && [itemTimestamp compare:apnDate] == NSOrderedDescending) {
+                              //This item was updated by user AFTER notification (== some update) was sent.
+                              continue;//Skip it!
+                           }
+                        }
+                        
+                        [item addAPNHint : itemID];
+
                         if (itemNames.length)
                            itemNames = [itemNames stringByAppendingFormat : @", %@", itemName];
                         else
@@ -1133,17 +1161,25 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          }
       }
       
-      if (!message.length)
-         message = @"Check for the news update";//Bad, but this should never happen actually.
-      
-      UIAlertView * const alert = [[UIAlertView alloc] initWithTitle:@"CERN.app notification"
-                                    message : message delegate : self cancelButtonTitle : @"close"
-                                    otherButtonTitles : nil];
-      [alert show];
+      if (message.length) {
+         UIAlertView * const alert = [[UIAlertView alloc] initWithTitle:@"CERN.app notification"
+                                       message : message delegate : self cancelButtonTitle : @"close"
+                                       otherButtonTitles : nil];
+         [alert show];
+      }//Else: as we are not able to identify, which menu
+       //item was updated, forget about the notification at all.
+
       appDelegate.APNdictionary = nil;
+      
+      //Now, many thank to Apple for this SHI...T:
+      //1. If I do not touch this thing, the notification will stay in the notification center's panel +
+      //   red circle with a number will stick forever to our app.
+      //2. If I do this ... despite the name, resetting application's badge will
+      //   also remove all notifications from the notificationi center.
+      //Do whatever you want, but it works like a crap in any way,
+      //so we just have to "think different" and embrace it.
+      [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
    }
-   
-   [UIApplication sharedApplication].applicationIconBadgeNumber = 0;   
 }
 
 @end

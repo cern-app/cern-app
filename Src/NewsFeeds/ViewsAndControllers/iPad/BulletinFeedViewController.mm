@@ -216,7 +216,7 @@
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    [appDelegate cacheData : dataItems withKey : self.feedCacheID];
    assert(self.feedApnID > 0 && "cacheInAppDelegate:, feedApnID is invalid");
-   [appDelegate setGTMForKey : [NSNumber numberWithUnsignedInteger : self.feedApnID]];
+   [appDelegate setGMTForKey : [NSString stringWithFormat : @"%u", self.feedApnID]];
 }
 
 //________________________________________________________________________________________

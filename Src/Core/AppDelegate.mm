@@ -5,6 +5,19 @@
 //TODO: this should become 'Details.h' or something like this.
 #import "TwitterAPI.h"
 
+namespace CernAPP {
+
+//________________________________________________________________________________________
+NSDate *GetCurrentGMT()
+{
+   NSDate * const localDate = [NSDate date];
+   NSTimeZone * const currentTimeZone = [NSTimeZone localTimeZone];
+   const NSInteger currentGMTOffset = [currentTimeZone secondsFromGMT];
+   return [localDate dateByAddingTimeInterval : -currentGMTOffset];
+}
+
+}
+
 namespace {
 
 enum class RequestType : unsigned char {
@@ -20,7 +33,6 @@ NSString * const deviceTokenKey = @"DeviceToken";
 @implementation AppDelegate {
    NSURLConnection *connection;
    NSMutableDictionary *appCache;
-   NSMutableDictionary *gmts;
    
    RequestType mode;
    NSMutableData *connectionData;
@@ -155,28 +167,21 @@ NSString * const deviceTokenKey = @"DeviceToken";
 }
 
 //________________________________________________________________________________________
-- (void) setGTMForKey : (NSObject<NSCopying> *) key
+- (void) setGMTForKey : (NSString *) key
 {
-   assert(key != nil && "setGMTForKey:, parameter 'key' is nil");
-   if (!gmts)
-      gmts = [[NSMutableDictionary alloc] init];
+   assert(key != nil && key.length > 0 && "setGMTForKey:, parameter 'key' is invalid");
    
-   NSDate * const localDate = [NSDate date];
-   NSTimeZone * const currentTimeZone = [NSTimeZone localTimeZone];
-   const NSInteger currentGMTOffset = [currentTimeZone secondsFromGMT];
-   NSDate * const gmt = [localDate dateByAddingTimeInterval : -currentGMTOffset];
-   [gmts setObject : gmt forKey : key];
+   [[NSUserDefaults standardUserDefaults] setObject : CernAPP::GetCurrentGMT()
+                                          forKey : [@"timestamp_" stringByAppendingString : key]];
+   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 //________________________________________________________________________________________
-- (NSDate *) GMTForKey : (NSObject<NSCopying> *) key
+- (NSDate *) GMTForKey : (NSString *) key
 {
    assert(key != nil && "GMTForKey:, parameter 'key' is nil");
    
-   if (!gmts)
-      return nil;
-   
-   return (NSDate *)gmts[key];//well, if statement and return can be one return.
+   return (NSDate *)[[NSUserDefaults standardUserDefaults] objectForKey : [@"timestamp_" stringByAppendingString : key]];
 }
 
 #pragma mark - Core data management.
@@ -275,7 +280,7 @@ NSString * const deviceTokenKey = @"DeviceToken";
    assert(deviceToken != nil && "application:didRegisterForRemoteNotificationsWithDeviceToken:, parameter 'deviceToken' is nil");
 
    NSString * const oldToken = [[NSUserDefaults standardUserDefaults] stringForKey : deviceTokenKey];
-   
+
    NSString *tokenString = [deviceToken description];
    tokenString = [tokenString stringByTrimmingCharactersInSet : [NSCharacterSet characterSetWithCharactersInString : @"<>"]];
    tokenString = [tokenString stringByReplacingOccurrencesOfString : @" " withString : @""];
@@ -308,6 +313,7 @@ NSString * const deviceTokenKey = @"DeviceToken";
 - (void) application : (UIApplication *) application didReceiveRemoteNotification : (NSDictionary *) userInfo
 {
 #pragma unused(application)
+
    if (userInfo) {
       APNdictionary = userInfo;
       InitialSlidingViewController * controller = (InitialSlidingViewController *)_window.rootViewController;
@@ -315,6 +321,7 @@ NSString * const deviceTokenKey = @"DeviceToken";
          MenuViewController * const mvc = (MenuViewController *)controller.underLeftViewController;
          [mvc checkPushNotifications];
       }
+      
    }
 }
 

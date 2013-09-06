@@ -245,7 +245,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
       [appDelegate cacheData : allArticles withKey : feedCacheID];
       assert(feedApnID > 0 && "addContentsToAppCache, feedApnID is invalid");
-      [appDelegate setGTMForKey : [NSNumber numberWithUnsignedInteger : feedApnID]];
+      [appDelegate setGMTForKey : [NSString stringWithFormat : @"%u", feedApnID]];
    }
 }
 

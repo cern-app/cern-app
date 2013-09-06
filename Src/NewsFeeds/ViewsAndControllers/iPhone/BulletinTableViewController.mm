@@ -94,7 +94,7 @@
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;   
    [appDelegate cacheData : bulletins withKey : self.feedCacheID];
    assert(self.feedApnID > 0 && "addContentsToAppCache, self.feedApnID is invalid");
-   [appDelegate setGTMForKey : [NSNumber numberWithUnsignedInteger : self.feedApnID]];
+   [appDelegate setGMTForKey : [NSString stringWithFormat : @"%u", self.feedApnID]];
 }
 
 //________________________________________________________________________________________

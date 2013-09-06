@@ -339,7 +339,7 @@ using CernAPP::NetworkStatus;
       assert([[UIApplication sharedApplication].delegate isKindOfClass:[AppDelegate class]] &&
              "feedParserDidFinish:, app delegate has a wrong type");
       assert(apnID > 0 && "feedParserDidFinish:, feedApnID is invalid");
-      [(AppDelegate *)[UIApplication sharedApplication].delegate setGTMForKey : [NSNumber numberWithUnsignedInteger : apnID]];
+      [(AppDelegate *)[UIApplication sharedApplication].delegate setGMTForKey : [NSString stringWithFormat : @"%u", apnID]];
    }
 
    if (!feedN) {
