@@ -995,6 +995,8 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    menuData = [[NSMutableData alloc] init];
    updateStage = MenuUpdateStage::menuPlistUpdate;
    
+   //Use a timeout different from the default one: it's possible, that the app started because a push notification
+   //received. In this case, we have to wait until menu reloaded (or failed to reload). Make this time shorter - 10 seconds.
    NSMutableURLRequest * const request = [NSMutableURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/MENU.plist"]
                                           cachePolicy : NSURLRequestReloadIgnoringLocalCacheData
                                           timeoutInterval : 10.];
@@ -1011,7 +1013,8 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    updateStage = MenuUpdateStage::livePlistUpdate;
    
-   
+   //Use a timeout different from the default one: it's possible, that the app started because a push notification
+   //received. In this case, we have to wait until menu reloaded (or failed to reload). Make this time shorter - 10 seconds.   
    NSMutableURLRequest * const request = [NSMutableURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/CERNLive.plist"]
                                           cachePolicy : NSURLRequestReloadIgnoringLocalCacheData
                                           timeoutInterval : 10.];
@@ -1048,6 +1051,9 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    
    menuData = nil;
    connection = nil;//Can I do this??? (I'm in a callback function now)
+   updateStage = MenuUpdateStage::none;
+
+   [self checkPushNotifications];
 }
 
 //________________________________________________________________________________________
@@ -1115,6 +1121,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 - (void) checkPushNotifications
 {
    //
+
    if (updateStage != MenuUpdateStage::none || inAnimation) {
       [self performSelector : @selector(checkPushNotifications) withObject : nil afterDelay : 1.f];
       return;
@@ -1122,7 +1129,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "checkPushNotifications, application delegate has a wrong type");
-   
+
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    
    if (NSDictionary * const apn = appDelegate.APNdictionary) {
