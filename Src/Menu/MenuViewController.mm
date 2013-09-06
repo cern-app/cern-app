@@ -994,8 +994,12 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    menuData = [[NSMutableData alloc] init];
    updateStage = MenuUpdateStage::menuPlistUpdate;
-   connection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/MENU.plist"]]
-                                                delegate : self];
+   
+   NSMutableURLRequest * const request = [NSMutableURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/MENU.plist"]
+                                          cachePolicy : NSURLRequestReloadIgnoringLocalCacheData
+                                          timeoutInterval : 10.];
+   
+   connection = [[NSURLConnection alloc] initWithRequest : request delegate : self];
 }
 
 //________________________________________________________________________________________
@@ -1006,8 +1010,13 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    menuData = [[NSMutableData alloc] init];
 
    updateStage = MenuUpdateStage::livePlistUpdate;
-   connection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/CERNLive.plist"]]
-                                                delegate : self];
+   
+   
+   NSMutableURLRequest * const request = [NSMutableURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/CERNLive.plist"]
+                                          cachePolicy : NSURLRequestReloadIgnoringLocalCacheData
+                                          timeoutInterval : 10.];
+   
+   connection = [[NSURLConnection alloc] initWithRequest : request delegate : self];
 }
 
 //________________________________________________________________________________________
@@ -1122,7 +1131,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       NSDate *apnDate = nil;
       if (NSString * const timestampAsString = (NSString *)apn[@"timestamp"]) {
          NSDateFormatter * const formatter = [[NSDateFormatter alloc] init];
-         [formatter setDateFormat : @"yyyy-MM-dd hh:mm:ss"];
+         [formatter setDateFormat : @"yyyy-MM-dd HH:mm:ss"];
          if (NSDate * const tmp = [formatter dateFromString : timestampAsString])
             apnDate = tmp;
       }
