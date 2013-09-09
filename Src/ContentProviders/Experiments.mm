@@ -11,7 +11,8 @@ const char * experimentNames[(int)LHCExperiment::nExperiments] = {
    "CMS",
    "ALICE",
    "LHCb",
-   "LHC"
+   "LHC",
+   "AMS"
 };
 
 //________________________________________________________________________________________
@@ -36,6 +37,8 @@ LHCExperiment ExperimentNameToEnum(NSString *name)
       return LHCExperiment::ALICE;
    else if ([name isEqualToString : @"LHCb"])
       return LHCExperiment::LHCb;
+   else if ([name isEqualToString : @"AMS"])
+      return LHCExperiment::AMS;
 
    assert([name isEqualToString : @"LHC"] &&
           "ExperimentNameToEnum, unknown experiment");

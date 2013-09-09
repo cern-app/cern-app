@@ -87,6 +87,28 @@
 			<key>Data</key>
 			<array>
 				<dict>
+					<key>Feeds</key>
+					<array>
+						<dict>
+							<key>Url</key>
+							<string>http://www.ams02.org/feed/</string>
+							<key>Name</key>
+							<string>AMS News</string>
+							<key>ItemID</key>
+							<integer>15</integer>
+						</dict>
+					</array>
+					<key>Category name</key>
+					<string>News</string>
+				</dict>
+			</array>
+			<key>ExperimentName</key>
+			<string>AMS</string>
+		</dict>
+		<dict>
+			<key>Data</key>
+			<array>
+				<dict>
 					<key>Category name</key>
 					<string>News</string>
 					<key>Feeds</key>
