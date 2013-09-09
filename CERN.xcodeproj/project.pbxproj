@@ -151,6 +151,7 @@
 		70600A27169AF9B300F9E833 /* webcasts.png in Resources */ = {isa = PBXBuildFile; fileRef = 70600A16169AF9B300F9E833 /* webcasts.png */; };
 		70619D3016B042F900906E5C /* 106-sliders@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70619D2F16B042F900906E5C /* 106-sliders@2x.png */; };
 		7064A35D169DA177006405B9 /* menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7064A35C169DA177006405B9 /* menu@2x.png */; };
+		70677DC117DDFDE800D533D9 /* APNHintView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70677DC017DDFDE800D533D9 /* APNHintView.mm */; };
 		706877791765CB2C00A22123 /* FeedParserOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706877781765CB2C00A22123 /* FeedParserOperation.mm */; };
 		7068777C1765CC9E00A22123 /* MARCParserOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7068777B1765CC9E00A22123 /* MARCParserOperation.mm */; };
 		7069F33116C11517006BC78B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7069F33016C11517006BC78B /* Settings.bundle */; };
@@ -444,6 +445,8 @@
 		70600A16169AF9B300F9E833 /* webcasts.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = webcasts.png; sourceTree = "<group>"; };
 		70619D2F16B042F900906E5C /* 106-sliders@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "106-sliders@2x.png"; sourceTree = "<group>"; };
 		7064A35C169DA177006405B9 /* menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu@2x.png"; sourceTree = "<group>"; };
+		70677DBF17DDFDE800D533D9 /* APNHintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APNHintView.h; sourceTree = "<group>"; };
+		70677DC017DDFDE800D533D9 /* APNHintView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = APNHintView.mm; sourceTree = "<group>"; };
 		706877771765CB2C00A22123 /* FeedParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedParserOperation.h; sourceTree = "<group>"; };
 		706877781765CB2C00A22123 /* FeedParserOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedParserOperation.mm; sourceTree = "<group>"; };
 		7068777A1765CC9E00A22123 /* MARCParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MARCParserOperation.h; sourceTree = "<group>"; };
@@ -921,6 +924,8 @@
 				7069F76416C14D6D006BC78B /* PictureButtonView.mm */,
 				70BCD9B11733C560000BD91B /* FlipParentView.h */,
 				70BCD9B21733C560000BD91B /* FlipParentView.mm */,
+				70677DBF17DDFDE800D533D9 /* APNHintView.h */,
+				70677DC017DDFDE800D533D9 /* APNHintView.mm */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -1681,6 +1686,7 @@
 				70BC65641770BF3700358CD1 /* TweetCell.mm in Sources */,
 				70BC65651770BF3700358CD1 /* TwitterTableView.mm in Sources */,
 				7034C63D178DB81D00711D87 /* MemUtils.mm in Sources */,
+				70677DC117DDFDE800D533D9 /* APNHintView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

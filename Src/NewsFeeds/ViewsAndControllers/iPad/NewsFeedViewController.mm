@@ -538,13 +538,14 @@
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "initTilesFromAppCache, app delegate has a wrong type");
    
-   NSObject * const cache = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForKey : feedCacheID];
-   assert([cache isKindOfClass : [NSMutableArray class]] &&
-          "initTilesFromAppCache, cached object has a wrong type");
+   if (NSObject * const cache = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForKey : feedCacheID]) {
+      assert([cache isKindOfClass : [NSMutableArray class]] &&
+             "initTilesFromAppCache, cached object has a wrong type");
    
-   dataItems = (NSMutableArray *)cache;
-   [self setPagesData];
-   
+      dataItems = (NSMutableArray *)cache;
+      [self setPagesData];
+   }
+
    return dataItems != nil;//no ptr to BOOL conversion.
 }
 

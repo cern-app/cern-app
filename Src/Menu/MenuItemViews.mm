@@ -13,6 +13,7 @@
 
 #import "MenuViewController.h"
 #import "MenuItemViews.h"
+#import "APNHintView.h"
 #import "GUIHelpers.h"
 
 //Menu GUI constants.
@@ -80,7 +81,7 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
    UIImageView *iconView;
    BOOL hasAPN;
 
-   UIImageView *apnView;
+   APNHintView *apnView;
 }
 
 @synthesize menuItem, isSelected, itemStyle, indent, imageHint;
@@ -131,8 +132,7 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
          
          hasAPN = NO;
 
-         apnView = [[UIImageView alloc] initWithFrame : CGRect()];
-         apnView.image = [UIImage imageNamed : @"updated.png"];
+         apnView = [[APNHintView alloc] initWithFrame : CGRect()];
          [self addSubview : apnView];
          apnView.hidden = YES;
          
@@ -263,7 +263,7 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
    UIImageView *iconView;
    
    BOOL hasAPN;
-   UIImageView *apnView;
+   APNHintView *apnView;
 }
 
 @synthesize indent, imageHint;
@@ -344,8 +344,7 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
       
       hasAPN = NO;
     
-      apnView = [[UIImageView alloc] initWithFrame : CGRect()];
-      apnView.image = [UIImage imageNamed : @"updated.png"];
+      apnView = [[APNHintView alloc] initWithFrame : CGRect()];
       [self addSubview : apnView];
       apnView.hidden = YES;
       

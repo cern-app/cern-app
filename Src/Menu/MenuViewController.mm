@@ -1134,37 +1134,18 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    
    if (NSDictionary * const apn = appDelegate.APNdictionary) {
       NSString * message = nil;
-      //Date from the notification:
-      /*
-      NSDate *apnDate = nil;
-      if (NSString * const timestampAsString = (NSString *)apn[@"timestamp"]) {
-         NSDateFormatter * const formatter = [[NSDateFormatter alloc] init];
-         [formatter setDateFormat : @"yyyy-MM-dd HH:mm:ss"];
-         if (NSDate * const tmp = [formatter dateFromString : timestampAsString])
-            apnDate = tmp;
-      }
-      */
 
-      if (NSString * const updatedItems = (NSString *)apn[@"updated"]) {
-         NSArray * const components = (NSArray *)[updatedItems componentsSeparatedByString : @" "];
+      if (NSString * const updated = (NSString *)apn[@"updated"]) {
+         NSArray * const updatedFeeds = [updated componentsSeparatedByString : @"|"];
          NSString * itemNames = @"";
-         for (NSString * component in components) {
-            if (const NSInteger itemID = [component integerValue]) {
+         for (NSString * feedData in updatedFeeds) {
+            NSArray * const components = [feedData componentsSeparatedByString : @":"];
+            assert(components.count == 2 && "checkPushNotifications, unexpected APN payload");
+            if (const NSInteger itemID = [components[0] integerValue]) {
                if (itemID > 0) {
                   for (NSObject<MenuItemProtocol> * item in menuItems) {
                      if (NSString * const itemName = [item textForID : itemID]) {
                         //We found updated menu item.
-                        /*
-                        if (apnDate) {
-                           //Let's compare the apn date and the last item's timestamp.
-                           NSDate * const itemTimestamp = [appDelegate GMTForKey : [NSString stringWithFormat : @"%d", itemID]];
-                           NSLog(@"compare dates: %@ %@", apnDate, itemTimestamp);
-                           if (itemTimestamp && [itemTimestamp compare:apnDate] == NSOrderedDescending) {
-                              //This item was updated by user AFTER notification (== some update) was sent.
-                              continue;//Skip it!
-                           }
-                        }*/
-                        
                         [item addAPNHint : itemID];
 
                         if (itemNames.length)
