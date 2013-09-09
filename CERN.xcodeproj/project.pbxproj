@@ -185,7 +185,6 @@
 		707B13F6169AF69300180E02 /* Reachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EC169AF69300180E02 /* Reachability.mm */; };
 		707B13F7169AF69300180E02 /* UIImage+SquareScaledImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EE169AF69300180E02 /* UIImage+SquareScaledImage.m */; };
 		707B13FA169AF6AE00180E02 /* StoryboardIdentifiers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */; };
-		7089C31117C4AC3900535CCA /* updated.png in Resources */ = {isa = PBXBuildFile; fileRef = 7089C31017C4AC3900535CCA /* updated.png */; };
 		7098286616C404C500311025 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7098286516C404C500311025 /* Social.framework */; };
 		709A4AE517B3DB7700266374 /* twitbird.png in Resources */ = {isa = PBXBuildFile; fileRef = 709A4AE417B3DB7700266374 /* twitbird.png */; };
 		709CE6C516A5BE97006D524E /* 389-flash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C416A5BE97006D524E /* 389-flash@2x.png */; };
@@ -510,7 +509,6 @@
 		707B13EE169AF69300180E02 /* UIImage+SquareScaledImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+SquareScaledImage.m"; sourceTree = "<group>"; };
 		707B13F8169AF6AE00180E02 /* StoryboardIdentifiers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryboardIdentifiers.h; sourceTree = "<group>"; };
 		707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StoryboardIdentifiers.mm; sourceTree = "<group>"; };
-		7089C31017C4AC3900535CCA /* updated.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = updated.png; sourceTree = "<group>"; };
 		7098286516C404C500311025 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		709A4AE417B3DB7700266374 /* twitbird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitbird.png; sourceTree = "<group>"; };
 		709CE6C416A5BE97006D524E /* 389-flash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "389-flash@2x.png"; sourceTree = "<group>"; };
@@ -996,7 +994,6 @@
 		707B136D169AEA4700180E02 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
-				7089C31017C4AC3900535CCA /* updated.png */,
 				7046261017BD163400343C13 /* press_release.png */,
 				709A4AE417B3DB7700266374 /* twitbird.png */,
 				70B22F0416F9DCAA007D88EF /* action_blue.png */,
@@ -1559,7 +1556,6 @@
 				703ED51F17957D3700F37E0C /* flip_right.png in Resources */,
 				709A4AE517B3DB7700266374 /* twitbird.png in Resources */,
 				7046261117BD163400343C13 /* press_release.png in Resources */,
-				7089C31117C4AC3900535CCA /* updated.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
