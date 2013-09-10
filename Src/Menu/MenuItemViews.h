@@ -43,7 +43,9 @@ enum class ItemStyle {
 @property (nonatomic) CGFloat indent;
 @property (nonatomic) CGSize imageHint;
 
-- (void) setHasAPN : (BOOL) hasNotification;
+- (void) addAPNHint : (NSUInteger) newItems;
+- (void) removeAPNHints;
+- (NSUInteger) nAPNHints;
 
 - (BOOL) isModalViewItem;
 
@@ -63,7 +65,9 @@ enum class ItemStyle {
 @property (nonatomic) CGFloat indent;
 @property (nonatomic) CGSize imageHint;
 
-- (void) setHasAPN : (BOOL) hasNotification;
+- (void) addAPNHint : (NSUInteger) notifications;
+- (void) removeAPNHint : (NSUInteger) items;
+- (NSUInteger) nAPNHints;
 
 - (MenuItemsGroup *) menuItemsGroup;
 - (UIImageView *) discloseImageView;

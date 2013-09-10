@@ -39,7 +39,6 @@ CGFloat DefaultGUIFontSize()
 //Single menu item, can be standalone or a group member.
 @implementation MenuItem {
    NSString *itemTitle;
-   BOOL hasAPN;
 }
 
 @synthesize itemView, menuGroup, contentProvider, itemID;
@@ -57,8 +56,6 @@ CGFloat DefaultGUIFontSize()
          itemID = contentProvider.providerID;
       else
          itemID = 0;
-      
-      hasAPN = NO;
    }
 
    return self;
@@ -144,13 +141,27 @@ CGFloat DefaultGUIFontSize()
 }
 
 //________________________________________________________________________________________
-- (BOOL) addAPNHint : (NSUInteger) anItemID
+- (void) itemPressedIn : (UIViewController *) controller
 {
-   assert(anItemID != 0 && "addAPNHint, parameter 'anItemID' is invalid");
+   assert(controller != nil && "itemPressedIn:, parameter 'controller' is nil");
+   //Ask content provider to load correct view/controller.
+   [contentProvider loadControllerTo : controller];
+}
 
-   if (anItemID == itemID && !hasAPN) {
-      [itemView setHasAPN : YES];
-      hasAPN = YES;
+#pragma mark - APN hints.
+
+//________________________________________________________________________________________
+- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) anItemID
+{
+   assert(newItems > 0 && "addAPNHint:forID:, parameter 'newItems' is invalid");
+   assert(anItemID != 0 && "addAPNHint:forID:, parameter 'anItemID' is invalid");
+
+   if (anItemID == itemID) {
+      [itemView addAPNHint : newItems];
+      
+      if ([contentProvider respondsToSelector : @selector(nAPNHints)])
+         contentProvider.nAPNHints = contentProvider.nAPNHints + newItems;
+
       return YES;
    }
    
@@ -158,17 +169,22 @@ CGFloat DefaultGUIFontSize()
 }
 
 //________________________________________________________________________________________
-- (void) itemPressedIn : (UIViewController *) controller
+- (BOOL) removeAPNHint : (NSUInteger) nItems forID : (NSUInteger) anItemID
 {
-   assert(controller != nil && "itemPressedIn:, parameter 'controller' is nil");
-   //Ask content provider to load correct view/controller.
-   [contentProvider loadControllerTo : controller];
+   assert(nItems > 0 && "removeAPNHint:, parameter 'nItems' is invalid");
+   assert(anItemID != 0 && "removeAPNHint:forID:, parameter 'anItemID' is invalid");
    
-   if (hasAPN && menuGroup) {
-      hasAPN = NO;
-      [itemView setHasAPN : NO];
-      [menuGroup removeAPNHint];
+   if (anItemID == itemID) {
+      assert(nItems == itemView.nAPNHints &&
+             "removeAPNHint:forID:, inconsistent number of items to remove");
+      [itemView removeAPNHints];
+      if ([contentProvider respondsToSelector : @selector(nAPNHints)])
+         contentProvider.nAPNHints = 0;
+
+      return YES;
    }
+
+   return NO;
 }
 
 @end
@@ -402,40 +418,6 @@ CGFloat DefaultGUIFontSize()
 }
 
 //________________________________________________________________________________________
-- (BOOL) addAPNHint : (NSUInteger) anItemID
-{
-   //Actually, menu group itself can never have APN, only some item inside.
-   assert(anItemID != 0 && "addAPNHint, parameter 'anItemID' is invalid");
-   
-   for (NSObject<MenuItemProtocol> *item in items) {
-      if ([item addAPNHint : anItemID]) {
-         //Ok, the group contains this item.
-         if (!apnHints)
-            [titleView setHasAPN : YES];
-
-         ++apnHints;
-         return YES;
-      }
-   }
-
-   return NO;
-}
-
-//________________________________________________________________________________________
-- (void) removeAPNHint
-{
-   assert(apnHints != 0 && "removeAPNHint, no hints to remove");
-   
-   --apnHints;
-   if (!apnHints) {
-      [titleView setHasAPN : NO];
-      if (parentGroup)
-         [parentGroup removeAPNHint];
-   }
-      
-}
-
-//________________________________________________________________________________________
 - (NSString *) itemText
 {
    return title;
@@ -458,6 +440,42 @@ CGFloat DefaultGUIFontSize()
 {
    assert(item < items.count && "viewForItem:, parameter 'item' is out of bounds");
    return items[item];
+}
+
+#pragma mark - APN hints.
+
+//________________________________________________________________________________________
+- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) anItemID
+{
+   assert(anItemID != 0 && "addAPNHint:forID, parameter 'anItemID' is invalid");
+   
+   for (NSObject<MenuItemProtocol> *item in items) {
+      if ([item addAPNHint : newItems forID : anItemID]) {
+         //Ok, the group contains this item.
+         [titleView addAPNHint : newItems];
+         return YES;
+      }
+   }
+
+   return NO;
+}
+
+//________________________________________________________________________________________
+- (BOOL) removeAPNHint : (NSUInteger) itemsToRemove forID : (NSUInteger) anItemID
+{
+   //Actually, menu group itself can never have APN, only some item inside.
+   assert(itemsToRemove > 0 && "removeAPNHint:forID:, parameter 'itemsToRemove' is invalid");
+   assert(anItemID != 0 && "removeAPNHint:forID:, parameter 'anItemID' is invalid");
+   
+   for (NSObject<MenuItemProtocol> *item in items) {
+      if ([item removeAPNHint : itemsToRemove forID : anItemID]) {
+         //Ok, the group contains this item.
+         [titleView removeAPNHint : itemsToRemove];
+         return YES;
+      }
+   }
+
+   return NO;
 }
 
 @end
@@ -528,14 +546,6 @@ CGFloat DefaultGUIFontSize()
 }
 
 //________________________________________________________________________________________
-- (BOOL) addAPNHint : (NSUInteger) itemID
-{
-
-   //Seperator can never have APNs :)
-   return NO;
-}
-
-//________________________________________________________________________________________
 - (NSString *) itemText
 {
    //NOOP.
@@ -548,5 +558,23 @@ CGFloat DefaultGUIFontSize()
    //NOOP.
    return nil;
 }
+
+//________________________________________________________________________________________
+- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID
+{
+#pragma unused(newItems, itemID)
+
+   //Separator can never have APNs :)
+   return NO;
+}
+
+//________________________________________________________________________________________
+- (BOOL) removeAPNHint : (NSUInteger) items forID : (NSUInteger) itemID
+{
+#pragma unused(items, itemID)
+   //Noop.
+   return NO;
+}
+
 
 @end

@@ -103,7 +103,7 @@ UIViewController *FindController(UIView *view)
    NSObject *filters;
 }
 
-@synthesize providerID;
+@synthesize providerID, nAPNHints;
 
 //Aux. fun to force the same id generation algorithm.
 //________________________________________________________________________________________
@@ -709,7 +709,7 @@ UIViewController *FindController(UIView *view)
    NSString *url;
 }
 
-@synthesize categoryName, providerID;
+@synthesize categoryName, providerID, nAPNHints;
 
 //________________________________________________________________________________________
 - (id) initWithDictionary : (NSDictionary *) info
@@ -1007,7 +1007,7 @@ UIViewController *FindController(UIView *view)
    NSArray *itemData;
 }
 
-@synthesize categoryName, providerID;
+@synthesize categoryName, providerID, nAPNHints;
 
 //________________________________________________________________________________________
 - (id) initWithDictionary : (NSDictionary *) dict

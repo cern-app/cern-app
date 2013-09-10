@@ -26,7 +26,8 @@
 - (void) setIndent : (CGFloat) indent imageHint : (CGSize) imageHint;
 
 - (NSString *) textForID : (NSUInteger) itemID;
-- (BOOL) addAPNHint : (NSUInteger) itemID;
+- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
+- (BOOL) removeAPNHint : (NSUInteger) items forID : (NSUInteger) itemID;
 
 @property (nonatomic) NSUInteger itemID;
 
@@ -57,7 +58,6 @@
 - (void) setLabelFontSize : (CGFloat) sizeBase;
 - (void) setIndent : (CGFloat) indent imageHint : (CGSize) imageHint;
 
-- (BOOL) addAPNHint : (NSUInteger) itemID;
 - (NSString *) textForID : (NSUInteger) itemID;
 
 - (void) itemPressedIn : (UIViewController *) controller;
@@ -68,6 +68,10 @@
 @property (nonatomic) __weak MenuItemView *itemView;
 
 @property (nonatomic) NSObject<ContentProvider> *contentProvider;
+
+//Add/remove a special hints to an item view (if itemIDs coincide)
+- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
+- (BOOL) removeAPNHint : (NSUInteger) items forID : (NSUInteger) itemID;
 
 @end
 
@@ -90,8 +94,7 @@
 - (UIImage *) itemImage;
 
 - (NSString *) textForID : (NSUInteger) itemID;
-- (BOOL) addAPNHint : (NSUInteger) itemID;
-- (void) removeAPNHint;
+
 @property (nonatomic) NSUInteger itemID;
 
 @property (nonatomic) BOOL collapsed;
@@ -106,6 +109,10 @@
 
 //Menu group can contain expanding sub-groups.
 @property (nonatomic) __weak MenuItemsGroup *parentGroup;
+
+//Add/remove special hints to an item view (if itemID is found).
+- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
+- (BOOL) removeAPNHint : (NSUInteger) items forID : (NSUInteger) itemID;
 
 @end
 
@@ -127,9 +134,14 @@
 - (UIImage *) itemImage;
 
 - (NSString *) textForID : (NSUInteger) itemID;
-- (BOOL) addAPNHint : (NSUInteger) itemID;
+
 @property (nonatomic) NSUInteger itemID;
 
 @property (nonatomic) __weak MenuItemView *itemView;
+
+//Noop functions.
+- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
+- (BOOL) removeAPNHint : (NSUInteger) items forID : (NSUInteger) itemID;
+
 
 @end

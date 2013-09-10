@@ -1146,7 +1146,10 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                   for (NSObject<MenuItemProtocol> * item in menuItems) {
                      if (NSString * const itemName = [item textForID : itemID]) {
                         //We found updated menu item.
-                        [item addAPNHint : itemID];
+                        //[item addAPNHint : itemID];
+                        const NSInteger newItems = [components[1] integerValue];
+                        assert(newItems > 0 && "checkPushNotifications, invalid payload");
+                        [item addAPNHint : newItems forID:itemID];
 
                         if (itemNames.length)
                            itemNames = [itemNames stringByAppendingFormat : @", %@", itemName];

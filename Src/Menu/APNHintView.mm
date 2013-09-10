@@ -50,6 +50,9 @@
 //________________________________________________________________________________________
 - (void) setCount : (NSUInteger) aCount
 {
+   if (aCount == count)
+      return;
+
    count = aCount;
 
    if (aCount < 99)
@@ -57,6 +60,8 @@
       text = [NSString stringWithFormat : @"%u", unsigned(aCount)];
    else
       text = @"!";
+   
+   [self setNeedsDisplay];
 }
 
 @end

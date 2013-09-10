@@ -79,7 +79,6 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 
    UILabel *itemLabel;
    UIImageView *iconView;
-   BOOL hasAPN;
 
    APNHintView *apnView;
 }
@@ -129,8 +128,6 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
          iconView.contentMode = UIViewContentModeScaleAspectFill;
          iconView.clipsToBounds = YES;
          [self addSubview : iconView];
-         
-         hasAPN = NO;
 
          apnView = [[APNHintView alloc] initWithFrame : CGRect()];
          [self addSubview : apnView];
@@ -234,22 +231,46 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 }
 
 //________________________________________________________________________________________
-- (void) setHasAPN : (BOOL) hasNotification
-{
-   if (hasAPN != hasNotification) {
-      iconView.hidden = hasNotification;
-      apnView.hidden = !iconView.hidden;
-      hasAPN = hasNotification;
-      
-      [self setNeedsDisplay];
-   }
-}
-
-//________________________________________________________________________________________
 - (void) handleTap
 {
    if ([controller itemViewWasSelected : self])
       [menuItem itemPressedIn : controller];
+}
+
+#pragma mark - APN hints.
+
+//________________________________________________________________________________________
+- (void) addAPNHint : (NSUInteger) newItems
+{
+   assert(newItems > 0 && "addAPNHint, parameter 'newItems' is invalid");
+   
+   const NSUInteger prevNumber = apnView.count;
+   apnView.count = prevNumber + newItems;
+   
+   if (!prevNumber) {
+      iconView.hidden = YES;
+      apnView.hidden = NO;
+      
+      [self setNeedsDisplay];//TODO: Do I really need this???
+   }
+}
+
+//________________________________________________________________________________________
+- (void) removeAPNHints
+{
+   assert(apnView.count > 0 && "removeAPNHint, nothing to remove");
+
+   apnView.count = 0;
+   apnView.hidden = YES;
+   iconView.hidden = NO;
+
+   [self setNeedsDisplay];
+}
+
+//________________________________________________________________________________________
+- (NSUInteger) nAPNHints
+{
+   return apnView.count;
 }
 
 @end
@@ -261,8 +282,7 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
    UILabel *itemLabel;
    UIImageView *discloseImageView;
    UIImageView *iconView;
-   
-   BOOL hasAPN;
+
    APNHintView *apnView;
 }
 
@@ -341,8 +361,6 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
       iconView.contentMode = UIViewContentModeScaleAspectFill;
       iconView.clipsToBounds = YES;
       [self addSubview : iconView];
-      
-      hasAPN = NO;
     
       apnView = [[APNHintView alloc] initWithFrame : CGRect()];
       [self addSubview : apnView];
@@ -435,18 +453,6 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 }
 
 //________________________________________________________________________________________
-- (void) setHasAPN : (BOOL) hasNotification
-{
-   if (hasAPN != hasNotification) {
-      iconView.hidden = hasNotification;
-      apnView.hidden = !iconView.hidden;
-      hasAPN = hasNotification;
-      
-      [self setNeedsDisplay];
-   }
-}
-
-//________________________________________________________________________________________
 - (MenuItemsGroup *) menuItemsGroup
 {
    return groupItem;
@@ -463,6 +469,45 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 {
    //Collapse or expand.
    [menuController groupViewWasTapped : self];
+}
+
+#pragma mark - APN hints.
+
+//________________________________________________________________________________________
+- (void) addAPNHint : (NSUInteger) newItems
+{
+   assert(newItems > 0 && "addAPNHint:, invalid number of new items");
+
+   const NSUInteger prevCount = apnView.count;
+   apnView.count = prevCount + newItems;
+
+   if (!prevCount) {
+      iconView.hidden = YES;
+      apnView.hidden = NO;
+
+      [self setNeedsDisplay];
+   }
+}
+
+//________________________________________________________________________________________
+- (void) removeAPNHint : (NSUInteger) items
+{
+   assert(items > 0 && "removeAPNHint:, parameter 'items' is invalid");
+   assert(apnView.count >= items && "removeAPNHint:, inconsistent number of items to remove");
+   
+   apnView.count = apnView.count - items;
+   if (!apnView.count) {
+      apnView.hidden = YES;
+      iconView.hidden = NO;
+      
+      [self setNeedsDisplay];//TODO: check, if I need this.
+   }
+}
+
+//________________________________________________________________________________________
+- (NSUInteger) nAPNHints
+{
+   return apnView.count;
 }
 
 @end

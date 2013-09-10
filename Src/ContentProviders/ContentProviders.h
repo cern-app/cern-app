@@ -13,6 +13,7 @@
 
 @property (nonatomic, retain) NSString *categoryName;
 @property (nonatomic) NSUInteger providerID;
+@property (nonatomic) NSUInteger nAPNHints;
 
 @end
 
@@ -28,6 +29,7 @@
 
 @property (nonatomic, retain) NSString *categoryName;
 @property (nonatomic) NSUInteger providerID;
+@property (nonatomic) NSUInteger nAPNHints;
 
 - (UIImage *) categoryImage;
 
@@ -86,6 +88,7 @@
 
 @property (nonatomic, retain) NSString *categoryName;
 @property (nonatomic) NSUInteger providerID;
+@property (nonatomic) NSUInteger nAPNHints;
 
 - (UIImage *) categoryImage;
 
@@ -145,6 +148,7 @@
 
 @property (nonatomic, retain) NSString *categoryName;
 @property (nonatomic) NSUInteger providerID;
+@property (nonatomic) NSUInteger nAPNHints;
 
 - (UIImage *) categoryImage;
 - (void) loadControllerTo : (UIViewController *) controller;
