@@ -248,8 +248,11 @@ UIViewController *FindController(UIView *view)
       nt.navigationItem.title = feedName;
       //
       assert(providerID > 0 && "loadControllerTo:, providerID is invalid");//required for caching.
-      nt.feedApnID = providerID;
+      nt.apnID = providerID;
       nt.feedCacheID = [NSString stringWithFormat : @"%@%u", self.categoryName, providerID];
+      
+      if (nAPNHints)
+         [nt addAPNItems : nAPNHints];
       //
       [nt setFeedURLString : feed];
       if (filters)
@@ -774,7 +777,10 @@ UIViewController *FindController(UIView *view)
 
       assert(providerID > 0 && "loadControllerTo:, providerID is invalid");
 
-      bc.feedApnID = providerID;
+      bc.apnID = providerID;
+      if (nAPNHints)
+         [bc addAPNItems : nAPNHints];
+      
       bc.feedCacheID = [NSString stringWithFormat : @"%@%u", categoryName, providerID];
       [bc setFeedURLString : url];
    }

@@ -3,6 +3,7 @@
 
 #import "ECSlidingViewController.h"
 #import "StoryboardIdentifiers.h"
+#import "APNEnabledController.h"
 #import "MenuViewController.h"
 #import "ContentProviders.h"
 #import "MenuItemViews.h"
@@ -1117,6 +1118,19 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 }
 
 #pragma mark - Check for APNs.
+
+//________________________________________________________________________________________
+- (void) removeNotifications : (NSUInteger) nItems forID : (NSUInteger) itemID
+{
+   assert(nItems != 0 && "removeNotifications:forID:, parameter 'nItems' is invalid");
+   assert(itemID != 0 && "removeNotifications:forID:, parameter 'itemID' is invalid");
+   
+   for (NSObject<MenuItemProtocol> *item in menuItems) {
+      if ([item removeAPNHint : nItems forID : itemID])
+         break;
+   }
+}
+
 //________________________________________________________________________________________
 - (void) checkPushNotifications
 {
@@ -1143,7 +1157,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
             assert(components.count == 2 && "checkPushNotifications, unexpected APN payload");
             if (const NSInteger itemID = [components[0] integerValue]) {
                if (itemID > 0) {
-                  for (NSObject<MenuItemProtocol> * item in menuItems) {
+                  for (NSObject<MenuItemProtocol> *item in menuItems) {
                      if (NSString * const itemName = [item textForID : itemID]) {
                         //We found updated menu item.
                         //[item addAPNHint : itemID];
@@ -1155,6 +1169,14 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                            itemNames = [itemNames stringByAppendingFormat : @", %@", itemName];
                         else
                            itemNames = [itemNames stringByAppendingFormat : @"%@", itemName];
+                        
+                        
+                        if ([self.slidingViewController.topViewController conformsToProtocol : @protocol(APNEnabledController)]) {
+                           UIViewController<APNEnabledController> * const tvc =
+                                 (UIViewController<APNEnabledController> *)self.slidingViewController.topViewController;
+                           if (tvc.apnID == itemID)
+                              [tvc addAPNItems : newItems];
+                        }
                      }
                   }
                }

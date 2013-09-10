@@ -36,14 +36,14 @@
    [externalCircle fill];
    const CGRect innerBB = CGRectMake(2.f, 2.f, rect.size.width - 4.f, rect.size.height - 4.f);
    UIBezierPath * const internalCircle = [UIBezierPath bezierPathWithOvalInRect : innerBB];
-   [[UIColor yellowColor] setFill];
+   [[UIColor redColor] setFill];
    [internalCircle fill];
 
    const CGSize textSize = [text sizeWithFont : customFont];
    const CGRect textRect = CGRectMake(rect.size.width / 2 - textSize.width / 2,
                                       rect.size.height / 2 - textSize.height / 2 - [customFont descender] / 2,
                                       textSize.width, textSize.height);
-   [[UIColor blackColor] set];
+   [[UIColor whiteColor] set];
    [text drawInRect : textRect withFont : customFont];
 }
 

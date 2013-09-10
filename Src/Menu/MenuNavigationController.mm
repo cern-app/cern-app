@@ -86,5 +86,26 @@
    return controllerToPop;
 }
 
+#pragma mark - APNEnabledViewController.
+
+//TODO: this part is a pure and quite ugly hack :(
+
+//________________________________________________________________________________________
+- (NSUInteger) apnID
+{
+   UIViewController * const next = self.viewControllers[0];
+   if (next && [next conformsToProtocol : @protocol(APNEnabledController)])
+      return ((UIViewController<APNEnabledController> *)next).apnID;
+
+   return 0;//Hack, 0 is considered to be an invalid ID.
+}
+
+//________________________________________________________________________________________
+- (void) addAPNItems : (NSUInteger) newItems
+{
+   UIViewController * const next = self.viewControllers[0];
+   if (next && [next conformsToProtocol : @protocol(APNEnabledController)])
+      [(UIViewController<APNEnabledController> *)next addAPNItems : newItems];
+}
 
 @end

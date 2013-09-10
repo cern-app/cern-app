@@ -117,7 +117,7 @@
       NewsTableViewController * const tableController = (NewsTableViewController *)aController;
       tableController.navigationItem.title = (NSString *)feedDict[@"Name"];
       tableController.feedCacheID = [FeedProvider feedCacheID : feedDict];
-      tableController.feedApnID = apnID;
+      tableController.apnID = apnID;
       [tableController setFeedURLString : (NSString *)feedDict[@"Url"]];
    }
 }

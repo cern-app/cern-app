@@ -6,8 +6,9 @@
 #import <UIKit/UIKit.h>
 
 #import "ConnectionController.h"
+#import "APNEnabledController.h"
 #import "Experiments.h"
 
-@interface MenuNavigationController : UINavigationController<ConnectionController>
+@interface MenuNavigationController : UINavigationController<ConnectionController, APNEnabledController>
 
 @end

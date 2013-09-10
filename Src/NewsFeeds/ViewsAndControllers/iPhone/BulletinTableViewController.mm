@@ -24,6 +24,7 @@
 - (void) hideActivityIndicators;
 - (void) showErrorHUD;
 - (void) addNavBarSpinner;
+- (void) hideAPNHints;
 
 @end
 
@@ -93,8 +94,6 @@
 
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;   
    [appDelegate cacheData : bulletins withKey : self.feedCacheID];
-   assert(self.feedApnID > 0 && "addContentsToAppCache, self.feedApnID is invalid");
-   [appDelegate setGMTForKey : [NSString stringWithFormat : @"%u", self.feedApnID]];
 }
 
 //________________________________________________________________________________________
@@ -279,6 +278,8 @@
       [self addContentsToAppCache];
       [self.tableView reloadData];
    }
+   
+   [self hideAPNHints];
    
    parseOp = nil;
 }

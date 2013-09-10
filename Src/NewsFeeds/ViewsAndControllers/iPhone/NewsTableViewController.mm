@@ -7,6 +7,7 @@
 #import "ECSlidingViewController.h"
 #import "NewsTableViewController.h"
 #import "StoryboardIdentifiers.h"
+#import "MenuViewController.h"
 #import "CellBackgroundView.h"
 #import "NewsTableViewCell.h"
 #import "ApplicationErrors.h"
@@ -16,6 +17,7 @@
 #import "TwitterAPI.h"
 
 #import "Reachability.h"
+#import "APNHintView.h"
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
 #import "FeedCache.h"
@@ -66,9 +68,10 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    NSMutableArray *rangeDownloaders;
 
    NSArray *feedFilters;
+   NSUInteger apnItems;
 }
 
-@synthesize feedCacheID, feedApnID;
+@synthesize feedCacheID, apnID;
 
 
 #pragma mark - Reachability.
@@ -92,7 +95,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    noConnectionHUD = nil;
    parseOp = nil;
    feedCacheID = nil;
-   feedApnID = 0;
+   apnID = 0;
 
    //'private' ivars (hidden in mm file).
    allArticles = nil;
@@ -108,6 +111,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    rangeDownloaders = nil;
 
    feedFilters = nil;
+   apnItems = 0;
 }
 
 //________________________________________________________________________________________
@@ -244,8 +248,6 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       
       AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
       [appDelegate cacheData : allArticles withKey : feedCacheID];
-      assert(feedApnID > 0 && "addContentsToAppCache, feedApnID is invalid");
-      [appDelegate setGMTForKey : [NSString stringWithFormat : @"%u", feedApnID]];
    }
 }
 
@@ -260,6 +262,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    if (firstViewDidAppear) {
       firstViewDidAppear = NO;
+      
       //We can have two "types of cache":
       //if we're loading some feed the first time,
       //it's possible we have some data in the database for
@@ -269,10 +272,10 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       //need to re-download/re-parse/re-download thumbnails, we can
       //use the previous data and refresh only on demand.
       assert(feedCacheID != nil && "viewDidAppear:, feedCacheID is nil");
-      assert(feedApnID > 0 && "viewDidAppear:, feedApnID is invalid");
 
       if ([self initFromAppCache]) {
          [self.tableView reloadData];//Load table with cached data, if any.
+         [self showAPNHints];
          //No need to refresh unless user asks about it.
          return;
       }
@@ -281,6 +284,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       [self.tableView reloadData];//Load table with cached data, if any.
       [self reload];      
    }
+   
+   [self showAPNHints];
 }
 
 //________________________________________________________________________________________
@@ -413,6 +418,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    [self.refreshControl endRefreshing];//well, if we have it active.
    [self.tableView reloadData];//we have new articles, now we can reload the table.
    [self loadImagesForOnscreenRows];
+   
+   [self hideAPNHints];
 }
 
 //________________________________________________________________________________________
@@ -432,6 +439,8 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    } else {
       [self showErrorHUD];
    }
+   
+   [self showAPNHints];
 }
 
 #pragma mark - UITableViewDataSource.
@@ -698,7 +707,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 - (void) addNavBarSpinner
 {
    navBarSpinner = [[UIActivityIndicatorView alloc] initWithFrame : CGRectMake(0.f, 0.f, 20.f, 20.f)];
-   UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView : navBarSpinner];
+   UIBarButtonItem * const barButton = [[UIBarButtonItem alloc] initWithCustomView : navBarSpinner];
    // Set to Left or Right
    self.navigationItem.rightBarButtonItem = barButton;
    [navBarSpinner startAnimating];
@@ -720,6 +729,55 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    noConnectionHUD.mode = MBProgressHUDModeText;
    noConnectionHUD.labelText = @"Network error, pull to refresh";
    noConnectionHUD.removeFromSuperViewOnHide = YES;
+}
+
+#pragma mark - APN.
+
+//________________________________________________________________________________________
+- (void) addAPNItems : (NSUInteger) nItems
+{
+   assert(nItems != 0 && "addAPNItems:, invalid number of items to add");
+   
+   apnItems += nItems;
+   if (!firstViewDidAppear)
+      [self showAPNHints];
+}
+
+//________________________________________________________________________________________
+- (void) hideAPNHints
+{
+   if (!apnItems)
+      return;
+   
+   assert([self.slidingViewController.underLeftViewController isKindOfClass : [MenuViewController class]] &&
+          "hideAPNHints, underLeftViewController has a wrong type");
+   MenuViewController * const mvc = (MenuViewController *)self.slidingViewController.underLeftViewController;
+
+   [mvc removeNotifications : apnItems forID : apnID];
+   apnItems = 0;
+   
+   if ([self.navigationItem.rightBarButtonItem.customView isKindOfClass : [APNHintView class]])
+      self.navigationItem.rightBarButtonItem = nil;
+}
+
+//________________________________________________________________________________________
+- (void) showAPNHints
+{
+   if (!apnItems)
+      return;
+
+   if (!navBarSpinner.isAnimating) {
+      APNHintView * apnHint = nil;
+      if ([self.navigationItem.rightBarButtonItem.customView isKindOfClass : [APNHintView class]]) {
+         apnHint = (APNHintView *)self.navigationItem.rightBarButtonItem.customView;
+      } else {
+         apnHint = [[APNHintView alloc] initWithFrame : CGRectMake(0.f, 0.f, 20.f, 20.f)];
+         UIBarButtonItem * const barButton = [[UIBarButtonItem alloc] initWithCustomView : apnHint];
+         self.navigationItem.rightBarButtonItem = barButton;
+      }
+
+      apnHint.count = apnItems;
+   }
 }
 
 @end

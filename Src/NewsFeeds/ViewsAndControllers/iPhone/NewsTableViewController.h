@@ -4,12 +4,14 @@
 #import <UIKit/UIKit.h>
 
 #import "ConnectionController.h"
+#import "APNEnabledController.h"
 #import "ThumbnailDownloader.h"
 #import "FeedParserOperation.h"
 #import "MBProgressHUD.h"
 
+
 @interface NewsTableViewController : UITableViewController<UITableViewDataSource, UITableViewDelegate, FeedParserOperationDelegate,
-                                                           ThumbnailDownloaderDelegate, ConnectionController>
+                                                           ThumbnailDownloaderDelegate, ConnectionController, APNEnabledController>
 {
 @protected
    NSArray *feedCache;//Controller's specific data to cache in DB.
@@ -35,10 +37,10 @@
 //feedIDString is unique identifier: it's the name used for
 //caching feed data.
 @property (nonatomic) NSString *feedCacheID;
-//feedApnID is an integer (unique) to remember
-//the time view was update the last time.
-//It's the same integer identifier as APN uses.
-@property (nonatomic) NSUInteger feedApnID;
+
+//APNEnabledController protocol.
+@property (nonatomic) NSUInteger apnID;
+- (void) addAPNItems : (NSUInteger) newItems;
 //
 @end
 

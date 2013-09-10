@@ -433,6 +433,7 @@
 		70533AEC16CA5B4C00077B0E /* PhotoBrowserProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoBrowserProtocol.h; sourceTree = "<group>"; };
 		7054AC8A17DF256A00FF7A60 /* APNHintView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APNHintView.h; sourceTree = "<group>"; };
 		7054AC8B17DF256A00FF7A60 /* APNHintView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = APNHintView.mm; sourceTree = "<group>"; };
+		7054AC8D17DF518300FF7A60 /* APNEnabledController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APNEnabledController.h; sourceTree = "<group>"; };
 		7054DEEB169AFD7A00B025C7 /* MENU.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MENU.plist; sourceTree = "<group>"; };
 		705D9FB3166F3A00007C7611 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		70600A07169AF9B300F9E833 /* about.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = about.png; sourceTree = "<group>"; };
@@ -1287,6 +1288,7 @@
 				70B2A75016DBBD5200BC8657 /* ConnectionController.h */,
 				70B2A75216DBBE5E00BC8657 /* HUDRefreshProtocol.h */,
 				70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */,
+				7054AC8D17DF518300FF7A60 /* APNEnabledController.h */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
