@@ -10,5 +10,6 @@
 //Count to show in a hint view, if > 99 - '!' will be
 //shown instead.
 @property (nonatomic) NSUInteger count;
+@property (nonatomic, weak) id delegate;
 
 @end

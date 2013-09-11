@@ -7,7 +7,7 @@
    UIFont *customFont;
 }
 
-@synthesize count;
+@synthesize count, delegate;
 
 //________________________________________________________________________________________
 - (id) initWithFrame : (CGRect) frame
@@ -21,6 +21,9 @@
       
       count = 0;
       text = @"!";
+      
+      UITapGestureRecognizer * const tapGesture = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(hintTapped)];
+      [self addGestureRecognizer : tapGesture];
    }
 
    return self;
@@ -62,6 +65,13 @@
       text = @"!";
    
    [self setNeedsDisplay];
+}
+
+//________________________________________________________________________________________
+- (void) hintTapped
+{
+   if (delegate && [delegate respondsToSelector : @selector(hintTapped)])
+      [delegate performSelector : @selector(hintTapped)];
 }
 
 @end

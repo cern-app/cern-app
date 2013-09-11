@@ -68,7 +68,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    NSMutableArray *rangeDownloaders;
 
    NSArray *feedFilters;
-   NSUInteger apnItems;
+   NSUInteger apnItems;   
 }
 
 @synthesize feedCacheID, apnID;
@@ -312,6 +312,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       CernAPP::ShowErrorAlert(@"Please, check network", @"Close");
       [self.refreshControl endRefreshing];
       [self hideActivityIndicators];
+      [self showAPNHints];
       return;
    }
 
@@ -737,7 +738,6 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 - (void) addAPNItems : (NSUInteger) nItems
 {
    assert(nItems != 0 && "addAPNItems:, invalid number of items to add");
-   
    apnItems += nItems;
    if (!firstViewDidAppear)
       [self showAPNHints];
@@ -776,8 +776,29 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
          self.navigationItem.rightBarButtonItem = barButton;
       }
 
+      apnHint.delegate = self;
       apnHint.count = apnItems;
    }
+}
+
+//________________________________________________________________________________________
+- (void) hintTapped
+{
+   if (parseOp)//We already updating the feed.
+      return;
+
+   //Stop an image download if we have any.
+   [self cancelAllImageDownloaders];
+
+   if (![self hasConnection]) {
+      CernAPP::ShowErrorAlert(@"Please, check network", @"Close");
+      return;
+   }
+
+   [noConnectionHUD hide : YES];
+   
+   [self addNavBarSpinner];
+   [self startFeedParsing];
 }
 
 @end

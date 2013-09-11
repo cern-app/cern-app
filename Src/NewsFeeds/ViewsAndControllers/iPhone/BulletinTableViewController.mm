@@ -24,6 +24,7 @@
 - (void) hideActivityIndicators;
 - (void) showErrorHUD;
 - (void) addNavBarSpinner;
+- (void) showAPNHints;
 - (void) hideAPNHints;
 
 @end
@@ -76,7 +77,6 @@
       NSMutableArray * const articles = CernAPP::ConvertFeedCache(feedCache);
       [self splitIntoIssues : articles];
       thumbnails = [[NSMutableDictionary alloc] init];
-
       return YES;
    }
    
@@ -297,6 +297,8 @@
    
    if (!bulletins || !bulletins.count)
       [self showErrorHUD];
+   
+   [self showAPNHints];
 }
 
 #pragma mark - Table view delegate
@@ -430,6 +432,29 @@
 - (BOOL) shouldAutorotate
 {
    return NO;
+}
+
+#pragma mark - APN.
+
+//________________________________________________________________________________________
+- (void) hintTapped
+{
+   if (parseOp)
+      return;
+
+   //Stop an image download if we have any.
+   [self cancelAllImageDownloaders];
+
+   if (![self hasConnection]) {
+      CernAPP::ShowErrorAlert(@"Please, check network", @"Close");
+      return;
+   }
+   
+   [noConnectionHUD hide : YES];
+   [MBProgressHUD hideAllHUDsForView : self.view animated : NO];
+
+   [self addNavBarSpinner];
+   [self startFeedParsing];
 }
 
 @end
