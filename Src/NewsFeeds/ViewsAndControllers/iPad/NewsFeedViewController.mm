@@ -630,7 +630,6 @@
 //________________________________________________________________________________________
 - (void) hideAPNHints
 {
-
    if (!apnItems)
       return;
    
@@ -651,7 +650,7 @@
 //________________________________________________________________________________________
 - (void) hintTapped
 {
-   if (parserOp)//assert? can this ever happen?
+   if (parserOp)
       return;
 
    if (![self hasConnection]) {
@@ -659,11 +658,10 @@
       return;
    }
 
-   //Stop any image download if we have any.
    [self cancelAllImageDownloaders];
    [self.noConnectionHUD hide : YES];
 
-   [self addNavBarSpinner];//A spinner will replace a button in a navigation bar
+   [self addNavBarSpinner];
    [self startFeedParser];
 }
 
