@@ -59,6 +59,8 @@
 					<key>Feeds</key>
 					<array>
 						<dict>
+							<key>ItemID</key>
+							<integer>12</integer>
 							<key>Url</key>
 							<string>http://alicematters.web.cern.ch/rss.xml</string>
 							<key>Name</key>
@@ -90,6 +92,16 @@
 					<key>Feeds</key>
 					<array>
 						<dict>
+							<key>ItemID</key>
+							<integer>13</integer>
+							<key>Url</key>
+							<string>http://www.atlas.ch/news/news.rss</string>
+							<key>Name</key>
+							<string>ATLAS News</string>
+						</dict>
+						<dict>
+							<key>ItemID</key>
+							<integer>14</integer>
 							<key>Url</key>
 							<string>http://pdg2.lbl.gov/atlasblog/?feed=rss2</string>
 							<key>Name</key>
@@ -164,6 +176,8 @@
 					<key>Feeds</key>
 					<array>
 						<dict>
+							<key>ItemID</key>
+							<integer>15</integer>
 							<key>Url</key>
 							<string>http://cms.web.cern.ch/news/category/265/rss.xml</string>
 							<key>Name</key>
