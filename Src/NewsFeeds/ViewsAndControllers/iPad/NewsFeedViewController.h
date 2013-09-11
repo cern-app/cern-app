@@ -7,11 +7,11 @@
 //
 
 #import "ConnectionController.h"
+#import "APNEnabledController.h"
 #import "FeedParserOperation.h"
 #import "ThumbnailDownloader.h"
 #import "TileViewController.h"
 #import "ImageDownloader.h"
-
 
 //NewsFeedViewController - shows feed items on a "newspaper's page".
 //Created by in two steps:
@@ -31,7 +31,7 @@
 //(not to create another thread from a background thread).
 
 @interface NewsFeedViewController : TileViewController<ThumbnailDownloaderDelegate, ConnectionController,
-                                                       FeedParserOperationDelegate>
+                                                       FeedParserOperationDelegate, APNEnabledController>
 {
 @protected
    NSMutableDictionary *downloaders;//image downloaders.
@@ -64,9 +64,12 @@
 - (void) hideNavBarSpinner;
 
 @property (nonatomic, copy) NSString *feedCacheID;
-@property (nonatomic) NSUInteger feedApnID;
 
 //HUD/UI
 - (IBAction) refresh : (id) sender;//The action for a nav. bar button.
+
+//APNEnabledController.
+@property (nonatomic) NSUInteger apnID;
+- (void) addAPNItems : (NSUInteger) newItems;
 
 @end

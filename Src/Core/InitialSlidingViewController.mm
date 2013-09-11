@@ -109,7 +109,7 @@
       NewsFeedViewController * const tileController = (NewsFeedViewController *)aController;
       tileController.navigationItem.title = (NSString *)feedDict[@"Name"];
       tileController.feedCacheID = [FeedProvider feedCacheID : feedDict];
-      tileController.feedApnID = apnID;
+      tileController.apnID = apnID;
       [tileController setFeedURLString : (NSString *)feedDict[@"Url"]];
    } else {
       assert([aController isKindOfClass : [NewsTableViewController class]] &&

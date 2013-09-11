@@ -195,11 +195,6 @@ UIViewController *FindController(UIView *view)
       CernAPP::ShowErrorAlert(@"No oauth tokens found for a twitter API", @"Close");
       return;
 #else
- /*     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-         CernAPP::ShowErrorAlert(@"iPhone version is not implemented", @"Close");
-         return;
-      }*/
-      
       assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
              "loadControllerTo:, application delegate has a wrong type");
       
@@ -266,8 +261,11 @@ UIViewController *FindController(UIView *view)
       nt.navigationItem.title = feedName;
       //
       assert(providerID > 0 && "loadControllerTo:, providerID is invalid");
-      nt.feedApnID = providerID;
+      nt.apnID = providerID;
       nt.feedCacheID = [NSString stringWithFormat : @"%@%u", self.categoryName, providerID];
+
+      if (nAPNHints)
+         [nt addAPNItems : nAPNHints];
       //
       [nt setFeedURLString : feed];
       if (filters)
@@ -764,7 +762,10 @@ UIViewController *FindController(UIView *view)
       BulletinFeedViewController * const nt = (BulletinFeedViewController *)navController.topViewController;
 
       assert(providerID > 0 && "loadControllerTo:, providerID is invalid");
-      nt.feedApnID = providerID;
+      nt.apnID = providerID;
+      if (nAPNHints)
+         [nt addAPNItems : nAPNHints];
+
       nt.feedCacheID = [NSString stringWithFormat : @"%@%u", categoryName, providerID];
 
       [nt setFeedURLString : url];

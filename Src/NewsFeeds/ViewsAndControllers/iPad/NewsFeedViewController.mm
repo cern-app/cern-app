@@ -10,15 +10,18 @@
 #import <cassert>
 
 #import "ArticleDetailViewController.h"
+#import "ECSlidingViewController.h"
 #import "NewsTableViewController.h"
 #import "NewsFeedViewController.h"
 #import "StoryboardIdentifiers.h"
+#import "MenuViewController.h"
 #import "ApplicationErrors.h"
 #import "FeedItemTileView.h"
 #import "Reachability.h"
 #import "FeedPageView.h"
 #import "MWFeedParser.h"
 #import "AppDelegate.h"
+#import "APNHintView.h"
 
 //TODO: instead of TwitterAPI.h must be Details.h
 #import "TwitterAPI.h"
@@ -42,9 +45,11 @@
    //If we are in the process of the flip animation,
    //do not reload/re-create
    BOOL flipRefreshDelayed;
+   
+   NSUInteger apnItems;
 }
 
-@synthesize feedCacheID, feedApnID;
+@synthesize feedCacheID, apnID;
 
 #pragma mark - Reachability.
 
@@ -75,6 +80,7 @@
       feedFilters = nil;
       
       flipRefreshDelayed = NO;
+      apnItems = 0;
    }
 
    return self;
@@ -138,6 +144,7 @@
       viewDidAppear = YES;
       
       if ([self initTilesFromAppCache]) {
+         [self showAPNHints];
          [self layoutFeedViews];
          return;//No need to refresh.
       }
@@ -146,6 +153,8 @@
       [self layoutPanRegion];
       [self refresh];
    }
+   
+   [self showAPNHints];
 }
 
 #pragma mark - PageController protocol.
@@ -191,7 +200,6 @@
       CernAPP::ShowSpinner(self);
    } else {
       [self addNavBarSpinner];//A spinner will replace a button in a navigation bar
-
       [self layoutFeedViews];
    }
 
@@ -209,6 +217,7 @@
    if (![self hasConnection]) {
       CernAPP::ShowErrorAlert(@"Please, check network", @"Close");
       CernAPP::HideSpinner(self);
+      [self showAPNHints];
       return;
    }
 
@@ -247,7 +256,11 @@
       CernAPP::ShowErrorHUD(self, @"No network");//TODO: better error message?
    
    parserOp = nil;
-   self.navigationItem.rightBarButtonItem.enabled = YES;   
+   if (!apnItems)
+      self.navigationItem.rightBarButtonItem.enabled = YES;
+   else {
+      [self showAPNHints];
+   }
 }
 
 //________________________________________________________________________________________
@@ -278,17 +291,15 @@
          [dataItems addObject : item];
    }
 
-   if (feedCache) {
+   if (feedCache)
       feedCache = nil;
-      //We were using cache and had a spinner in a nav bar (while loading a new data).
-      [self hideNavBarSpinner];
-   } else
-      CernAPP::HideSpinner(self);
    
+   [self hideNavBarSpinner];
+   CernAPP::HideSpinner(self);
+   [self hideAPNHints];
    //Cache data in app delegate.
    [self cacheInAppDelegate];
    //
-
    parserOp = nil;
    
    if (flipAnimator.animationLock)
@@ -558,8 +569,6 @@
    
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    [appDelegate cacheData : dataItems withKey : feedCacheID];
-   assert(feedApnID > 0 && "cacheInAppDelegate, feedApnID is invalid");
-   [appDelegate setGMTForKey : [NSString stringWithFormat : @"%u", feedApnID]];
 }
 
 //________________________________________________________________________________________
@@ -583,6 +592,79 @@
       
       downloaders = nil;
    }
+}
+
+#pragma mark - APNEnabledController and aux. methods.
+
+//________________________________________________________________________________________
+- (void) addAPNItems : (NSUInteger) nItems
+{
+   assert(nItems > 0 && "addAPNItems:, parameter 'nItems' is invalid");
+
+   apnItems += nItems;
+   if (viewDidAppear)
+      [self showAPNHints];
+}
+
+//________________________________________________________________________________________
+- (void) showAPNHints
+{
+   if (!apnItems)
+      return;
+   
+   if (!navBarSpinner.isAnimating) {
+      APNHintView * apnHint = nil;
+      if ([self.navigationItem.rightBarButtonItem.customView isKindOfClass : [APNHintView class]]) {
+         apnHint = (APNHintView *)self.navigationItem.rightBarButtonItem.customView;
+      } else {
+         apnHint = [[APNHintView alloc] initWithFrame : CGRectMake(0.f, 0.f, 20.f, 20.f)];
+         UIBarButtonItem * const barButton = [[UIBarButtonItem alloc] initWithCustomView : apnHint];
+         self.navigationItem.rightBarButtonItem = barButton;
+      }
+
+      apnHint.delegate = self;
+      apnHint.count = apnItems;
+   }
+}
+
+//________________________________________________________________________________________
+- (void) hideAPNHints
+{
+
+   if (!apnItems)
+      return;
+   
+   assert([self.slidingViewController.underLeftViewController isKindOfClass : [MenuViewController class]] &&
+          "hideAPNHints, underLeftViewController has a wrong type");
+   MenuViewController * const mvc = (MenuViewController *)self.slidingViewController.underLeftViewController;
+
+   [mvc removeNotifications : apnItems forID : apnID];
+   apnItems = 0;
+   
+   if ([self.navigationItem.rightBarButtonItem.customView isKindOfClass : [APNHintView class]]) {
+      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                                initWithBarButtonSystemItem : UIBarButtonSystemItemRefresh
+                                                target : self action : @selector(refresh:)];
+   }
+}
+
+//________________________________________________________________________________________
+- (void) hintTapped
+{
+   if (parserOp)//assert? can this ever happen?
+      return;
+
+   if (![self hasConnection]) {
+      CernAPP::ShowErrorAlert(@"Please, check network", @"Close");
+      return;
+   }
+
+   //Stop any image download if we have any.
+   [self cancelAllImageDownloaders];
+   [self.noConnectionHUD hide : YES];
+
+   [self addNavBarSpinner];//A spinner will replace a button in a navigation bar
+   [self startFeedParser];
 }
 
 @end
