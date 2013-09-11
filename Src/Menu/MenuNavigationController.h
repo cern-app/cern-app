@@ -11,4 +11,8 @@
 
 @interface MenuNavigationController : UINavigationController<ConnectionController, APNEnabledController>
 
+//APNEnabledController's protocol.
+@property (nonatomic) NSUInteger apnID;
+- (void) addAPNItems : (NSUInteger) newItems;
+
 @end

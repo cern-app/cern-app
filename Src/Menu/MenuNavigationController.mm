@@ -101,6 +101,14 @@
 }
 
 //________________________________________________________________________________________
+- (void) setApnID : (NSUInteger) apnID
+{
+#pragma unused(apnID)
+   //apnID is set in a content provider and is set directly for the
+   //required controller, not for this one.
+}
+
+//________________________________________________________________________________________
 - (void) addAPNItems : (NSUInteger) newItems
 {
    UIViewController * const next = self.viewControllers[0];
