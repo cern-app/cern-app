@@ -570,10 +570,10 @@ using FlipAnimation::DirectionType;
 }
 
 //________________________________________________________________________________________
-- (void)setOpacityProgress:(float)startOpacityValue
-                          :(float)endOpacityValue
-                          :(float)beginTime
-                          :(float)duration
+- (void)setOpacityProgress:(CGFloat)startOpacityValue
+                          :(CGFloat)endOpacityValue
+                          :(CGFloat)beginTime
+                          :(CGFloat)duration
                           :(NSString *)fillMode
                           :(CALayer *)targetLayer
 {

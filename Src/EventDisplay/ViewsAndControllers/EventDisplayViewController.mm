@@ -508,7 +508,7 @@ using CernAPP::NetworkStatus;
 
    NSDictionary * const source = (NSDictionary *)sources[loadingSource];
    if (NSArray * const boundaryRects = (NSArray *)source[sourceBoundaryRects]) {
-      for (int pageIndex = loadingPage, e = loadingPage + boundaryRects.count; pageIndex < e; ++pageIndex) {
+      for (int pageIndex = loadingPage, e = (int)(loadingPage + boundaryRects.count); pageIndex < e; ++pageIndex) {
          MWZoomingScrollView * const page = (MWZoomingScrollView *)pages[pageIndex];
          [page displayImageFailure];//this will stop spinner and set imageBroken == YES.
       }

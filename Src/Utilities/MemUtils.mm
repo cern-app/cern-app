@@ -23,10 +23,10 @@ void print_memory_usage()
    }
 
    //Stats in bytes.
-   const natural_t memUsed = (vmStat.active_count + vmStat.inactive_count + vmStat.wire_count) * pageSize;
-   const natural_t memFree = vmStat.free_count * pageSize;
-   const natural_t memTotal = memUsed + memFree;
-   NSLog(@"used: %u free: %u total: %u", memUsed, memFree, memTotal);
+   const uint64_t memUsed = (vmStat.active_count + vmStat.inactive_count + vmStat.wire_count) * pageSize;
+   const uint64_t memFree = vmStat.free_count * pageSize;
+   const uint64_t memTotal = memUsed + memFree;
+   NSLog(@"used: %llu free: %llu total: %llu", memUsed, memFree, memTotal);
 }
 
 }

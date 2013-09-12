@@ -38,7 +38,7 @@ static natural_t get_free_memory(void)
     }
 
     /* Stats in bytes */
-    natural_t mem_free = vm_stat.free_count * pagesize;
+    natural_t mem_free = (natural_t)(vm_stat.free_count * pagesize);
     return mem_free;
 }
 
@@ -426,7 +426,7 @@ static natural_t get_free_memory(void)
 
 - (int)getMemoryCount
 {
-    return [[memCache allKeys] count];
+    return (int)[[memCache allKeys] count];
 }
 
 @end
