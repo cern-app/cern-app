@@ -407,8 +407,8 @@ using FlipAnimation::DirectionType;
       adjustedValue = fabs(aValue);
    }
    
-   adjustedValue = std::max(0.f, adjustedValue);
-   adjustedValue = std::min(10.f, adjustedValue);
+   adjustedValue = std::max(CGFloat(0.), adjustedValue);
+   adjustedValue = std::min(CGFloat(10.), adjustedValue);
    
    if (adjustedValue <= 5.f) {
       opacityValue = adjustedValue / 10.f;

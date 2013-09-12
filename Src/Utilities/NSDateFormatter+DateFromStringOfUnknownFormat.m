@@ -19,7 +19,7 @@
     [self setLenient:YES];
     
     NSArray *allLocales = [NSLocale availableLocaleIdentifiers];
-    int numLocales = allLocales.count;
+    long numLocales = allLocales.count;
     
     for (int i=0; i<numLocales; i++) {
         self.locale = [[NSLocale alloc] initWithLocaleIdentifier:[allLocales objectAtIndex:i]];

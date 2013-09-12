@@ -220,7 +220,7 @@ const NSUInteger tilesOnPage = 4;
       [animation setTimingFunction : [CAMediaTimingFunction functionWithControlPoints : 0.6f : 1.5f : 0.8f : 0.8f]];
 
       animation.duration = duration;
-      [tile.layer addAnimation : animation forKey : [NSString stringWithFormat : @"bounce%u", index]];
+      [tile.layer addAnimation : animation forKey : [NSString stringWithFormat : @"bounce%lu", (unsigned long)index]];
       tile.layer.position = endPoint;
       //
       ++index;

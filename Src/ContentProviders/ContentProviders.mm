@@ -244,7 +244,7 @@ UIViewController *FindController(UIView *view)
       //
       assert(providerID > 0 && "loadControllerTo:, providerID is invalid");//required for caching.
       nt.apnID = providerID;
-      nt.feedCacheID = [NSString stringWithFormat : @"%@%u", self.categoryName, providerID];
+      nt.feedCacheID = [NSString stringWithFormat : @"%@%lu", self.categoryName, (unsigned long)providerID];
       
       if (nAPNHints)
          [nt addAPNItems : nAPNHints];
@@ -262,7 +262,7 @@ UIViewController *FindController(UIView *view)
       //
       assert(providerID > 0 && "loadControllerTo:, providerID is invalid");
       nt.apnID = providerID;
-      nt.feedCacheID = [NSString stringWithFormat : @"%@%u", self.categoryName, providerID];
+      nt.feedCacheID = [NSString stringWithFormat : @"%@%lu", self.categoryName, (unsigned long)providerID];
 
       if (nAPNHints)
          [nt addAPNItems : nAPNHints];
@@ -766,7 +766,7 @@ UIViewController *FindController(UIView *view)
       if (nAPNHints)
          [nt addAPNItems : nAPNHints];
 
-      nt.feedCacheID = [NSString stringWithFormat : @"%@%u", categoryName, providerID];
+      nt.feedCacheID = [NSString stringWithFormat : @"%@%lu", categoryName, (unsigned long)providerID];
 
       [nt setFeedURLString : url];
    } else {
@@ -782,7 +782,7 @@ UIViewController *FindController(UIView *view)
       if (nAPNHints)
          [bc addAPNItems : nAPNHints];
       
-      bc.feedCacheID = [NSString stringWithFormat : @"%@%u", categoryName, providerID];
+      bc.feedCacheID = [NSString stringWithFormat : @"%@%lu", categoryName, (unsigned long)providerID];
       [bc setFeedURLString : url];
    }
    

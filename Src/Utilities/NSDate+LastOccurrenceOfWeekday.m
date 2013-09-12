@@ -17,7 +17,7 @@
    NSDateComponents *components = [calendar components : NSWeekdayCalendarUnit fromDate : self];
 
    
-   const int startingWeekday = components.weekday;
+   const long startingWeekday = components.weekday;
    const int daysTillTarget = (targetWeekday - startingWeekday + 7) % 7;
 
    return [self dateByAddingTimeInterval : 60 * 60 * 24 * daysTillTarget];
