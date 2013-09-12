@@ -1,27 +1,49 @@
-//
-//  DeviceCheck.m
-//  CERN
-//
-//  Created by Timur Pocheptsov on 9/28/12.
-//  Copyright (c) 2012 CERN. All rights reserved.
-//
+#import <cassert>
+
+#import <UIKit/UIKit.h>
 
 #import "DeviceCheck.h"
 
-@implementation DeviceCheck
+namespace CernAPP {
 
 //________________________________________________________________________________________
-+ (BOOL) deviceIsiPad
+bool SystemVersionEqualTo(NSString *version)
 {
-   //Docs says nothing about possible device names, giving only two examples: "iPod touch" and "iPhone".
-   NSString * const deviceModel = [UIDevice currentDevice].model;
-   return [deviceModel rangeOfString : @"iPad"].location != NSNotFound;
+   assert(version != nil && "SystemVersionEqualTo, parameter 'version' is nil");
+
+   return [[[UIDevice currentDevice] systemVersion] compare : version options : NSNumericSearch] == NSOrderedSame;
 }
 
 //________________________________________________________________________________________
-+ (BOOL) deviceIsiPhone5
+bool SystemVersionGreaterThan(NSString *version)
 {
-   return [UIScreen mainScreen].bounds.size.height > 480.f;
+   assert(version != nil && "SystemVersionGreaterThan, parameter 'version' is nil");
+
+   return [[[UIDevice currentDevice] systemVersion] compare : version options : NSNumericSearch] == NSOrderedDescending;
 }
 
-@end
+//________________________________________________________________________________________
+bool SystemVersionGreaterThanOrEqualTo(NSString *version)
+{
+   assert(version != nil && "SystemVersionGreaterThanOrEqualTo, parameter 'version' is nil");
+
+   return [[[UIDevice currentDevice] systemVersion] compare : version options : NSNumericSearch] != NSOrderedAscending;
+}
+
+//________________________________________________________________________________________
+bool SystemVersionLessThan(NSString *version)
+{
+   assert(version != nil && "SystemVersionLessThan, parameter 'version' is nil");
+   
+   return [[[UIDevice currentDevice] systemVersion] compare : version options : NSNumericSearch] == NSOrderedAscending;
+}
+
+//________________________________________________________________________________________
+bool SystemVersionLessThanOrEqualTo(NSString *version)
+{
+   assert(version != nil && "SystemVersionLessThanOrEqualTo, parameter 'version' is nil");
+
+   return [[[UIDevice currentDevice] systemVersion] compare : version options : NSNumericSearch] != NSOrderedDescending;
+}
+
+}

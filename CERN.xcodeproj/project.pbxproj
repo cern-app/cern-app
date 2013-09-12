@@ -185,6 +185,8 @@
 		707B13F6169AF69300180E02 /* Reachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EC169AF69300180E02 /* Reachability.mm */; };
 		707B13F7169AF69300180E02 /* UIImage+SquareScaledImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EE169AF69300180E02 /* UIImage+SquareScaledImage.m */; };
 		707B13FA169AF6AE00180E02 /* StoryboardIdentifiers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */; };
+		70817FB417E20A4700DCD387 /* iPad_iOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70817FB217E20A4700DCD387 /* iPad_iOS7.storyboard */; };
+		70817FB517E20A4700DCD387 /* iPhone_iOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70817FB317E20A4700DCD387 /* iPhone_iOS7.storyboard */; };
 		7098286616C404C500311025 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7098286516C404C500311025 /* Social.framework */; };
 		709A4AE517B3DB7700266374 /* twitbird.png in Resources */ = {isa = PBXBuildFile; fileRef = 709A4AE417B3DB7700266374 /* twitbird.png */; };
 		709CE6C516A5BE97006D524E /* 389-flash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C416A5BE97006D524E /* 389-flash@2x.png */; };
@@ -510,6 +512,8 @@
 		707B13EE169AF69300180E02 /* UIImage+SquareScaledImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+SquareScaledImage.m"; sourceTree = "<group>"; };
 		707B13F8169AF6AE00180E02 /* StoryboardIdentifiers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryboardIdentifiers.h; sourceTree = "<group>"; };
 		707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StoryboardIdentifiers.mm; sourceTree = "<group>"; };
+		70817FB217E20A4700DCD387 /* iPad_iOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPad_iOS7.storyboard; sourceTree = "<group>"; };
+		70817FB317E20A4700DCD387 /* iPhone_iOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPhone_iOS7.storyboard; sourceTree = "<group>"; };
 		7098286516C404C500311025 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		709A4AE417B3DB7700266374 /* twitbird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitbird.png; sourceTree = "<group>"; };
 		709CE6C416A5BE97006D524E /* 389-flash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "389-flash@2x.png"; sourceTree = "<group>"; };
@@ -740,6 +744,8 @@
 				70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */,
 				41E618271614CEB700BAA7D4 /* iPad.storyboard */,
 				41E618281614CEB700BAA7D4 /* iPhone.storyboard */,
+				70817FB217E20A4700DCD387 /* iPad_iOS7.storyboard */,
+				70817FB317E20A4700DCD387 /* iPhone_iOS7.storyboard */,
 				41E6188D1614CF7000BAA7D4 /* StaticInformation.plist */,
 				700F547816396A130082B89E /* CERNLive.plist */,
 				41BBD0E81615AED20057EDE2 /* LICENSE */,
@@ -1511,6 +1517,7 @@
 				7054DEEC169AFD7A00B025C7 /* MENU.plist in Resources */,
 				70C0E944169C4D740004ED1E /* disclose.png in Resources */,
 				70C0E946169C73BA0004ED1E /* PTC55F.ttf in Resources */,
+				70817FB517E20A4700DCD387 /* iPhone_iOS7.storyboard in Resources */,
 				70C0E948169C75F10004ED1E /* PTS56F.ttf in Resources */,
 				70C0E94A169C85FA0004ED1E /* menu.png in Resources */,
 				7064A35D169DA177006405B9 /* menu@2x.png in Resources */,
@@ -1557,6 +1564,7 @@
 				703ED51E17957D3700F37E0C /* flip_left.png in Resources */,
 				703ED51F17957D3700F37E0C /* flip_right.png in Resources */,
 				709A4AE517B3DB7700266374 /* twitbird.png in Resources */,
+				70817FB417E20A4700DCD387 /* iPad_iOS7.storyboard in Resources */,
 				7046261117BD163400343C13 /* press_release.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

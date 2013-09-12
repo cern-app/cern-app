@@ -1,14 +1,11 @@
-//
-//  DeviceCheck.h
-//  CERN
-//
-//  Created by Timur Pocheptsov on 9/28/12.
-//  Copyright (c) 2012 CERN. All rights reserved.
-//
+#import <Foundation/Foundation.h>
 
-@interface DeviceCheck : NSObject
+namespace CernAPP {
 
-+ (BOOL) deviceIsiPad;
-+ (BOOL) deviceIsiPhone5;
+bool SystemVersionEqualTo(NSString *version);
+bool SystemVersionGreaterThan(NSString *version);
+bool SystemVersionGreaterThanOrEqualTo(NSString *version);
+bool SystemVersionLessThan(NSString *version);
+bool SystemVersionLessThanOrEqualTo(NSString *version);
 
-@end
+}

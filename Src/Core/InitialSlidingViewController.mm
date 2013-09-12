@@ -18,6 +18,7 @@
 #import "NewsFeedViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "ContentProviders.h"
+#import "DeviceCheck.h"
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
 
@@ -127,10 +128,12 @@
 {
    UIStoryboard *storyboard = nil;
    
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-      storyboard = [UIStoryboard storyboardWithName : @"iPhone" bundle : nil];
-   else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      storyboard = [UIStoryboard storyboardWithName : @"iPad" bundle : nil];
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+      NSString * const fileName = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPhone_iOS7" : @"iPhone";
+      storyboard = [UIStoryboard storyboardWithName : fileName bundle : nil];
+   } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      NSString * const fileName = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPad_iOS7" : @"iPad";
+      storyboard = [UIStoryboard storyboardWithName : fileName bundle : nil];
       //For iPad, limit the visible width of under left view.
       self.shouldAllowPanningPastAnchor = NO;
       self.anchorLeftRevealAmount = CernAPP::menuWidthPad;
