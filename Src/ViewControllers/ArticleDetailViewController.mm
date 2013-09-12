@@ -660,7 +660,7 @@ const NSUInteger fontIncreaseStep = 4;
 {
    const int add = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 44 : 20;
 
-   const int fontSize = add + fontIncreaseStep * zoomLevel;
+   const int fontSize = add + (int)(fontIncreaseStep * zoomLevel);
    NSString * const jsString = [[NSString alloc] initWithFormat : @"document.getElementsByTagName('body')[0].style.fontSize=%d", fontSize];
    [rdbView stringByEvaluatingJavaScriptFromString : jsString];
 }
