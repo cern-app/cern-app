@@ -1188,7 +1188,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       }
       
       if (message.length) {
-         UIAlertView * const alert = [[UIAlertView alloc] initWithTitle:@"CERN.app notification"
+         UIAlertView * const alert = [[UIAlertView alloc] initWithTitle:@"CERN notification"
                                        message : message delegate : self cancelButtonTitle : @"close"
                                        otherButtonTitles : nil];
          [alert show];

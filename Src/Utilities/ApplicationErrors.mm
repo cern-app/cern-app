@@ -13,7 +13,7 @@ void ShowErrorAlert(NSString *message, NSString *buttonTitle)
    assert(message != nil && "ShowErrorAlert, parameter 'message' is nil");
    assert(buttonTitle != nil && "ShowErrorAlert, parameter 'buttonTitle' is nil");
 
-   UIAlertView * const alert = [[UIAlertView alloc] initWithTitle : @"CERN.app" message : message
+   UIAlertView * const alert = [[UIAlertView alloc] initWithTitle : @"CERN" message : message
                                 delegate : nil cancelButtonTitle : buttonTitle otherButtonTitles : nil];
    [alert show];
 }
