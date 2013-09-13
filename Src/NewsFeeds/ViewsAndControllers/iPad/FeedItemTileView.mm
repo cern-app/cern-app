@@ -18,6 +18,7 @@
 #import "NewsTableViewCell.h"
 #import "FeedItemTileView.h"
 #import "NSString+HTML.h"
+#import "DeviceCheck.h"
 
 
 namespace CernAPP {
@@ -559,9 +560,13 @@ CGPathRef CreateTextPath(FeedItemTileView *view)
          
          std::vector<CGPoint> lineOrigins(nLines);
          CTFrameGetLineOrigins(textFrame, CFRangeMake(0, nLines), &lineOrigins[0]);
+         
+         CGFloat yAdvance = textLineHeight;
+         if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") && lineOrigins.size() > 1)
+            yAdvance = std::abs(lineOrigins[1].y - lineOrigins[0].y);
 
          for (CFIndex i = 0; i < nLines; ++i) {
-            topY += textLineHeight;
+            topY += yAdvance;// textLineHeight;
             const CGFloat x = lineOrigins[i].x + w * wideImageMargin;
             CGContextSetTextPosition(ctx, x, [self translateY : topY]);
             
@@ -574,7 +579,8 @@ CGPathRef CreateTextPath(FeedItemTileView *view)
             if (i + 1 == nLines) {
                const double lineWidth = CTLineGetTypographicBounds(ctLine, &ascent, &descent, &leading);
                const bool wideLine = std::abs(lineWidth - widthAtTheBottom)  < 0.1 * widthAtTheBottom;
-               if (topY + textLineHeight > lastLineY && wideLine) {
+               //if (topY + textLineHeight > lastLineY && wideLine) {
+               if (topY + yAdvance > lastLineY && wideLine) {
                   NSMutableAttributedString * const lineAttrString = [[text attributedSubstringFromRange : stringRange] mutableCopy];
                   const NSRange replaceRange = NSMakeRange(stringRange.length - 4, 4);
                   [lineAttrString replaceCharactersInRange : replaceRange withString : @" ..."];
