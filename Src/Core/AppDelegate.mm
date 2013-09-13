@@ -1,5 +1,6 @@
 #import "InitialSlidingViewController.h"
 #import "MenuViewController.h"
+#import "DeviceCheck.h"
 #import "AppDelegate.h"
 
 //TODO: this should become 'Details.h' or something like this.
@@ -62,7 +63,8 @@ NSString * const deviceTokenKey = @"DeviceToken";
    //   for the "Readability" view.
    //3. Register our device for APN.
 
-   [[UIBarButtonItem appearance] setTintColor : [UIColor colorWithRed : 0.f green : 83.f / 255.f blue : 161.f / 255.f alpha : 1.f]];
+   if (CernAPP::SystemVersionLessThan(@"7.0"))
+      [[UIBarButtonItem appearance] setTintColor : [UIColor colorWithRed : 0.f green : 83.f / 255.f blue : 161.f / 255.f alpha : 1.f]];
 
    NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
    NSDictionary * const appDefaults = [NSDictionary dictionaryWithObjectsAndKeys : @13, @"GUIFontSize", @0, @"HTMLBodyFontSize", nil];
