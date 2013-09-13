@@ -140,7 +140,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
    self.view.backgroundColor = [UIColor blackColor];
    
-   [self createAlbumViewWithFrame : CGRect()];   
+   [self createAlbumViewWithFrame : CGRect()];
    [self.collectionView.superview bringSubviewToFront : self.collectionView];
    
    [self.collectionView registerClass : [PhotoAlbumCoverView class]
@@ -340,15 +340,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
              "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
       PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.row];
 
-      CGRect cellFrame = photoCell.frame;
-      if (UIImage * const image = (UIImage *)thumbnails[indexPath]) {
-         cellFrame.size = CellSizeFromImageSize(image.size);
+      if (UIImage * const image = (UIImage *)thumbnails[indexPath])
          photoCell.imageView.image = image;
-      } else {
-         cellFrame.size = CGSizeMake(125.f, 125.f);
-      }
-         
-      photoCell.frame = cellFrame;
       
       if (album.title.length)
          photoCell.title = album.title;
@@ -397,7 +390,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (void) collectionView : (UICollectionView *) collectionView didSelectItemAtIndexPath : (NSIndexPath *) indexPath
 {
    assert(indexPath != nil && "collectionView:didSelectItemAtIndexPath:, parameter 'indexPath' is nil");
-
    if (collectionView == albumCollectionView) {
       //Image was selected from an album, open photo browser for this album
       //with the selected image on the visible page.
