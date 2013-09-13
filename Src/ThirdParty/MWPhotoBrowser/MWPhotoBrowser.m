@@ -949,7 +949,8 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 
 	// Title
 	if ([self numberOfPhotos] > 1) {
-		self.title = [NSString stringWithFormat:@"%lu %@ %lu", _currentPageIndex+1, NSLocalizedString(@"of", @"Used in the context: 'Showing 1 of 3 items'"), (unsigned long)[self numberOfPhotos]];
+		self.title = [NSString stringWithFormat:@"%lu %@ %lu", (unsigned long)_currentPageIndex + 1,
+                    NSLocalizedString(@"of", @"Used in the context: 'Showing 1 of 3 items'"), (unsigned long)[self numberOfPhotos]];
 	} else {
 		self.title = nil;
 	}
