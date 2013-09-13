@@ -7,10 +7,12 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-#import "MWPhotoBrowser.h"
+
 #import "MWZoomingScrollView.h"
+#import "MWPhotoBrowser.h"
 #import "MBProgressHUD.h"
 #import "SDImageCache.h"
+#import "DeviceCheck.h"
 
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
 #define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
@@ -21,6 +23,18 @@
 #define PADDING                 10
 #define PAGE_INDEX_TAG_OFFSET   1000
 #define PAGE_INDEX(page)        ([(page) tag] - PAGE_INDEX_TAG_OFFSET)
+
+namespace {
+
+UIBarStyle NavigationBarStyle()
+{
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+      return UIBarStyleBlackOpaque;
+   
+   return UIBarStyleBlackTranslucent;
+}
+
+}
 
 // Private
 @interface MWPhotoBrowser () {
@@ -245,7 +259,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
       [_toolbar setBackgroundImage : nil forToolbarPosition : UIToolbarPositionAny barMetrics : UIBarMetricsLandscapePhone];
    }
 
-   _toolbar.barStyle = UIBarStyleBlackTranslucent;
+   _toolbar.barStyle = NavigationBarStyle();
    _toolbar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
 
    // Toolbar Items
@@ -424,7 +438,11 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 - (void) setNavBarAppearance : (BOOL) animated
 {
    self.navigationController.navigationBar.tintColor = nil;
-   self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+   self.navigationController.navigationBar.barStyle = NavigationBarStyle();
+
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+      self.navigationController.navigationBar.translucent = NO;
+
    if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
       [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
       [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsLandscapePhone];
