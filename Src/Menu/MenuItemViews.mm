@@ -13,6 +13,7 @@
 
 #import "MenuViewController.h"
 #import "MenuItemViews.h"
+#import "DeviceCheck.h"
 #import "APNHintView.h"
 #import "GUIHelpers.h"
 
@@ -47,6 +48,10 @@ std::pair<CGFloat, CGFloat> TextMetrics(UILabel *label)
 {
    assert(label != nil && "TextHeight, parameter 'label' is nil");
    const CGSize lineBounds = [label.text sizeWithFont : label.font];
+
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+      return std::make_pair(lineBounds.height, lineBounds.height);
+   
    return std::make_pair(lineBounds.height - label.font.descender, lineBounds.height);
 }
 

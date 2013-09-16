@@ -35,8 +35,8 @@ const CGFloat largeSizeVMargin = 0.05f;
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
       return;
    
-   const CGFloat smallSizeHMargin = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? 0.015f : 0.05f;
-   const CGFloat largeSizeHMargin = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? 0.008f : 0.03f;
+   const CGFloat smallSizeHMargin = 0.05f;
+   const CGFloat largeSizeHMargin = 0.03f;
 
    const CGFloat w = self.frame.size.width;
    const CGFloat h = self.frame.size.height;
