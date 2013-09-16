@@ -8,6 +8,7 @@
 #import "TwitterTableView.h"
 #import "NSString+HTML.h"
 #import "Reachability.h"
+#import "DeviceCheck.h"
 #import "TwitterAPI.h"
 #import "TweetCell.h"
 #import "GCOAuth.h"
@@ -66,7 +67,10 @@
    [super viewDidLoad];
 
 	// Do any additional setup after loading the view, typically from a nib.
-   self.view.backgroundColor = [UIColor lightGrayColor];
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+      self.view.backgroundColor = [UIColor colorWithRed : 0.95f green : 0.95f blue : 0.95f alpha : 1.f];
+   else
+      self.view.backgroundColor = [UIColor lightGrayColor];
    
    self.tableView.separatorColor = [UIColor clearColor];
    [self.tableView registerClass : [TweetCell class] forCellReuseIdentifier : [TweetCell reuseIdentifier]];

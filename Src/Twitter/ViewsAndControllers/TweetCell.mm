@@ -4,12 +4,11 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "TwitterTableViewController.h"
+#import "DeviceCheck.h"
 #import "MWFeedItem.h"
 #import "TweetCell.h"
 
-const CGFloat smallSizeHMargin = 0.05f;
 const CGFloat smallSizeVMargin = 0.005f;
-const CGFloat largeSizeHMargin = 0.03f;
 const CGFloat largeSizeVMargin = 0.05f;
 
 @implementation TweetCell {
@@ -24,13 +23,21 @@ const CGFloat largeSizeVMargin = 0.05f;
    UIFont *largeFontBold;
       
    NSURLRequest *webViewRequest;
+   
+   CALayer *backgroundLayer;
 }
 
 @synthesize controller;
 
 //________________________________________________________________________________________
-- (void) drawRect:(CGRect)rect
+- (void) drawRect : (CGRect) rect
 {
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+      return;
+   
+   const CGFloat smallSizeHMargin = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? 0.015f : 0.05f;
+   const CGFloat largeSizeHMargin = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? 0.008f : 0.03f;
+
    const CGFloat w = self.frame.size.width;
    const CGFloat h = self.frame.size.height;
    
@@ -120,6 +127,11 @@ const CGFloat largeSizeVMargin = 0.05f;
       assert(largeFontBold != nil && "initWithStyle:reuseIdentifier:, largeFontBold is nil");
       
       webViewRequest = nil;
+      
+      if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+         self.layer.borderWidth = 1.f;
+         self.layer.borderColor = [UIColor lightGrayColor].CGColor;
+      }
    }
 
    return self;
@@ -141,6 +153,9 @@ const CGFloat largeSizeVMargin = 0.05f;
 //________________________________________________________________________________________
 - (void) layoutSubviews
 {
+   const CGFloat smallSizeHMargin = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? 0.015f : 0.05f;
+   const CGFloat largeSizeHMargin = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? 0.008f : 0.03f;
+
    const CGRect frame = self.frame;
    const CGFloat w = frame.size.width;
    const CGFloat h = frame.size.height;
@@ -185,6 +200,8 @@ const CGFloat largeSizeVMargin = 0.05f;
 //________________________________________________________________________________________
 - (void) layoutUIInFrame : (CGRect) frame
 {
+   const CGFloat largeSizeHMargin = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? 0.008f : 0.03f;
+
    const CGFloat w = frame.size.width;
    
    if (self.cellExpanded) {
@@ -233,6 +250,8 @@ const CGFloat largeSizeVMargin = 0.05f;
 - (void) addWebView : (TwitterTableViewController<UIWebViewDelegate> *) delegate
 {
    assert(webViewRequest != nil && "addWebView:, webViewRequest is nil");
+
+   const CGFloat largeSizeHMargin = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? 0.008f : 0.03f;
 
    const CGFloat w = self.frame.size.width;
    const CGFloat h = self.frame.size.height;

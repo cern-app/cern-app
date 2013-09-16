@@ -103,7 +103,6 @@ const NSUInteger nAutoAnimationSteps = 10;
 #ifdef __IPHONE_7_0
       self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 #endif
-
       [self.slidingViewController.panGesture requireGestureRecognizerToFail : panGesture];
    }
 }
