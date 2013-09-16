@@ -3,9 +3,11 @@
 #import <cmath>
 
 #import <QuartzCore/QuartzCore.h>
+#import <Availability.h>
 
 #import "ECSlidingViewController.h"
 #import "TileViewController.h"
+#import "DeviceCheck.h"
 #import "FlipView.h"
 
 using namespace FlipAnimation;
@@ -92,6 +94,18 @@ const NSUInteger nAutoAnimationSteps = 10;
    //so sliding-view animation is simply killed by
    //this complexity.
    flipView.hidden = YES;
+}
+
+//________________________________________________________________________________________
+- (void) viewDidAppear : (BOOL) animated
+{
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+#ifdef __IPHONE_7_0
+      self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+#endif
+
+      [self.slidingViewController.panGesture requireGestureRecognizerToFail : panGesture];
+   }
 }
 
 //________________________________________________________________________________________
