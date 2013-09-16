@@ -1,5 +1,6 @@
 #import <cassert>
 
+#import "DeviceCheck.h"
 #import "APNHintView.h"
 
 @implementation APNHintView {
@@ -43,8 +44,10 @@
    [internalCircle fill];
 
    const CGSize textSize = [text sizeWithFont : customFont];
+   
+   const CGFloat shift = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? 0. : [customFont descender] / 2;
    const CGRect textRect = CGRectMake(rect.size.width / 2 - textSize.width / 2,
-                                      rect.size.height / 2 - textSize.height / 2 - [customFont descender] / 2,
+                                      rect.size.height / 2 - textSize.height / 2 - shift,
                                       textSize.width, textSize.height);
    [[UIColor whiteColor] set];
    [text drawInRect : textRect withFont : customFont];
