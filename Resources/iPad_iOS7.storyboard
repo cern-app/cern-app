@@ -532,6 +532,9 @@
                                             <constraint firstAttribute="height" constant="33" id="XHo-Be-SSs"/>
                                         </constraints>
                                         <color key="maximumTrackTintColor" red="0.23921568630000001" green="0.25490196079999999" blue="0.31764705879999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="guiFontSizeChanged:" destination="9UZ-Wz-VxU" eventType="valueChanged" id="vmN-iQ-O31"/>
+                                        </connections>
                                     </slider>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Menu font size:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VeH-a5-dQg">
                                         <rect key="frame" x="31" y="52" width="232" height="21"/>
@@ -563,6 +566,9 @@
                                         <rect key="frame" x="393" y="47" width="275" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="maximumTrackTintColor" red="0.23921568630000001" green="0.25490196079999999" blue="0.31764705879999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="htmlFontSizeChanged:" destination="9UZ-Wz-VxU" eventType="valueChanged" id="pCk-AI-pCf"/>
+                                        </connections>
                                     </slider>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Readability view font size:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zMh-uE-rjq">
                                         <rect key="frame" x="31" y="46" width="256" height="33"/>
@@ -606,6 +612,9 @@
                                             <constraint firstAttribute="height" constant="31" id="4KM-NK-xBl"/>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="31" id="IhL-WY-Zb1"/>
                                         </constraints>
+                                        <connections>
+                                            <action selector="twitterSwitchAction:" destination="9UZ-Wz-VxU" eventType="valueChanged" id="44m-ZC-L1a"/>
+                                        </connections>
                                     </switch>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
