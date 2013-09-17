@@ -507,6 +507,9 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 	// Recalculate contentSize based on current orientation
 	_pagingScrollView.contentSize = [self contentSizeForPagingScrollView];
 
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+      _pagingScrollView.contentInset = UIEdgeInsetsZero;
+
 	// Adjust frames and configuration of each visible page
 	for (MWZoomingScrollView *page in _visiblePages) {
       NSUInteger index = PAGE_INDEX(page);
