@@ -680,10 +680,13 @@ UIViewController *FindController(UIView *view)
       [self addLiveImageDescription : obj into : evc];
 
    evc.title = [NSString stringWithFormat : @"%s", ExperimentName(experiment)];
+   if (selected > 0)
+      evc.initialPage = selected;
+
    [controller pushViewController : evc animated : YES];
    
-   if (selected)
-      [evc scrollToPage : selected];
+   //if (selected)
+   //   [evc scrollToPage : selected];
 }
 
 @end

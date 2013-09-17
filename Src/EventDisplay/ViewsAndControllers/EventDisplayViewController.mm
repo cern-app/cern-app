@@ -56,6 +56,8 @@ using CernAPP::NetworkStatus;
    NSInteger pageBeforeRotation;
 }
 
+@synthesize initialPage;
+
 #pragma mark - Reachability and the network status.
 
 //________________________________________________________________________________________
@@ -327,7 +329,11 @@ using CernAPP::NetworkStatus;
       assert(pageControl.currentPage >= 0 && pageControl.currentPage < pages.count &&
              "refresh, current page is out of bounds");
 
-      [self scrollToPage : pageControl.currentPage];
+      if (initialPage) {
+         [self scrollToPage : initialPage];
+         initialPage = 0;
+      } else
+         [self scrollToPage : pageControl.currentPage];
 
       self.navigationItem.rightBarButtonItem.enabled = NO;
       NSDictionary * const source = [sources objectAtIndex : 0];
@@ -418,7 +424,7 @@ using CernAPP::NetworkStatus;
    //any image (not at index 0) can be selected in a table,
    //so I have to scroll to this image (page).
    self.scrollView.contentOffset = CGPointMake(page * self.scrollView.frame.size.width, 0);
-   self.pageControl.currentPage = page;
+   pageControl.currentPage = page;
 
    [self checkCurrentPage];
 }

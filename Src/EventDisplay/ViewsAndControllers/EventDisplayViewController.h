@@ -42,6 +42,7 @@
 - (void) addSourceWithDescription : (NSString *) description URL : (NSURL *) url boundaryRects : (NSArray *) boundaryRects;
 - (IBAction)refresh : (id)sender;
 
+@property (nonatomic) NSUInteger initialPage;
 - (void) scrollToPage : (NSInteger) page;
 //For sliding menu.
 - (IBAction) revealMenu : (id) sender;
