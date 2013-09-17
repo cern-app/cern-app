@@ -505,8 +505,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
                                                 initWithBarButtonSystemItem : UIBarButtonSystemItemRefresh
                                                 target : self action : @selector(reloadImages:)];
    } else {
+      NSString *btnTitle = @"Back to albums";
+      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+         btnTitle = @"Done";
       self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-                                                initWithTitle : CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"Done" : @"Back to albums"
+                                                initWithTitle : btnTitle
                                                 style :  UIBarButtonItemStyleDone
                                                 target : self action : @selector(switchToStackedMode:)];
    }
