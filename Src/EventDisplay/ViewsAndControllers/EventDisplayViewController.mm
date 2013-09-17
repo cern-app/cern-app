@@ -12,6 +12,8 @@
 
 #import <cassert>
 
+#import <Availability.h>
+
 #import "EventDisplayViewController.h"
 #import "ECSlidingViewController.h"
 #import "MWZoomingScrollView.h"
@@ -180,6 +182,14 @@ using CernAPP::NetworkStatus;
 
    //We do not add anything into the navigation stack, so this method (in principle) is
    //called only once.
+   
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") && scrollView) {
+#ifdef __IPHONE_7_0
+      self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+#endif
+      if (numPages > 1)
+         [self.slidingViewController.panGesture requireGestureRecognizerToFail : scrollView.panGestureRecognizer];
+   }
 
    [self refresh];
 }
