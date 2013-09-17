@@ -493,7 +493,6 @@
         <!--App Settings Controller-->
         <scene sceneID="Qwp-xH-MMn">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="WMy-4U-1NJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="AppSettingsControllerID" id="9UZ-Wz-VxU" customClass="AppSettingsController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bGR-g9-my4"/>
@@ -659,6 +658,7 @@
                         <outlet property="twitterSwitch" destination="zUv-kP-8Ow" id="Bf8-sP-cXH"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WMy-4U-1NJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2009" y="7486"/>
         </scene>
@@ -808,12 +808,18 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rEa-Nf-yTm">
                                 <rect key="frame" x="0.0" y="44" width="768" height="980"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="45h-uQ-CJg">
+                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="45h-uQ-CJg">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
-                                <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <textAttributes key="titleTextAttributes">
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </textAttributes>
                                 <items>
                                     <navigationItem title="Credits" id="KnG-eK-xIY">
                                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="wsS-JW-BGI">
