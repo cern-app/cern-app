@@ -43,7 +43,6 @@
    //We are looking for either a tweet or a news feed in our list.
    NSDictionary *feedDict = nil;
    
-   NSString * storeID = @"";
    for (id item in menuContents) {
       assert([item isKindOfClass : [NSDictionary class]] && "loadFirstNewsFeed:, item in an array has a wrong type");
       NSDictionary * const menuItemDict = (NSDictionary *)item;
@@ -57,10 +56,8 @@
          assert([menuItemDict[@"Name"] isKindOfClass : [NSString class]] &&
                 "loadFirstNewsFeed:, 'Name' not found or has a wrong type");
          //It's a feed at the top level.
-         if (!feedToSkip || ![feedToSkip isEqualToString : (NSString *)menuItemDict[@"Name"]]) {
-            storeID = (NSString *)menuItemDict[@"Name"];
+         if (!feedToSkip || ![feedToSkip isEqualToString : (NSString *)menuItemDict[@"Name"]])
             feedDict = menuItemDict;
-         }
       } else if ([catName isEqualToString : @"Menu group"]) {
          //Scan the menu group for a feed.
          assert([menuItemDict[@"Items"] isKindOfClass : [NSArray class]] &&
@@ -82,7 +79,6 @@
                //It's a feed at the top level.
                if (!feedToSkip || ![feedToSkip isEqualToString : (NSString *)childItemInfo[@"Name"]]) {
                   feedDict = childItemInfo;
-                  storeID = [(NSString *)menuItemDict[@"Name"] stringByAppendingString:(NSString *)feedDict[@"Name"]];
                   break;
                }
             }
