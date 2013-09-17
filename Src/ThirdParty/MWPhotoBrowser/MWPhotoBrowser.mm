@@ -1047,11 +1047,19 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
         [UIView beginAnimations:nil context:nil];
         [UIView setAnimationDuration:0.35];
     }
-    CGFloat alpha = hidden ? 0 : 1;
-	[self.navigationController.navigationBar setAlpha:alpha];
-	[_toolbar setAlpha:alpha];
-    for (UIView *v in captionViews) v.alpha = alpha;
-	if (animated) [UIView commitAnimations];
+   
+    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+      _toolbar.hidden = hidden;
+      self.navigationController.navigationBar.hidden = hidden;
+    } else {
+       CGFloat alpha = hidden ? 0 : 1;
+      [self.navigationController.navigationBar setAlpha:alpha];
+      [_toolbar setAlpha:alpha];
+      for (UIView *v in captionViews) v.alpha = alpha;
+    }
+
+   
+   if (animated) [UIView commitAnimations];
 
 	// Control hiding timer
 	// Will cancel existing timer but only begin hiding if
