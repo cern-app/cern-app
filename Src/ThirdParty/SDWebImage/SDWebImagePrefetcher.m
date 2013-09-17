@@ -42,8 +42,8 @@ static SDWebImagePrefetcher *instance;
 
 - (void)reportStatus
 {
-    NSUInteger total = [self.prefetchURLs count];
-    NSLog(@"Finished prefetching (%lu successful, %lu skipped, timeElasped %.2f)", total - _skippedCount, (unsigned long)_skippedCount, CFAbsoluteTimeGetCurrent() - _startedTime);
+  //  NSUInteger total = [self.prefetchURLs count];
+  //  NSLog(@"Finished prefetching (%lu successful, %lu skipped, timeElasped %.2f)", total - _skippedCount, (unsigned long)_skippedCount, CFAbsoluteTimeGetCurrent() - _startedTime);
 }
 
 - (void)prefetchURLs:(NSArray *)urls
