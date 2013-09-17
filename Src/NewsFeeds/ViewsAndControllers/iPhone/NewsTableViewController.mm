@@ -17,6 +17,7 @@
 #import "TwitterAPI.h"
 
 #import "Reachability.h"
+#import "DeviceCheck.h"
 #import "APNHintView.h"
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
@@ -521,7 +522,9 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 
    MWFeedItem * const feedItem = (MWFeedItem *)allArticles[row];
 
-   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName : @"iPhone" bundle : nil];
+   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName :
+                                          CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPhone_iOS7" : @"iPhone"
+                                          bundle : nil];
    ArticleDetailViewController * const viewController = [mainStoryboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailViewControllerID];
    [viewController setContentForArticle : feedItem];
    viewController.navigationItem.title = @"";

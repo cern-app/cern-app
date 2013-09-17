@@ -13,6 +13,7 @@
 #import "CellBackgroundView.h"
 #import "NewsTableViewCell.h"
 #import "Reachability.h"
+#import "DeviceCheck.h"
 #import "MWFeedItem.h"
 
 //This controller/table does not have to load/parse any feeds, it already has
@@ -148,7 +149,9 @@
 {
    assert(self.navigationController != nil && "tableView:didSelectRowAtIndexPath: navigation controller is nil");
 
-   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName : @"iPhone" bundle : nil];
+   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName :
+                                          CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPhone_iOS7" : @"iPhone"
+                                          bundle : nil];
    ArticleDetailViewController *viewController = [mainStoryboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailViewControllerID];
    const NSInteger row = indexPath.row;
    assert(row >= 0 && row < tableData.count &&

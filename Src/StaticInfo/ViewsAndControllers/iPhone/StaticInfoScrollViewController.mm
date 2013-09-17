@@ -13,6 +13,7 @@
 #import "StaticInfoItemViewController.h"
 #import "ECSlidingViewController.h"
 #import "StoryboardIdentifiers.h"
+#import "DeviceCheck.h"
 #import "KeyVal.h"
 
 
@@ -33,7 +34,10 @@
 
    assert(page < dataSource.count && "viewControllerForPage:, parameter 'page' is out of bounds");
 
-   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName : @"iPhone" bundle : nil];
+   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName :
+                                          CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPhone_iOS7" : @"iPhone"
+                                          bundle : nil];
+   
    StaticInfoItemViewController * const detailViewController = [mainStoryboard instantiateViewControllerWithIdentifier : StaticInfoItemViewControllerID];
    if (page > 2)
       detailViewController.delayImageLoad = YES;

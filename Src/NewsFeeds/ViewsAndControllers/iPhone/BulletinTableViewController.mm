@@ -15,6 +15,7 @@
 #import "HUDRefreshProtocol.h"
 #import "NewsTableViewCell.h"
 #import "ApplicationErrors.h"
+#import "DeviceCheck.h"
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
 #import "FeedCache.h"
@@ -312,7 +313,9 @@
    if (indexPath.row < 0 || indexPath.row >= bulletins.count)
       return;
 
-   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName : @"iPhone" bundle : nil];
+   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName :
+                                          CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPhone_iOS7" : @"iPhone"
+                                          bundle : nil];
    BulletinIssueTableViewController * const vc = [mainStoryboard instantiateViewControllerWithIdentifier : CernAPP::BulletinIssueTableControllerID];
    vc.tableData = bulletins[indexPath.row];
    vc.issueID = CernAPP::BulletinTitleForWeek((NSArray *)bulletins[indexPath.row]);
