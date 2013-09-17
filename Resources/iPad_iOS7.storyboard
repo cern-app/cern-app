@@ -889,13 +889,6 @@
     </scenes>
     <resources>
         <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

@@ -10,23 +10,30 @@
             <objects>
                 <viewController storyboardIdentifier="Menu" id="Wid-ZD-WEx" customClass="MenuViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="VnW-db-VoW"/>
-                        <viewControllerLayoutGuide type="bottom" id="c77-Tn-EuC"/>
+                        <viewControllerLayoutGuide type="top" id="jvl-pH-XBC"/>
+                        <viewControllerLayoutGuide type="bottom" id="0EL-Vb-kcS"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="W0P-Wb-YYH">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SJQ-36-KAm">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SJQ-36-KAm">
+                                <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="Wid-ZD-WEx" id="yDK-L0-VuD"/>
                                 </connections>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.23921568627450979" green="0.25490196078431371" blue="0.31764705882352939" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="SJQ-36-KAm" firstAttribute="leading" secondItem="W0P-Wb-YYH" secondAttribute="leading" id="6p9-1Q-PHV"/>
+                            <constraint firstItem="SJQ-36-KAm" firstAttribute="top" secondItem="W0P-Wb-YYH" secondAttribute="top" constant="20" id="KDT-gJ-Fd0"/>
+                            <constraint firstAttribute="bottom" secondItem="SJQ-36-KAm" secondAttribute="bottom" id="Y7C-E5-a97"/>
+                            <constraint firstAttribute="trailing" secondItem="SJQ-36-KAm" secondAttribute="trailing" id="vrl-zr-iCS"/>
+                        </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <connections>
                         <outlet property="scrollView" destination="SJQ-36-KAm" id="wEN-sz-PCo"/>
                     </connections>
@@ -40,12 +47,12 @@
             <objects>
                 <tableViewController id="9RW-qg-iB0" customClass="NewsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="cNW-69-xt1">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsTableViewCell" id="Hwf-VG-Ehq" customClass="NewsTableViewCell">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hwf-VG-Ehq" id="vJ1-m5-Vvy">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -56,7 +63,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="News" id="gDZ-dg-pYE">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="GuA-7s-vpk">
-                            <color key="tintColor" red="0.0" green="0.32549019607843138" blue="0.63137254901960782" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="revealMenu:" destination="9RW-qg-iB0" id="ghr-zN-kNg"/>
                             </connections>
@@ -71,10 +78,14 @@
         <scene sceneID="Eg2-Wt-7fI">
             <objects>
                 <navigationController storyboardIdentifier="TableNavigationControllerNewsID" definesPresentationContext="YES" id="BAO-j4-Vf6" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ajY-07-D6Y">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="ajY-07-D6Y">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.0" green="0.24705882352941178" blue="0.56470588235294117" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.0" green="0.32549019607843138" blue="0.63137254901960782" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="9RW-qg-iB0" kind="relationship" relationship="rootViewController" id="EJX-tO-V96"/>
@@ -89,8 +100,8 @@
             <objects>
                 <viewController storyboardIdentifier="ArticleDetailViewControllerID" id="ecX-5O-MuA" customClass="ArticleDetailViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="fF4-k9-Ds6"/>
-                        <viewControllerLayoutGuide type="bottom" id="Z54-k9-DNe"/>
+                        <viewControllerLayoutGuide type="top" id="CsC-84-wKs"/>
+                        <viewControllerLayoutGuide type="bottom" id="l9Y-5i-SHe"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="5OU-Kj-4aQ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
@@ -162,10 +173,14 @@
         <scene sceneID="U1H-Rc-XJC">
             <objects>
                 <navigationController restorationIdentifier="StaticInfoNavigationControllerID" storyboardIdentifier="StaticInfoNavigationControllerID" definesPresentationContext="YES" id="E6Z-IQ-cOC" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="e8u-mq-nKf">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="e8u-mq-nKf">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="jGf-kb-kKm" kind="relationship" relationship="rootViewController" id="PZw-vr-dYc"/>
@@ -180,15 +195,15 @@
             <objects>
                 <viewController storyboardIdentifier="StaticInfoScrollViewControllerID" id="jGf-kb-kKm" customClass="StaticInfoScrollViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="U0j-cb-eKX"/>
-                        <viewControllerLayoutGuide type="bottom" id="QSv-Pb-Dzw"/>
+                        <viewControllerLayoutGuide type="top" id="Q4i-Rp-Ck4"/>
+                        <viewControllerLayoutGuide type="bottom" id="glu-Rx-J0L"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="rQa-Ql-lZv">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JMQ-en-XRi" customClass="SlideScrollView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -196,7 +211,7 @@
                                 </connections>
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="lx6-a8-nVe">
-                                <rect key="frame" x="140" y="434" width="38" height="36"/>
+                                <rect key="frame" x="140" y="370" width="38" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                             </pageControl>
                         </subviews>
@@ -222,10 +237,14 @@
         <scene sceneID="h59-Rr-Nv9">
             <objects>
                 <navigationController storyboardIdentifier="EventDisplayControllerID" definesPresentationContext="YES" id="nNK-kj-BdT" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cIP-qc-Ffi">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="cIP-qc-Ffi">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="4QK-cK-8yw" kind="relationship" relationship="rootViewController" id="8fp-7y-09M"/>
@@ -240,15 +259,15 @@
             <objects>
                 <viewController id="4QK-cK-8yw" customClass="EventDisplayViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Xtf-m7-v1L"/>
-                        <viewControllerLayoutGuide type="bottom" id="rl5-F0-UIe"/>
+                        <viewControllerLayoutGuide type="top" id="Xfu-L8-86A"/>
+                        <viewControllerLayoutGuide type="bottom" id="Q4m-rZ-aag"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2kB-Hv-ufj">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uqr-LZ-Fdi">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="416"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -256,7 +275,7 @@
                                 </connections>
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="bZx-Ei-40N">
-                                <rect key="frame" x="140" y="434" width="38" height="36"/>
+                                <rect key="frame" x="140" y="370" width="38" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                             </pageControl>
                         </subviews>
@@ -283,12 +302,12 @@
             <objects>
                 <tableViewController id="7gC-la-dPg" customClass="LiveEventTableController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="g58-Gm-5a5">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsTableViewCell" id="bO8-4l-YOf" customClass="NewsTableViewCell">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bO8-4l-YOf" id="f4a-Ge-twT">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -317,7 +336,7 @@
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="eju-X2-ebY" customClass="PhotoCollectionsViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="Wib-Yk-9mL">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="s7B-cD-3tG">
                             <size key="itemSize" width="226" height="222"/>
@@ -327,7 +346,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoAlbumCoverView" id="1hx-yt-xcg" customClass="PhotoAlbumCoverView">
-                                <rect key="frame" x="47" y="64" width="226" height="222"/>
+                                <rect key="frame" x="47" y="0.0" width="226" height="222"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="226" height="222"/>
@@ -344,7 +363,7 @@
                     </collectionView>
                     <navigationItem key="navigationItem" id="kDS-NN-NBk">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="ZjV-C7-2RT">
-                            <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="revealMenu:" destination="eju-X2-ebY" id="IPD-aS-zNs"/>
                             </connections>
@@ -365,13 +384,13 @@
             <objects>
                 <tableViewController id="nlL-X2-qbW" customClass="BulletinTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="67" sectionHeaderHeight="22" sectionFooterHeight="22" id="29H-5z-LPq">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" restorationIdentifier="BulletinCell" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsTableViewCell" rowHeight="67" id="Gi2-am-zNY" customClass="NewsTableViewCell">
-                                <rect key="frame" x="0.0" y="86" width="320" height="67"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="67"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gi2-am-zNY" id="btb-9r-4gG">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
@@ -400,10 +419,15 @@
         <scene sceneID="Ane-wd-yN7">
             <objects>
                 <navigationController restorationIdentifier="VideoCollectionsViewControllerID" storyboardIdentifier="VideoCollectionsViewControllerID" definesPresentationContext="YES" id="sjt-Q6-hGe" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HWI-Dd-Hud">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="HWI-Dd-Hud">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="textShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="yid-68-0bm" kind="relationship" relationship="rootViewController" id="UH9-Mw-xde"/>
@@ -418,8 +442,8 @@
             <objects>
                 <viewController storyboardIdentifier="AppSettingsControllerID" title="Settings" id="2Om-Ou-J2S" customClass="AppSettingsController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Qfv-To-cGJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="Yud-OX-1i5"/>
+                        <viewControllerLayoutGuide type="top" id="ZxP-ij-qyb"/>
+                        <viewControllerLayoutGuide type="bottom" id="bLz-HZ-0AB"/>
                     </layoutGuides>
                     <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="xju-3c-8lr">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
@@ -535,8 +559,8 @@
             <objects>
                 <viewController storyboardIdentifier="CreditsViewControllerID" id="NHq-yp-OT4" customClass="CreditsViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Pgr-5c-TFe"/>
-                        <viewControllerLayoutGuide type="bottom" id="qnq-WU-szp"/>
+                        <viewControllerLayoutGuide type="top" id="U0R-ON-BPk"/>
+                        <viewControllerLayoutGuide type="bottom" id="2Sa-q7-fG0"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="QfC-qN-5mJ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
@@ -583,9 +607,15 @@
         <scene sceneID="3Xe-aO-qnh">
             <objects>
                 <navigationController storyboardIdentifier="TwitterViewControllerID" definesPresentationContext="YES" id="dr0-bO-vSV" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ggh-bY-p5M">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="ggh-bY-p5M">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="textShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="sGt-c0-WCd" kind="relationship" relationship="rootViewController" id="kTn-1l-Gc4"/>
@@ -600,12 +630,12 @@
             <objects>
                 <tableViewController id="sGt-c0-WCd" customClass="TwitterTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="79L-NO-FG3" customClass="TwitterTableView">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TweetCell" id="7iQ-PI-Df5" customClass="TweetCell">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7iQ-PI-Df5" id="H0B-Vh-BLp">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -635,7 +665,7 @@
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="yid-68-0bm" customClass="VideosGridViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="sLZ-AR-KcK">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Zgz-14-RSD">
                             <size key="itemSize" width="192" height="128"/>
@@ -645,14 +675,14 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoCell" id="GkA-Hn-h9t" customClass="PhotoGridViewCell">
-                                <rect key="frame" x="64" y="125" width="192" height="128"/>
+                                <rect key="frame" x="64" y="61" width="192" height="128"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="128"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ixj-cr-Bwu">
-                                            <rect key="frame" x="5" y="6" width="182" height="116.99999999999999"/>
+                                            <rect key="frame" x="5" y="6" width="182" height="117"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -665,7 +695,7 @@
                             </collectionViewCell>
                         </cells>
                         <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionSupplementraryViewHeader" id="MQS-3B-eJG" customClass="CollectionSupplementraryView">
-                            <rect key="frame" x="0.0" y="64" width="320" height="61"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="320" translatesAutoresizingMaskIntoConstraints="NO" id="GDf-fU-8k0">
@@ -681,7 +711,7 @@
                             </connections>
                         </collectionReusableView>
                         <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionSupplementraryViewFooter" id="tqY-A7-B1r" customClass="CollectionSupplementraryView">
-                            <rect key="frame" x="0.0" y="253" width="320" height="32"/>
+                            <rect key="frame" x="0.0" y="189" width="320" height="32"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </collectionReusableView>
                         <connections>
@@ -710,10 +740,15 @@
         <scene sceneID="j9B-Y1-TY8">
             <objects>
                 <navigationController storyboardIdentifier="WebcastsControllerID" definesPresentationContext="YES" id="WUT-ib-Dwu" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qng-op-CvZ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="qng-op-CvZ">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="textShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="jIg-M7-jma" kind="relationship" relationship="rootViewController" id="zly-ES-VRP"/>
@@ -728,7 +763,7 @@
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="jIg-M7-jma" customClass="WebcastsCollectionViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="fXj-nf-X4N">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qCh-X3-IUN">
                             <size key="itemSize" width="254" height="239"/>
@@ -738,7 +773,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoThumbnailCell" id="njD-hx-LBh" customClass="VideoThumbnailCell">
-                                <rect key="frame" x="33" y="64" width="254" height="239"/>
+                                <rect key="frame" x="33" y="0.0" width="254" height="239"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="254" height="239"/>
@@ -762,12 +797,13 @@
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="iA3-CK-wrS">
                             <rect key="frame" x="53" y="7" width="220" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <segments>
                                 <segment title="Live"/>
                                 <segment title="Upcoming"/>
                                 <segment title="Recent"/>
                             </segments>
-                            <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="sectionSelected:" destination="jIg-M7-jma" eventType="valueChanged" id="GN5-sR-hdE"/>
                             </connections>
@@ -791,12 +827,12 @@
             <objects>
                 <tableViewController storyboardIdentifier="BulletinIssueTableControllerID" id="ko8-j9-gnx" customClass="BulletinIssueTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="RSr-hG-T2Q">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsTableViewCell" id="7Wd-bj-jfd" customClass="NewsTableViewCell">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7Wd-bj-jfd" id="dK0-O5-BkB">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -819,10 +855,14 @@
         <scene sceneID="QPu-eL-rHv">
             <objects>
                 <navigationController restorationIdentifier="BulletinTableViewControllerID" storyboardIdentifier="BulletinTableViewControllerID" definesPresentationContext="YES" id="A6O-UZ-Iat" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="TC2-1b-HgR">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="TC2-1b-HgR">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="nlL-X2-qbW" kind="relationship" relationship="rootViewController" id="nkR-yO-3hu"/>
@@ -836,10 +876,14 @@
         <scene sceneID="IEF-6V-VUd">
             <objects>
                 <navigationController restorationIdentifier="" storyboardIdentifier="PhotoCollectionsViewControllerID" definesPresentationContext="YES" id="YUT-nR-VZg" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="aYY-6n-r8Y">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="aYY-6n-r8Y">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="eju-X2-ebY" kind="relationship" relationship="rootViewController" id="sCc-4U-nXx"/>
@@ -854,15 +898,15 @@
             <objects>
                 <viewController restorationIdentifier="EventDisplayControllerNavID" storyboardIdentifier="EventDisplayControllerNavID" id="IHO-Wg-Ivh" customClass="EventDisplayViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="njZ-Gc-St6"/>
-                        <viewControllerLayoutGuide type="bottom" id="UuE-UT-z7U"/>
+                        <viewControllerLayoutGuide type="top" id="iMC-uh-ESq"/>
+                        <viewControllerLayoutGuide type="bottom" id="8bQ-Yx-kCe"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8rL-5Z-cfg">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="whH-uq-IQB" customClass="SlideScrollView">
-                                <rect key="frame" x="0.0" y="-7" width="320" height="487"/>
+                                <rect key="frame" x="0.0" y="-7" width="320" height="423"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -870,7 +914,7 @@
                                 </connections>
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="RIe-WB-Uye">
-                                <rect key="frame" x="140" y="434" width="38" height="36"/>
+                                <rect key="frame" x="140" y="370" width="38" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                             </pageControl>
                         </subviews>
@@ -890,10 +934,14 @@
         <scene sceneID="g9q-Si-fp6">
             <objects>
                 <navigationController storyboardIdentifier="EventDisplayControllerFromTableID" definesPresentationContext="YES" id="87g-mq-c08" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="kEc-ow-z2h">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="kEc-ow-z2h">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="7gC-la-dPg" kind="relationship" relationship="rootViewController" id="d4h-gM-AN9"/>
@@ -908,8 +956,8 @@
             <objects>
                 <viewController storyboardIdentifier="StaticInfoItemViewControllerID" id="naR-tS-hw1" customClass="StaticInfoItemViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="qOX-d2-k9V"/>
-                        <viewControllerLayoutGuide type="bottom" id="c4j-1P-RkQ"/>
+                        <viewControllerLayoutGuide type="top" id="8w3-Xg-W6w"/>
+                        <viewControllerLayoutGuide type="bottom" id="M3k-LC-4FA"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ruX-ns-9ey">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
@@ -958,8 +1006,8 @@
             <objects>
                 <viewController id="H2v-Ob-DhD" customClass="InitialSlidingViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="DaD-6x-Mzw"/>
-                        <viewControllerLayoutGuide type="bottom" id="Ir7-Q2-n5D"/>
+                        <viewControllerLayoutGuide type="top" id="peb-p1-8UE"/>
+                        <viewControllerLayoutGuide type="bottom" id="yw1-Sx-e6N"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="IWW-TW-Yeo">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
@@ -969,7 +1017,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BIB-pv-C48" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1584" y="-787"/>
+            <point key="canvasLocation" x="-1593" y="-813"/>
         </scene>
     </scenes>
     <resources>
