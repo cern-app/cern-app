@@ -9,6 +9,7 @@
 #import "ApplicationErrors.h"
 #import "PhotoViewCell.h"
 #import "Reachability.h"
+#import "DeviceCheck.h"
 #import "PhotoAlbum.h"
 
 using CernAPP::ResourceTypeImageForPhotoBrowserIPAD;
@@ -505,7 +506,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
                                                 target : self action : @selector(reloadImages:)];
    } else {
       self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-                                                initWithTitle : @"Back to albums" style : UIBarButtonItemStyleDone
+                                                initWithTitle : CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"Done" : @"Back to albums"
+                                                style :  UIBarButtonItemStyleDone
                                                 target : self action : @selector(switchToStackedMode:)];
    }
 }
