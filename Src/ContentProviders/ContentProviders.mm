@@ -18,6 +18,7 @@
 #import "ConnectionController.h"
 #import "ApplicationErrors.h"
 #import "ContentProviders.h"
+#import "DeviceCheck.h"
 #import "AppDelegate.h"
 #import "TwitterAPI.h"
 #import "KeyVal.h"
@@ -669,7 +670,10 @@ UIViewController *FindController(UIView *view)
 
    using namespace CernAPP;
  
-   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName : @"iPhone" bundle : nil];
+   UIStoryboard * const mainStoryboard = [UIStoryboard storyboardWithName :
+                                          @"iPhone" // CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPhone_iOS7" : @"iPhone"
+                                          bundle : nil];
+
    EventDisplayViewController * const evc = [mainStoryboard instantiateViewControllerWithIdentifier : EventDisplayControllerNavID];
    
    for (id obj in liveEvents)

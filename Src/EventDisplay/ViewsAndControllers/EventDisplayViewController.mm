@@ -18,6 +18,7 @@
 #import "ApplicationErrors.h"
 #import "MWPhotoProtocol.h"
 #import "Reachability.h"
+#import "DeviceCheck.h"
 #import "GUIHelpers.h"
 #import "MWPhoto.h"
 
@@ -114,8 +115,11 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (void) dealloc
 {
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+      //This is something new or at least Apple never said I need this.
+      self.scrollView.delegate = nil;
+   
    [self cancelAnyConnections];
-      
 
    [internetReach stopNotifier];
    [[NSNotificationCenter defaultCenter] removeObserver : self];
