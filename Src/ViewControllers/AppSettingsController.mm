@@ -69,8 +69,8 @@ using CernAPP::TwitterFeedShowOption;
       AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
       twitterSwitch.on = appDelegate.tweetOption == TwitterFeedShowOption::externalView ? YES : NO;
       
-   //   if (![[UIApplication sharedApplication] canOpenURL : [NSURL URLWithString : @"twitter://"]])
-     //    twitterSettingsView.hidden = YES;//Well, no need in this option, no external app to open tweets.
+      if (![[UIApplication sharedApplication] canOpenURL : [NSURL URLWithString : @"twitter://"]])
+         twitterSettingsView.hidden = YES;//Well, no need in this option, no external app to open tweets.
    }
    
    //Read defaults for the sliders.
