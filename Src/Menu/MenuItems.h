@@ -25,10 +25,10 @@
 - (void) setLabelFontSize : (CGFloat) sizeBase;
 - (void) setIndent : (CGFloat) indent imageHint : (CGSize) imageHint;
 
-- (NSString *) textForID : (NSUInteger) itemID;
-- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
-- (BOOL) removeAPNHint : (NSUInteger) items forID : (NSUInteger) itemID;
-
+//APN hints support.
+- (NSObject<MenuItemProtocol> *) findItemForID : (NSUInteger) itemID;
+- (NSUInteger) apnItems;
+- (BOOL) resetAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
 @property (nonatomic) NSUInteger itemID;
 
 @optional
@@ -58,20 +58,18 @@
 - (void) setLabelFontSize : (CGFloat) sizeBase;
 - (void) setIndent : (CGFloat) indent imageHint : (CGSize) imageHint;
 
-- (NSString *) textForID : (NSUInteger) itemID;
-
 - (void) itemPressedIn : (UIViewController *) controller;
-
-@property (nonatomic) NSUInteger itemID;
 
 @property (nonatomic) __weak MenuItemsGroup *menuGroup;
 @property (nonatomic) __weak MenuItemView *itemView;
 
 @property (nonatomic) NSObject<ContentProvider> *contentProvider;
 
-//Add/remove a special hints to an item view (if itemIDs coincide)
-- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
-- (BOOL) removeAPNHint : (NSUInteger) items forID : (NSUInteger) itemID;
+//APN hints support.
+- (NSObject<MenuItemProtocol> *) findItemForID : (NSUInteger) itemID;
+- (NSUInteger) apnItems;
+- (BOOL) resetAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
+@property (nonatomic) NSUInteger itemID;
 
 @end
 
@@ -93,10 +91,6 @@
 - (NSString *) itemText;
 - (UIImage *) itemImage;
 
-- (NSString *) textForID : (NSUInteger) itemID;
-
-@property (nonatomic) NSUInteger itemID;
-
 @property (nonatomic) BOOL collapsed;
 @property (nonatomic) BOOL shrinkable;
 
@@ -110,9 +104,11 @@
 //Menu group can contain expanding sub-groups.
 @property (nonatomic) __weak MenuItemsGroup *parentGroup;
 
-//Add/remove special hints to an item view (if itemID is found).
-- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
-- (BOOL) removeAPNHint : (NSUInteger) items forID : (NSUInteger) itemID;
+//APN hints support.
+- (NSObject<MenuItemProtocol> *) findItemForID : (NSUInteger) itemID;
+- (NSUInteger) apnItems;
+- (BOOL) resetAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
+@property (nonatomic) NSUInteger itemID;
 
 @end
 
@@ -133,15 +129,12 @@
 - (NSString *) itemText;
 - (UIImage *) itemImage;
 
-- (NSString *) textForID : (NSUInteger) itemID;
-
-@property (nonatomic) NSUInteger itemID;
-
 @property (nonatomic) __weak MenuItemView *itemView;
 
-//Noop functions.
-- (BOOL) addAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
-- (BOOL) removeAPNHint : (NSUInteger) items forID : (NSUInteger) itemID;
-
+//APN hints support.
+- (NSObject<MenuItemProtocol> *) findItemForID : (NSUInteger) itemID;
+- (NSUInteger) apnItems;
+- (BOOL) resetAPNHint : (NSUInteger) newItems forID : (NSUInteger) itemID;
+@property (nonatomic) NSUInteger itemID;
 
 @end

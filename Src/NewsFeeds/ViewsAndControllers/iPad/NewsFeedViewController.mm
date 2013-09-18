@@ -45,11 +45,9 @@
    //If we are in the process of the flip animation,
    //do not reload/re-create
    BOOL flipRefreshDelayed;
-   
-   NSUInteger apnItems;
 }
 
-@synthesize feedCacheID, apnID;
+@synthesize feedCacheID, apnID, apnItems;
 
 #pragma mark - Reachability.
 
@@ -597,13 +595,16 @@
 #pragma mark - APNEnabledController and aux. methods.
 
 //________________________________________________________________________________________
-- (void) addAPNItems : (NSUInteger) nItems
+- (void) setApnItems : (NSUInteger) nItems
 {
-   assert(nItems > 0 && "addAPNItems:, parameter 'nItems' is invalid");
-
-   apnItems += nItems;
-   if (viewDidAppear)
-      [self showAPNHints];
+   if (nItems) {
+      apnItems = nItems;
+      if (viewDidAppear)
+         [self showAPNHints];
+   } else if (viewDidAppear) {
+      [self hideAPNHints];
+   } else
+      apnItems = 0;
 }
 
 //________________________________________________________________________________________

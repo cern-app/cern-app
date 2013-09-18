@@ -245,35 +245,30 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 #pragma mark - APN hints.
 
 //________________________________________________________________________________________
-- (void) addAPNHint : (NSUInteger) newItems
+- (void) setApnItems : (NSUInteger) nItems
 {
-   assert(newItems > 0 && "addAPNHint, parameter 'newItems' is invalid");
-   
-   const NSUInteger prevNumber = apnView.count;
-   apnView.count = prevNumber + newItems;
-   
-   if (!prevNumber) {
-      iconView.hidden = YES;
-      apnView.hidden = NO;
+   if (nItems) {
+      const NSUInteger prevNumber = apnView.count;
+      if (!prevNumber) {
+         iconView.hidden = YES;
+         apnView.hidden = NO;
+      }
       
-      [self setNeedsDisplay];//TODO: Do I really need this???
+      apnView.count = nItems;
+
+      if (!prevNumber)
+         [self setNeedsDisplay];
+   } else {
+      apnView.count = 0;
+      apnView.hidden = YES;
+      iconView.hidden = NO;
+      
+      [self setNeedsDisplay];
    }
 }
 
 //________________________________________________________________________________________
-- (void) removeAPNHints
-{
-   assert(apnView.count > 0 && "removeAPNHint, nothing to remove");
-
-   apnView.count = 0;
-   apnView.hidden = YES;
-   iconView.hidden = NO;
-
-   [self setNeedsDisplay];
-}
-
-//________________________________________________________________________________________
-- (NSUInteger) nAPNHints
+- (NSUInteger) apnItems
 {
    return apnView.count;
 }
@@ -479,38 +474,24 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 #pragma mark - APN hints.
 
 //________________________________________________________________________________________
-- (void) addAPNHint : (NSUInteger) newItems
+- (void) setApnItems : (NSUInteger) nItems
 {
-   assert(newItems > 0 && "addAPNHint:, invalid number of new items");
-
-   const NSUInteger prevCount = apnView.count;
-   apnView.count = prevCount + newItems;
-
-   if (!prevCount) {
-      iconView.hidden = YES;
-      apnView.hidden = NO;
-
-      [self setNeedsDisplay];
-   }
-}
-
-//________________________________________________________________________________________
-- (void) removeAPNHint : (NSUInteger) items
-{
-   assert(items > 0 && "removeAPNHint:, parameter 'items' is invalid");
-   assert(apnView.count >= items && "removeAPNHint:, inconsistent number of items to remove");
-   
-   apnView.count = apnView.count - items;
-   if (!apnView.count) {
+   if (nItems) {
+      if (!apnView.count) {
+         apnView.hidden = NO;
+         iconView.hidden = YES;
+      }
+      
+      apnView.count = nItems;
+   } else {
+      apnView.count = nItems;
       apnView.hidden = YES;
       iconView.hidden = NO;
-      
-      [self setNeedsDisplay];//TODO: check, if I need this.
    }
 }
 
 //________________________________________________________________________________________
-- (NSUInteger) nAPNHints
+- (NSUInteger) apnItems
 {
    return apnView.count;
 }

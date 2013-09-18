@@ -109,11 +109,11 @@
 }
 
 //________________________________________________________________________________________
-- (void) addAPNItems : (NSUInteger) newItems
+- (void) setApnItems : (NSUInteger) apnItems
 {
    UIViewController * const next = self.viewControllers[0];
    if (next && [next conformsToProtocol : @protocol(APNEnabledController)])
-      [(UIViewController<APNEnabledController> *)next addAPNItems : newItems];
+      [(UIViewController<APNEnabledController> *)next setApnItems : apnItems];
 }
 
 @end

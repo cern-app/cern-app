@@ -13,6 +13,6 @@
 
 //APNEnabledController's protocol.
 @property (nonatomic) NSUInteger apnID;
-- (void) addAPNItems : (NSUInteger) newItems;
+@property (nonatomic) NSUInteger apnItems;
 
 @end

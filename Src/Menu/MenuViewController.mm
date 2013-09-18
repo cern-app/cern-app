@@ -1126,7 +1126,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(itemID != 0 && "removeNotifications:forID:, parameter 'itemID' is invalid");
    
    for (NSObject<MenuItemProtocol> *item in menuItems) {
-      if ([item removeAPNHint : nItems forID : itemID])
+      if ([item resetAPNHint : 0 forID : itemID])
          break;
    }
 }
@@ -1158,24 +1158,23 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
             if (const NSInteger itemID = [components[0] integerValue]) {
                if (itemID > 0) {
                   for (NSObject<MenuItemProtocol> *item in menuItems) {
-                     if (NSString * const itemName = [item textForID : itemID]) {
+                     if (NSObject<MenuItemProtocol> * const found = [item findItemForID : itemID]) {
                         //We found updated menu item.
                         //[item addAPNHint : itemID];
                         const NSInteger newItems = [components[1] integerValue];
                         assert(newItems > 0 && "checkPushNotifications, invalid payload");
-                        [item addAPNHint : newItems forID:itemID];
+                        [item resetAPNHint : newItems forID : itemID];
 
                         if (itemNames.length)
-                           itemNames = [itemNames stringByAppendingFormat : @", %@", itemName];
+                           itemNames = [itemNames stringByAppendingFormat : @", %@", found.itemText];
                         else
-                           itemNames = [itemNames stringByAppendingFormat : @"%@", itemName];
-                        
+                           itemNames = [itemNames stringByAppendingFormat : @"%@", found.itemText];
                         
                         if ([self.slidingViewController.topViewController conformsToProtocol : @protocol(APNEnabledController)]) {
                            UIViewController<APNEnabledController> * const tvc =
                                  (UIViewController<APNEnabledController> *)self.slidingViewController.topViewController;
                            if (tvc.apnID == itemID)
-                              [tvc addAPNItems : newItems];
+                              tvc.apnItems = newItems;
                         }
                      }
                   }

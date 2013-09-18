@@ -36,8 +36,9 @@ using CernAPP::NetworkStatus;
    MBProgressHUD *noWebcastsHUDs[3];
 
    Reachability *internetReach;
-   NSUInteger apnID;
 }
+
+@synthesize apnID;
 
 #pragma mark - Reachability.
 
@@ -165,15 +166,6 @@ using CernAPP::NetworkStatus;
 }
 
 #pragma mark - Other methods.
-
-//________________________________________________________________________________________
-- (void) setApnID : (NSNumber *) anApnID
-{
-   assert(anApnID != nil && "setApnID:, parameter 'anApnID' is nil");
-   apnID = [anApnID unsignedIntegerValue];
-   //0 is not a valid id.
-   assert(apnID > 0 && "setApnID:, apnID is invalid");
-}
 
 //________________________________________________________________________________________
 - (void) setControllerData : (NSArray *) dataItems
@@ -646,6 +638,14 @@ using CernAPP::NetworkStatus;
 - (BOOL) shouldAutorotate
 {
    return UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone;
+}
+
+#pragma mark - APN.
+
+//________________________________________________________________________________________
+- (void) addAPNItems : (NSUInteger) newItems
+{
+
 }
 
 #pragma mark - UI.

@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 
 #import "ConnectionController.h"
+#import "APNEnabledController.h"
 #import "ImageDownloader.h"
 #import "MWFeedParser.h"
 
@@ -9,7 +10,7 @@
 
 - (void) setControllerData : (NSArray *) dataItems;
 
-- (void) setApnID : (NSNumber *) apnID;//NSNumber, method is called by performSelector:withObject:.
-
+@property (nonatomic) NSUInteger apnID;
+//- (void) addAPNItems : (NSUInteger) newItems;
 
 @end

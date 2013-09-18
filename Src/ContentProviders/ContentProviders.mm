@@ -248,7 +248,7 @@ UIViewController *FindController(UIView *view)
       nt.feedCacheID = [NSString stringWithFormat : @"%@%lu", self.categoryName, (unsigned long)providerID];
       
       if (nAPNHints)
-         [nt addAPNItems : nAPNHints];
+         nt.apnItems = nAPNHints;
       //
       [nt setFeedURLString : feed];
       if (filters)
@@ -266,7 +266,7 @@ UIViewController *FindController(UIView *view)
       nt.feedCacheID = [NSString stringWithFormat : @"%@%lu", self.categoryName, (unsigned long)providerID];
 
       if (nAPNHints)
-         [nt addAPNItems : nAPNHints];
+         nt.apnItems = nAPNHints;
       //
       [nt setFeedURLString : feed];
       if (filters)
@@ -771,7 +771,7 @@ UIViewController *FindController(UIView *view)
       assert(providerID > 0 && "loadControllerTo:, providerID is invalid");
       nt.apnID = providerID;
       if (nAPNHints)
-         [nt addAPNItems : nAPNHints];
+         nt.apnItems = nAPNHints;
 
       nt.feedCacheID = [NSString stringWithFormat : @"%@%lu", categoryName, (unsigned long)providerID];
 
@@ -787,7 +787,7 @@ UIViewController *FindController(UIView *view)
 
       bc.apnID = providerID;
       if (nAPNHints)
-         [bc addAPNItems : nAPNHints];
+         bc.apnItems = nAPNHints;
       
       bc.feedCacheID = [NSString stringWithFormat : @"%@%lu", categoryName, (unsigned long)providerID];
       [bc setFeedURLString : url];

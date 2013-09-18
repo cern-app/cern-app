@@ -69,10 +69,9 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    NSMutableArray *rangeDownloaders;
 
    NSArray *feedFilters;
-   NSUInteger apnItems;   
 }
 
-@synthesize feedCacheID, apnID;
+@synthesize feedCacheID, apnID, apnItems;
 
 
 #pragma mark - Reachability.
@@ -738,12 +737,16 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
 #pragma mark - APN.
 
 //________________________________________________________________________________________
-- (void) addAPNItems : (NSUInteger) nItems
+- (void) setApnItems : (NSUInteger) nItems
 {
-   assert(nItems != 0 && "addAPNItems:, invalid number of items to add");
-   apnItems += nItems;
-   if (!firstViewDidAppear)
-      [self showAPNHints];
+   if (nItems) {
+      apnItems = nItems;
+      if (!firstViewDidAppear)
+         [self showAPNHints];
+   } else if (!firstViewDidAppear)
+      [self hideAPNHints];
+   else
+      apnItems = 0;
 }
 
 //________________________________________________________________________________________
