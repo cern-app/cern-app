@@ -6,6 +6,7 @@
 #import "ECSlidingViewController.h"
 #import "NewsTableViewController.h"
 #import "HUDRefreshProtocol.h"
+#import "MenuViewController.h"
 #import "VideoThumbnailCell.h"
 #import "ApplicationErrors.h"
 #import "MBProgressHUD.h"
@@ -38,7 +39,7 @@ using CernAPP::NetworkStatus;
    Reachability *internetReach;
 }
 
-@synthesize apnID;
+@synthesize apnID, apnItems;
 
 #pragma mark - Reachability.
 
@@ -77,6 +78,7 @@ using CernAPP::NetworkStatus;
       internetReach = [Reachability reachabilityForInternetConnection];
       
       apnID = 0;
+      apnItems = 0;
    }
    
    return self;
@@ -298,8 +300,10 @@ using CernAPP::NetworkStatus;
    else
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    
-   if ([self allParsersFinished])
+   if ([self allParsersFinished]) {
       self.navigationItem.rightBarButtonItem.enabled = YES;
+      [self hideAPNHints];
+   }
 }
 
 //________________________________________________________________________________________
@@ -332,6 +336,8 @@ using CernAPP::NetworkStatus;
              "feedParserDidFinish:, app delegate has a wrong type");
       assert(apnID > 0 && "feedParserDidFinish:, feedApnID is invalid");
       [(AppDelegate *)[UIApplication sharedApplication].delegate setGMTForKey : [NSString stringWithFormat : @"%lu", (unsigned long)apnID]];
+      
+      [self hideAPNHints];//??
    }
 
    if (!feedN) {
@@ -746,6 +752,36 @@ using CernAPP::NetworkStatus;
    }
 
    [self cancelAllDownloaders : NO];
+}
+
+#pragma mark - APN hints.
+
+//________________________________________________________________________________________
+- (void) setApnItems : (NSUInteger) nItems
+{
+   if (nItems) {
+      apnItems = nItems;
+   } else if (viewDidAppear) {
+      [self hideAPNHints];
+   } else
+      apnItems = 0;
+}
+
+//________________________________________________________________________________________
+- (void) hideAPNHints
+{
+   //At the moment no hint view attached to controller's view, only in a menu item.
+   if (!apnItems)
+      return;
+   
+   assert([self.slidingViewController.underLeftViewController isKindOfClass : [MenuViewController class]] &&
+          "hideAPNHints, underLeftViewController has a wrong type");
+   MenuViewController * const mvc = (MenuViewController *)self.slidingViewController.underLeftViewController;
+
+   [mvc removeNotifications : apnItems forID : apnID];
+   apnItems = 0;
+
+   //Do something else with self.view or a navigation bar here.
 }
 
 @end

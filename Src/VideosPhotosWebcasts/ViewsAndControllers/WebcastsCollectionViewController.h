@@ -6,11 +6,11 @@
 #import "MWFeedParser.h"
 
 @interface WebcastsCollectionViewController : UICollectionViewController<MWFeedParserDelegate, ConnectionController,
-                                                                         ImageDownloaderDelegate>
+                                                                         ImageDownloaderDelegate, APNEnabledController>
 
 - (void) setControllerData : (NSArray *) dataItems;
 
 @property (nonatomic) NSUInteger apnID;
-//- (void) addAPNItems : (NSUInteger) newItems;
+@property (nonatomic) NSUInteger apnItems;
 
 @end

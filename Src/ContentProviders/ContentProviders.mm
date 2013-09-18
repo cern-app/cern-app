@@ -15,6 +15,7 @@
 #import "ECSlidingViewController.h"
 #import "NewsFeedViewController.h"
 #import "StoryboardIdentifiers.h"
+#import "APNEnabledController.h"
 #import "ConnectionController.h"
 #import "ApplicationErrors.h"
 #import "ContentProviders.h"
@@ -1081,14 +1082,16 @@ UIViewController *FindController(UIView *view)
    if (itemData && [navController.topViewController respondsToSelector:@selector(setControllerData:)])
       [navController.topViewController performSelector : @selector(setControllerData:) withObject : itemData];
    
-   //This is to be used with APN, so controller also MUST have a valid (other than 0) providerID.
-   //The resulting storeID is used to save timestamps in app delegate.
-   if ([navController.topViewController respondsToSelector : @selector(setApnID:)]) {
-      assert(providerID > 0 && "loadControllerTo:, invalid providerID");
-      [navController.topViewController performSelector : @selector(setApnID:)
-       withObject : [NSNumber numberWithUnsignedInteger : providerID]];
-   }
+   if (providerID && [navController.topViewController conformsToProtocol : @protocol(APNEnabledController)]) {
+      UIViewController<APNEnabledController> * const apnc =
+         (UIViewController<APNEnabledController> *)navController.topViewController;
 
+      apnc.apnID = providerID;
+      
+      if (nAPNHints)
+         apnc.apnItems = nAPNHints;
+   }
+   
    [controller.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete : ^ {
       CGRect frame = controller.slidingViewController.topViewController.view.frame;
       controller.slidingViewController.topViewController = navController;
