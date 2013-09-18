@@ -73,8 +73,6 @@ using CernAPP::NetworkStatus;
       }
 
       viewDidAppear = NO;
-      
-      //[[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
       internetReach = [Reachability reachabilityForInternetConnection];
       
       apnID = 0;
@@ -82,12 +80,6 @@ using CernAPP::NetworkStatus;
    }
    
    return self;
-}
-
-//________________________________________________________________________________________
-- (void) dealloc
-{
-   //[[NSNotificationCenter defaultCenter] removeObserver : self];
 }
 
 #pragma mark - viewDid/Will/NeverDoes etc.
@@ -646,14 +638,6 @@ using CernAPP::NetworkStatus;
    return UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone;
 }
 
-#pragma mark - APN.
-
-//________________________________________________________________________________________
-- (void) addAPNItems : (NSUInteger) newItems
-{
-
-}
-
 #pragma mark - UI.
 
 //________________________________________________________________________________________
@@ -759,11 +743,11 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (void) setApnItems : (NSUInteger) nItems
 {
-   if (nItems) {
+   if (nItems)
       apnItems = nItems;
-   } else if (viewDidAppear) {
+   else if (viewDidAppear)
       [self hideAPNHints];
-   } else
+   else
       apnItems = 0;
 }
 
