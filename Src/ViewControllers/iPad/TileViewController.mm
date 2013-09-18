@@ -111,18 +111,35 @@ const NSUInteger nAutoAnimationSteps = 10;
 - (void) viewWillAppear : (BOOL) animated
 {
    //TODO: find a better ("idiomatic") solution for this problem.
+   [super viewWillAppear : animated];
+
    if (nPages) {
       //it can happen, that we have a wrong geometry: detail view
       //controller was pushed on a stack, we rotate a device and press
       //a 'back' button. geometry is wrong now.
       
       if (currPage && currPage.frame.size.width) {
-         const CGRect currentFrame = self.view.frame;
-         if (currentFrame.size.width != currPage.frame.size.width) {
+         const CGRect currFrame = currPage.frame;// self.view.frame;
+         const UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+         bool layoutBroken = false;
+         if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
+            if (currFrame.size.width < currFrame.size.height) {
+               //Nice! Thank you, Apple's engineers!
+               self.view.frame = CGRectMake(0.f, 0.f, 1024.f, 704.f);
+               layoutBroken = true;
+            }
+         } else {
+            if (currFrame.size.width > currFrame.size.height) {
+               //Nice! Thank you, Apple's engineers!
+               self.view.frame = CGRectMake(0.f, 0.f, 768.f, 960.f);
+               layoutBroken = true;
+            }
+         }
+
+         if (layoutBroken) {
             [self layoutPages : YES];
             [self layoutFlipView];
             [self layoutPanRegion];
-            
             [self fixFlipHintGeometry];
          }
       }
@@ -308,6 +325,8 @@ const NSUInteger nAutoAnimationSteps = 10;
 {
    assert(flipAnimator.animationLock == NO &&
           "willAnimateRotationToInterfaceOrientation:duration:, flip animation is active");
+
+   NSLog(@"rotating");
 
    if (!nPages)
       return;

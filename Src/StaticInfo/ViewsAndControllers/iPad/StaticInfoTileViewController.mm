@@ -89,7 +89,7 @@
          [self showRightFlipHint];
    }
 }
-
+/*
 //________________________________________________________________________________________
 - (void) viewWillAppear : (BOOL) animated
 {
@@ -118,7 +118,7 @@
       [self layoutFlipView];
       [self layoutPanRegion];
    }
-}
+}*/
 
 #pragma mark - Overriders for TileViewController's methods.
 
