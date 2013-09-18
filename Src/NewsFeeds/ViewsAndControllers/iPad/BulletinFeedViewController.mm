@@ -12,6 +12,12 @@
 #import "FeedCache.h"
 #import "FlipView.h"
 
+@interface NewsFeedViewController(Private)
+
+- (void) hideAPNHints;
+
+@end
+
 @implementation BulletinFeedViewController
 
 #pragma mark - Lifecycle.
@@ -42,12 +48,11 @@
 
    [self sortArticlesIntoIssues : items];
    
-   if (feedCache) {
+   if (feedCache)
       feedCache = nil;
-      //We were using cache and had a spinner in a nav bar (while loading a new data).
-      [self hideNavBarSpinner];
-   } else
-      CernAPP::HideSpinner(self);
+   
+   [self hideNavBarSpinner];
+   CernAPP::HideSpinner(self);
    
    parserOp = nil;
 
@@ -63,6 +68,8 @@
       [self refreshAfterFlip];
       panGesture.enabled = YES;
    }
+   
+   [self hideAPNHints];
 }
 
 //________________________________________________________________________________________
