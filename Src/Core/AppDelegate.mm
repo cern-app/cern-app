@@ -279,7 +279,10 @@ NSString * const deviceTokenKey = @"DeviceToken";
 
    using namespace CernAPP::Details;
 
-   assert(deviceToken != nil && "application:didRegisterForRemoteNotificationsWithDeviceToken:, parameter 'deviceToken' is nil");
+   if (!deviceToken) {
+      NSLog(@"error: application:didRegisterForRemoveNotificationsWithDeviceToken:, parameter 'deviceToken' is nil");
+      return;
+   }
 
    NSString * const oldToken = [[NSUserDefaults standardUserDefaults] stringForKey : deviceTokenKey];
 
@@ -300,7 +303,7 @@ NSString * const deviceTokenKey = @"DeviceToken";
       mode = RequestType::tokenRegistration;
       connection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : request]] delegate : self];
    } else
-      NSLog(@"invalid token registration request for device token %@", deviceToken);
+      NSLog(@"error: invalid token registration request for device token %@", deviceToken);
 }
 
 //________________________________________________________________________________________
@@ -308,7 +311,7 @@ NSString * const deviceTokenKey = @"DeviceToken";
 {
 #pragma unused(application)
 
-   NSLog(@"failed to register for APN: %@", error);
+   NSLog(@"error: failed to register for APN - %@", error);
 }
 
 //________________________________________________________________________________________
@@ -323,7 +326,6 @@ NSString * const deviceTokenKey = @"DeviceToken";
          MenuViewController * const mvc = (MenuViewController *)controller.underLeftViewController;
          [mvc checkPushNotifications];
       }
-      
    }
 }
 
