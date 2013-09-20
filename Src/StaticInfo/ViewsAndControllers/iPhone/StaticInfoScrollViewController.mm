@@ -69,6 +69,17 @@
 }
 
 //________________________________________________________________________________________
+- (void) viewDidAppear:(BOOL)animated
+{
+   [super viewDidAppear:animated];
+   
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") && scrollView) {
+      if (dataSource.count > 1)
+         [self.slidingViewController.panGesture requireGestureRecognizerToFail : scrollView.panGestureRecognizer];
+   }
+}
+
+//________________________________________________________________________________________
 - (void) viewDidLayoutSubviews
 {
    //Now layout static info item views in a scrollview.
