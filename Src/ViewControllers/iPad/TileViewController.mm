@@ -326,8 +326,6 @@ const NSUInteger nAutoAnimationSteps = 10;
    assert(flipAnimator.animationLock == NO &&
           "willAnimateRotationToInterfaceOrientation:duration:, flip animation is active");
 
-   NSLog(@"rotating");
-
    if (!nPages)
       return;
 

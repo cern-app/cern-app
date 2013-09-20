@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 
 //
-//APNHintView - simple view, yellow circle with a number inside
+//APNHintView - simple view, red circle with a number inside
 //(APN == Apple push notification, number == number of new items.
 //
 

@@ -20,6 +20,9 @@ using CernAPP::ItemStyle;
 //for example, feed item has to be in a menu group item, etc. etc.
 
 //In the version 2 I hope we'll have, this must be completely rethought.
+//Also, APN hints system was added at the end and it's completely unnatural
+//and too complicated (spreaded all over views, content providers, menu items.
+//To be redesigned in v 2.
 
 namespace {
 
@@ -1160,7 +1163,6 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                   for (NSObject<MenuItemProtocol> *item in menuItems) {
                      if (NSObject<MenuItemProtocol> * const found = [item findItemForID : itemID]) {
                         //We found updated menu item.
-                        //[item addAPNHint : itemID];
                         const NSInteger newItems = [components[1] integerValue];
                         assert(newItems > 0 && "checkPushNotifications, invalid payload");
                         [item resetAPNHint : newItems forID : itemID];
@@ -1174,7 +1176,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                            UIViewController<APNEnabledController> * const tvc =
                                  (UIViewController<APNEnabledController> *)self.slidingViewController.topViewController;
                            if (tvc.apnID == itemID)
-                              tvc.apnItems = newItems;
+                              tvc.apnItems = newItems;//Inform the current top-level controller about an APN.
                         }
                      }
                   }
