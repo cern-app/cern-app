@@ -109,6 +109,16 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 #pragma mark - viewDid/Done/Does/Will etc.
 
 //________________________________________________________________________________________
+- (void) adjustAlbumViewInsets
+{
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+      UIEdgeInsets insets = {};
+      insets.top = self.navigationController.navigationBar.frame.size.height + 20.f;
+      albumCollectionView.contentInset = insets;
+   }
+}
+
+//________________________________________________________________________________________
 - (void) createAlbumViewWithFrame : (CGRect) frame
 {
    albumCollectionView = [[UICollectionView alloc] initWithFrame : frame collectionViewLayout : [[AnimatedStackLayout alloc] init]];
@@ -129,6 +139,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    albumCollectionView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
                                           UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
                                           UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+   [self adjustAlbumViewInsets];
 }
 
 //________________________________________________________________________________________
@@ -146,6 +157,14 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
    [self.collectionView registerClass : [PhotoAlbumCoverView class]
            forCellWithReuseIdentifier : [PhotoAlbumCoverView cellReuseIdentifier]];
+}
+
+//________________________________________________________________________________________
+- (void) viewWillAppear : (BOOL) animated
+{
+   [super viewWillAppear : animated];
+
+   [self adjustAlbumViewInsets];
 }
 
 //________________________________________________________________________________________
