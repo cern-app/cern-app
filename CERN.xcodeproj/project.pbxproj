@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		412B1E3217F0665000AE146A /* icon_120x120.png in Resources */ = {isa = PBXBuildFile; fileRef = 412B1E3117F0665000AE146A /* icon_120x120.png */; };
+		412B1E3417F0675F00AE146A /* icon_76x76.png in Resources */ = {isa = PBXBuildFile; fileRef = 412B1E3317F0675F00AE146A /* icon_76x76.png */; };
+		412B1E3617F0677300AE146A /* icon_152x152.png in Resources */ = {isa = PBXBuildFile; fileRef = 412B1E3517F0677300AE146A /* icon_152x152.png */; };
 		4162A4551625BA87002B9D09 /* Default~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4162A4541625BA87002B9D09 /* Default~iphone.png */; };
 		4162A4571625BA98002B9D09 /* Default@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4162A4561625BA98002B9D09 /* Default@2x~iphone.png */; };
 		4162A4611625BD3C002B9D09 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 4162A4601625BD3C002B9D09 /* Default-Landscape@2x~ipad.png */; };
@@ -258,6 +261,9 @@
 
 /* Begin PBXFileReference section */
 		411D362316BADC57008CF20B /* Readability-sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Readability-sample.h"; sourceTree = "<group>"; };
+		412B1E3117F0665000AE146A /* icon_120x120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_120x120.png; sourceTree = "<group>"; };
+		412B1E3317F0675F00AE146A /* icon_76x76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_76x76.png; sourceTree = "<group>"; };
+		412B1E3517F0677300AE146A /* icon_152x152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_152x152.png; sourceTree = "<group>"; };
 		4162A4541625BA87002B9D09 /* Default~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default~iphone.png"; sourceTree = "<group>"; };
 		4162A4561625BA98002B9D09 /* Default@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x~iphone.png"; sourceTree = "<group>"; };
 		4162A4601625BD3C002B9D09 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
@@ -791,6 +797,9 @@
 				41E618011614CEB700BAA7D4 /* icon@2x~iphone.png */,
 				41E618021614CEB700BAA7D4 /* icon~ipad.png */,
 				41E618031614CEB700BAA7D4 /* icon~iphone.png */,
+				412B1E3117F0665000AE146A /* icon_120x120.png */,
+				412B1E3317F0675F00AE146A /* icon_76x76.png */,
+				412B1E3517F0677300AE146A /* icon_152x152.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -1477,6 +1486,7 @@
 				41E6184A1614CEB700BAA7D4 /* H6.png in Resources */,
 				41E6184B1614CEB700BAA7D4 /* H7.png in Resources */,
 				41E6184C1614CEB700BAA7D4 /* H8.png in Resources */,
+				412B1E3617F0677300AE146A /* icon_152x152.png in Resources */,
 				41E6184D1614CEB700BAA7D4 /* H9.png in Resources */,
 				41E6184E1614CEB700BAA7D4 /* HA.png in Resources */,
 				41E6184F1614CEB800BAA7D4 /* HJ.png in Resources */,
@@ -1511,6 +1521,7 @@
 				41BBD0E41615AC810057EDE2 /* Default-568h@2x.png in Resources */,
 				41CE55B71616073F00F477AD /* D3.png in Resources */,
 				41CE55B91616074A00F477AD /* D4.png in Resources */,
+				412B1E3217F0665000AE146A /* icon_120x120.png in Resources */,
 				703FD35C161DDB4F00B8BB8C /* PTS75F.ttf in Resources */,
 				4162A4551625BA87002B9D09 /* Default~iphone.png in Resources */,
 				4162A4571625BA98002B9D09 /* Default@2x~iphone.png in Resources */,
@@ -1546,6 +1557,7 @@
 				7046DFDF16A42ADB00F17445 /* disclose_disabled.png in Resources */,
 				7046DFE116A42EE300F17445 /* disclose_child.png in Resources */,
 				709CE6C516A5BE97006D524E /* 389-flash@2x.png in Resources */,
+				412B1E3417F0675F00AE146A /* icon_76x76.png in Resources */,
 				709CE6C816A5C045006D524E /* 112-group@2x.png in Resources */,
 				709CE6CA16A5C287006D524E /* 180-stickynote@2x.png in Resources */,
 				70619D3016B042F900906E5C /* 106-sliders@2x.png in Resources */,
@@ -1818,8 +1830,8 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Src/PCH/CERN-Prefix.pch";
 				GCC_VERSION = "";
