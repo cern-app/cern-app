@@ -14,6 +14,7 @@
 #import "NewsTableViewCell.h"
 #import "ContentProviders.h"
 #import "Reachability.h"
+#import "DeviceCheck.h"
 
 using CernAPP::NetworkStatus;
 
@@ -130,6 +131,14 @@ using CernAPP::NetworkStatus;
    if (!firstViewDidAppear) {
       firstViewDidAppear = YES;
       [self refresh];
+   }
+
+
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+#ifdef __IPHONE_7_0
+      self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+#endif
+      [self.slidingViewController.panGesture requireGestureRecognizerToFail : self.tableView.panGestureRecognizer];
    }
 
 }
