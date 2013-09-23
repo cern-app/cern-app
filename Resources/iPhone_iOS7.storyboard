@@ -36,7 +36,7 @@
         <scene sceneID="wpa-mT-NfK">
             <objects>
                 <tableViewController id="9RW-qg-iB0" customClass="NewsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="cNW-69-xt1">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="cNW-69-xt1" customClass="SlideTableView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -92,7 +92,7 @@
         <!--Article Detail View Controller-->
         <scene sceneID="Rke-Ci-fMZ">
             <objects>
-                <viewController storyboardIdentifier="ArticleDetailViewControllerID" id="ecX-5O-MuA" customClass="ArticleDetailViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ArticleDetailViewControllerID" automaticallyAdjustsScrollViewInsets="NO" id="ecX-5O-MuA" customClass="ArticleDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5OU-Kj-4aQ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -112,7 +112,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uSo-NM-CIQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" id="lNs-hN-a6K">
+                <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" id="lNs-hN-a6K" customClass="SlideWebView">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -120,7 +120,7 @@
                         <outlet property="delegate" destination="ecX-5O-MuA" id="A4g-F6-JoN"/>
                     </connections>
                 </webView>
-                <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" id="ImY-np-WJW">
+                <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" id="ImY-np-WJW" customClass="SlideWebView">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -368,7 +368,7 @@
         <scene sceneID="8aV-bc-V97">
             <objects>
                 <tableViewController id="nlL-X2-qbW" customClass="BulletinTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="67" sectionHeaderHeight="22" sectionFooterHeight="22" id="29H-5z-LPq">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="67" sectionHeaderHeight="22" sectionFooterHeight="22" id="29H-5z-LPq" customClass="SlideTableView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -817,7 +817,7 @@
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sjo-XE-sSL" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController storyboardIdentifier="BulletinIssueTableControllerID" id="ko8-j9-gnx" customClass="BulletinIssueTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="RSr-hG-T2Q">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="RSr-hG-T2Q" customClass="SlideTableView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

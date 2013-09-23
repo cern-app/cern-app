@@ -3,6 +3,8 @@
 
 #import <cassert>
 
+#import <Availability.h>
+
 #import "ArticleDetailViewController.h"
 #import "ECSlidingViewController.h"
 #import "NewsTableViewController.h"
@@ -259,6 +261,14 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    //viewDidAppear can be called many times: the first time when controller
    //created and view loaded, next time - for example, when article detailed view
    //controller is poped from the navigation stack.
+
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+#ifdef __IPHONE_7_0
+      [self.slidingViewController.panGesture requireGestureRecognizerToFail:self.tableView.panGestureRecognizer];
+#endif
+      if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+         [self.slidingViewController.panGesture requireGestureRecognizerToFail:self.tableView.panGestureRecognizer];
+   }
 
    if (firstViewDidAppear) {
       firstViewDidAppear = NO;

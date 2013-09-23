@@ -98,6 +98,7 @@
 
 
 #import <Social/Social.h>
+#import <Availability.h>
 
 #import "ArticleDetailViewController.h"
 #import "ECSlidingViewController.h"
@@ -296,6 +297,12 @@ const NSUInteger fontIncreaseStep = 4;
    //Called only once (?)
    
    [super viewDidAppear : animated];
+   
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+#ifdef __IPHONE_7_0
+      self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+#endif
+   }
 
    CGRect frame = self.view.frame;
    frame.origin = CGPoint();
@@ -1119,13 +1126,13 @@ const NSUInteger fontIncreaseStep = 4;
 - (void) switchToPageView
 {
    //Non-animated switch.
-   if (rdbView.superview) {
+   if (rdbView.superview)
       [rdbView removeFromSuperview];
-   }
-   
-   if (!pageView.superview) {
+   if (!pageView.superview)
       [containerView addSubview : pageView];
-   }
+   
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+      [self.slidingViewController.panGesture requireGestureRecognizerToFail : pageView.scrollView.panGestureRecognizer];
    
    if (!spinner.hidden)
       [spinner.superview bringSubviewToFront : spinner];
@@ -1139,6 +1146,9 @@ const NSUInteger fontIncreaseStep = 4;
       [pageView removeFromSuperview];
    if (!rdbView.superview)
       [containerView addSubview : rdbView];
+
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+      [self.slidingViewController.panGesture requireGestureRecognizerToFail : rdbView.scrollView.panGestureRecognizer];
 
    if (!spinner.hidden)
       [spinner.superview bringSubviewToFront : spinner];

@@ -185,6 +185,8 @@
 		707B13F6169AF69300180E02 /* Reachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EC169AF69300180E02 /* Reachability.mm */; };
 		707B13F7169AF69300180E02 /* UIImage+SquareScaledImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EE169AF69300180E02 /* UIImage+SquareScaledImage.m */; };
 		707B13FA169AF6AE00180E02 /* StoryboardIdentifiers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */; };
+		707EA02517F07216006AA7A4 /* SlideTableView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707EA02417F07216006AA7A4 /* SlideTableView.mm */; };
+		707EA02817F07889006AA7A4 /* SlideWebView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707EA02717F07889006AA7A4 /* SlideWebView.mm */; };
 		70817FB417E20A4700DCD387 /* iPad_iOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70817FB217E20A4700DCD387 /* iPad_iOS7.storyboard */; };
 		70817FB517E20A4700DCD387 /* iPhone_iOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70817FB317E20A4700DCD387 /* iPhone_iOS7.storyboard */; };
 		7098286616C404C500311025 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7098286516C404C500311025 /* Social.framework */; };
@@ -512,6 +514,10 @@
 		707B13EE169AF69300180E02 /* UIImage+SquareScaledImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+SquareScaledImage.m"; sourceTree = "<group>"; };
 		707B13F8169AF6AE00180E02 /* StoryboardIdentifiers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryboardIdentifiers.h; sourceTree = "<group>"; };
 		707B13F9169AF6AE00180E02 /* StoryboardIdentifiers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StoryboardIdentifiers.mm; sourceTree = "<group>"; };
+		707EA02317F07216006AA7A4 /* SlideTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideTableView.h; sourceTree = "<group>"; };
+		707EA02417F07216006AA7A4 /* SlideTableView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SlideTableView.mm; sourceTree = "<group>"; };
+		707EA02617F07889006AA7A4 /* SlideWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideWebView.h; sourceTree = "<group>"; };
+		707EA02717F07889006AA7A4 /* SlideWebView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SlideWebView.mm; sourceTree = "<group>"; };
 		70817FB217E20A4700DCD387 /* iPad_iOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPad_iOS7.storyboard; sourceTree = "<group>"; };
 		70817FB317E20A4700DCD387 /* iPhone_iOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPhone_iOS7.storyboard; sourceTree = "<group>"; };
 		7098286516C404C500311025 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -929,6 +935,10 @@
 				7069F76416C14D6D006BC78B /* PictureButtonView.mm */,
 				70BCD9B11733C560000BD91B /* FlipParentView.h */,
 				70BCD9B21733C560000BD91B /* FlipParentView.mm */,
+				707EA02317F07216006AA7A4 /* SlideTableView.h */,
+				707EA02417F07216006AA7A4 /* SlideTableView.mm */,
+				707EA02617F07889006AA7A4 /* SlideWebView.h */,
+				707EA02717F07889006AA7A4 /* SlideWebView.mm */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -1610,6 +1620,7 @@
 				707B1395169AEDA000180E02 /* Experiments.mm in Sources */,
 				707B13A0169AF07D00180E02 /* GUIHelpers.mm in Sources */,
 				707B13AD169AF1E500180E02 /* ApplicationErrors.mm in Sources */,
+				707EA02517F07216006AA7A4 /* SlideTableView.mm in Sources */,
 				707B13EF169AF69300180E02 /* DeviceCheck.mm in Sources */,
 				707B13F0169AF69300180E02 /* GTMNSString+HTML.m in Sources */,
 				707B13F1169AF69300180E02 /* KeyVal.mm in Sources */,
@@ -1662,6 +1673,7 @@
 				70A562CA173A35C300145FEC /* BulletinIssueViewController.mm in Sources */,
 				70A562CB173A35C300145FEC /* BulletinPageView.mm in Sources */,
 				70A562CC173A35C300145FEC /* FeedItemTileView.mm in Sources */,
+				707EA02817F07889006AA7A4 /* SlideWebView.mm in Sources */,
 				70A562CD173A35C300145FEC /* FeedPageView.mm in Sources */,
 				70A562CE173A35C300145FEC /* NewsFeedViewController.mm in Sources */,
 				70A562D1173A35C300145FEC /* BulletinIssueTableViewController.mm in Sources */,

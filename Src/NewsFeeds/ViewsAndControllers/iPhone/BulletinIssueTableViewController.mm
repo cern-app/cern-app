@@ -6,9 +6,12 @@
 //  Copyright (c) 2013 CERN. All rights reserved.
 //
 
+#import <Availability.h>
+
 #import "BulletinIssueTableViewController.h"
 #import "ArticleDetailViewController.h"
 #import "BulletinTableViewController.h"
+#import "ECSlidingViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "CellBackgroundView.h"
 #import "NewsTableViewCell.h"
@@ -77,6 +80,13 @@
    if (!loaded) {
       [self.tableView reloadData];
       loaded = YES;
+   }
+   
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+#ifdef __IPHONE_7_0
+      self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+#endif
+      [self.slidingViewController.panGesture requireGestureRecognizerToFail:self.tableView.panGestureRecognizer];
    }
 }
 

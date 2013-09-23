@@ -7,6 +7,7 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import <Availability.h>
 
 #import "BulletinIssueTableViewController.h"
 #import "BulletinTableViewController.h"
