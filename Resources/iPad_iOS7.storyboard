@@ -40,7 +40,7 @@
         <!--Article Detail View Controller-->
         <scene sceneID="PXC-fj-nKg">
             <objects>
-                <viewController storyboardIdentifier="ArticleDetailViewControllerID" id="C5G-He-c5f" customClass="ArticleDetailViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ArticleDetailViewControllerID" automaticallyAdjustsScrollViewInsets="NO" id="C5G-He-c5f" customClass="ArticleDetailViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="spO-Jm-jwq"/>
                         <viewControllerLayoutGuide type="bottom" id="8Xf-hD-irZ"/>
@@ -69,7 +69,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4wN-a2-Skr" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <webView contentMode="scaleToFill" id="hfq-6o-5xc">
+                <webView contentMode="scaleToFill" id="hfq-6o-5xc" customClass="SlideWebView">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -77,7 +77,7 @@
                         <outlet property="delegate" destination="C5G-He-c5f" id="XbS-qe-HBv"/>
                     </connections>
                 </webView>
-                <webView contentMode="scaleToFill" id="O6x-Hl-3pO">
+                <webView contentMode="scaleToFill" id="O6x-Hl-3pO" customClass="SlideWebView">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -92,7 +92,8 @@
         <scene sceneID="lsm-n1-6DS">
             <objects>
                 <navigationController storyboardIdentifier="FeedTileViewControllerID" definesPresentationContext="YES" id="vuC-nA-Hru" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="PiZ-K9-22d">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationBar key="navigationBar" alpha="0.89999999999999991" contentMode="scaleToFill" id="PiZ-K9-22d">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -121,6 +122,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="Yxv-KD-QgN">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="j3B-Ny-EXL">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -171,6 +173,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JNS-yb-Ht2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -180,7 +183,8 @@
         <scene sceneID="PXB-hP-k2n">
             <objects>
                 <navigationController storyboardIdentifier="BulletinTileViewControllerID" definesPresentationContext="YES" id="EMI-sL-0NS" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="DpK-ej-iXd">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="DpK-ej-iXd">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -209,6 +213,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="aKj-R0-bgS">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="ubC-yG-dVp">
                             <connections>
@@ -230,7 +235,8 @@
         <scene sceneID="vvo-cm-3GC">
             <objects>
                 <navigationController storyboardIdentifier="StaticInfoTileViewControllerID" definesPresentationContext="YES" id="9OY-gO-3hz" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="9p3-r5-X7e">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9p3-r5-X7e">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -259,6 +265,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="RoH-KZ-31m">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="fVp-EA-jZr">
                             <connections>
@@ -275,7 +282,7 @@
         <scene sceneID="WFA-uf-uMX">
             <objects>
                 <navigationController storyboardIdentifier="PhotoCollectionsViewControllerID" definesPresentationContext="YES" id="znT-bM-D1R" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="0Hr-O5-ixb">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Hr-O5-ixb">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -296,7 +303,7 @@
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="Fm4-vg-l4a" customClass="PhotoCollectionsViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="Hqu-4q-aZR">
-                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ouv-bw-ypR">
                             <size key="itemSize" width="50" height="50"/>
@@ -306,7 +313,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoAlbumCoverView" id="BvA-4D-1a2" customClass="PhotoAlbumCoverView">
-                                <rect key="frame" x="0.0" y="0.0" width="215" height="215"/>
+                                <rect key="frame" x="0.0" y="64" width="215" height="215"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="215" height="215"/>
@@ -342,9 +349,9 @@
         <scene sceneID="lwW-qc-M2h">
             <objects>
                 <navigationController storyboardIdentifier="WebcastsControllerID" definesPresentationContext="YES" id="fa8-sK-xye" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="v9x-uT-5HR">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="v9x-uT-5HR">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
@@ -364,7 +371,7 @@
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="c9e-RJ-5cx" customClass="WebcastsCollectionViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="lVe-YZ-Lkm">
-                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="pdP-AR-LEE">
                             <size key="itemSize" width="213" height="202"/>
@@ -374,7 +381,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoThumbnailCell" id="zth-VQ-Tqq" customClass="VideoThumbnailCell">
-                                <rect key="frame" x="0.0" y="0.0" width="213" height="202"/>
+                                <rect key="frame" x="0.0" y="64" width="213" height="202"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="213" height="202"/>
@@ -427,9 +434,9 @@
         <scene sceneID="9ku-Ff-Zp7">
             <objects>
                 <navigationController storyboardIdentifier="VideoCollectionsViewControllerID" definesPresentationContext="YES" id="WNB-nu-GMH" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="7mV-6t-VJu">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7mV-6t-VJu">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
@@ -449,7 +456,7 @@
             <objects>
                 <collectionViewController autoresizesArchivedViewToFullSize="NO" id="MDs-b9-uRh" customClass="VideosCollectionViewController" sceneMemberID="viewController">
                     <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="TwK-Mp-ZET">
-                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="iOF-yQ-SJG">
                             <size key="itemSize" width="230" height="230"/>
@@ -459,7 +466,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoThumbnailCell" id="Qrl-Hl-CSH" customClass="VideoThumbnailCell">
-                                <rect key="frame" x="0.0" y="0.0" width="230" height="230"/>
+                                <rect key="frame" x="0.0" y="64" width="230" height="230"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="230" height="230"/>
@@ -502,7 +509,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T9v-kH-YbL">
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T9v-kH-YbL">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -645,10 +652,12 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <toolbarItems/>
+                    <toolbarItems>
+                        <barButtonItem title="Done" id="UsS-aC-HhY"/>
+                    </toolbarItems>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <nil key="simulatedBottomBarMetrics"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="guiFontSizeSlider" destination="ShE-Nn-GaL" id="DLy-KT-5hH"/>
                         <outlet property="guiSettingsView" destination="Oqb-Ll-uRJ" id="f70-8g-O6d"/>
@@ -666,9 +675,10 @@
         <scene sceneID="Ezw-Iv-6C2">
             <objects>
                 <navigationController storyboardIdentifier="EventDisplayControllerID" definesPresentationContext="YES" id="wLI-Pc-Phq" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="ktS-HH-yJO">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ktS-HH-yJO">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
@@ -686,7 +696,7 @@
         <!--Event Display View Controller-->
         <scene sceneID="7lt-5j-Htd">
             <objects>
-                <viewController id="Cr0-3A-1RS" customClass="EventDisplayViewController" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Cr0-3A-1RS" customClass="EventDisplayViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="f7P-SQ-vlm"/>
                         <viewControllerLayoutGuide type="bottom" id="TFW-HW-3sF"/>
@@ -704,18 +714,23 @@
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="kT6-1u-tho">
                                 <rect key="frame" x="365" y="921" width="39" height="37"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="37" id="gCW-sA-4Ys"/>
+                                    <constraint firstAttribute="width" constant="39" id="pyr-wO-YnY"/>
+                                </constraints>
                             </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="kT6-1u-tho" secondAttribute="bottom" constant="2" id="Rm7-lF-TiE"/>
-                            <constraint firstItem="A4d-gz-5LG" firstAttribute="bottom" secondItem="4nK-Ou-L9O" secondAttribute="bottom" id="cuo-70-aEO"/>
-                            <constraint firstItem="A4d-gz-5LG" firstAttribute="trailing" secondItem="4nK-Ou-L9O" secondAttribute="trailing" id="g1w-XO-iIO"/>
-                            <constraint firstItem="A4d-gz-5LG" firstAttribute="top" secondItem="4nK-Ou-L9O" secondAttribute="top" id="gky-cL-2XJ"/>
-                            <constraint firstItem="kT6-1u-tho" firstAttribute="centerX" secondItem="A4d-gz-5LG" secondAttribute="centerX" id="sac-DM-4er"/>
-                            <constraint firstItem="A4d-gz-5LG" firstAttribute="leading" secondItem="4nK-Ou-L9O" secondAttribute="leading" id="szT-zK-LP9"/>
+                            <constraint firstAttribute="trailing" secondItem="A4d-gz-5LG" secondAttribute="trailing" id="DHI-ev-UXv"/>
+                            <constraint firstAttribute="bottom" secondItem="kT6-1u-tho" secondAttribute="bottom" constant="2" id="Qq0-ww-amb"/>
+                            <constraint firstItem="A4d-gz-5LG" firstAttribute="top" secondItem="4nK-Ou-L9O" secondAttribute="top" id="WuR-Pp-N2a"/>
+                            <constraint firstAttribute="bottom" secondItem="A4d-gz-5LG" secondAttribute="bottom" id="jo6-3e-Smg"/>
+                            <constraint firstAttribute="centerX" secondItem="kT6-1u-tho" secondAttribute="centerX" id="rl3-mR-YM6"/>
+                            <constraint firstItem="A4d-gz-5LG" firstAttribute="leading" secondItem="4nK-Ou-L9O" secondAttribute="leading" id="snb-RH-nsk"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="FLi-Mz-Ha5">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="6z2-kq-5hS">
                             <connections>
@@ -741,9 +756,10 @@
         <scene sceneID="YnT-o6-dH5">
             <objects>
                 <navigationController storyboardIdentifier="TwitterViewControllerID" definesPresentationContext="YES" id="vvZ-YM-7aN" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="A1x-Be-nlV">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="A1x-Be-nlV">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
@@ -763,12 +779,12 @@
             <objects>
                 <tableViewController id="c4N-lx-DaL" customClass="TwitterTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Yad-tt-nH4" customClass="TwitterTableView">
-                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TweetCell" id="S0q-6S-G9c" customClass="TweetCell">
-                                <rect key="frame" x="0.0" y="22" width="768" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="768" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="S0q-6S-G9c" id="C1p-vW-MyF">
                                     <rect key="frame" x="0.0" y="0.0" width="768" height="43"/>
@@ -805,26 +821,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rEa-Nf-yTm">
-                                <rect key="frame" x="0.0" y="44" width="768" height="980"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rEa-Nf-yTm">
+                                <rect key="frame" x="0.0" y="-1" width="768" height="1025"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="45h-uQ-CJg">
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XqM-VZ-VYE">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="7ZA-MW-279"/>
+                                </constraints>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <textAttributes key="titleTextAttributes">
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </textAttributes>
                                 <items>
-                                    <navigationItem title="Credits" id="KnG-eK-xIY">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="wsS-JW-BGI">
+                                    <navigationItem title="Credits" id="wa2-HE-Tpz">
+                                        <barButtonItem key="rightBarButtonItem" title="Done" id="7Wu-Pd-EXm">
                                             <connections>
-                                                <action selector="donePressed:" destination="B0g-ew-1eY" id="Cy0-QS-0OR"/>
+                                                <action selector="donePressed:" destination="B0g-ew-1eY" id="h83-P7-0HA"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -833,13 +852,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="trailing" secondItem="Fc9-a4-tOc" secondAttribute="trailing" id="2Tr-Dr-8aJ"/>
-                            <constraint firstItem="45h-uQ-CJg" firstAttribute="top" secondItem="Fc9-a4-tOc" secondAttribute="top" id="Hf0-2L-Mi1"/>
-                            <constraint firstItem="45h-uQ-CJg" firstAttribute="trailing" secondItem="Fc9-a4-tOc" secondAttribute="trailing" id="Iua-aO-y3c"/>
-                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="leading" secondItem="Fc9-a4-tOc" secondAttribute="leading" id="LFF-Lf-EJ6"/>
-                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="top" secondItem="45h-uQ-CJg" secondAttribute="bottom" id="QRN-S7-uRd"/>
-                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="bottom" secondItem="Fc9-a4-tOc" secondAttribute="bottom" id="VZt-wg-OhN"/>
-                            <constraint firstItem="45h-uQ-CJg" firstAttribute="leading" secondItem="Fc9-a4-tOc" secondAttribute="leading" id="kHv-Pa-JxA"/>
+                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="top" secondItem="Fc9-a4-tOc" secondAttribute="top" constant="-1" id="1qK-Jq-cbg"/>
+                            <constraint firstItem="XqM-VZ-VYE" firstAttribute="leading" secondItem="Fc9-a4-tOc" secondAttribute="leading" id="D2g-wt-Pfs"/>
+                            <constraint firstItem="XqM-VZ-VYE" firstAttribute="top" secondItem="Fc9-a4-tOc" secondAttribute="top" id="FHh-OZ-oQ9"/>
+                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="leading" secondItem="Fc9-a4-tOc" secondAttribute="leading" id="buA-Gh-7lJ"/>
+                            <constraint firstAttribute="bottom" secondItem="rEa-Nf-yTm" secondAttribute="bottom" id="f6H-xh-Ggd"/>
+                            <constraint firstAttribute="trailing" secondItem="rEa-Nf-yTm" secondAttribute="trailing" id="iL7-DU-xuA"/>
+                            <constraint firstAttribute="trailing" secondItem="XqM-VZ-VYE" secondAttribute="trailing" id="sVY-wb-vax"/>
                         </constraints>
                     </view>
                     <connections>
@@ -852,6 +871,13 @@
         </scene>
     </scenes>
     <resources>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
         <image name="menu.png" width="20" height="20"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

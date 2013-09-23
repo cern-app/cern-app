@@ -600,9 +600,11 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (void) willAnimateRotationToInterfaceOrientation : (UIInterfaceOrientation) toInterfaceOrientation duration : (NSTimeInterval) duration
 {
-   CGRect pcFrame = pageControl.frame;
-   pcFrame.origin.x = self.view.frame.size.width / 2 - pcFrame.size.width / 2;
-   pageControl.frame = pcFrame;
+   if (CernAPP::SystemVersionLessThan(@"7.0")) {
+      CGRect pcFrame = pageControl.frame;
+      pcFrame.origin.x = self.view.frame.size.width / 2 - pcFrame.size.width / 2;
+      pageControl.frame = pcFrame;
+   }
 
    if (pages.count) {
       const CGFloat scrollViewWidth = self.scrollView.frame.size.width;

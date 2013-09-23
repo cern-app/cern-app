@@ -111,7 +111,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) adjustAlbumViewInsets
 {
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
       UIEdgeInsets insets = {};
       insets.top = self.navigationController.navigationBar.frame.size.height + 20.f;
       albumCollectionView.contentInset = insets;

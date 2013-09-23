@@ -52,11 +52,15 @@ CGFloat LicenseFontSize()
 {
    [super viewWillAppear : animated];
    
-   
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+      //We have a transparent nav. bar.
       UIEdgeInsets insets = {};
+
       if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
-         navigationBar.hidden = YES;
+         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+            navigationBar.hidden = YES;
+         else
+            insets.top = navigationBar.frame.size.height;
       } else {
          insets.top = navigationBar.frame.size.height;
          navigationBar.hidden = NO;
@@ -270,7 +274,7 @@ CGFloat LicenseFontSize()
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
       return;//We do not hide a navigation bar on iPad.
    
-   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"")) {
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
       UIEdgeInsets insets = {};
       if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
          navigationBar.hidden = YES;

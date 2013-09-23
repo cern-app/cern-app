@@ -144,6 +144,9 @@
       if ([self initTilesFromAppCache]) {
          [self showAPNHints];
          [self layoutFeedViews];
+         //
+         [self loadVisiblePageData];
+         //
          return;//No need to refresh.
       }
 
@@ -345,6 +348,9 @@
    
    NSMutableArray * const thumbnails = [[NSMutableArray alloc] init];
    const NSRange range = currPage.pageRange;
+   
+   bool needUpdate = false;
+   
    for (NSUInteger i = range.location, e = range.location + range.length; i < e; ++i) {
       MWFeedItem * const article = (MWFeedItem *)dataItems[i];
       if (!article.image) {
@@ -359,25 +365,18 @@
             newThumbnail.val = CernAPP::Details::GetThumbnailURL(urlString);
             [thumbnails addObject : newThumbnail];
          }
+      } else if (![currPage tileHasThumbnail : i - range.location]) {
+         needUpdate = true;
+         [currPage setThumbnail : article.image forTile : i - range.location doLayout : NO];
       }
    }
+
+   if (needUpdate) {
+      [currPage layoutTiles];
+      [flipView replaceCurrentFrame : currPage];
+   }
    
-   if (!thumbnails.count) {
-      //Let's check, if we have an image in some article, but no image in the corresponding tile.
-      bool needUpdate = false;
-      for (NSUInteger i = range.location, e = range.location + range.length; i < e; ++i) {
-         MWFeedItem * const article = (MWFeedItem *)dataItems[i];
-         if (article.image && ![currPage tileHasThumbnail : i - range.location]) {
-            needUpdate = true;
-            [currPage setThumbnail : article.image forTile : i - range.location doLayout : NO];
-         }
-      }
-      
-      if (needUpdate) {
-         [currPage layoutTiles];
-         [flipView replaceCurrentFrame : currPage];
-      }
-   } else {
+   if (thumbnails.count) {
       ThumbnailDownloader * const newDownloader = [[ThumbnailDownloader alloc] initWithItems : thumbnails sizeLimit : 500000  downscaleToSize : 200.f];
       [downloaders setObject : newDownloader forKey : key];
       newDownloader.pageNumber = currPage.pageNumber;

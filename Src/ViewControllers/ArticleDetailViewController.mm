@@ -283,7 +283,7 @@ const NSUInteger fontIncreaseStep = 4;
 {
    [super viewWillAppear : animated];
    
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
       UIEdgeInsets insets = {};
       insets.top = self.navigationController.navigationBar.frame.size.height + 20.f;
       rdbView.scrollView.contentInset = insets;
@@ -1133,7 +1133,7 @@ const NSUInteger fontIncreaseStep = 4;
    if (!pageView.superview)
       [containerView addSubview : pageView];
    
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+   if (/*UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && */CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
       [self.slidingViewController.panGesture requireGestureRecognizerToFail : pageView.scrollView.panGestureRecognizer];
    
    if (!spinner.hidden)
@@ -1149,7 +1149,7 @@ const NSUInteger fontIncreaseStep = 4;
    if (!rdbView.superview)
       [containerView addSubview : rdbView];
 
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+   if (/*UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && */CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
       [self.slidingViewController.panGesture requireGestureRecognizerToFail : rdbView.scrollView.panGestureRecognizer];
 
    if (!spinner.hidden)
@@ -1240,7 +1240,7 @@ const NSUInteger fontIncreaseStep = 4;
       [self.navigationController setNavigationBarHidden : NO];
    }
    
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
       UIEdgeInsets insets = {};
       if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
          insets.top = self.navigationController.navigationBar.frame.size.height + 20.f;
