@@ -37,17 +37,19 @@
             <objects>
                 <tableViewController id="9RW-qg-iB0" customClass="NewsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="cNW-69-xt1">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsTableViewCell" id="Hwf-VG-Ehq" customClass="NewsTableViewCell">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hwf-VG-Ehq" id="vJ1-m5-Vvy">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableViewCell>
                         </prototypes>
                     </tableView>
@@ -68,13 +70,15 @@
         <scene sceneID="Eg2-Wt-7fI">
             <objects>
                 <navigationController storyboardIdentifier="TableNavigationControllerNewsID" definesPresentationContext="YES" id="BAO-j4-Vf6" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="ajY-07-D6Y">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ajY-07-D6Y">
+                        <rect key="frame" x="0.0" y="-44" width="0.0" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="textShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>
                     <connections>
@@ -83,7 +87,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eCe-p0-voL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1081" y="-2243"/>
+            <point key="canvasLocation" x="-1084" y="-2250"/>
         </scene>
         <!--Article Detail View Controller-->
         <scene sceneID="Rke-Ci-fMZ">
@@ -125,7 +129,7 @@
                     </connections>
                 </webView>
             </objects>
-            <point key="canvasLocation" x="-132" y="-2219"/>
+            <point key="canvasLocation" x="-114" y="-2247"/>
         </scene>
         <!--News Table View Controller-->
         <scene sceneID="Otn-tR-aW1">
@@ -150,6 +154,7 @@
                             <outlet property="delegate" destination="k86-IH-HwC" id="9B4-WA-h3z"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="95M-Mk-Dx9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -357,18 +362,18 @@
             </objects>
             <point key="canvasLocation" x="-510" y="1660"/>
         </scene>
-        <!--Bulletin Table View Controller - Root View Controller-->
+        <!--Bulletin Table View Controller - Bulletin-->
         <scene sceneID="8aV-bc-V97">
             <objects>
                 <tableViewController id="nlL-X2-qbW" customClass="BulletinTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="67" sectionHeaderHeight="22" sectionFooterHeight="22" id="29H-5z-LPq">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" restorationIdentifier="BulletinCell" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsTableViewCell" rowHeight="67" id="Gi2-am-zNY" customClass="NewsTableViewCell">
-                                <rect key="frame" x="0.0" y="22" width="320" height="67"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="67"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gi2-am-zNY" id="btb-9r-4gG">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
@@ -378,7 +383,7 @@
                             </tableViewCell>
                         </prototypes>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="jXF-9c-KgQ">
+                    <navigationItem key="navigationItem" title="Bulletin" id="jXF-9c-KgQ">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="dZc-uQ-pLT">
                             <connections>
                                 <action selector="revealMenu:" destination="nlL-X2-qbW" id="a2J-IL-zMA"/>
@@ -589,9 +594,10 @@
         <scene sceneID="3Xe-aO-qnh">
             <objects>
                 <navigationController storyboardIdentifier="TwitterViewControllerID" definesPresentationContext="YES" id="dr0-bO-vSV" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="ggh-bY-p5M">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ggh-bY-p5M">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
@@ -612,12 +618,12 @@
             <objects>
                 <tableViewController id="sGt-c0-WCd" customClass="TwitterTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="79L-NO-FG3" customClass="TwitterTableView">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TweetCell" id="7iQ-PI-Df5" customClass="TweetCell">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7iQ-PI-Df5" id="H0B-Vh-BLp">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -664,7 +670,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="Ixj-cr-Bwu">
-                                            <rect key="frame" x="5" y="6" width="182" height="116.99999999999999"/>
+                                            <rect key="frame" x="5" y="6" width="182" height="117"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -807,14 +813,15 @@
         <!--Bulletin Issue Table View Controller-->
         <scene sceneID="Arv-H9-BEz">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sjo-XE-sSL" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController storyboardIdentifier="BulletinIssueTableControllerID" id="ko8-j9-gnx" customClass="BulletinIssueTableViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="RSr-hG-T2Q">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsTableViewCell" id="7Wd-bj-jfd" customClass="NewsTableViewCell">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7Wd-bj-jfd" id="dK0-O5-BkB">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -829,7 +836,6 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="T3S-LW-i8W"/>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sjo-XE-sSL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-63" y="2250"/>
         </scene>
@@ -837,9 +843,10 @@
         <scene sceneID="QPu-eL-rHv">
             <objects>
                 <navigationController restorationIdentifier="BulletinTableViewControllerID" storyboardIdentifier="BulletinTableViewControllerID" definesPresentationContext="YES" id="A6O-UZ-Iat" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="TC2-1b-HgR">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="TC2-1b-HgR">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">

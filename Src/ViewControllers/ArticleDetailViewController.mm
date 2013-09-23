@@ -106,6 +106,7 @@
 #import "MBProgressHUD.h"
 #import "NSString+HTML.h"
 #import "Reachability.h"
+#import "DeviceCheck.h"
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
 #import "GCOAuth.h"
@@ -292,6 +293,13 @@ const NSUInteger fontIncreaseStep = 4;
 
    rdbView.frame = frame;
    pageView.frame = frame;
+
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+      UIEdgeInsets insets = {};
+      insets.top = self.navigationController.navigationBar.frame.size.height + 20.f;
+      rdbView.scrollView.contentInset = insets;
+      pageView.scrollView.contentInset = insets;
+   }
    
    rdbView.multipleTouchEnabled = YES;
    pageView.multipleTouchEnabled = YES;
