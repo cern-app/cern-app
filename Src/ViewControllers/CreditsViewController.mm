@@ -9,6 +9,7 @@
 #import <cassert>
 
 #import "CreditsViewController.h"
+#import "DeviceCheck.h"
 
 namespace {
 
@@ -44,6 +45,26 @@ CGFloat LicenseFontSize()
    }
 
    return self;
+}
+
+//________________________________________________________________________________________
+- (void) viewWillAppear : (BOOL) animated
+{
+   [super viewWillAppear : animated];
+   
+   
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+      UIEdgeInsets insets = {};
+      if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+         navigationBar.hidden = YES;
+      } else {
+         insets.top = navigationBar.frame.size.height;
+         navigationBar.hidden = NO;
+      }
+      
+      textView.contentOffset = CGPoint();
+      textView.contentInset = insets;
+   }
 }
 
 //________________________________________________________________________________________
@@ -248,20 +269,33 @@ CGFloat LicenseFontSize()
 
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
       return;//We do not hide a navigation bar on iPad.
+   
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"")) {
+      UIEdgeInsets insets = {};
+      if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+         navigationBar.hidden = YES;
+      } else {
+         navigationBar.hidden = NO;
+         insets.top = navigationBar.frame.size.height;
+      }
 
-   const CGRect barFrame = navigationBar.frame;
-   CGRect textFrame = textView.frame;
-   if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
-      navigationBar.hidden = YES;
-      textFrame.origin.y -= barFrame.size.height;
-      textFrame.size.height += barFrame.size.height;
+      textView.contentInset = insets;
    } else {
-      navigationBar.hidden = NO;
-      textFrame.origin.y += barFrame.size.height;
-      textFrame.size.height -= barFrame.size.height;
-   }
+      const CGRect barFrame = navigationBar.frame;
+      CGRect textFrame = textView.frame;
 
-   textView.frame = textFrame;
+      if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
+         navigationBar.hidden = YES;
+         textFrame.origin.y -= barFrame.size.height;
+         textFrame.size.height += barFrame.size.height;
+      } else {
+         navigationBar.hidden = NO;
+         textFrame.origin.y += barFrame.size.height;
+         textFrame.size.height -= barFrame.size.height;
+      }
+
+      textView.frame = textFrame;
+   }
 }
 
 @end

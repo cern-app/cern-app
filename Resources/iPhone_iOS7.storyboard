@@ -549,7 +549,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" usesAttributedText="YES" id="Sbg-RT-egd">
-                                <rect key="frame" x="0.0" y="44" width="320" height="436"/>
+                                <rect key="frame" x="0.0" y="-1" width="320" height="481"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <accessibility key="accessibilityConfiguration">
@@ -559,20 +559,20 @@
                                 <attributedString key="attributedText"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <navigationBar contentMode="scaleToFill" id="BNc-gm-B2c">
+                            <navigationBar contentMode="scaleToFill" id="NS3-4n-IGT">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="barTintColor" red="0.4039215686" green="0.54117647059999996" blue="0.74509803919999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <textAttributes key="titleTextAttributes">
                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </textAttributes>
                                 <items>
-                                    <navigationItem title="Credits" id="1GJ-AD-2aI">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="bNQ-d9-4hZ">
+                                    <navigationItem title="Title" id="2TC-CZ-9aL">
+                                        <barButtonItem key="rightBarButtonItem" title="Done" id="uVP-hM-gxq">
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <connections>
-                                                <action selector="donePressed:" destination="NHq-yp-OT4" id="3y6-za-cFf"/>
+                                                <action selector="donePressed:" destination="NHq-yp-OT4" id="NKc-Ic-JHC"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -581,8 +581,9 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="navigationBar" destination="BNc-gm-B2c" id="mA8-ps-wlp"/>
+                        <outlet property="navigationBar" destination="NS3-4n-IGT" id="Yas-eP-6JI"/>
                         <outlet property="textView" destination="Sbg-RT-egd" id="Utl-jL-0rH"/>
                     </connections>
                 </viewController>
