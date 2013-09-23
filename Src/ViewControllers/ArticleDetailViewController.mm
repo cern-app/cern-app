@@ -278,6 +278,19 @@ const NSUInteger fontIncreaseStep = 4;
 }
 
 //________________________________________________________________________________________
+- (void) viewWillAppear:(BOOL)animated
+{
+   [super viewWillAppear : animated];
+   
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+      UIEdgeInsets insets = {};
+      insets.top = self.navigationController.navigationBar.frame.size.height + 20.f;
+      rdbView.scrollView.contentInset = insets;
+      pageView.scrollView.contentInset = insets;
+   }
+}
+
+//________________________________________________________________________________________
 - (void) viewDidAppear : (BOOL) animated
 {
    //Called only once (?)
@@ -293,13 +306,6 @@ const NSUInteger fontIncreaseStep = 4;
 
    rdbView.frame = frame;
    pageView.frame = frame;
-
-   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
-      UIEdgeInsets insets = {};
-      insets.top = self.navigationController.navigationBar.frame.size.height + 20.f;
-      rdbView.scrollView.contentInset = insets;
-      pageView.scrollView.contentInset = insets;
-   }
    
    rdbView.multipleTouchEnabled = YES;
    pageView.multipleTouchEnabled = YES;
