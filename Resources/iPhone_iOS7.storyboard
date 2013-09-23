@@ -224,7 +224,8 @@
         <scene sceneID="h59-Rr-Nv9">
             <objects>
                 <navigationController storyboardIdentifier="EventDisplayControllerID" definesPresentationContext="YES" id="nNK-kj-BdT" customClass="MenuNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="cIP-qc-Ffi">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cIP-qc-Ffi">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -264,6 +265,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="ius-zb-BsQ">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="7cA-cT-f2J">
                             <connections>

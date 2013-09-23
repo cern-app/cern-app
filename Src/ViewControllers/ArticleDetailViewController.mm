@@ -1227,13 +1227,22 @@ const NSUInteger fontIncreaseStep = 4;
       [self.navigationController.view addGestureRecognizer : self.slidingViewController.panGesture];
       [self.navigationController setNavigationBarHidden : NO];
    }
+   
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+      UIEdgeInsets insets = {};
+      if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
+         insets.top = self.navigationController.navigationBar.frame.size.height + 20.f;
+
+      rdbView.scrollView.contentInset = insets;
+      pageView.scrollView.contentInset = insets;
+   }
+
 }
 
 //________________________________________________________________________________________
 - (void) didRotateFromInterfaceOrientation : (UIInterfaceOrientation) fromInterfaceOrientation
 {
 #pragma unused(fromInterfaceOrientation)
-
    [self.view layoutSubviews];
 }
 
