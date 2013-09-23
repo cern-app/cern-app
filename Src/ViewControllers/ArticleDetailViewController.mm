@@ -283,7 +283,7 @@ const NSUInteger fontIncreaseStep = 4;
 {
    [super viewWillAppear : animated];
    
-   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
       UIEdgeInsets insets = {};
       insets.top = self.navigationController.navigationBar.frame.size.height + 20.f;
       rdbView.scrollView.contentInset = insets;
@@ -378,6 +378,8 @@ const NSUInteger fontIncreaseStep = 4;
       pageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
                                   UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
                                   UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
+   } else { //if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+      rdbView.scrollView.delegate = self;
    }
    
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
@@ -1238,7 +1240,7 @@ const NSUInteger fontIncreaseStep = 4;
       [self.navigationController setNavigationBarHidden : NO];
    }
    
-   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
       UIEdgeInsets insets = {};
       if (UIInterfaceOrientationIsPortrait(toInterfaceOrientation))
          insets.top = self.navigationController.navigationBar.frame.size.height + 20.f;
@@ -1461,6 +1463,14 @@ const NSUInteger fontIncreaseStep = 4;
    }
    
    timeoutGuard = nil;
+}
+
+#pragma mark - UIScrollViewDelegate
+
+//________________________________________________________________________________________
+- (UIView *) viewForZoomingInScrollView : (UIScrollView *) scrollView
+{
+   return nil;
 }
 
 @end

@@ -15,7 +15,7 @@
 
 @interface ArticleDetailViewController : UIViewController <UIWebViewDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate,
                                                            OverlayViewDelegate, MFMailComposeViewControllerDelegate,
-                                                           ConnectionController>
+                                                           ConnectionController, UIScrollViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UIWebView *rdbView;
 @property (nonatomic, strong) IBOutlet UIWebView *pageView;
