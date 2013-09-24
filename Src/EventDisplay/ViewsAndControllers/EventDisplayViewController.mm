@@ -603,7 +603,6 @@ using CernAPP::NetworkStatus;
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
       //iPhone/iPhone_iOS7 storyboards are not using auto layout (this is the legacy UI).
       //Both storyboards for iPad (iPad/iPad_iOS7) support auto layout.
-      //On iPhone scroll view has wrong coordinates.
       CGRect pcFrame = pageControl.frame;
       pcFrame.origin.x = self.view.frame.size.width / 2 - pcFrame.size.width / 2;
       pageControl.frame = pcFrame;
