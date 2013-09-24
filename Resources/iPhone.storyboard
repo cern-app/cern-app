@@ -266,13 +266,13 @@
         <scene sceneID="x0V-lh-C4Z">
             <objects>
                 <tableViewController id="7gC-la-dPg" customClass="LiveEventTableController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="g58-Gm-5a5">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="g58-Gm-5a5" customClass="SlideTableView">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsTableViewCell" id="bO8-4l-YOf" customClass="NewsTableViewCell">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bO8-4l-YOf" id="sV4-7l-r5w">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -311,7 +311,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoAlbumCoverView" id="1hx-yt-xcg" customClass="PhotoAlbumCoverView">
-                                <rect key="frame" x="47" y="0.0" width="226" height="222"/>
+                                <rect key="frame" x="47" y="64" width="226" height="222"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="226" height="222"/>
@@ -937,15 +937,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
         <image name="menu.png" width="20" height="20"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

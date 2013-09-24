@@ -138,9 +138,9 @@ using CernAPP::NetworkStatus;
 #ifdef __IPHONE_7_0
       self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 #endif
-      [self.slidingViewController.panGesture requireGestureRecognizerToFail : self.tableView.panGestureRecognizer];
    }
-
+   
+   [self.slidingViewController.panGesture requireGestureRecognizerToFail : self.tableView.panGestureRecognizer];
 }
 
 #pragma mark - Aux. function to search image data for a given row index.

@@ -187,9 +187,10 @@ using CernAPP::NetworkStatus;
 #ifdef __IPHONE_7_0
       self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 #endif
-      if (numPages > 1)
-         [self.slidingViewController.panGesture requireGestureRecognizerToFail : scrollView.panGestureRecognizer];
    }
+   
+   if (numPages > 1)
+      [self.slidingViewController.panGesture requireGestureRecognizerToFail : scrollView.panGestureRecognizer];
 
    [self refresh];
 }
