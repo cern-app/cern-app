@@ -41,7 +41,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsTableViewCell" id="Hwf-VG-Ehq" customClass="NewsTableViewCell">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hwf-VG-Ehq" id="pfv-JQ-TO2">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -103,7 +103,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uSo-NM-CIQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" id="lNs-hN-a6K">
+                <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" id="lNs-hN-a6K" customClass="SlideWebView">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -111,7 +111,7 @@
                         <outlet property="delegate" destination="ecX-5O-MuA" id="A4g-F6-JoN"/>
                     </connections>
                 </webView>
-                <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" id="ImY-np-WJW">
+                <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" id="ImY-np-WJW" customClass="SlideWebView">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -937,6 +937,15 @@
         </scene>
     </scenes>
     <resources>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
         <image name="menu.png" width="20" height="20"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

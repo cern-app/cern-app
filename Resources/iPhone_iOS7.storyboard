@@ -673,7 +673,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="Ixj-cr-Bwu">
-                                            <rect key="frame" x="5" y="6" width="182" height="116.99999999999999"/>
+                                            <rect key="frame" x="5" y="6.0000000000000071" width="182" height="116.99999999999999"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>

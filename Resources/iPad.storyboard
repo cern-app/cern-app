@@ -69,7 +69,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4wN-a2-Skr" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <webView contentMode="scaleToFill" id="hfq-6o-5xc">
+                <webView contentMode="scaleToFill" id="hfq-6o-5xc" customClass="SlideWebView">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -77,7 +77,7 @@
                         <outlet property="delegate" destination="C5G-He-c5f" id="XbS-qe-HBv"/>
                     </connections>
                 </webView>
-                <webView contentMode="scaleToFill" id="O6x-Hl-3pO">
+                <webView contentMode="scaleToFill" id="O6x-Hl-3pO" customClass="SlideWebView">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -851,6 +851,13 @@
         </scene>
     </scenes>
     <resources>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
         <image name="menu.png" width="20" height="20"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

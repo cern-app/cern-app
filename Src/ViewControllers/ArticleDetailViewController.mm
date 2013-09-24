@@ -378,9 +378,9 @@ const NSUInteger fontIncreaseStep = 4;
       pageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth |
                                   UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin |
                                   UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleBottomMargin;
-   } else { //if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
-      rdbView.scrollView.delegate = self;
    }
+   
+   rdbView.scrollView.delegate = self;
    
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
 }
@@ -1133,8 +1133,7 @@ const NSUInteger fontIncreaseStep = 4;
    if (!pageView.superview)
       [containerView addSubview : pageView];
    
-   if (/*UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && */CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
-      [self.slidingViewController.panGesture requireGestureRecognizerToFail : pageView.scrollView.panGestureRecognizer];
+   [self.slidingViewController.panGesture requireGestureRecognizerToFail : pageView.scrollView.panGestureRecognizer];
    
    if (!spinner.hidden)
       [spinner.superview bringSubviewToFront : spinner];
@@ -1149,8 +1148,7 @@ const NSUInteger fontIncreaseStep = 4;
    if (!rdbView.superview)
       [containerView addSubview : rdbView];
 
-   if (/*UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && */CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
-      [self.slidingViewController.panGesture requireGestureRecognizerToFail : rdbView.scrollView.panGestureRecognizer];
+   [self.slidingViewController.panGesture requireGestureRecognizerToFail : rdbView.scrollView.panGestureRecognizer];
 
    if (!spinner.hidden)
       [spinner.superview bringSubviewToFront : spinner];
