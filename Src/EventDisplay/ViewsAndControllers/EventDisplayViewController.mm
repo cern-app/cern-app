@@ -585,8 +585,14 @@ using CernAPP::NetworkStatus;
 {
    //Quite an ugly hack to fix the geometry, if our view was hidden by modal view/controller
    //and device was rotated.
+   if (!pages.count)
+      return;
+
    const CGFloat scrollViewWidth = self.scrollView.frame.size.width;
    const CGFloat scrollViewHeight = self.scrollView.frame.size.height;
+
+   if (scrollView.contentSize.height == scrollViewHeight)
+      return;
 
    scrollView.contentSize = CGSizeMake(scrollViewWidth * numPages, scrollViewHeight);
    [scrollView setContentOffset : CGPointMake(self.scrollView.frame.size.width * pageControl.currentPage, 0.f)];
@@ -663,7 +669,6 @@ using CernAPP::NetworkStatus;
 - (void) didRotateFromInterfaceOrientation : (UIInterfaceOrientation) fromInterfaceOrientation
 {
    [self checkCurrentPage];
-   NSLog(@"did rotate");
 }
 
 #pragma mark - PhotoBrowserDelegate.
