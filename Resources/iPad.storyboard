@@ -714,16 +714,19 @@
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="kT6-1u-tho">
                                 <rect key="frame" x="365" y="985" width="39" height="37"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="37" id="iDJ-wo-Hgy"/>
+                                </constraints>
                             </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="kT6-1u-tho" secondAttribute="bottom" constant="2" id="Rm7-lF-TiE"/>
                             <constraint firstItem="A4d-gz-5LG" firstAttribute="bottom" secondItem="4nK-Ou-L9O" secondAttribute="bottom" id="cuo-70-aEO"/>
                             <constraint firstItem="A4d-gz-5LG" firstAttribute="trailing" secondItem="4nK-Ou-L9O" secondAttribute="trailing" id="g1w-XO-iIO"/>
                             <constraint firstItem="A4d-gz-5LG" firstAttribute="top" secondItem="4nK-Ou-L9O" secondAttribute="top" id="gky-cL-2XJ"/>
-                            <constraint firstItem="kT6-1u-tho" firstAttribute="centerX" secondItem="A4d-gz-5LG" secondAttribute="centerX" id="sac-DM-4er"/>
+                            <constraint firstAttribute="centerX" secondItem="kT6-1u-tho" secondAttribute="centerX" id="i9Y-JK-LGi"/>
                             <constraint firstItem="A4d-gz-5LG" firstAttribute="leading" secondItem="4nK-Ou-L9O" secondAttribute="leading" id="szT-zK-LP9"/>
+                            <constraint firstAttribute="bottom" secondItem="kT6-1u-tho" secondAttribute="bottom" constant="2" id="xvd-kx-njv"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="FLi-Mz-Ha5">

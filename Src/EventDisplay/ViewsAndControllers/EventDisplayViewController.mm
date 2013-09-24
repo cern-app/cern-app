@@ -601,7 +601,9 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (void) willAnimateRotationToInterfaceOrientation : (UIInterfaceOrientation) toInterfaceOrientation duration : (NSTimeInterval) duration
 {
-   if (CernAPP::SystemVersionLessThan(@"7.0")) {
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+      //iPhone/iPhone_iOS7 storyboards are not using auto layout (this is the legacy UI).
+      //Both storyboards for iPad (iPad/iPad_iOS7) support auto layout.
       CGRect pcFrame = pageControl.frame;
       pcFrame.origin.x = self.view.frame.size.width / 2 - pcFrame.size.width / 2;
       pageControl.frame = pcFrame;
