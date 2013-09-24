@@ -71,9 +71,9 @@
 //________________________________________________________________________________________
 - (void) viewDidAppear:(BOOL)animated
 {
-   [super viewDidAppear:animated];
+   [super viewDidAppear : animated];
    
-   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") && scrollView) {
+   if (scrollView) {
       if (dataSource.count > 1)
          [self.slidingViewController.panGesture requireGestureRecognizerToFail : scrollView.panGestureRecognizer];
    }
