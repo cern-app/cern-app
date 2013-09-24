@@ -56,6 +56,8 @@ using CernAPP::NetworkStatus;
    
    //UglyUglyUgly
    NSInteger pageBeforeRotation;
+   
+   BOOL viewDidAppear;
 }
 
 @synthesize initialPage;
@@ -111,6 +113,7 @@ using CernAPP::NetworkStatus;
       loadingSource = 0;
       
       pageLoaded = NO;
+      viewDidAppear = NO;
    }
 
    return self;
@@ -191,7 +194,16 @@ using CernAPP::NetworkStatus;
    if (numPages > 1)
       [self.slidingViewController.panGesture requireGestureRecognizerToFail : scrollView.panGestureRecognizer];
 
-   [self refresh];
+   if (!viewDidAppear) {
+      viewDidAppear = YES;
+      [self refresh];
+   } else {
+      //That's quite ugly, fix for (possibly) broken
+      //geometry - it's possible, that our view was hidden by
+      //modal view and device rotated.
+      //This must be fixed in a more "idiomatic" way.
+      [self adjustPages];
+   }
 }
 
 //________________________________________________________________________________________
@@ -569,6 +581,25 @@ using CernAPP::NetworkStatus;
 #pragma mark - Interface rotation.
 
 //________________________________________________________________________________________
+- (void) adjustPages
+{
+   //Quite an ugly hack to fix the geometry, if our view was hidden by modal view/controller
+   //and device was rotated.
+   const CGFloat scrollViewWidth = self.scrollView.frame.size.width;
+   const CGFloat scrollViewHeight = self.scrollView.frame.size.height;
+
+   scrollView.contentSize = CGSizeMake(scrollViewWidth * numPages, scrollViewHeight);
+   [scrollView setContentOffset : CGPointMake(self.scrollView.frame.size.width * pageControl.currentPage, 0.f)];
+   
+   for (NSUInteger i = 0, e = pages.count; i < e; ++i) {
+      const CGRect pageFrame = CGRectMake(i * scrollViewWidth, 0.f, scrollViewWidth, scrollViewHeight);
+      MWZoomingScrollView * const page = (MWZoomingScrollView *)pages[i];
+      page.frame = pageFrame;
+      [page setMaxMinZoomScalesForCurrentBounds];//?
+   }
+}
+
+//________________________________________________________________________________________
 - (BOOL) shouldAutorotate
 {
    return pageLoaded;
@@ -632,6 +663,7 @@ using CernAPP::NetworkStatus;
 - (void) didRotateFromInterfaceOrientation : (UIInterfaceOrientation) fromInterfaceOrientation
 {
    [self checkCurrentPage];
+   NSLog(@"did rotate");
 }
 
 #pragma mark - PhotoBrowserDelegate.
