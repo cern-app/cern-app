@@ -65,10 +65,10 @@ NSString *ImageURLFromEnclosures(MWFeedItem *article)
    if (!article.enclosures)
       return nil;
 
-   id arrayItem = nil, val = nil;
-   for (arrayItem in article.enclosures) {
+   for (id arrayItem in article.enclosures) {
       if ([arrayItem isKindOfClass : [NSDictionary class]]) {
          NSDictionary * const dict = (NSDictionary *)arrayItem;
+         id val = nil;
          if ((val = dict[@"type"]) && [val isKindOfClass : [NSString class]]) {
             NSString * const enclosureType = [(NSString *)val lowercaseString];
             if (enclosureType.length) {
