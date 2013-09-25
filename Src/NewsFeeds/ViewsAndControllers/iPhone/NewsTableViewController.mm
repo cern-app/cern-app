@@ -55,6 +55,36 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
    return nil;
 }
 
+//________________________________________________________________________________________
+NSString *ImageURLFromEnclosures(MWFeedItem *article)
+{
+   //Now we have some feeds with enclosures and this enclosures contains images
+   //for feed's entries.
+   assert(article != nil && "ImageURLFromEnclosures, parameter 'article' is nil");
+   
+   if (!article.enclosures)
+      return nil;
+
+   id arrayItem = nil, val = nil;
+   for (arrayItem in article.enclosures) {
+      if ([arrayItem isKindOfClass : [NSDictionary class]]) {
+         NSDictionary * const dict = (NSDictionary *)arrayItem;
+         if ((val = dict[@"type"]) && [val isKindOfClass : [NSString class]]) {
+            NSString * const enclosureType = [(NSString *)val lowercaseString];
+            if (enclosureType.length) {
+               if ([enclosureType rangeOfString:@"image/"].location != NSNotFound) {
+                  id url = nil;
+                  if ((url = dict[@"url"]) && [url isKindOfClass : [NSString class]])
+                     return (NSString *)dict[@"url"];
+               }
+            }
+         }
+      }
+   }
+   
+   return nil;
+}
+
 }
 
 @implementation NewsTableViewController {
@@ -634,13 +664,15 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
             if (!body)
                body = article.summary;
          
-            if (body) {
-               if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
-                  KeyVal * const newThumbnail = [[KeyVal alloc] init];
-                  newThumbnail.key = indexPath;
-                  newThumbnail.val = CernAPP::Details::GetThumbnailURL(urlString);
-                  [pairs addObject : newThumbnail];
-               }
+            NSString *urlString = CernAPP::FirstImageURLFromHTMLString(body);
+            if (!urlString)
+               urlString = CernAPP::ImageURLFromEnclosures(article);
+         
+            if (urlString) {
+               KeyVal * const newThumbnail = [[KeyVal alloc] init];
+               newThumbnail.key = indexPath;
+               newThumbnail.val = CernAPP::Details::GetThumbnailURL(urlString);
+               [pairs addObject : newThumbnail];
             }
          }
       }

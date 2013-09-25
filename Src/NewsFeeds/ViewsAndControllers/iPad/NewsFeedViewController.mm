@@ -367,8 +367,12 @@
          NSString * body = article.content;
          if (!body)
             body = article.summary;
+         
+         NSString *urlString = CernAPP::FirstImageURLFromHTMLString(body);
+         if (!urlString)//Now we have some feeds, which contain RSS enclosure with images for entries.
+            urlString = CernAPP::ImageURLFromEnclosures(article);
 
-         if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
+         if (urlString) {
             KeyVal * const newThumbnail = [[KeyVal alloc] init];
             newThumbnail.key = [NSIndexPath indexPathForRow : i inSection : currPage.pageNumber];
             newThumbnail.val = CernAPP::Details::GetThumbnailURL(urlString);
