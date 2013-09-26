@@ -75,7 +75,6 @@
         [dateFormatterRFC3339 setLocale:en_US_POSIX];
         [dateFormatterRFC822 setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
         [dateFormatterRFC3339 setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-		
 	}
 	return self;
 }

@@ -103,8 +103,21 @@
 - (void) parserDidFinish
 {
    if (!self.isCancelled) {
-      if (self.delegate)
-         [delegate parserDidFinishWithInfo : feedInfo items : feedItems];
+      if (self.delegate) {
+         NSArray *const sortedItems = [feedItems sortedArrayUsingComparator :
+                                       ^ NSComparisonResult(id a, id b)
+                                        {
+                                           const NSComparisonResult cmp = [((MWFeedItem *)a).date compare : ((MWFeedItem *)b).date];
+                                           if (cmp == NSOrderedAscending)
+                                              return NSOrderedDescending;
+                                           else if (cmp == NSOrderedDescending)
+                                              return NSOrderedAscending;
+                                           return cmp;
+                                        }
+                                      ];
+
+         [delegate parserDidFinishWithInfo : feedInfo items : sortedItems];
+      }
    }
 }
 

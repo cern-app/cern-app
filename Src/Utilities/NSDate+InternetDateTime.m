@@ -21,7 +21,7 @@ static NSDateFormatter *_internetDateTimeFormatter = nil;
         if (!_internetDateTimeFormatter) {
             NSLocale *en_US_POSIX = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
             _internetDateTimeFormatter = [[NSDateFormatter alloc] init];
-            [_internetDateTimeFormatter setLocale:en_US_POSIX];
+            [_internetDateTimeFormatter setLocale: en_US_POSIX];
             [_internetDateTimeFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
         }
     }
@@ -37,10 +37,16 @@ static NSDateFormatter *_internetDateTimeFormatter = nil;
             // Try RFC822 first
             date = [NSDate dateFromRFC822String:dateString];
             if (!date) date = [NSDate dateFromRFC3339String:dateString];
+            // Try something.
+            if (!date)
+               date = [NSDate dateFromUnknownString : dateString];
         } else {
             // Try RFC3339 first
             date = [NSDate dateFromRFC3339String:dateString];
             if (!date) date = [NSDate dateFromRFC822String:dateString];
+            // The last try.
+            if (!date)
+               date = [NSDate dateFromUnknownString : dateString];
         }
     }
      // Finished with date string
@@ -137,6 +143,23 @@ static NSDateFormatter *_internetDateTimeFormatter = nil;
     }
      // Finished with date string
 	return date;
+}
+
++ (NSDate *) dateFromUnknownString : (NSString *) dateString {
+    if (!dateString)
+        return nil;
+    
+    NSDate *date = nil;
+    NSDateFormatter * const dateFormatter = [NSDate internetDateTimeFormatter];
+    @synchronized(dateFormatter) {
+        [dateFormatter setDateFormat : @"d MMM yyyy"];
+        //I hate this shit. NSDateFormatter does not understand Sept and we have a 'Sept' from ATLAS.
+        NSString * const fixedDateString = [dateString stringByReplacingOccurrencesOfString : @"Sept" withString : @"Sep"];
+        date = [dateFormatter dateFromString : fixedDateString];
+        if (!date) NSLog(@"Could not parse date in unknown format: \"%@\"", dateString);
+    }
+
+    return date;
 }
 
 @end
