@@ -34,11 +34,6 @@ NSString * const sourceURL = @"URL";
 
 using CernAPP::NetworkStatus;
 
-//
-//pageLoaded is a legacy of CERN.app v.1 - I had a multi-page controller there and
-//event display view supported PageController protocol.
-//
-
 @implementation EventDisplayViewController {
    unsigned loadingPage;
    unsigned loadingSource;
@@ -97,7 +92,7 @@ using CernAPP::NetworkStatus;
    return internetReach && [internetReach currentReachabilityStatus] != NetworkStatus::notReachable;
 }
 
-@synthesize sources, scrollView, pageControl, titleLabel, dateLabel, pageLoaded, needsRefreshButton;
+@synthesize sources, scrollView, pageControl, titleLabel, dateLabel, needsRefreshButton;
 
 #pragma mark - Lifecycle.
 
@@ -111,8 +106,7 @@ using CernAPP::NetworkStatus;
       numPages = 0;
       loadingPage = 0;
       loadingSource = 0;
-      
-      pageLoaded = NO;
+
       viewDidAppear = NO;
    }
 
@@ -168,7 +162,6 @@ using CernAPP::NetworkStatus;
       [pageControl setHidden : YES];
 
    scrollView.backgroundColor = [UIColor blackColor];
-   pageLoaded = NO;
    
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(reachabilityStatusChanged:) name : CernAPP::reachabilityChangedNotification object : nil];
    internetReach = [Reachability reachabilityForInternetConnection];
@@ -257,7 +250,6 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (void) addSourceWithDescription : (NSString *) description URL : (NSURL *) url boundaryRects : (NSArray *) boundaryRects
 {
-   pageLoaded = NO;
    NSMutableDictionary * const source = [NSMutableDictionary dictionary];
    [source setValue : description forKey : sourceDescription];
    [source setValue : url forKey : sourceURL];
@@ -339,7 +331,6 @@ using CernAPP::NetworkStatus;
          [subview removeFromSuperview];
    }
 
-   pageLoaded = NO;
    loadingPage = 0;
    loadingSource = 0;
    
@@ -522,12 +513,11 @@ using CernAPP::NetworkStatus;
       NSURL * const url = [source objectForKey : sourceURL];
       NSURLRequest * const request = [NSURLRequest requestWithURL : url];
       imageData = [[NSMutableData alloc] init];
-      currentConnection = [[NSURLConnection alloc] initWithRequest : request delegate : self startImmediately : YES];
+      currentConnection = [[NSURLConnection alloc] initWithRequest : request delegate : self];
    } else {
       currentConnection = nil;
       imageData = nil;
       loadingSource = 0;
-      pageLoaded = YES;
       self.navigationItem.rightBarButtonItem.enabled = YES;
    }
 }
@@ -563,7 +553,6 @@ using CernAPP::NetworkStatus;
       currentConnection = nil;
       imageData = nil;
       loadingSource = 0;
-      pageLoaded = YES;
       self.navigationItem.rightBarButtonItem.enabled = YES;
    }
    
@@ -608,7 +597,7 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (BOOL) shouldAutorotate
 {
-   return pageLoaded;
+   return YES;
 }
 
 //________________________________________________________________________________________

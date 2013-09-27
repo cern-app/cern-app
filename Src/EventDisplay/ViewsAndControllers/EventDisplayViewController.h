@@ -29,7 +29,7 @@
 
 - (void) reloadPage;
 - (void) reloadPageFromRefreshControl;
-@property (nonatomic) BOOL pageLoaded;
+
 @property (nonatomic, assign) BOOL needsRefreshButton;
 
 @property (nonatomic, strong) NSMutableArray *sources;
