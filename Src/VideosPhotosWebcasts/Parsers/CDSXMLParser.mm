@@ -29,6 +29,10 @@
 - (BOOL) start
 {
    assert(CDSUrl != nil && "start, CDSUrl is nil");
+   
+   //I assert on this condition instead of 'return NO;' - this parser MUST be started from an operation ONLY
+   //and an operation CAN NEVER call the start twice (if the first one was successfull or stop was
+   //not called between).
    assert(connection == nil && xmlParser == nil && "start, parser was started already");
 
 
