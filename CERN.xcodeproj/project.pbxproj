@@ -214,6 +214,7 @@
 		70B6B0BE169DD6BE0058DADA /* cern_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BD169DD6BE0058DADA /* cern_logo.png */; };
 		70B7878D16B951B100048CC9 /* zoomin.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B7878B16B951B100048CC9 /* zoomin.png */; };
 		70B7878E16B951B100048CC9 /* zoomout.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B7878C16B951B100048CC9 /* zoomout.png */; };
+		70B875DB17FC69EA00773913 /* CDSXMLParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B875DA17FC69EA00773913 /* CDSXMLParser.mm */; };
 		70BC65631770BF3700358CD1 /* TwitterTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC655D1770BF3700358CD1 /* TwitterTableViewController.mm */; };
 		70BC65641770BF3700358CD1 /* TweetCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC65601770BF3700358CD1 /* TweetCell.mm */; };
 		70BC65651770BF3700358CD1 /* TwitterTableView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70BC65621770BF3700358CD1 /* TwitterTableView.mm */; };
@@ -558,6 +559,8 @@
 		70B6B0BD169DD6BE0058DADA /* cern_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_logo.png; sourceTree = "<group>"; };
 		70B7878B16B951B100048CC9 /* zoomin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoomin.png; sourceTree = "<group>"; };
 		70B7878C16B951B100048CC9 /* zoomout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zoomout.png; sourceTree = "<group>"; };
+		70B875D917FC69EA00773913 /* CDSXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDSXMLParser.h; sourceTree = "<group>"; };
+		70B875DA17FC69EA00773913 /* CDSXMLParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CDSXMLParser.mm; sourceTree = "<group>"; };
 		70BC655C1770A92800358CD1 /* Twitter-sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Twitter-sample.h"; sourceTree = "<group>"; };
 		70BC655D1770BF3700358CD1 /* TwitterTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TwitterTableViewController.mm; sourceTree = "<group>"; };
 		70BC655E1770BF3700358CD1 /* TwitterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterTableViewController.h; sourceTree = "<group>"; };
@@ -1124,6 +1127,8 @@
 				70A56287173A32F600145FEC /* CernMediaMARCParser.mm */,
 				7068777A1765CC9E00A22123 /* MARCParserOperation.h */,
 				7068777B1765CC9E00A22123 /* MARCParserOperation.mm */,
+				70B875D917FC69EA00773913 /* CDSXMLParser.h */,
+				70B875DA17FC69EA00773913 /* CDSXMLParser.mm */,
 			);
 			path = Parsers;
 			sourceTree = "<group>";
@@ -1660,6 +1665,7 @@
 				7040F0EB1761FD780050DEF6 /* PhotoCollectionsViewController.mm in Sources */,
 				7040F0EC1761FD780050DEF6 /* AnimatedStackLayout.mm in Sources */,
 				7040F0ED1761FD780050DEF6 /* ImageStackViewCell.mm in Sources */,
+				70B875DB17FC69EA00773913 /* CDSXMLParser.mm in Sources */,
 				7040F0EE1761FD780050DEF6 /* PhotoAlbumCoverView.mm in Sources */,
 				7040F0EF1761FD780050DEF6 /* PhotoAlbumFooterView.mm in Sources */,
 				7040F0F01761FD780050DEF6 /* PhotoViewCell.mm in Sources */,
