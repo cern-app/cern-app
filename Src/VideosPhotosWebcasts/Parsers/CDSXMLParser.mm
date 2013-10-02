@@ -17,38 +17,6 @@
 //After xml data was downloaded, we parse it and pass the parsed data to
 //the delegate (it will be an operation object).
 
-namespace {
-
-//________________________________________________________________________________________
-bool StringIsValidDatafieldTag(NSString *tagStr)
-{
-   if (!tagStr)
-      return false;
-   
-   //856 - MARC resource
-   //245 - Title
-   //269 - Date and place.
-   if ([tagStr isEqualToString : @"856"] || [tagStr isEqualToString : @"245"] || [tagStr isEqualToString : @"269"])
-      return true;
-
-   return false;
-}
-
-//________________________________________________________________________________________
-bool StringIsValidSubfieldCode(NSString *codeStr)
-{
-   if (!codeStr)
-      return false;
-
-   if ([codeStr isEqualToString : @"x"] || [codeStr isEqualToString : @"u"] || [codeStr isEqualToString : @"c"]
-      || [codeStr isEqualToString : @"a"])
-      return true;
-   
-   return false;
-}
-
-}
-
 @implementation CDSXMLParser {
    NSURLConnection *connection;
    NSMutableData *connectionData;
@@ -60,13 +28,15 @@ bool StringIsValidSubfieldCode(NSString *codeStr)
    NSMutableString *elementData;
 }
 
-@synthesize CDSUrl, delegate;
+@synthesize CDSUrl, validFieldTags, validSubfieldCodes, delegate;
 
 //________________________________________________________________________________________
 - (id) init
 {
    if (self = [super init]) {
       CDSUrl = nil;
+      validFieldTags = nil;
+      validSubfieldCodes = nil;
       delegate = nil;
       
       connection = nil;
@@ -85,6 +55,8 @@ bool StringIsValidSubfieldCode(NSString *codeStr)
 - (BOOL) start
 {
    assert(CDSUrl != nil && "start, CDSUrl is nil");
+   assert(validFieldTags != nil && "start, validFieldTags is nil");
+   assert(validSubfieldCodes != nil && "start, validSubfieldCodes is nil");
    
    //I assert on this condition instead of 'return NO;' - this parser MUST be started from an operation ONLY
    //and an operation CAN NEVER call the start twice (if the first one was successfull or stop was
@@ -173,8 +145,10 @@ bool StringIsValidSubfieldCode(NSString *codeStr)
              "parser:didStartElement:namespaceURI:qualifiedName:attributes:, record already started");
       CDSrecord = [[NSMutableArray alloc] init];
    } else if ([elementName isEqualToString : @"datafield"]) {
+      assert(datafieldTag == nil &&
+             "parser:didStartElement:namespaceURI:qualifiedName:attributes:, datafield already started");
       datafieldTag = (NSString *)attributeDict[@"tag"];
-      if (StringIsValidDatafieldTag(datafieldTag)) {
+      if ([validFieldTags member : datafieldTag]) {
          assert(CDSDatafield == nil &&
                 "parser:didStartElement:namespaceURI:qualifiedName:attributes:, datafield already started");
          CDSDatafield = [[NSMutableDictionary alloc] init];
@@ -182,8 +156,10 @@ bool StringIsValidSubfieldCode(NSString *codeStr)
       } else
          datafieldTag = nil;
    } else if ([elementName isEqualToString : @"subfield"] && datafieldTag) {
+      assert(subfieldCode == nil &&
+             "parser:didStartElement:namespaceURI:qualifiedName:attributes:, subfield already started");
       subfieldCode = (NSString *)attributeDict[@"code"];
-      if (StringIsValidSubfieldCode(subfieldCode)) {
+      if ([validSubfieldCodes member : subfieldCode]) {
          elementData = nil;
       } else
          subfieldCode = nil;
@@ -225,7 +201,7 @@ bool StringIsValidSubfieldCode(NSString *codeStr)
          CDSDatafield = nil;
       }
    } else if ([elementName isEqualToString : @"record"]) {
-      if (delegate)
+      if (delegate && CDSrecord.count)
          [delegate parser : self didParseRecord : CDSrecord];
       CDSrecord = nil;
    }

@@ -20,6 +20,8 @@
 @interface CDSXMLParser : NSObject<NSURLConnectionDataDelegate, NSXMLParserDelegate>
 
 @property (nonatomic) NSString *CDSUrl;
+@property (nonatomic) NSSet *validFieldTags;
+@property (nonatomic) NSSet *validSubfieldCodes;
 @property (nonatomic, weak) NSObject<CDSXMLParserDelegate> *delegate;
 
 - (BOOL) start;
