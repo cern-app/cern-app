@@ -12,7 +12,7 @@
 
 @protocol CDSXMLParserDelegate
 @required
-- (void) parser : (CDSXMLParser *) parser didParseRecord : (NSDictionary *) record;
+- (void) parser : (CDSXMLParser *) parser didParseRecord : (NSArray *) record;
 - (void) parserDidFinish : (CDSXMLParser *) parser;
 - (void) parser : (CDSXMLParser *) parser didFailWithError : (NSError *) error;
 @end

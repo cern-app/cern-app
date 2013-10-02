@@ -17,13 +17,69 @@
 //After xml data was downloaded, we parse it and pass the parsed data to
 //the delegate (it will be an operation object).
 
+namespace {
+
+//________________________________________________________________________________________
+bool StringIsValidDatafieldTag(NSString *tagStr)
+{
+   if (!tagStr)
+      return false;
+   
+   //856 - MARC resource
+   //245 - Title
+   //269 - Date and place.
+   if ([tagStr isEqualToString : @"856"] || [tagStr isEqualToString : @"245"] || [tagStr isEqualToString : @"269"])
+      return true;
+
+   return false;
+}
+
+//________________________________________________________________________________________
+bool StringIsValidSubfieldCode(NSString *codeStr)
+{
+   if (!codeStr)
+      return false;
+
+   if ([codeStr isEqualToString : @"x"] || [codeStr isEqualToString : @"u"] || [codeStr isEqualToString : @"c"]
+      || [codeStr isEqualToString : @"a"])
+      return true;
+   
+   return false;
+}
+
+}
+
 @implementation CDSXMLParser {
    NSURLConnection *connection;
    NSMutableData *connectionData;
    NSXMLParser *xmlParser;
+   NSMutableArray *CDSrecord;
+   NSMutableDictionary *CDSDatafield;
+   NSString *datafieldTag;
+   NSString *subfieldCode;
+   NSMutableString *elementData;
 }
 
 @synthesize CDSUrl, delegate;
+
+//________________________________________________________________________________________
+- (id) init
+{
+   if (self = [super init]) {
+      CDSUrl = nil;
+      delegate = nil;
+      
+      connection = nil;
+      connectionData = nil;
+      
+      xmlParser = nil;
+      CDSrecord = nil;
+      datafieldTag = nil;
+      subfieldCode = nil;
+   }
+   
+   return self;
+}
 
 //________________________________________________________________________________________
 - (BOOL) start
@@ -106,30 +162,80 @@
 //________________________________________________________________________________________
 - (void) parserDidStartDocument : (NSXMLParser *) parser
 {
-
 }
 
 //________________________________________________________________________________________
 - (void) parser : (NSXMLParser *) parser didStartElement : (NSString *) elementName namespaceURI : (NSString *) namespaceURI
          qualifiedName : (NSString *) qName attributes : (NSDictionary *) attributeDict
 {
+   if ([elementName isEqualToString : @"record"]) {
+      assert(CDSrecord == nil &&
+             "parser:didStartElement:namespaceURI:qualifiedName:attributes:, record already started");
+      CDSrecord = [[NSMutableArray alloc] init];
+   } else if ([elementName isEqualToString : @"datafield"]) {
+      datafieldTag = (NSString *)attributeDict[@"tag"];
+      if (StringIsValidDatafieldTag(datafieldTag)) {
+         assert(CDSDatafield == nil &&
+                "parser:didStartElement:namespaceURI:qualifiedName:attributes:, datafield already started");
+         CDSDatafield = [[NSMutableDictionary alloc] init];
+         [CDSDatafield setObject : datafieldTag forKey : @"tag"];
+      } else
+         datafieldTag = nil;
+   } else if ([elementName isEqualToString : @"subfield"] && datafieldTag) {
+      subfieldCode = (NSString *)attributeDict[@"code"];
+      if (StringIsValidSubfieldCode(subfieldCode)) {
+         elementData = nil;
+      } else
+         subfieldCode = nil;
+   }
 }
 
 //________________________________________________________________________________________
 - (void) parser : (NSXMLParser *) parser foundCharacters : (NSString *) string
 {
+#pragma unused(parser)
+   if (datafieldTag && subfieldCode) {
+      if ([string stringByTrimmingCharactersInSet : [NSCharacterSet whitespaceAndNewlineCharacterSet]].length) {
+         if (!elementData)
+            elementData = [[NSMutableString alloc] initWithString : string];
+         else
+            [elementData appendString : string];
+      }
+   }
 }
 
 //________________________________________________________________________________________
 - (void) parser : (NSXMLParser *) parser didEndElement : (NSString *) elementName namespaceURI : (NSString *) namespaceURI
          qualifiedName : (NSString *) qName
 {
+   if ([elementName isEqualToString : @"subfield"]) {
+      if (subfieldCode) {
+         assert(CDSDatafield != nil &&
+                "parser:didEndElement:namespaceURI:, CDSDatafield is nil");
+         [CDSDatafield setObject : elementData forKey : subfieldCode];
+         subfieldCode = nil;
+         elementData = nil;
+      }
+   } else if ([elementName isEqualToString : @"datafield"]) {
+      if (datafieldTag) {
+         assert(CDSrecord != nil &&
+                "parser:didEndElement:namespaceURI:, CDSRecord is nil");
+         [CDSrecord addObject : CDSDatafield];
+         datafieldTag = nil;
+         CDSDatafield = nil;
+      }
+   } else if ([elementName isEqualToString : @"record"]) {
+      if (delegate)
+         [delegate parser : self didParseRecord : CDSrecord];
+      CDSrecord = nil;
+   }
 }
 
 //________________________________________________________________________________________
 - (void) parserDidEndDocument : (NSXMLParser *) parser
 {
-
+   if (delegate)
+      [delegate parserDidFinish : self];
 }
 
 @end
