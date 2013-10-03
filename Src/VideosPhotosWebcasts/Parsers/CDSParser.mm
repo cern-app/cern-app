@@ -90,7 +90,7 @@
          [xmlParser parse];
       }
    } else {
-      NSLog(@"error<CDSXMLParser>: start - failed to create url");
+      NSLog(@"error<CDSXMLParser>: start - failed to create an url");
       [operation parser : self didFailWithError : nil];
    }
 }

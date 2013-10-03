@@ -94,15 +94,15 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       operation = nil;
       //
       datafieldTags = [[NSMutableSet alloc] init];
-      [datafieldTags addObject : @"856"];
-      [datafieldTags addObject : @"269"];
-      [datafieldTags addObject : @"245"];      
+      [datafieldTags addObject : CernAPP::CDStagMARC];
+      [datafieldTags addObject : CernAPP::CDStagDate];
+      [datafieldTags addObject : CernAPP::CDStagTitle];
       
       subfieldCodes = [[NSMutableSet alloc] init];
-      [subfieldCodes addObject : @"x"];
-      [subfieldCodes addObject : @"u"];
-      [subfieldCodes addObject : @"c"];
-      [subfieldCodes addObject : @"a"];
+      [subfieldCodes addObject : CernAPP::CDScodeContent];
+      [subfieldCodes addObject : CernAPP::CDScodeURL];
+      [subfieldCodes addObject : CernAPP::CDScodeDate];
+      [subfieldCodes addObject : CernAPP::CDScodeTitle];
       //
       selected = nil;
       selectedAlbum = nil;

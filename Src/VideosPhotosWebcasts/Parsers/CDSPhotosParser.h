@@ -14,6 +14,21 @@
 //CDSXMLParser creates Obj-C data structures from XML
 //and CDSPhotosParserOperation creates photo collection objects.
 
+namespace CernAPP {
+
+//Datafield tags.
+extern NSString * const CDStagMARC;
+extern NSString * const CDStagTitle;
+extern NSString * const CDStagDate;
+
+//Subfield codes.
+extern NSString * const CDScodeURL;
+extern NSString * const CDScodeContent;
+extern NSString * const CDScodeDate;
+extern NSString * const CDScodeTitle;
+
+}
+
 @interface CDSPhotosParserOperation : CDSParserOperation
 
 - (id) initWithURLString : (NSString *) urlString datafieldTags : (NSSet *) tags
