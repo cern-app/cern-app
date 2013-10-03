@@ -17,6 +17,13 @@
 - (id) initWithURLString : (NSString *) urlString datafieldTags : (NSSet *) tags
        subfieldCodes : (NSSet *) codes
 {
+   assert(urlString != nil &&
+          "initWithURLString:datafieldTags:subfieldCodes:, parameter 'urlString' is nil");
+   assert(tags != nil &&
+          "initWithURLString:datafieldTags:subfieldCodes:, parameter 'tags' is nil");
+   assert(codes != nil &&
+          "initWithURLString:datafieldTags:subfieldCodes:, parameter 'codes' is nil");
+
    self = [super initWithURLString : urlString datafieldTags : tags subfieldCodes : codes];
    if (self) {
       photoAlbums = [[NSMutableArray alloc] init];
@@ -34,6 +41,7 @@
       return;
    
    //TODO: create a CDSPhotoAlbum from this record.
+   NSLog(@"got a record:\n%@", recordData);
 }
 
 //________________________________________________________________________________________

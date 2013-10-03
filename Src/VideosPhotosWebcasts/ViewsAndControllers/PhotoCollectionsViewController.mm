@@ -7,13 +7,11 @@
 #import "AnimatedStackLayout.h"
 #import "ImageStackViewCell.h"
 #import "ApplicationErrors.h"
+#import "CDSPhotoAlbum.h"
 #import "PhotoViewCell.h"
 #import "Reachability.h"
 #import "DeviceCheck.h"
-#import "PhotoAlbum.h"
 
-using CernAPP::ResourceTypeImageForPhotoBrowserIPAD;
-using CernAPP::ResourceTypeThumbnail;
 using CernAPP::NetworkStatus;
 
 namespace
@@ -50,12 +48,15 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    NSArray *photoAlbums;
 
    //Parser-related:
-   NSOperationQueue *parserQueue;
-   PhotoCollectionsParserOperation *operation;
+   NSMutableSet *datafieldTags;
+   NSMutableSet *subfieldCodes;
    
+   NSOperationQueue *parserQueue;
+   CDSPhotosParserOperation *operation;
+
    //Photos manipulation:
    NSIndexPath *selected;     //Index of a selected stack.
-   PhotoAlbum *selectedAlbum; //Selected album.
+   CDSPhotoAlbum *selectedAlbum; //Selected album.
 
    Reachability *internetReach;
    
@@ -91,7 +92,18 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
       parserQueue = [[NSOperationQueue alloc] init];
       operation = nil;
+      //
+      datafieldTags = [[NSMutableSet alloc] init];
+      [datafieldTags addObject : @"856"];
+      [datafieldTags addObject : @"269"];
+      [datafieldTags addObject : @"245"];      
       
+      subfieldCodes = [[NSMutableSet alloc] init];
+      [subfieldCodes addObject : @"x"];
+      [subfieldCodes addObject : @"u"];
+      [subfieldCodes addObject : @"c"];
+      [subfieldCodes addObject : @"a"];
+      //
       selected = nil;
       selectedAlbum = nil;
       
@@ -203,9 +215,13 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(urlString != nil && "startParserOperation, urlString is nil");
    assert(parserQueue != nil && "startParserOperation, parserQueue is nil");
    assert(operation == nil && "startParserOperation, parsing operation is still active");
+   assert(datafieldTags != nil && "startParserOperation, datafieldTags is nil");
+   assert(subfieldCodes != nil && "startParserOperation, subfieldCodes is nil");
    
-   operation = [[PhotoCollectionsParserOperation alloc] initWithURLString : urlString
-                                                            resourceTypes : @[@"jpgA4", @"jpgA5", @"jpgIcon"]];
+   operation = [[CDSPhotosParserOperation alloc] initWithURLString : urlString
+                                                 datafieldTags : datafieldTags
+                                                 subfieldCodes : subfieldCodes];
+   
    operation.delegate = self;
    [parserQueue addOperation : operation];
 }
@@ -358,7 +374,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
       assert(indexPath.row >= 0 && indexPath.row < photoAlbums.count &&
              "collectionView:cellForItemAtIndexPath:, row index is out of bounds");
-      PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.row];
+      CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[indexPath.row];
 
       if (UIImage * const image = (UIImage *)thumbnails[indexPath])
          photoCell.imageView.image = image;
@@ -445,7 +461,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
              "collectionView:didSelectItemAtIndexPath:, row is out of bounds");
 
       selected = indexPath;
-      selectedAlbum = (PhotoAlbum *)photoAlbums[indexPath.row];
+      selectedAlbum = (CDSPhotoAlbum *)photoAlbums[indexPath.row];
 
       [albumCollectionView reloadData];
 
@@ -569,7 +585,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (void) loadFirstThumbnails
 {
    for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i) {
-      if (((PhotoAlbum *)photoAlbums[i]).nImages)
+      if (((CDSPhotoAlbum *)photoAlbums[i]).nImages)
          [self loadNextThumbnail : [NSIndexPath indexPathForRow : 0 inSection : i]];
       //Else we do not load anything for this album (neither the cover, nor the contents).
    }
@@ -581,14 +597,14 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(indexPath != nil && "loadNextThumbnail:, parameter 'indexPath' is nil");
    assert(indexPath.section < photoAlbums.count && "loadNextThumbnail:, section index is out of bounds");
 
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.section];
+   CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[indexPath.section];
    assert(indexPath.row < album.nImages && "loadNextThumbnail:, row index is out of bounds");
 
    if (imageDownloaders[indexPath])//Downloading already.
       return;
 
    ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL :
-                                         [album getImageURLWithIndex : indexPath.row forType : ResourceTypeThumbnail]];
+                                         [album getImageURLWithIndex : indexPath.row forSize : CernAPP::thumbnailImage]];
    downloader.delegate = self;
    downloader.indexPathInTableView = indexPath;
    [imageDownloaders setObject : downloader forKey : indexPath];
@@ -600,13 +616,13 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 {
    assert(index < photoAlbums.count && "loadThumbnailsForAlbum:, parameter 'index' is out of bounds");
    
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[index];
+   CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[index];
    for (NSUInteger i = 0, e = album.nImages; i < e; ++i) {
       NSIndexPath * const key = [NSIndexPath indexPathForRow : i inSection : index];
       if ([album getThumbnailImageForIndex : i] || imageDownloaders[key])
          continue;
       ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL :
-                                            [album getImageURLWithIndex : i forType : ResourceTypeThumbnail]];
+                                            [album getImageURLWithIndex : i forSize : CernAPP::thumbnailImage]];
       downloader.indexPathInTableView = key;
       downloader.delegate = self;
       [imageDownloaders setObject : downloader forKey : key];
@@ -621,7 +637,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(indexPath.section < photoAlbums.count &&
           "imageDidLoad:, section index is out of bounds");
    
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.section];
+   CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[indexPath.section];
    assert(indexPath.row < album.nImages && "imageDidLoad:, row index is out of bounds");
    
    ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath];
@@ -663,7 +679,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(indexPath.section < photoAlbums.count &&
           "imageDownloadFailed:, section index is out of bounds");
 
-   PhotoAlbum * const album = (PhotoAlbum *)photoAlbums[indexPath.section];
+   CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[indexPath.section];
    assert(indexPath.row < album.nImages &&
           "imageDownloadFailed:, row index is out of bounds");
 
@@ -775,7 +791,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(selectedAlbum != nil && "photoBrowser:photoAtIndex:, no album selected");
    assert(index < selectedAlbum.nImages && "photoBrowser:photoAtIndex:, index is out of bounds");
 
-   NSURL * const url = [selectedAlbum getImageURLWithIndex : index forType : ResourceTypeImageForPhotoBrowserIPAD];
+   NSURL * const url = [selectedAlbum getImageURLWithIndex : index forSize : CernAPP::iPadImage];
    return [MWPhoto photoWithURL : url];
 }
 

@@ -1,8 +1,8 @@
 #import <UIKit/UIKit.h>
 
 #import "ConnectionController.h"
-#import "MARCParserOperation.h"
 #import "HUDRefreshProtocol.h"
+#import "CDSPhotosParser.h"
 #import "ImageDownloader.h"
 #import "MWPhotoBrowser.h"
 
@@ -12,9 +12,8 @@
 
 @interface PhotoCollectionsViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate,
                                                                       ImageDownloaderDelegate, HUDRefreshProtocol,
-                                                                      MARCParserOperationDelegate, ConnectionController,
+                                                                      CDSParserOperationDelegate, ConnectionController,
                                                                       MWPhotoBrowserDelegate>
-
 
 - (void) setURLString : (NSString *) urlString;
 
