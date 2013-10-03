@@ -7,9 +7,10 @@
 //
 
 #import "CDSPhotosParser.h"
+#import "CDSPhotoAlbum.h"
 
 @implementation CDSPhotosParserOperation {
-
+   NSMutableArray *photoAlbums;
 }
 
 //________________________________________________________________________________________
@@ -18,14 +19,14 @@
 {
    self = [super initWithURLString : urlString datafieldTags : tags subfieldCodes : codes];
    if (self) {
-   
+      photoAlbums = [[NSMutableArray alloc] init];
    }
    
    return self;
 }
 
 //________________________________________________________________________________________
-- (void) parser : (CDSXMLParser *) aParser didParseRecord : (NSDictionary *) record
+- (void) parser : (CDSXMLParser *) aParser didParseRecord : (NSArray *) recordData
 {
 #pragma unused(aParser)
 
@@ -42,11 +43,10 @@
 
    if (self.isCancelled)
       return;
-   //TODO: the delegate should be informed on a main thread.
-//   assert(photoAlbums != nil && "parserDidFinish:, photoAlbums is nil");//it can be empty, but not nil!
-//   [self performSelectorOnMainThread : @selector(informDelegateAboutCompletionWithItems:)
-//         withObject : photoAlbums waitUntilDone : NO];
-}
 
+   assert(photoAlbums != nil && "parserDidFinish:, photoAlbums is nil");//it can be empty, but not nil!
+   [self performSelectorOnMainThread : @selector(informDelegateAboutCompletionWithItems:)
+         withObject : photoAlbums waitUntilDone : NO];
+}
 
 @end

@@ -320,7 +320,7 @@
 #pragma mark - Methods for CDSXMLParser to keeps us informed (and to be overriden by concrete operations).
 
 //________________________________________________________________________________________
-- (void) parser : (CDSXMLParser *) parser didParseRecord : (NSDictionary *) record
+- (void) parser : (CDSXMLParser *) parser didParseRecord : (NSArray *) record
 {
 #pragma unused(parser, record)
    //NOOP.
