@@ -33,6 +33,12 @@ NSString *LargeImageType()
    return CernAPP::iPadImageUrl;
 }
 
+//________________________________________________________________________________________
+NSString *LargeIconImageType()
+{
+   return @"icon-640";
+}
+
 }
 
 @implementation CDSPhotosParserOperation {
@@ -167,7 +173,7 @@ NSString *LargeImageType()
       //Uff.
       if (!thumbnailUrl)
          thumbnailUrl = imageUrl;
-      
+
       [newAlbum addImageData : @{CernAPP::iPadImageUrl : [NSURL URLWithString : [imageUrl stringByTrimmingCharactersInSet : charSet]],
                                  CernAPP::thumbnailImageUrl : [NSURL URLWithString : [thumbnailUrl stringByTrimmingCharactersInSet : charSet]]}];
    }
@@ -187,13 +193,13 @@ NSString *LargeImageType()
 
    if (NSString * const url = (NSString *)datafield[CernAPP::CDScodeURL]) {
       if (NSString * const contentType = (NSString *)datafield[CernAPP::CDScodeContent]) {
-         if ([contentType isEqualToString : CernAPP::LargeImageType()])//It's a large size image.
+         if ([contentType isEqualToString : CernAPP::LargeImageType()] || [contentType isEqualToString : CernAPP::LargeIconImageType()])//It's a large size image.
             [imageUrls addObject : url];
          else if ([contentType isEqualToString : @"icon"] || [contentType isEqualToString : @"icon-180"] || [contentType isEqualToString : @"jpgIcon"])
             [thumbnailUrls addObject : url];
          //ignore others.
       } else {
-         [imageUrls addObject : url];
+         //[imageUrls addObject : url];
       }
    }//Else we completely skip this datafield.
 }
