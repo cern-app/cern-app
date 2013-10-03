@@ -10,9 +10,10 @@
 
 namespace CernAPP {
 
-NSString * const thumbnailImage = @"thumbnailSize";
-NSString * const iPhoneImage = @"iPhoneSize";
-NSString * const iPadImage = @"iPadSize";
+NSString * const thumbnailImageSize = @"thumbnailSize";
+NSString * const thumbnailImage = @"thumbnailImage";
+NSString * const iPhoneImageSize = @"iPhoneSize";
+NSString * const iPadImageSize = @"iPadSize";
 
 }
 

@@ -29,7 +29,7 @@ NSString *LargeImageType()
       return @"jpgA4";
    
    return @"jpgA5";*/
-   return CernAPP::iPadImage;
+   return CernAPP::iPadImageSize;
 }
 
 }
@@ -137,6 +137,8 @@ NSString *LargeImageType()
    
    if (!imageUrls.count)
       return;
+   
+   NSCharacterSet * const charSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
 
    for (NSString * imageUrl in imageUrls) {
       //This "algorithm" is terribly ineffecient, but ... not too much I can do with our input
@@ -164,8 +166,9 @@ NSString *LargeImageType()
       //Uff.
       if (!thumbnailUrl)
          thumbnailUrl = imageUrl;
-
-      [newAlbum addImageData : @{CernAPP::iPadImage : imageUrl, CernAPP::thumbnailImage : thumbnailUrl}];
+      
+      [newAlbum addImageData : @{CernAPP::iPadImageSize : [NSURL URLWithString : [imageUrl stringByTrimmingCharactersInSet : charSet]],
+                                 CernAPP::thumbnailImageSize : [NSURL URLWithString : [thumbnailUrl stringByTrimmingCharactersInSet : charSet]]}];
    }
    
    imageUrls = nil;

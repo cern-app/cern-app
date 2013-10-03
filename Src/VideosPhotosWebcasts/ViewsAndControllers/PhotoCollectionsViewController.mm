@@ -255,6 +255,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(indexPath != nil && "collectionView:layout:sizeForItemAtIndexPath:, parameter 'indexPath' is nil");
 
    if (collectionView == albumCollectionView) {
+   NSLog(@"mememe");
       assert(selectedAlbum != nil &&
              "collectionView:layout:sizeForItemAtIndexPath:, no album was selected");
       assert(indexPath.row < selectedAlbum.nImages &&
@@ -604,7 +605,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       return;
 
    ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL :
-                                         [album getImageURLWithIndex : indexPath.row forSize : CernAPP::thumbnailImage]];
+                                         [album getImageURLWithIndex : indexPath.row forSize : CernAPP::thumbnailImageSize]];
    downloader.delegate = self;
    downloader.indexPathInTableView = indexPath;
    [imageDownloaders setObject : downloader forKey : indexPath];
@@ -622,7 +623,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       if ([album getThumbnailImageForIndex : i] || imageDownloaders[key])
          continue;
       ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL :
-                                            [album getImageURLWithIndex : i forSize : CernAPP::thumbnailImage]];
+                                            [album getImageURLWithIndex : i forSize : CernAPP::thumbnailImageSize]];
       downloader.indexPathInTableView = key;
       downloader.delegate = self;
       [imageDownloaders setObject : downloader forKey : key];
@@ -791,7 +792,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    assert(selectedAlbum != nil && "photoBrowser:photoAtIndex:, no album selected");
    assert(index < selectedAlbum.nImages && "photoBrowser:photoAtIndex:, index is out of bounds");
 
-   NSURL * const url = [selectedAlbum getImageURLWithIndex : index forSize : CernAPP::iPadImage];
+   NSURL * const url = [selectedAlbum getImageURLWithIndex : index forSize : CernAPP::iPadImageSize];
    return [MWPhoto photoWithURL : url];
 }
 
