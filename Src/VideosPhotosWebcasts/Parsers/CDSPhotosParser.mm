@@ -29,7 +29,7 @@ NSString *LargeImageType()
       return @"jpgA4";
    
    return @"jpgA5";*/
-   return CernAPP::iPadImageSize;
+   return CernAPP::iPadImageUrl;
 }
 
 }
@@ -167,8 +167,8 @@ NSString *LargeImageType()
       if (!thumbnailUrl)
          thumbnailUrl = imageUrl;
       
-      [newAlbum addImageData : @{CernAPP::iPadImageSize : [NSURL URLWithString : [imageUrl stringByTrimmingCharactersInSet : charSet]],
-                                 CernAPP::thumbnailImageSize : [NSURL URLWithString : [thumbnailUrl stringByTrimmingCharactersInSet : charSet]]}];
+      [newAlbum addImageData : @{CernAPP::iPadImageUrl : [NSURL URLWithString : [imageUrl stringByTrimmingCharactersInSet : charSet]],
+                                 CernAPP::thumbnailImageUrl : [NSURL URLWithString : [thumbnailUrl stringByTrimmingCharactersInSet : charSet]]}];
    }
    
    imageUrls = nil;

@@ -10,10 +10,10 @@
 
 namespace CernAPP {
 
-NSString * const thumbnailImageSize = @"thumbnailSize";
+NSString * const thumbnailImageUrl = @"thumbnailUrl";
 NSString * const thumbnailImage = @"thumbnailImage";
-NSString * const iPhoneImageSize = @"iPhoneSize";
-NSString * const iPadImageSize = @"iPadSize";
+NSString * const iPhoneImageUrl = @"iPhoneUrl";
+NSString * const iPadImageUrl = @"iPadUrl";
 
 }
 
@@ -61,15 +61,15 @@ NSString * const iPadImageSize = @"iPadSize";
 }
 
 //________________________________________________________________________________________
-- (NSURL *) getImageURLWithIndex : (NSUInteger) index forSize : (NSString *) size
+- (NSURL *) getImageURLWithIndex : (NSUInteger) index urlType : (NSString *) type
 {
-   assert(index < albumData.count && "getImageURLWithIndex:forSize:, parameter 'index' is out of bounds");
-   assert(size != nil && "getImageURLWithIndex:forSize:, parameter 'size' is nil");
+   assert(index < albumData.count && "getImageURLWithIndex:urlType:, parameter 'index' is out of bounds");
+   assert(type != nil && "getImageURLWithIndex:urlType:, parameter 'size' is nil");
    
    NSDictionary * const imageData = (NSDictionary *)albumData[index];
-   assert(imageData[size] != nil && "getImageURLWithIndex:forSize:, no url for resource type found");
+   assert(imageData[type] != nil && "getImageURLWithIndex:urlType:, no url for resource type found");
    
-   return (NSURL *)imageData[size];
+   return (NSURL *)imageData[type];
 }
 
 //________________________________________________________________________________________

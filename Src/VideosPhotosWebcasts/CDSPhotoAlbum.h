@@ -12,10 +12,10 @@ namespace CernAPP {
 
 //Different sizes (for the same image).
 //Strings, as they work as keys in a dictionary.
-extern NSString * const thumbnailImageSize;
+extern NSString * const thumbnailImageUrl;
 extern NSString * const thumbnailImage;
-extern NSString * const iPhoneImageSize;
-extern NSString * const iPadImageSize;
+extern NSString * const iPhoneImageUrl;
+extern NSString * const iPadImageUrl;
 
 }
 
@@ -25,7 +25,7 @@ extern NSString * const iPadImageSize;
 - (void) addImageData : (NSDictionary *) dict;
 - (UIImage *) getThumbnailImageForIndex : (NSUInteger) index;
 - (void) setThumbnailImage : (UIImage *) image withIndex : (NSUInteger) index;
-- (NSURL *) getImageURLWithIndex : (NSUInteger) index forSize : (NSString *) type;
+- (NSURL *) getImageURLWithIndex : (NSUInteger) index urlType : (NSString *) type;
 
 - (NSUInteger) nImages;
 
