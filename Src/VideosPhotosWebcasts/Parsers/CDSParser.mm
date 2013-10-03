@@ -10,17 +10,13 @@
 
 #import "CDSParser.h"
 
-//This parser will be created/executed by an operation object
-//(so, it's in a background thread). The parser itself uses
-//asynchronous connection == + 1 more thread (but according to
-//the documentation even synchronous connections create additional threads).
+//The parser itself uses synchronous connection (but according to
+//the documentation even synchronous connections create additional threads??).
 //After xml data was downloaded, we parse it and pass the parsed data to
 //the delegate (it will be an operation object).
 
 @implementation CDSXMLParser {
    __weak CDSParserOperation *operation;
-   NSURLConnection *connection;
-   NSMutableData *connectionData;
    NSXMLParser *xmlParser;
    NSMutableArray *CDSrecord;
    NSMutableDictionary *CDSDatafield;
@@ -42,9 +38,6 @@
       validSubfieldCodes = nil;
       operation = anOperation;
    
-      connection = nil;
-      connectionData = nil;
-      
       xmlParser = nil;
       CDSrecord = nil;
       datafieldTag = nil;
@@ -64,7 +57,7 @@
 }
 
 //________________________________________________________________________________________
-- (BOOL) start
+- (void) start
 {
    assert(operation != nil && "start, operation is nil");
    assert(CDSUrl != nil && "start, CDSUrl is nil");
@@ -74,92 +67,40 @@
    //I assert on this condition instead of 'return NO;' - this parser MUST be started from an operation ONLY
    //and an operation CAN NEVER call the start twice (if the first one was successfull or stop was
    //not called between).
-   assert(connection == nil && xmlParser == nil && "start, parser was started already");
-
+   assert(xmlParser == nil && "start, parser was started already");
 
    if (NSURL * const url = [NSURL URLWithString : CDSUrl]) {
       NSURLRequest * const urlRequest = [[NSURLRequest alloc] initWithURL : url];
       if (!urlRequest) {
          NSLog(@"error<CDSXMLParser>: start - failed to create an url request");
-         return NO;
+         [operation parser : self didFailWithError : nil];
+         return;
       }
 
-      connectionData = [[NSMutableData alloc] init];
-      if (!(connection = [[NSURLConnection alloc] initWithRequest : urlRequest delegate : self])) {
-         connectionData = nil;
-         NSLog(@"error<CDSXMLParser>: start - failed to create a connection");
-         return NO;
+      NSError *error = nil;
+      NSURLResponse *response = nil;
+      NSData * const connectionData = [NSURLConnection sendSynchronousRequest : urlRequest returningResponse : &response error : &error];
+      
+      if ([self stopIfCancelled])
+         return;
+
+      if (connectionData && connectionData.length && !error) {
+         xmlParser = [[NSXMLParser alloc] initWithData : connectionData];
+         xmlParser.delegate = self;
+         [xmlParser parse];
       }
    } else {
       NSLog(@"error<CDSXMLParser>: start - failed to create url");
-      return NO;
+      [operation parser : self didFailWithError : nil];
    }
-   
-   return YES;
 }
 
 //________________________________________________________________________________________
 - (void) stop
 {
-   if (connection) {
-      assert(xmlParser == nil && "stop, xmlParser working while connection is active");
-      [connection cancel];
-      connection = nil;
-   } else if (xmlParser) {
-      assert(connection == nil && "stop, xmlParser working while connection is active");
+   if (xmlParser) {
       [xmlParser abortParsing];
       xmlParser.delegate = nil;
-   }
-}
-
-#pragma mark - NSURLConnectionDataDelegate
-
-//________________________________________________________________________________________
-- (void) connection : (NSURLConnection *) aConnection didReceiveData : (NSData *) data
-{
-#pragma unused(aConnection)
-
-   if ([self stopIfCancelled])
-      return;
-
-   assert(data != nil && "connection:didReceieveData:, parameter 'data' is nil");
-   assert(connectionData != nil && "connection:didReceiveData:, connectionData is nil");
-   
-   [connectionData appendData : data];
-}
-
-//________________________________________________________________________________________
-- (void) connection : (NSURLConnection *) aConnection didFailWithError : (NSError *) error
-{
-#pragma unused(aConnection)
-
-   if ([self stopIfCancelled])
-      return;
-
-   connectionData = nil;
-   connection = nil;
-
-   assert(operation != nil && "connection:didFailWithError:, operation is nil");
-   [operation parser : self didFailWithError : error];
-}
-
-//________________________________________________________________________________________
-- (void) connectionDidFinishLoading : (NSURLConnection *) aConnection
-{
-#pragma unused(aConnection)
-
-   if ([self stopIfCancelled])
-      return;
-
-   //Verify data? Start parsing.
-   if (connectionData.length) {
-      assert(xmlParser == nil && "connectionDidFinishLoading:, xmlParser is active already");
-      xmlParser = [[NSXMLParser alloc] initWithData : connectionData];
-      xmlParser.delegate = self;
-      [xmlParser parse];
-   } else {
-      assert(operation != nil && "connectionDidFinishLoading:, operation is nil");
-      [operation parserDidFinish : self];
    }
 }
 

@@ -10,10 +10,10 @@
 
 @class CDSParserOperation;
 
-@interface CDSXMLParser : NSObject<NSURLConnectionDataDelegate, NSXMLParserDelegate>
+@interface CDSXMLParser : NSObject<NSXMLParserDelegate>
 
 - (id) initWithOperation : (CDSParserOperation *) operation;
-- (BOOL) start;
+- (void) start;
 - (void) stop;
 
 @property (nonatomic) NSString *CDSUrl;
