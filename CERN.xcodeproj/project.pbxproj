@@ -234,7 +234,6 @@
 		70D98B2B16F786D8003C42E7 /* SlideScrollView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */; };
 		70E69AC1170EC2D700384523 /* ArticleiPadCSS.css in Resources */ = {isa = PBXBuildFile; fileRef = 70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */; };
 		70E69AC4170EE81F00384523 /* FeedCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E69AC2170EE81F00384523 /* FeedCache.mm */; };
-		70E9EE641746203500D1530E /* PhotoAlbum.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70E9EE631746203500D1530E /* PhotoAlbum.mm */; };
 		70FB8558172987E500F7CCBD /* AnimationDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70FB8554172987E500F7CCBD /* AnimationDelegate.mm */; };
 		70FB8559172987E500F7CCBD /* AnimationFrame.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70FB8556172987E500F7CCBD /* AnimationFrame.mm */; };
 		70FDADCE16CE604200933383 /* cern_info.png in Resources */ = {isa = PBXBuildFile; fileRef = 70FDADCD16CE604200933383 /* cern_info.png */; };
@@ -594,8 +593,6 @@
 		70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = ArticleiPadCSS.css; sourceTree = "<group>"; };
 		70E69AC2170EE81F00384523 /* FeedCache.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedCache.mm; sourceTree = "<group>"; };
 		70E69AC3170EE81F00384523 /* FeedCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedCache.h; sourceTree = "<group>"; };
-		70E9EE621746203500D1530E /* PhotoAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoAlbum.h; sourceTree = "<group>"; };
-		70E9EE631746203500D1530E /* PhotoAlbum.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PhotoAlbum.mm; sourceTree = "<group>"; };
 		70FB8554172987E500F7CCBD /* AnimationDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimationDelegate.mm; sourceTree = "<group>"; };
 		70FB8555172987E500F7CCBD /* AnimationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationDelegate.h; sourceTree = "<group>"; };
 		70FB8556172987E500F7CCBD /* AnimationFrame.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AnimationFrame.mm; sourceTree = "<group>"; };
@@ -1120,8 +1117,6 @@
 			children = (
 				7043C29817FD68E100ECE1E5 /* CDSPhotoAlbum.h */,
 				7043C29917FD68E100ECE1E5 /* CDSPhotoAlbum.mm */,
-				70E9EE621746203500D1530E /* PhotoAlbum.h */,
-				70E9EE631746203500D1530E /* PhotoAlbum.mm */,
 				70A56285173A32F600145FEC /* Parsers */,
 				70A5628A173A32F600145FEC /* ViewsAndControllers */,
 			);
@@ -1664,7 +1659,6 @@
 				70A562EE173A382A00145FEC /* StaticInfoTileViewController.mm in Sources */,
 				70A562EF173A382A00145FEC /* StaticInfoItemViewController.mm in Sources */,
 				70A562F0173A382A00145FEC /* StaticInfoScrollViewController.mm in Sources */,
-				70E9EE641746203500D1530E /* PhotoAlbum.mm in Sources */,
 				706A3F9F1754CB5C00FD8685 /* VideosCollectionViewController.mm in Sources */,
 				706A40181754FB6200FD8685 /* AppSettingsController.mm in Sources */,
 				706A401B1754FB9E00FD8685 /* ArticleDetailViewController.mm in Sources */,

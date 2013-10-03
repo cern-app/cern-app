@@ -29,14 +29,6 @@
 
 @end
 
-
-//Photos.
-@interface PhotoCollectionsParserOperation : MARCParserOperation
-
-- (id) initWithURLString : (NSString *) urlString resourceTypes : (NSArray *) resourceTypes;
-
-@end
-
 //Videos.
 @interface VideoCollectionsParserOperation : MARCParserOperation
 
