@@ -1,5 +1,5 @@
 //
-//  CDSXMLParser.m
+//  CDSParser.m
 //  CERN
 //
 //  Created by Timur Pocheptsov on 10/2/13.
