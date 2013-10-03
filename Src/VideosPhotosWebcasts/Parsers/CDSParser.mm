@@ -8,7 +8,7 @@
 
 #import <cassert>
 
-#import "CDSXMLParser.h"
+#import "CDSParser.h"
 
 //This parser will be created/executed by an operation object
 //(so, it's in a background thread). The parser itself uses
@@ -18,6 +18,7 @@
 //the delegate (it will be an operation object).
 
 @implementation CDSXMLParser {
+   __weak CDSParserOperation *operation;
    NSURLConnection *connection;
    NSMutableData *connectionData;
    NSXMLParser *xmlParser;
@@ -28,17 +29,19 @@
    NSMutableString *elementData;
 }
 
-@synthesize CDSUrl, validFieldTags, validSubfieldCodes, delegate;
+@synthesize CDSUrl, validFieldTags, validSubfieldCodes;
 
 //________________________________________________________________________________________
-- (id) init
+- (id) initWithOperation : (CDSParserOperation *) anOperation
 {
+   assert(anOperation != nil && "initWithOperation:, parameter 'anOperation' is nil");
+
    if (self = [super init]) {
       CDSUrl = nil;
       validFieldTags = nil;
       validSubfieldCodes = nil;
-      delegate = nil;
-      
+      operation = anOperation;
+   
       connection = nil;
       connectionData = nil;
       
@@ -52,8 +55,18 @@
 }
 
 //________________________________________________________________________________________
+- (BOOL) stopIfCancelled
+{
+   if (operation.isCancelled)
+      [self stop];
+
+   return operation.isCancelled;
+}
+
+//________________________________________________________________________________________
 - (BOOL) start
 {
+   assert(operation != nil && "start, operation is nil");
    assert(CDSUrl != nil && "start, CDSUrl is nil");
    assert(validFieldTags != nil && "start, validFieldTags is nil");
    assert(validSubfieldCodes != nil && "start, validSubfieldCodes is nil");
@@ -95,6 +108,7 @@
    } else if (xmlParser) {
       assert(connection == nil && "stop, xmlParser working while connection is active");
       [xmlParser abortParsing];
+      xmlParser.delegate = nil;
    }
 }
 
@@ -104,6 +118,9 @@
 - (void) connection : (NSURLConnection *) aConnection didReceiveData : (NSData *) data
 {
 #pragma unused(aConnection)
+
+   if ([self stopIfCancelled])
+      return;
 
    assert(data != nil && "connection:didReceieveData:, parameter 'data' is nil");
    assert(connectionData != nil && "connection:didReceiveData:, connectionData is nil");
@@ -116,11 +133,14 @@
 {
 #pragma unused(aConnection)
 
+   if ([self stopIfCancelled])
+      return;
+
    connectionData = nil;
    connection = nil;
 
-   if (delegate)
-      [delegate parser : self didFailWithError : error];
+   assert(operation != nil && "connection:didFailWithError:, operation is nil");
+   [operation parser : self didFailWithError : error];
 }
 
 //________________________________________________________________________________________
@@ -128,14 +148,19 @@
 {
 #pragma unused(aConnection)
 
+   if ([self stopIfCancelled])
+      return;
+
    //Verify data? Start parsing.
    if (connectionData.length) {
       assert(xmlParser == nil && "connectionDidFinishLoading:, xmlParser is active already");
       xmlParser = [[NSXMLParser alloc] initWithData : connectionData];
       xmlParser.delegate = self;
       [xmlParser parse];
-   } else if (delegate)
-      [delegate parserDidFinish : self];
+   } else {
+      assert(operation != nil && "connectionDidFinishLoading:, operation is nil");
+      [operation parserDidFinish : self];
+   }
 }
 
 #pragma mark - NSXMLParserDelegate
@@ -144,6 +169,8 @@
 - (void) parserDidStartDocument : (NSXMLParser *) parser
 {
 #pragma unused(parser)
+
+   [self stopIfCancelled];
 }
 
 //________________________________________________________________________________________
@@ -151,6 +178,9 @@
          qualifiedName : (NSString *) qName attributes : (NSDictionary *) attributeDict
 {
 #pragma unused(parser, namespaceURI, qName)
+
+   if ([self stopIfCancelled])
+      return;
 
    if ([elementName isEqualToString : @"record"]) {
       assert(CDSrecord == nil &&
@@ -183,6 +213,9 @@
 {
 #pragma unused(parser)
 
+   if ([self stopIfCancelled])
+      return;
+
    if (datafieldTag && subfieldCode) {
       if ([string stringByTrimmingCharactersInSet : [NSCharacterSet whitespaceAndNewlineCharacterSet]].length) {
          if (!elementData)
@@ -199,10 +232,13 @@
 {
 #pragma unsued(parser, namespaceURI, qName)
 
+   if ([self stopIfCancelled])
+      return;
+
    if ([elementName isEqualToString : @"subfield"]) {
       if (subfieldCode) {
          assert(CDSDatafield != nil &&
-                "parser:didEndElement:namespaceURI:, CDSDatafield is nil");
+                "parser:didEndElement:namespaceURI:qualifiedName:, CDSDatafield is nil");
          [CDSDatafield setObject : elementData forKey : subfieldCode];
          subfieldCode = nil;
          elementData = nil;
@@ -210,14 +246,18 @@
    } else if ([elementName isEqualToString : @"datafield"]) {
       if (datafieldTag) {
          assert(CDSrecord != nil &&
-                "parser:didEndElement:namespaceURI:, CDSRecord is nil");
+                "parser:didEndElement:namespaceURI:qualifiedName:, CDSRecord is nil");
          [CDSrecord addObject : CDSDatafield];
          datafieldTag = nil;
          CDSDatafield = nil;
       }
    } else if ([elementName isEqualToString : @"record"]) {
-      if (delegate && CDSrecord.count)
-         [delegate parser : self didParseRecord : CDSrecord];
+      if (CDSrecord.count) {
+         assert(operation != nil &&
+                "parser:didEndElement:namespaceURI:qualifiedName:, operation is nil");
+         [operation parser : self didParseRecord : CDSrecord];
+      }
+
       CDSrecord = nil;
    }
 }
@@ -227,8 +267,101 @@
 {
 #pragma unused(parser)
 
-   if (delegate)
-      [delegate parserDidFinish : self];
+   if ([self stopIfCancelled])
+      return;
+
+   assert(operation != nil && "parserDidEndDocument:, operation is nil");
+   [operation parserDidFinish : self];
+}
+
+@end
+
+#pragma mark - Parser's wrapper - operation object.
+
+@implementation CDSParserOperation {
+   CDSXMLParser *parser;
+}
+
+@synthesize delegate;
+
+//________________________________________________________________________________________
+- (id) initWithURLString : (NSString *) urlString datafieldTags : (NSSet *) tags subfieldCodes : (NSSet *) codes
+{
+   assert(urlString != nil && "initWithURLString:datafieldTags:subfieldCodes:, parameter 'urlString' is nil");
+   assert(tags != nil && "initWithURLString:datafieldTags:subfieldCodes:, parameter 'tags' is nil");
+   assert(tags.count > 0 && "initWithURLString:datafieldTags:subfieldCodes:, parameter 'tags' is an empty set");
+   assert(codes != nil && "initWithURLString:datafieldTags:subfieldCodes:, parameter 'codes' is nil");
+   assert(codes.count > 0 && "initWithURLString:datafieldTags:subfieldCodes:, parameter 'codes' is an empty set");
+   
+   if (self = [super init]) {
+      parser = [[CDSXMLParser alloc] initWithOperation : self];
+      parser.CDSUrl = urlString;
+      parser.validFieldTags = tags;
+      parser.validSubfieldCodes = codes;
+   }
+
+   return self;
+}
+
+#pragma mark - NSOpetation.
+
+//________________________________________________________________________________________
+- (void) main
+{
+   assert(parser != nil && "main, parser is nil");
+   
+   if (!self.isCancelled) {
+      @autoreleasepool {//TODO: check this, do I really need a pool?
+         [parser start];
+      }
+   }
+}
+
+#pragma mark - Methods for CDSXMLParser to keeps us informed (and to be overriden by concrete operations).
+
+//________________________________________________________________________________________
+- (void) parser : (CDSXMLParser *) parser didParseRecord : (NSDictionary *) record
+{
+#pragma unused(parser, record)
+   //NOOP.
+}
+
+//________________________________________________________________________________________
+- (void) parserDidFinish : (CDSXMLParser *) parser
+{
+#pragma unused(parser)
+   //NOOP.
+}
+
+//________________________________________________________________________________________
+- (void) parser : (CDSXMLParser *) parser didFailWithError : (NSError *) error
+{
+#pragma unused(parser)
+   [self performSelectorOnMainThread : @selector(informDelegateAboutError:) withObject : error waitUntilDone : NO];
+}
+
+#pragma mark - Aux. methods to be executed on a main thread (inform a delegate).
+
+//________________________________________________________________________________________
+- (void) informDelegateAboutError : (NSError *) error
+{
+   //I can assert here on something like [NSThread isMainThread]
+   if (!self.isCancelled) {
+      assert(delegate != nil && "informDelegateAboutError:, delegate is nil");
+      [delegate parserDidFailWithError : error];
+   }
+}
+
+//________________________________________________________________________________________
+- (void) informDelegateAboutCompletionWithItems : (NSArray *) items
+{
+   //I can assert here on something like [NSThread isMainThread]
+   assert(items != nil && "informDelegateAboutCompletionWithItems:, parameter 'items' is nil");
+
+   if (!self.isCancelled) {
+      assert(delegate != nil && "informDelegateAboutCompletionWithItems:, delegate is nil");
+      [delegate parserDidFinishWithItems : items];
+   }
 }
 
 @end
