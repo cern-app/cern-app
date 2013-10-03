@@ -88,7 +88,8 @@
          xmlParser = [[NSXMLParser alloc] initWithData : connectionData];
          xmlParser.delegate = self;
          [xmlParser parse];
-      }
+      } else
+         [operation parser : self didFailWithError : nil];
    } else {
       NSLog(@"error<CDSXMLParser>: start - failed to create an url");
       [operation parser : self didFailWithError : nil];
