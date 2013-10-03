@@ -114,11 +114,13 @@
 //________________________________________________________________________________________
 - (void) connection : (NSURLConnection *) aConnection didFailWithError : (NSError *) error
 {
-#pragma unused(aConnection, error)
+#pragma unused(aConnection)
 
    connectionData = nil;
    connection = nil;
-   //TODO: inform our delegate!
+
+   if (delegate)
+      [delegate parser : self didFailWithError : error];
 }
 
 //________________________________________________________________________________________
@@ -127,6 +129,13 @@
 #pragma unused(aConnection)
 
    //Verify data? Start parsing.
+   if (connectionData.length) {
+      assert(xmlParser == nil && "connectionDidFinishLoading:, xmlParser is active already");
+      xmlParser = [[NSXMLParser alloc] initWithData : connectionData];
+      xmlParser.delegate = self;
+      [xmlParser parse];
+   } else if (delegate)
+      [delegate parserDidFinish : self];
 }
 
 #pragma mark - NSXMLParserDelegate
@@ -134,12 +143,15 @@
 //________________________________________________________________________________________
 - (void) parserDidStartDocument : (NSXMLParser *) parser
 {
+#pragma unused(parser)
 }
 
 //________________________________________________________________________________________
 - (void) parser : (NSXMLParser *) parser didStartElement : (NSString *) elementName namespaceURI : (NSString *) namespaceURI
          qualifiedName : (NSString *) qName attributes : (NSDictionary *) attributeDict
 {
+#pragma unused(parser, namespaceURI, qName)
+
    if ([elementName isEqualToString : @"record"]) {
       assert(CDSrecord == nil &&
              "parser:didStartElement:namespaceURI:qualifiedName:attributes:, record already started");
@@ -170,6 +182,7 @@
 - (void) parser : (NSXMLParser *) parser foundCharacters : (NSString *) string
 {
 #pragma unused(parser)
+
    if (datafieldTag && subfieldCode) {
       if ([string stringByTrimmingCharactersInSet : [NSCharacterSet whitespaceAndNewlineCharacterSet]].length) {
          if (!elementData)
@@ -184,6 +197,8 @@
 - (void) parser : (NSXMLParser *) parser didEndElement : (NSString *) elementName namespaceURI : (NSString *) namespaceURI
          qualifiedName : (NSString *) qName
 {
+#pragma unsued(parser, namespaceURI, qName)
+
    if ([elementName isEqualToString : @"subfield"]) {
       if (subfieldCode) {
          assert(CDSDatafield != nil &&
@@ -210,6 +225,8 @@
 //________________________________________________________________________________________
 - (void) parserDidEndDocument : (NSXMLParser *) parser
 {
+#pragma unused(parser)
+
    if (delegate)
       [delegate parserDidFinish : self];
 }
