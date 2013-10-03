@@ -19,6 +19,7 @@ namespace CernAPP {
 //Datafield tags.
 extern NSString * const CDStagMARC;
 extern NSString * const CDStagTitle;
+extern NSString * const CDStagTitleAlt;
 extern NSString * const CDStagDate;
 
 //Subfield codes.

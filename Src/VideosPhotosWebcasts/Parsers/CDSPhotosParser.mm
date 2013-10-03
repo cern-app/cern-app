@@ -15,6 +15,7 @@ namespace CernAPP {
 
 NSString * const CDStagMARC = @"856";
 NSString * const CDStagTitle = @"245";
+NSString * const CDStagTitleAlt = @"246";
 NSString * const CDStagDate = @"269";
 
 NSString * const CDScodeURL = @"u";
@@ -123,7 +124,7 @@ NSString *LargeImageType()
          [self processMARCDatafield:datafield];
       else if ([tag isEqualToString : CernAPP::CDStagDate])
          [self processDateDatafield : datafield];
-      else if ([tag isEqualToString : CernAPP::CDStagTitle])
+      else if ([tag isEqualToString : CernAPP::CDStagTitle] || [tag isEqualToString : CernAPP::CDStagTitleAlt])
          [self processTitleDatafield : datafield];
    }
 }
@@ -214,12 +215,14 @@ NSString *LargeImageType()
 - (void) processTitleDatafield : (NSDictionary *) datafield
 {
    assert(datafield != nil && "processTitleDatafield:, parameter 'datafield' is nil");
-   assert(datafield[@"tag"] != nil && [(NSString *)datafield[@"tag"] isEqualToString : CernAPP::CDStagTitle] &&
+   assert(datafield[@"tag"] != nil &&
+          ([(NSString *)datafield[@"tag"] isEqualToString : CernAPP::CDStagTitle] ||
+           [(NSString *)datafield[@"tag"] isEqualToString : CernAPP::CDStagTitleAlt]) &&
           "processTitleDatafield:, invalid datafield's tag");
    assert(newAlbum != nil && "processTitleDatafield:, newAlbum is nil");
    
    if (NSString * const titleString = (NSString *)datafield[CernAPP::CDScodeTitle]) {
-      if (titleString.length)
+      if (titleString.length && !newAlbum.title)
          newAlbum.title = titleString;
    }
 }

@@ -97,6 +97,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       [datafieldTags addObject : CernAPP::CDStagMARC];
       [datafieldTags addObject : CernAPP::CDStagDate];
       [datafieldTags addObject : CernAPP::CDStagTitle];
+      [datafieldTags addObject : CernAPP::CDStagTitleAlt];
       
       subfieldCodes = [[NSMutableSet alloc] init];
       [subfieldCodes addObject : CernAPP::CDScodeContent];
