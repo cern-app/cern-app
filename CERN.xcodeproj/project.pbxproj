@@ -172,7 +172,7 @@
 		707B13F1169AF69300180E02 /* KeyVal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13E2169AF69300180E02 /* KeyVal.mm */; };
 		707B13F2169AF69300180E02 /* NSDate+InternetDateTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13E4169AF69300180E02 /* NSDate+InternetDateTime.m */; };
 		707B13F3169AF69300180E02 /* NSDate+LastOccurrenceOfWeekday.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13E6169AF69300180E02 /* NSDate+LastOccurrenceOfWeekday.m */; };
-		707B13F4169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13E8169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.m */; };
+		707B13F4169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13E8169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.mm */; };
 		707B13F5169AF69300180E02 /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EA169AF69300180E02 /* NSString+HTML.m */; };
 		707B13F6169AF69300180E02 /* Reachability.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EC169AF69300180E02 /* Reachability.mm */; };
 		707B13F7169AF69300180E02 /* UIImage+SquareScaledImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 707B13EE169AF69300180E02 /* UIImage+SquareScaledImage.m */; };
@@ -491,7 +491,7 @@
 		707B13E5169AF69300180E02 /* NSDate+LastOccurrenceOfWeekday.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+LastOccurrenceOfWeekday.h"; sourceTree = "<group>"; };
 		707B13E6169AF69300180E02 /* NSDate+LastOccurrenceOfWeekday.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+LastOccurrenceOfWeekday.m"; sourceTree = "<group>"; };
 		707B13E7169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+DateFromStringOfUnknownFormat.h"; sourceTree = "<group>"; };
-		707B13E8169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+DateFromStringOfUnknownFormat.m"; sourceTree = "<group>"; };
+		707B13E8169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSDateFormatter+DateFromStringOfUnknownFormat.mm"; sourceTree = "<group>"; };
 		707B13E9169AF69300180E02 /* NSString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+HTML.h"; sourceTree = "<group>"; };
 		707B13EA169AF69300180E02 /* NSString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+HTML.m"; sourceTree = "<group>"; };
 		707B13EB169AF69300180E02 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -1092,7 +1092,7 @@
 				707B13E5169AF69300180E02 /* NSDate+LastOccurrenceOfWeekday.h */,
 				707B13E6169AF69300180E02 /* NSDate+LastOccurrenceOfWeekday.m */,
 				707B13E7169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.h */,
-				707B13E8169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.m */,
+				707B13E8169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.mm */,
 				707B13E9169AF69300180E02 /* NSString+HTML.h */,
 				707B13EA169AF69300180E02 /* NSString+HTML.m */,
 				707B13EB169AF69300180E02 /* Reachability.h */,
@@ -1596,7 +1596,7 @@
 				707B13F1169AF69300180E02 /* KeyVal.mm in Sources */,
 				707B13F2169AF69300180E02 /* NSDate+InternetDateTime.m in Sources */,
 				707B13F3169AF69300180E02 /* NSDate+LastOccurrenceOfWeekday.m in Sources */,
-				707B13F4169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.m in Sources */,
+				707B13F4169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.mm in Sources */,
 				707B13F5169AF69300180E02 /* NSString+HTML.m in Sources */,
 				707B13F6169AF69300180E02 /* Reachability.mm in Sources */,
 				707B13F7169AF69300180E02 /* UIImage+SquareScaledImage.m in Sources */,

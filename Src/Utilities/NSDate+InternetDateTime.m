@@ -6,6 +6,7 @@
 //  Copyright 2010 Michael Waterfall. All rights reserved.
 //
 
+#import "NSDateFormatter+DateFromStringOfUnknownFormat.h"
 #import "NSDate+InternetDateTime.h"
 
 // Always keep the formatter around as they're expensive to instantiate
@@ -152,11 +153,9 @@ static NSDateFormatter *_internetDateTimeFormatter = nil;
     NSDate *date = nil;
     NSDateFormatter * const dateFormatter = [NSDate internetDateTimeFormatter];
     @synchronized(dateFormatter) {
-        [dateFormatter setDateFormat : @"d MMM yyyy"];
-        //I hate this shit. NSDateFormatter does not understand Sept and we have a 'Sept' from ATLAS.
-        NSString * const fixedDateString = [dateString stringByReplacingOccurrencesOfString : @"Sept" withString : @"Sep"];
-        date = [dateFormatter dateFromString : fixedDateString];
-        if (!date) NSLog(@"Could not parse date in unknown format: \"%@\"", dateString);
+        date = [dateFormatter dateFromStringOfUnknownFormat : dateString];
+        if (!date)
+            NSLog(@"Could not parse date in unknown format: \"%@\"", dateString);
     }
 
     return date;
