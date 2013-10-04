@@ -145,7 +145,6 @@
 		70619D3016B042F900906E5C /* 106-sliders@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 70619D2F16B042F900906E5C /* 106-sliders@2x.png */; };
 		7064A35D169DA177006405B9 /* menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7064A35C169DA177006405B9 /* menu@2x.png */; };
 		706877791765CB2C00A22123 /* FeedParserOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706877781765CB2C00A22123 /* FeedParserOperation.mm */; };
-		7068777C1765CC9E00A22123 /* MARCParserOperation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7068777B1765CC9E00A22123 /* MARCParserOperation.mm */; };
 		7069F33116C11517006BC78B /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7069F33016C11517006BC78B /* Settings.bundle */; };
 		7069F76516C14D6D006BC78B /* OverlayView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7069F76216C14D6D006BC78B /* OverlayView.mm */; };
 		7069F76616C14D6D006BC78B /* PictureButtonView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7069F76416C14D6D006BC78B /* PictureButtonView.mm */; };
@@ -188,7 +187,6 @@
 		709CE6CA16A5C287006D524E /* 180-stickynote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C916A5C287006D524E /* 180-stickynote@2x.png */; };
 		70A2533E16BBED0F00F9898A /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 70A2533D16BBED0F00F9898A /* refresh.png */; };
 		70A2534016BBEF8F00F9898A /* bookmarks.png in Resources */ = {isa = PBXBuildFile; fileRef = 70A2533F16BBEF8F00F9898A /* bookmarks.png */; };
-		70A56296173A32F600145FEC /* CernMediaMARCParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56287173A32F600145FEC /* CernMediaMARCParser.mm */; };
 		70A56299173A32F600145FEC /* CollectionSupplementraryView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A5628F173A32F600145FEC /* CollectionSupplementraryView.mm */; };
 		70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A56293173A32F600145FEC /* VideosGridViewController.mm */; };
 		70A562C8173A35C300145FEC /* BulletinFeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562AA173A35C300145FEC /* BulletinFeedViewController.mm */; };
@@ -209,6 +207,7 @@
 		70A562EE173A382A00145FEC /* StaticInfoTileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562E6173A382A00145FEC /* StaticInfoTileViewController.mm */; };
 		70A562EF173A382A00145FEC /* StaticInfoItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562E9173A382A00145FEC /* StaticInfoItemViewController.mm */; };
 		70A562F0173A382A00145FEC /* StaticInfoScrollViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562EB173A382A00145FEC /* StaticInfoScrollViewController.mm */; };
+		70AD297A17FEA4E2007011D8 /* CDSVideosParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70AD297917FEA4E2007011D8 /* CDSVideosParser.mm */; };
 		70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B22F0416F9DCAA007D88EF /* action_blue.png */; };
 		70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */; };
 		70B6B0B9169DD2790058DADA /* live_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0B8169DD2790058DADA /* live_color.png */; };
@@ -439,8 +438,6 @@
 		7064A35C169DA177006405B9 /* menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu@2x.png"; sourceTree = "<group>"; };
 		706877771765CB2C00A22123 /* FeedParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedParserOperation.h; sourceTree = "<group>"; };
 		706877781765CB2C00A22123 /* FeedParserOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FeedParserOperation.mm; sourceTree = "<group>"; };
-		7068777A1765CC9E00A22123 /* MARCParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MARCParserOperation.h; sourceTree = "<group>"; };
-		7068777B1765CC9E00A22123 /* MARCParserOperation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MARCParserOperation.mm; sourceTree = "<group>"; };
 		7069F33016C11517006BC78B /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = Settings.bundle; path = ../Src/Menu/Settings.bundle; sourceTree = "<group>"; };
 		7069F76116C14D6D006BC78B /* OverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayView.h; sourceTree = "<group>"; };
 		7069F76216C14D6D006BC78B /* OverlayView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OverlayView.mm; sourceTree = "<group>"; };
@@ -513,8 +510,6 @@
 		709CE6C916A5C287006D524E /* 180-stickynote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "180-stickynote@2x.png"; sourceTree = "<group>"; };
 		70A2533D16BBED0F00F9898A /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		70A2533F16BBEF8F00F9898A /* bookmarks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bookmarks.png; sourceTree = "<group>"; };
-		70A56286173A32F600145FEC /* CernMediaMARCParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CernMediaMARCParser.h; sourceTree = "<group>"; };
-		70A56287173A32F600145FEC /* CernMediaMARCParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CernMediaMARCParser.mm; sourceTree = "<group>"; };
 		70A5628E173A32F600145FEC /* CollectionSupplementraryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionSupplementraryView.h; sourceTree = "<group>"; };
 		70A5628F173A32F600145FEC /* CollectionSupplementraryView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CollectionSupplementraryView.mm; sourceTree = "<group>"; };
 		70A56292173A32F600145FEC /* VideosGridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideosGridViewController.h; sourceTree = "<group>"; };
@@ -555,6 +550,8 @@
 		70A562E9173A382A00145FEC /* StaticInfoItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoItemViewController.mm; sourceTree = "<group>"; };
 		70A562EA173A382A00145FEC /* StaticInfoScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoScrollViewController.h; sourceTree = "<group>"; };
 		70A562EB173A382A00145FEC /* StaticInfoScrollViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoScrollViewController.mm; sourceTree = "<group>"; };
+		70AD297817FEA4E2007011D8 /* CDSVideosParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDSVideosParser.h; sourceTree = "<group>"; };
+		70AD297917FEA4E2007011D8 /* CDSVideosParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CDSVideosParser.mm; sourceTree = "<group>"; };
 		70B22F0416F9DCAA007D88EF /* action_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action_blue.png; sourceTree = "<group>"; };
 		70B2A75016DBBD5200BC8657 /* ConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionController.h; sourceTree = "<group>"; };
 		70B2A75216DBBE5E00BC8657 /* HUDRefreshProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDRefreshProtocol.h; sourceTree = "<group>"; };
@@ -1126,14 +1123,12 @@
 		70A56285173A32F600145FEC /* Parsers */ = {
 			isa = PBXGroup;
 			children = (
-				70A56287173A32F600145FEC /* CernMediaMARCParser.mm */,
-				70A56286173A32F600145FEC /* CernMediaMARCParser.h */,
-				7068777A1765CC9E00A22123 /* MARCParserOperation.h */,
-				7068777B1765CC9E00A22123 /* MARCParserOperation.mm */,
 				70B875D917FC69EA00773913 /* CDSParser.h */,
 				70B875DA17FC69EA00773913 /* CDSParser.mm */,
 				7043C29517FD665B00ECE1E5 /* CDSPhotosParser.h */,
 				7043C29617FD665B00ECE1E5 /* CDSPhotosParser.mm */,
+				70AD297817FEA4E2007011D8 /* CDSVideosParser.h */,
+				70AD297917FEA4E2007011D8 /* CDSVideosParser.mm */,
 			);
 			path = Parsers;
 			sourceTree = "<group>";
@@ -1636,7 +1631,6 @@
 				70FB8559172987E500F7CCBD /* AnimationFrame.mm in Sources */,
 				70C728461732C6E300992077 /* FlipView.mm in Sources */,
 				70BCD9B31733C560000BD91B /* FlipParentView.mm in Sources */,
-				70A56296173A32F600145FEC /* CernMediaMARCParser.mm in Sources */,
 				70A56299173A32F600145FEC /* CollectionSupplementraryView.mm in Sources */,
 				70A5629B173A32F600145FEC /* VideosGridViewController.mm in Sources */,
 				70A562C8173A35C300145FEC /* BulletinFeedViewController.mm in Sources */,
@@ -1672,11 +1666,11 @@
 				7040F0EC1761FD780050DEF6 /* AnimatedStackLayout.mm in Sources */,
 				7040F0ED1761FD780050DEF6 /* ImageStackViewCell.mm in Sources */,
 				70B875DB17FC69EA00773913 /* CDSParser.mm in Sources */,
+				70AD297A17FEA4E2007011D8 /* CDSVideosParser.mm in Sources */,
 				7040F0EE1761FD780050DEF6 /* PhotoAlbumCoverView.mm in Sources */,
 				7040F0EF1761FD780050DEF6 /* PhotoAlbumFooterView.mm in Sources */,
 				7040F0F01761FD780050DEF6 /* PhotoViewCell.mm in Sources */,
 				706877791765CB2C00A22123 /* FeedParserOperation.mm in Sources */,
-				7068777C1765CC9E00A22123 /* MARCParserOperation.mm in Sources */,
 				70BC65631770BF3700358CD1 /* TwitterTableViewController.mm in Sources */,
 				70BC65641770BF3700358CD1 /* TweetCell.mm in Sources */,
 				70BC65651770BF3700358CD1 /* TwitterTableView.mm in Sources */,

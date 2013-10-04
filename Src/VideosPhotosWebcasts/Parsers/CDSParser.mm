@@ -15,6 +15,20 @@
 //After xml data was downloaded, we parse it and pass the parsed data to
 //the delegate (it will be an operation object).
 
+namespace CernAPP {
+
+NSString * const CDStagMARC = @"856";
+NSString * const CDStagTitle = @"245";
+NSString * const CDStagTitleAlt = @"246";
+NSString * const CDStagDate = @"269";
+
+NSString * const CDScodeURL = @"u";
+NSString * const CDScodeContent = @"x";
+NSString * const CDScodeDate = @"c";
+NSString * const CDScodeTitle = @"a";
+
+}
+
 @implementation CDSXMLParser {
    __weak CDSParserOperation *operation;
    NSXMLParser *xmlParser;

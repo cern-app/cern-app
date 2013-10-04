@@ -13,16 +13,6 @@
 
 namespace CernAPP {
 
-NSString * const CDStagMARC = @"856";
-NSString * const CDStagTitle = @"245";
-NSString * const CDStagTitleAlt = @"246";
-NSString * const CDStagDate = @"269";
-
-NSString * const CDScodeURL = @"u";
-NSString * const CDScodeContent = @"x";
-NSString * const CDScodeDate = @"c";
-NSString * const CDScodeTitle = @"a";
-
 //________________________________________________________________________________________
 NSString *LargeImageType()
 {
@@ -119,10 +109,7 @@ NSString *LargeIconImageType()
    thumbnailUrls = [[NSMutableArray alloc] init];
    newAlbum = [[CDSPhotoAlbum alloc] init];
 
-   for (NSObject *baseObj in recordData) {
-      assert([baseObj isKindOfClass : [NSDictionary class]] &&
-             "processDatafields:, unknown object found in a record");
-      NSDictionary * const datafield = (NSDictionary *)baseObj;
+   for (NSDictionary * const datafield in recordData) {
       assert(datafield[@"tag"] != nil &&
              "processDatafields, unknown datafield (no tag found)");
       NSString * const tag = (NSString *)datafield[@"tag"];

@@ -12,12 +12,12 @@
 #import <UIKit/UIKit.h>
 
 #import "ConnectionController.h"
-#import "MARCParserOperation.h"
 #import "HUDRefreshProtocol.h"
 #import "ImageDownloader.h"
 #import "MBProgressHUD.h"
+#import "CDSParser.h"
 
-@interface VideosGridViewController : UICollectionViewController<MARCParserOperationDelegate, ImageDownloaderDelegate, ConnectionController,
+@interface VideosGridViewController : UICollectionViewController<CDSParserOperationDelegate, ImageDownloaderDelegate, ConnectionController,
                                                                  UICollectionViewDataSource, UICollectionViewDelegate, HUDRefreshProtocol>
 {
 @protected

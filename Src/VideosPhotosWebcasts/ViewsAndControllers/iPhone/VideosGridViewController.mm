@@ -16,16 +16,21 @@
 #import "ECSlidingViewController.h"
 #import "VideoThumbnailCell.h"
 #import "ApplicationErrors.h"
+#import "CDSVideosParser.h"
 #import "MBProgressHUD.h"
 #import "Reachability.h"
+#import "DeviceCheck.h"
 #import "GUIHelpers.h"
 
 @implementation VideosGridViewController {
    BOOL loaded;
    //
    NSOperationQueue *parserQueue;
-   VideoCollectionsParserOperation *operation;
+   CDSVideosParserOperation *operation;
    
+   NSMutableSet *datafieldTags;
+   NSMutableSet *subfieldCodes;
+
    Reachability *internetReach;
 }
 
@@ -52,6 +57,18 @@
 
       parserQueue = [[NSOperationQueue alloc] init];
       operation = nil;
+      
+      datafieldTags = [[NSMutableSet alloc] init];
+      [datafieldTags addObject : CernAPP::CDStagMARC];
+      [datafieldTags addObject : CernAPP::CDStagDate];
+      [datafieldTags addObject : CernAPP::CDStagTitle];
+      //[datafieldTags addObject : CernAPP::CDStagTitleAlt];
+      
+      subfieldCodes = [[NSMutableSet alloc] init];
+      [subfieldCodes addObject : CernAPP::CDScodeContent];
+      [subfieldCodes addObject : CernAPP::CDScodeURL];
+      [subfieldCodes addObject : CernAPP::CDScodeDate];
+      [subfieldCodes addObject : CernAPP::CDScodeTitle];
       
       internetReach = nil;
    }
@@ -98,10 +115,13 @@
    assert(parserQueue != nil && "startParserOperation, parserQueue is nil");
    assert(operation == nil && "startParserOperation, called while parser operation is active");
    
-   operation = [[VideoCollectionsParserOperation alloc] initWithURLString : @"http://cdsweb.cern.ch/search?ln=en&cc=Press+Office+Video+Selection&p"
-                                                                             "=internalnote%3A%22ATLAS%22&f=&action_search=Search&c=Press+Office+V"
-                                                                             "ideo+Selection&c=&sf=year&so=d&rm=&rg=100&sc=0&of=xm"
-                                                            resourceTypes : @[@"mp40600", @"jpgposterframe"]];
+   NSString * const url =
+   @"http://cdsweb.cern.ch/search?ln=en&cc=Press+Office+Video+Selection&p=internalnote%3A%22ATLAS%22&f=&action_search=Search&c=Press+Office+Video+Selection&c=&sf=year&so=d&rm=&rg=100&sc=0&of=xm";
+   
+   operation = [[CDSVideosParserOperation alloc] initWithURLString : url
+                                                 datafieldTags : datafieldTags
+                                                 subfieldCodes : subfieldCodes];
+
    operation.delegate = self;
    [parserQueue addOperation : operation];
 }
@@ -182,12 +202,15 @@
    videoThumbnails = [NSMutableDictionary dictionary];
 
    for (NSDictionary *metaData in videoMetadata) {
-      ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : (NSURL *)metaData[@"jpgposterframe"]];
-      NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : 0 inSection : section];
-      downloader.indexPathInTableView = indexPath;
-      downloader.delegate = self;
-      [imageDownloaders setObject : downloader forKey : indexPath];
-      [downloader startDownload];
+      if (NSURL * const thumbnailURL = metaData[CernAPP::CDSvideoThubmnailURL]) {//What if we don't have a thumbnail at all?
+         ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : thumbnailURL];
+         NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : 0 inSection : section];
+         downloader.indexPathInTableView = indexPath;
+         downloader.delegate = self;
+         [imageDownloaders setObject : downloader forKey : indexPath];
+         [downloader startDownload];
+      }
+   
       ++section;
    }
 }
@@ -280,6 +303,29 @@
 }
 
 //________________________________________________________________________________________
+- (UILabel *) descriptionLabelForHeaderView : (CollectionSupplementraryView *) view
+{
+   UILabel *descriptionLabel = nil;
+   if (!view.subviews.count) {
+      descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 53.f)];
+      descriptionLabel.textColor = [UIColor whiteColor];
+      descriptionLabel.backgroundColor = [UIColor clearColor];
+      descriptionLabel.numberOfLines = 0;
+      descriptionLabel.textAlignment = NSTextAlignmentCenter;
+      [view addSubview : descriptionLabel];
+   } else {
+      for (UIView *v in view.subviews) {
+         if ([v isKindOfClass : [UILabel class]]) {
+            descriptionLabel = (UILabel *)v;
+            break;
+         }
+      }
+   }
+   
+   return descriptionLabel;
+}
+
+//________________________________________________________________________________________
 - (UICollectionReusableView *) collectionView : (UICollectionView *) collectionView
                                viewForSupplementaryElementOfKind : (NSString *) kind atIndexPath : (NSIndexPath *) indexPath
 {
@@ -297,10 +343,12 @@
               withReuseIdentifier : [CollectionSupplementraryView reuseIdentifierHeader]
               forIndexPath : indexPath];
       NSDictionary * const metaData = (NSDictionary *)videoMetadata[indexPath.section];
-      view.descriptionLabel.text = (NSString *)metaData[@"title"];
+
+      UILabel * const descriptionLabel = [self descriptionLabelForHeaderView : view];
+      descriptionLabel.text = (NSString *)metaData[CernAPP::CDScodeTitle];
       UIFont * const font = [UIFont fontWithName : CernAPP::childMenuFontName size : 12.f];
       assert(font != nil && "collectionView:viewForSupplementaryElementOfKinf:atIndexPath:, font not found");
-      view.descriptionLabel.font = font;
+      descriptionLabel.font = font;
    } else {
       view = [collectionView dequeueReusableSupplementaryViewOfKind : kind
               withReuseIdentifier : [CollectionSupplementraryView reuseIdentifierFooter]
@@ -330,7 +378,7 @@
           "collectionView:didSelectItemAtIndexPath:, section is out of bounds");
 
    NSDictionary * const video = (NSDictionary *)videoMetadata[indexPath.section];
-   NSURL * const url = (NSURL *)video[@"mp40600"];
+   NSURL * const url = (NSURL *)video[CernAPP::CDSvideoURL];
    
    //Hmm, I have to do this stupid Voodoo magic, otherwise, I have error messages
    //from the Quartz about invalid context.

@@ -673,7 +673,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="Ixj-cr-Bwu">
-                                            <rect key="frame" x="5" y="6.0000000000000071" width="182" height="116.99999999999999"/>
+                                            <rect key="frame" x="5" y="6" width="182" height="117"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -688,18 +688,6 @@
                         <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionSupplementraryViewHeader" id="MQS-3B-eJG" customClass="CollectionSupplementraryView">
                             <rect key="frame" x="0.0" y="64" width="320" height="61"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <subviews>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GDf-fU-8k0">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="53"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <connections>
-                                <outlet property="descriptionLabel" destination="GDf-fU-8k0" id="RDR-3q-lad"/>
-                            </connections>
                         </collectionReusableView>
                         <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CollectionSupplementraryViewFooter" id="tqY-A7-B1r" customClass="CollectionSupplementraryView">
                             <rect key="frame" x="0.0" y="253" width="320" height="32"/>
@@ -1001,6 +989,15 @@
         </scene>
     </scenes>
     <resources>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
+        <image name="menu.png" width="20" height="20"/>
         <image name="menu.png" width="20" height="20"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -2,6 +2,7 @@
 
 #import "VideosCollectionViewController.h"
 #import "VideoThumbnailCell.h"
+#import "CDSVideosParser.h"
 
 @implementation VideosCollectionViewController
 
@@ -58,7 +59,7 @@
       videoCell.imageView.image = nil;
    
    NSDictionary * const metaData = (NSDictionary *)videoMetadata[indexPath.row];
-   NSString * const videoTitle = (NSString *)metaData[@"title"];
+   NSString * const videoTitle = (NSString *)metaData[CernAPP::CDScodeTitle];
    if (videoTitle.length)
       videoCell.title = videoTitle;
    else
@@ -80,7 +81,7 @@
           "collectionView:didSelectItemAtIndexPath:, row index is out of bounds");
 
    NSDictionary * const video = (NSDictionary *)videoMetadata[indexPath.row];
-   if (NSURL * const url = (NSURL *)video[@"mp40600"]) {
+   if (NSURL * const url = (NSURL *)video[CernAPP::CDSvideoURL]) {
       MPMoviePlayerViewController * const playerController = [[MPMoviePlayerViewController alloc] initWithContentURL : url];
       [self presentMoviePlayerViewControllerAnimated : playerController];
    }
@@ -105,7 +106,7 @@
    imageDownloaders = [[NSMutableDictionary alloc] init];
    videoThumbnails = [[NSMutableDictionary alloc] init];
    for (NSDictionary *metaData in videoMetadata) {
-      ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : (NSURL *)metaData[@"jpgposterframe"]];
+      ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : (NSURL *)metaData[CernAPP::CDSvideoThubmnailURL]];
       NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : row inSection : 0];
       downloader.indexPathInTableView = indexPath;
       downloader.delegate = self;

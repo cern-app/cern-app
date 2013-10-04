@@ -8,6 +8,22 @@
 
 #import <Foundation/Foundation.h>
 
+namespace CernAPP {
+
+//Datafield tags.
+extern NSString * const CDStagMARC;
+extern NSString * const CDStagTitle;
+extern NSString * const CDStagTitleAlt;
+extern NSString * const CDStagDate;
+
+//Subfield codes.
+extern NSString * const CDScodeURL;
+extern NSString * const CDScodeContent;
+extern NSString * const CDScodeDate;
+extern NSString * const CDScodeTitle;
+
+}
+
 @class CDSParserOperation;
 
 @interface CDSXMLParser : NSObject<NSXMLParserDelegate>

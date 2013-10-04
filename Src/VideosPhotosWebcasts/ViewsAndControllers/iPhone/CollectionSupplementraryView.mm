@@ -2,19 +2,6 @@
 
 @implementation CollectionSupplementraryView
 
-@synthesize descriptionLabel;
-
-//________________________________________________________________________________________
-- (id) initWithFrame : (CGRect) frame
-{
-   if (self = [super initWithFrame : frame]) {
-      //
-      descriptionLabel = [[UILabel alloc] initWithFrame : CGRect()];
-   }
-
-   return self;
-}
-
 //________________________________________________________________________________________
 + (NSString *) reuseIdentifierHeader
 {
