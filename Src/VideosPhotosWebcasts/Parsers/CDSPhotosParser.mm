@@ -180,9 +180,14 @@ NSString *LargeIconImageType()
 
    if (NSString * const url = (NSString *)datafield[CernAPP::CDScodeURL]) {
       if (NSString * const contentType = (NSString *)datafield[CernAPP::CDScodeContent]) {
-         if ([contentType isEqualToString : CernAPP::LargeImageType()] || [contentType isEqualToString : CernAPP::LargeIconImageType()])//It's a large size image.
+         if ([contentType isEqualToString : CernAPP::LargeImageType()])
             [imageUrls addObject : url];
-         else if ([contentType isEqualToString : @"icon"] || [contentType isEqualToString : @"icon-180"] || [contentType isEqualToString : @"jpgIcon"])
+         else if ([contentType isEqualToString : CernAPP::LargeIconImageType()]) {//It's a large size image.
+            const NSRange epsExt = [url rangeOfString : @".eps?"];//UGLY hack again :(((
+            //I have a bad feeling, UIImage doesn't give a f..k about eps.
+            if (epsExt.location == NSNotFound)
+               [imageUrls addObject : url];
+         } else if ([contentType isEqualToString : @"icon"] || [contentType isEqualToString : @"icon-180"] || [contentType isEqualToString : @"jpgIcon"])
             [thumbnailUrls addObject : url];
          //ignore others.
       } else {
