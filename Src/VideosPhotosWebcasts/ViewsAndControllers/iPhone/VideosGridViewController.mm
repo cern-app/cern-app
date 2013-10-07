@@ -25,6 +25,9 @@
 @implementation VideosGridViewController {
    BOOL loaded;
    //
+   NSURLConnection *CDSconnection;
+   NSMutableData *xmlData;
+   //
    NSOperationQueue *parserQueue;
    CDSVideosParserOperation *operation;
    
@@ -54,6 +57,9 @@
       imageDownloaders = nil;
 
       loaded = NO;
+
+      CDSconnection = nil;
+      xmlData = nil;
 
       parserQueue = [[NSOperationQueue alloc] init];
       operation = nil;
@@ -114,16 +120,22 @@
 {
    assert(parserQueue != nil && "startParserOperation, parserQueue is nil");
    assert(operation == nil && "startParserOperation, called while parser operation is active");
+   assert(CDSconnection == nil && "startParserOperation, called while connection is still active");
    
-   NSString * const url =
+   NSString * const urlString =
    @"http://cdsweb.cern.ch/search?ln=en&cc=Press+Office+Video+Selection&p=internalnote%3A%22ATLAS%22&f=&action_search=Search&c=Press+Office+Video+Selection&c=&sf=year&so=d&rm=&rg=100&sc=0&of=xm";
    
-   operation = [[CDSVideosParserOperation alloc] initWithURLString : url
-                                                 datafieldTags : datafieldTags
-                                                 subfieldCodes : subfieldCodes];
-
-   operation.delegate = self;
-   [parserQueue addOperation : operation];
+   if (NSURL * const url = [NSURL URLWithString : urlString]) {
+      if (NSURLRequest * const request = [NSURLRequest requestWithURL : url]) {
+         xmlData = [[NSMutableData alloc] init];
+         CDSconnection = [[NSURLConnection alloc] initWithRequest : request delegate : self];
+         if (CDSconnection)
+            return;
+         xmlData = nil;
+      }
+   }
+   
+   [self handleNetworkError : nil];
 }
 
 //________________________________________________________________________________________
@@ -144,6 +156,7 @@
 {
    assert(parserQueue != nil && "refresh, parserQueue is nil");
    assert(operation == nil && "refresh, called while parsing operation is active");
+   assert(CDSconnection == nil && "refresh, called while CDS connection is still active");
 
    [self cancelAllDownloaders];
    self.navigationItem.rightBarButtonItem.enabled = NO;
@@ -154,7 +167,70 @@
    [self startParserOperation];
 }
 
+#pragma mark - NSURLConnectionDataDelegate and related methods.
+
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) connection didReceiveData : (NSData *) data
+{
+#pragma unused(connection)
+
+   assert(data != nil && "connection:didReceiveData:, parameter 'data' is nil");
+   assert(xmlData != nil && "connection:didReceiveData:, xmlData is nil");
+   
+   [xmlData appendData : data];
+}
+
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) connection didFailWithError : (NSError *) error
+{
+#pragma unused(connection, error)
+   xmlData = nil;
+   [self handleNetworkError : error];
+}
+
+//________________________________________________________________________________________
+- (void) connectionDidFinishLoading : (NSURLConnection *) connection
+{
+   assert(xmlData != nil && "connectionDidFinishLoading:, xmlData is nil");
+   assert(operation == nil && "connectionDidFinishLoading:, called while parsing operation is active");
+   assert(parserQueue != nil && "connectionDidFinishLoading:, parserQueue is nil");
+   
+   CDSconnection = nil;
+
+   if (xmlData.length) {
+      operation = [[CDSVideosParserOperation alloc] initWithXMLData : xmlData
+                                                    datafieldTags : datafieldTags
+                                                    subfieldCodes : subfieldCodes];
+      xmlData = nil;
+      operation.delegate = self;
+      [parserQueue addOperation : operation];
+   } else {
+      xmlData = nil;
+      [self handleNetworkError : nil];
+   }
+}
+
 #pragma mark - Parser operation delegate.
+
+//________________________________________________________________________________________
+- (void) handleNetworkError : (NSError *) error
+{
+#pragma unused(error)
+
+   [self resetControls];
+
+   if (!videoMetadata.count)
+      CernAPP::ShowErrorHUD(self, @"Network error");
+   else
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+}
+
+//________________________________________________________________________________________
+- (void) resetControls
+{
+   CernAPP::HideSpinner(self);
+   self.navigationItem.rightBarButtonItem.enabled = YES;
+}
 
 //________________________________________________________________________________________
 - (void) parserDidFailWithError : (NSError *) error
@@ -164,18 +240,13 @@
    if (!operation)//Was cancelled.
       return;
 
-   CernAPP::HideSpinner(self);
-
    [parserQueue cancelAllOperations];
    operation = nil;
-
-   if (!videoMetadata.count)
-      CernAPP::ShowErrorHUD(self, @"Network error");
-   else
-      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    
-   //Refresh button.
-   self.navigationItem.rightBarButtonItem.enabled = YES;
+   [self resetControls];
+   //I can not report this error to an user - it's something quite
+   //special from XML parser. Just enable the 'refresh' button and hide
+   //the activity indicator.
 }
 
 //________________________________________________________________________________________

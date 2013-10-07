@@ -28,11 +28,10 @@ extern NSString * const CDScodeTitle;
 
 @interface CDSXMLParser : NSObject<NSXMLParserDelegate>
 
-- (id) initWithOperation : (CDSParserOperation *) operation;
+- (id) initWithXMLData : (NSData *) data operation : (CDSParserOperation *) operation;
 - (void) start;
 - (void) stop;
 
-@property (nonatomic) NSString *CDSUrl;
 @property (nonatomic) NSSet *validFieldTags;
 @property (nonatomic) NSSet *validSubfieldCodes;
 
@@ -53,7 +52,7 @@ extern NSString * const CDScodeTitle;
 //Base class for different parsing operations (videos, photos, whatever).
 @interface CDSParserOperation : NSOperation
 
-- (id) initWithURLString : (NSString *) urlString datafieldTags : (NSSet *) tags
+- (id) initWithXMLData : (NSData *) xmlData datafieldTags : (NSSet *) tags
        subfieldCodes : (NSSet *) codes;
 
 //These methods to be overriden.

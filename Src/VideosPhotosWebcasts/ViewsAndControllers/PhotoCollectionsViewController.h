@@ -11,9 +11,9 @@
 @class MBProgressHUD;
 
 @interface PhotoCollectionsViewController : UICollectionViewController<UICollectionViewDataSource, UICollectionViewDelegate,
-                                                                      ImageDownloaderDelegate, HUDRefreshProtocol,
-                                                                      CDSParserOperationDelegate, ConnectionController,
-                                                                      MWPhotoBrowserDelegate>
+                                                                       NSURLConnectionDataDelegate, ImageDownloaderDelegate,
+                                                                       HUDRefreshProtocol, CDSParserOperationDelegate,
+                                                                       ConnectionController, MWPhotoBrowserDelegate>
 
 - (void) setURLString : (NSString *) urlString;
 

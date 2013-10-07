@@ -30,6 +30,7 @@ NSString * const CDScodeTitle = @"a";
 }
 
 @implementation CDSXMLParser {
+   NSData *xmlData;
    __weak CDSParserOperation *operation;
    NSXMLParser *xmlParser;
    NSMutableArray *CDSrecord;
@@ -39,19 +40,22 @@ NSString * const CDScodeTitle = @"a";
    NSMutableString *elementData;
 }
 
-@synthesize CDSUrl, validFieldTags, validSubfieldCodes;
+@synthesize validFieldTags, validSubfieldCodes;
 
 //________________________________________________________________________________________
-- (id) initWithOperation : (CDSParserOperation *) anOperation
+- (id) initWithXMLData : (NSData *) data operation : (CDSParserOperation *) anOperation
 {
-   assert(anOperation != nil && "initWithOperation:, parameter 'anOperation' is nil");
+   assert(data != nil && "initWithXMLData:operation, parameter 'data' is nil");
+   assert(data.length != 0 && "initWithXMLData:operation, empty xml");
+   assert(anOperation != nil && "initWithXMLData:operation:, parameter 'anOperation' is nil");
 
    if (self = [super init]) {
-      CDSUrl = nil;
       validFieldTags = nil;
       validSubfieldCodes = nil;
+      
+      xmlData = data;
       operation = anOperation;
-   
+      
       xmlParser = nil;
       CDSrecord = nil;
       datafieldTag = nil;
@@ -74,40 +78,19 @@ NSString * const CDScodeTitle = @"a";
 - (void) start
 {
    assert(operation != nil && "start, operation is nil");
-   assert(CDSUrl != nil && "start, CDSUrl is nil");
+   assert(xmlData != nil && xmlData.length != 0 && "start, xmlData is nil or empty");
+   assert(xmlParser == nil && "start, parser was started already");
    assert(validFieldTags != nil && "start, validFieldTags is nil");
    assert(validSubfieldCodes != nil && "start, validSubfieldCodes is nil");
    
    //I assert on this condition instead of 'return NO;' - this parser MUST be started from an operation ONLY
    //and an operation CAN NEVER call the start twice (if the first one was successfull or stop was
    //not called between).
-   assert(xmlParser == nil && "start, parser was started already");
-
-   if (NSURL * const url = [NSURL URLWithString : CDSUrl]) {
-      NSURLRequest * const urlRequest = [[NSURLRequest alloc] initWithURL : url];
-      if (!urlRequest) {
-         NSLog(@"error<CDSXMLParser>: start - failed to create an url request");
-         [operation parser : self didFailWithError : nil];
-         return;
-      }
-
-      NSError *error = nil;
-      NSURLResponse *response = nil;
-      NSData * const connectionData = [NSURLConnection sendSynchronousRequest : urlRequest returningResponse : &response error : &error];
-      
-      if ([self stopIfCancelled])
-         return;
-
-      if (connectionData && connectionData.length && !error) {
-         xmlParser = [[NSXMLParser alloc] initWithData : connectionData];
-         xmlParser.delegate = self;
-         [xmlParser parse];
-      } else
-         [operation parser : self didFailWithError : nil];
-   } else {
-      NSLog(@"error<CDSXMLParser>: start - failed to create an url");
+   if ((xmlParser = [[NSXMLParser alloc] initWithData : xmlData])) {
+      xmlParser.delegate = self;
+      [xmlParser parse];
+   } else
       [operation parser : self didFailWithError : nil];
-   }
 }
 
 //________________________________________________________________________________________
@@ -241,17 +224,19 @@ NSString * const CDScodeTitle = @"a";
 @synthesize delegate;
 
 //________________________________________________________________________________________
-- (id) initWithURLString : (NSString *) urlString datafieldTags : (NSSet *) tags subfieldCodes : (NSSet *) codes
+- (id) initWithXMLData : (NSData *) xmlData datafieldTags : (NSSet *) tags subfieldCodes : (NSSet *) codes
 {
-   assert(urlString != nil && "initWithURLString:datafieldTags:subfieldCodes:, parameter 'urlString' is nil");
-   assert(tags != nil && "initWithURLString:datafieldTags:subfieldCodes:, parameter 'tags' is nil");
-   assert(tags.count > 0 && "initWithURLString:datafieldTags:subfieldCodes:, parameter 'tags' is an empty set");
-   assert(codes != nil && "initWithURLString:datafieldTags:subfieldCodes:, parameter 'codes' is nil");
-   assert(codes.count > 0 && "initWithURLString:datafieldTags:subfieldCodes:, parameter 'codes' is an empty set");
+   assert(xmlData != nil &&
+          "initWithXMLData:datafieldTags:subfieldCodes:, parameter 'xmlData' is nil");
+   assert(xmlData.length != 0 &&
+          "initWithXMLData:datafieldTags:subfieldCodes:, xmlData is empty");
+   assert(tags != nil && "initWithXMLData:datafieldTags:subfieldCodes:, parameter 'tags' is nil");
+   assert(tags.count > 0 && "initWithXMLDAta:datafieldTags:subfieldCodes:, parameter 'tags' is an empty set");
+   assert(codes != nil && "initWithXMLData:datafieldTags:subfieldCodes:, parameter 'codes' is nil");
+   assert(codes.count > 0 && "initWithXMLData:datafieldTags:subfieldCodes:, parameter 'codes' is an empty set");
    
    if (self = [super init]) {
-      parser = [[CDSXMLParser alloc] initWithOperation : self];
-      parser.CDSUrl = urlString;
+      parser = [[CDSXMLParser alloc] initWithXMLData : xmlData operation : self];
       parser.validFieldTags = tags;
       parser.validSubfieldCodes = codes;
    }

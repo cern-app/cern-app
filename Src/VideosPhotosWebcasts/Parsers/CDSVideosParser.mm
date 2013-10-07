@@ -27,10 +27,19 @@ NSString * const CDSvideoThubmnailURL = @"videoThumbnailURL";
 }
 
 //________________________________________________________________________________________
-- (id) initWithURLString : (NSString *) urlString datafieldTags : (NSSet *) tags
+- (id) initWithXMLData : (NSData *) xmlData datafieldTags : (NSSet *) tags
        subfieldCodes : (NSSet *) codes
 {
-   self = [super initWithURLString : urlString datafieldTags : tags subfieldCodes : codes];
+   assert(xmlData != nil &&
+          "initWithXMLData:datafieldTags:subfieldCodes:, parameter 'xmlData' is nil");
+   assert(xmlData.length != 0 &&
+          "initWithXMLData:datafieldTags:subfieldCodes:, xmlData is empty");
+   assert(tags != nil &&
+          "initWithXMLData:datafieldTags:subfieldCodes:, parameter 'tags' is nil");
+   assert(codes != nil &&
+          "initWithXMLData:datafieldTags:subfieldCodes:, parameter 'codes' is nil");
+
+   self = [super initWithXMLData : xmlData datafieldTags : tags subfieldCodes : codes];
    if (self) {
       videosMetadata = [[NSMutableArray alloc] init];
       video = nil;

@@ -51,6 +51,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    NSMutableSet *datafieldTags;
    NSMutableSet *subfieldCodes;
    
+   NSURLConnection *CDSconnection;
+   NSMutableData *xmlData;
    NSOperationQueue *parserQueue;
    CDSPhotosParserOperation *operation;
 
@@ -90,6 +92,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       thumbnails = [[NSMutableDictionary alloc] init];
       photoAlbums = nil;
    
+      CDSconnection = nil;
+      xmlData = nil;
       parserQueue = [[NSOperationQueue alloc] init];
       operation = nil;
       //
@@ -215,22 +219,26 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 {
    assert(urlString != nil && "startParserOperation, urlString is nil");
    assert(parserQueue != nil && "startParserOperation, parserQueue is nil");
+   assert(CDSconnection == nil && "startParserOperation, CDS connection is still active");
    assert(operation == nil && "startParserOperation, parsing operation is still active");
-   assert(datafieldTags != nil && "startParserOperation, datafieldTags is nil");
-   assert(subfieldCodes != nil && "startParserOperation, subfieldCodes is nil");
    
-   operation = [[CDSPhotosParserOperation alloc] initWithURLString : urlString
-                                                 datafieldTags : datafieldTags
-                                                 subfieldCodes : subfieldCodes];
-   
-   operation.delegate = self;
-   [parserQueue addOperation : operation];
+   if (NSURL * const url = [NSURL URLWithString : urlString]) {
+      if (NSURLRequest * const request = [NSURLRequest requestWithURL : url]) {
+         xmlData = [[NSMutableData alloc] init];
+         if ((CDSconnection = [[NSURLConnection alloc] initWithRequest : request delegate : self]))
+            return;
+         xmlData = nil;
+      }
+   }
+
+   [self handleNetworkError : nil];
 }
 
 //________________________________________________________________________________________
 - (void) refresh
 {
    assert(urlString != nil && "refresh, urlString is nil");
+   assert(CDSconnection == nil && "refresh, called while CDS connection is still active");
    assert(parserQueue != nil && "refresh, parserQueue is nil");
    assert(operation == nil && "refresh, called while parsing operation is still active");
    //
@@ -580,6 +588,51 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    }
 }
 
+#pragma mark - NSURLConnectionDataDelegate and related methods.
+
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) connection didReceiveData : (NSData *) data
+{
+#pragma unused(connection)
+
+   assert(data != nil && "connection:didReceiveData:, parameter 'data' is nil");
+   assert(xmlData != nil && "connection:didReceiveData:, xmlData is nil");
+   
+   [xmlData appendData : data];
+}
+
+//________________________________________________________________________________________
+- (void) connection : (NSURLConnection *) connection didFailWithError : (NSError *) error
+{
+#pragma unused(connection, error)
+   xmlData = nil;
+   [CDSconnection cancel];
+   CDSconnection = nil;
+   [self handleNetworkError : error];
+}
+
+//________________________________________________________________________________________
+- (void) connectionDidFinishLoading : (NSURLConnection *) connection
+{
+   assert(xmlData != nil && "connectionDidFinishLoading:, xmlData is nil");
+   assert(operation == nil && "connectionDidFinishLoading:, called while parsing operation is active");
+   assert(parserQueue != nil && "connectionDidFinishLoading:, parserQueue is nil");
+   
+   CDSconnection = nil;
+
+   if (xmlData.length) {
+      operation = [[CDSPhotosParserOperation alloc] initWithXMLData : xmlData
+                                                    datafieldTags : datafieldTags
+                                                    subfieldCodes : subfieldCodes];
+      operation.delegate = self;
+      [parserQueue addOperation : operation];
+      xmlData = nil;
+   } else {
+      xmlData = nil;
+      [self handleNetworkError : nil];
+   }
+}
+
 #pragma mark - ImageDownloaderDelegate and related methods.
 
 //________________________________________________________________________________________
@@ -699,7 +752,31 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    }
 }
 
-#pragma mark - Parser operation delegate.
+#pragma mark - Parser operation delegate and related methods.
+
+//________________________________________________________________________________________
+- (void) handleNetworkError : (NSError *) error
+{
+#pragma unused(error)
+   //TODO: log the 'error'?
+   [parserQueue cancelAllOperations];
+   operation = nil;
+   
+   [self resetControls];
+   
+   if (!photoAlbums.count)
+      CernAPP::ShowErrorHUD(self, @"Network error");
+   else
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+}
+
+//________________________________________________________________________________________
+- (void) resetControls
+{
+   CernAPP::HideSpinner(self);
+   if (albumCollectionView.hidden)
+      self.navigationItem.rightBarButtonItem.enabled = YES;
+}
 
 //________________________________________________________________________________________
 - (void) parserDidFinishWithItems : (NSArray *) items
@@ -736,17 +813,13 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    if (!operation)
       return;
 
-   CernAPP::HideSpinner(self);
-
    [parserQueue cancelAllOperations];
    operation = nil;
 
-   self.navigationItem.rightBarButtonItem.enabled = YES;
-   
-   if (!photoAlbums.count)
-      CernAPP::ShowErrorHUD(self, @"Network error");
-   else
-      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+   //I can not show any error message - it's useless for an user:(
+   //Just hide activity indicators and enable 'refresh' button.
+   NSLog(@"PhotoCollectionsViewController<error>: -parserDidFailedWithError: was called with error %@", error);
+   [self resetControls];
 }
 
 #pragma mark - ConnectionController delegate and related methods.
@@ -769,6 +842,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (void) cancelAnyConnections
 {
    assert(parserQueue != nil && "cancelAnyConnections, parserQueue is nil");
+
+   if (CDSconnection)
+      [CDSconnection cancel];
+   
+   CDSconnection = nil;
    [parserQueue cancelAllOperations];
    operation = nil;
    [self cancelAllImageDownloaders];
@@ -802,6 +880,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 - (IBAction) reloadImages : (id) sender
 {
 #pragma unused(sender)
+   assert(CDSconnection == nil && "reloadImages:, called while CDS connection is still active");
    assert(operation == nil && "reloadImages:, called while parser is still active");
    
    //This method can be called if any previous refresh operation was completed

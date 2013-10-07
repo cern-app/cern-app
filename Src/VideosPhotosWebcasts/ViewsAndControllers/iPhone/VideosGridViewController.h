@@ -18,7 +18,8 @@
 #import "CDSParser.h"
 
 @interface VideosGridViewController : UICollectionViewController<CDSParserOperationDelegate, ImageDownloaderDelegate, ConnectionController,
-                                                                 UICollectionViewDataSource, UICollectionViewDelegate, HUDRefreshProtocol>
+                                                                 UICollectionViewDataSource, UICollectionViewDelegate,
+                                                                 NSURLConnectionDataDelegate, HUDRefreshProtocol>
 {
 @protected
    NSArray *videoMetadata;

@@ -17,7 +17,7 @@ extern NSString * const CDSvideoThubmnailURL;
 
 @interface CDSVideosParserOperation : CDSParserOperation
 
-- (id) initWithURLString : (NSString *) urlString datafieldTags : (NSSet *) tags
+- (id) initWithXMLData : (NSData *) xmlData datafieldTags : (NSSet *) tags
        subfieldCodes : (NSSet *) codes;
 
 @end
