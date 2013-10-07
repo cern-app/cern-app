@@ -170,6 +170,19 @@
 #pragma mark - NSURLConnectionDataDelegate and related methods.
 
 //________________________________________________________________________________________
+- (void) handleNetworkError : (NSError *) error
+{
+#pragma unused(error)
+
+   [self resetControls];
+
+   if (!videoMetadata.count)
+      CernAPP::ShowErrorHUD(self, @"Network error");
+   else
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+}
+
+//________________________________________________________________________________________
 - (void) connection : (NSURLConnection *) connection didReceiveData : (NSData *) data
 {
 #pragma unused(connection)
@@ -185,6 +198,8 @@
 {
 #pragma unused(connection, error)
    xmlData = nil;
+   [CDSconnection cancel];
+   CDSconnection = nil;
    [self handleNetworkError : error];
 }
 
@@ -213,26 +228,6 @@
 #pragma mark - Parser operation delegate.
 
 //________________________________________________________________________________________
-- (void) handleNetworkError : (NSError *) error
-{
-#pragma unused(error)
-
-   [self resetControls];
-
-   if (!videoMetadata.count)
-      CernAPP::ShowErrorHUD(self, @"Network error");
-   else
-      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
-}
-
-//________________________________________________________________________________________
-- (void) resetControls
-{
-   CernAPP::HideSpinner(self);
-   self.navigationItem.rightBarButtonItem.enabled = YES;
-}
-
-//________________________________________________________________________________________
 - (void) parserDidFailWithError : (NSError *) error
 {
 #pragma unused(error)
@@ -255,12 +250,11 @@
    if (!operation)//Was cancelled.
       return;
 
+   operation = nil;
    videoMetadata = [items copy];
 
    [self downloadVideoThumbnails];
    [self.collectionView reloadData];
-   
-   operation = nil;
 }
 
 #pragma mark - ImageDownloader.
@@ -482,12 +476,23 @@
 //________________________________________________________________________________________
 - (void) cancelAnyConnections
 {
+   if (CDSconnection)
+      [CDSconnection cancel];
+
+   CDSconnection = nil;
    [parserQueue cancelAllOperations];
    operation = nil;
    [self cancelAllDownloaders];
 }
 
-#pragma mark - Sliding view.
+#pragma mark - Sliding view and UI.
+
+//________________________________________________________________________________________
+- (void) resetControls
+{
+   CernAPP::HideSpinner(self);
+   self.navigationItem.rightBarButtonItem.enabled = YES;
+}
 
 //________________________________________________________________________________________
 - (IBAction) revealMenu : (id) sender

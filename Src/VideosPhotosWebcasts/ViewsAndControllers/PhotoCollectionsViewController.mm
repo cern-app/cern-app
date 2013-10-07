@@ -245,7 +245,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    [self cancelAllImageDownloaders];
    //
    [noConnectionHUD hide : YES];
-   self.navigationItem.rightBarButtonItem.enabled = NO;//Disable the "Refresh" button.
+
+   if (albumCollectionView.hidden) //Is it possible to view an album view and press 'refresh'???
+      self.navigationItem.rightBarButtonItem.enabled = NO;
+
    CernAPP::ShowSpinner(self);
    [self startParserOperation];
 }
@@ -604,7 +607,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //________________________________________________________________________________________
 - (void) connection : (NSURLConnection *) connection didFailWithError : (NSError *) error
 {
-#pragma unused(connection, error)
+#pragma unused(connection)
    xmlData = nil;
    [CDSconnection cancel];
    CDSconnection = nil;
