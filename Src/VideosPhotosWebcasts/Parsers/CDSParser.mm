@@ -244,7 +244,7 @@ NSString * const CDScodeTitle = @"a";
    return self;
 }
 
-#pragma mark - NSOpetation.
+#pragma mark - NSOperation.
 
 //________________________________________________________________________________________
 - (void) main
