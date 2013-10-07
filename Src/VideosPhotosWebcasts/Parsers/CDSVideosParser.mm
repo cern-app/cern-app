@@ -97,7 +97,7 @@ NSString * const CDSvideoThubmnailURL = @"videoThumbnailURL";
       if ([tag isEqualToString : CernAPP::CDStagTitle] || [tag isEqualToString : CernAPP::CDStagTitleAlt])
          [self processTitleDatafield : datafield];
       else if ([tag isEqualToString : CernAPP::CDStagDate])
-         [self processDateDatafield : datafield];
+         ;//[self processDateDatafield : datafield];
       else if ([tag isEqualToString : CernAPP::CDStagMARC])
          [self processMARCDatafield : datafield];
    }
