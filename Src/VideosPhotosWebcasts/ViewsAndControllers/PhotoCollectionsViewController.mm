@@ -11,6 +11,7 @@
 #import "PhotoViewCell.h"
 #import "Reachability.h"
 #import "DeviceCheck.h"
+#import "AppDelegate.h"
 
 using CernAPP::NetworkStatus;
 
@@ -33,6 +34,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    
    return cellSize;
 }
+
+NSString * const appCacheKey = @"PhotoCollectionsControllerID";
 
 }
 
@@ -185,11 +188,38 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 }
 
 //________________________________________________________________________________________
+- (BOOL) initFromAppCache
+{
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "initFromAppCache, app delegate is nil or has a wrong type");
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   if ((photoAlbums = (NSArray *)[appDelegate cacheForKey : appCacheKey])) {
+      [thumbnails removeAllObjects];
+      //
+      [self loadFirstThumbnailsFromCache];
+      [self.collectionView reloadData];//Probably, we found some thumbnails already.
+      //It's possible, that not all thumbnails were previously loaded for collections we cached.
+      CernAPP::ShowSpinner(self);
+      for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i)
+         [self loadThumbnailsForAlbum : i];
+      self.navigationItem.rightBarButtonItem.enabled = YES;//and it's probably enabled already.
+      if (!imageDownloaders.count)
+         CernAPP::HideSpinner(self);
+
+      return YES;
+   }
+
+   return NO;
+}
+
+//________________________________________________________________________________________
 - (void) viewDidAppear : (BOOL) animated
 {
    if (!viewDidAppear) {
       viewDidAppear = YES;
-      [self refresh];
+      
+      if (![self initFromAppCache])
+         [self refresh];
    }
    
    albumCollectionView.frame = self.collectionView.frame;//TODO: test this!
@@ -639,6 +669,21 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 #pragma mark - ImageDownloaderDelegate and related methods.
 
 //________________________________________________________________________________________
+- (void) loadFirstThumbnailsFromCache
+{
+   for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i) {
+      NSIndexPath * const albumKey = [NSIndexPath indexPathForRow : i inSection : 0];
+      CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[i];
+      for (NSUInteger j = 0, e1 = album.nImages; j < e1; ++j) {
+         if (UIImage * const image = [album getThumbnailImageForIndex : j]) {
+            thumbnails[albumKey] = image;
+            break;
+         }
+      }
+   }
+}
+
+//________________________________________________________________________________________
 - (void) loadFirstThumbnails
 {
    for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i) {
@@ -792,6 +837,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    operation = nil;
    
    photoAlbums = [items copy];
+   //
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "parserDidFinishWithItems:, app delegate is either nil or has a wrong type");
+   [(AppDelegate *)[UIApplication sharedApplication].delegate cacheData : photoAlbums withKey : appCacheKey];
+   //
    [thumbnails removeAllObjects];
 
    //It's possible, that self.collectionView is hidden now.
