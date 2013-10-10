@@ -21,6 +21,8 @@
 #import "GUIHelpers.h"
 #import "FeedCache.h"
 
+#import "TwitterAPI.h"
+
 @interface NewsTableViewController(Private)
 
 - (void) hideActivityIndicators;
@@ -350,18 +352,19 @@
             body = article.summary;
          
          if (body) {
-            if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
-            
-               downloader = [[ImageDownloader alloc] initWithURLString : urlString];
-               downloader.indexPathInTableView = indexPath;
-               //
-               downloader.dataSizeLimit = 500000;
-               downloader.downscaleToSize = 150.f;
-               //
-               downloader.delegate = self;
-               [imageDownloaders setObject : downloader forKey : indexPath];
-               [downloader startDownload];//Power on.
-               break;
+            if (NSString *urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
+               if ((urlString = CernAPP::Details::GetThumbnailURL(urlString))) {
+                  downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+                  downloader.indexPathInTableView = indexPath;
+                  //
+                  downloader.dataSizeLimit = 500000;
+                  downloader.downscaleToSize = 150.f;
+                  //
+                  downloader.delegate = self;
+                  [imageDownloaders setObject : downloader forKey : indexPath];
+                  [downloader startDownload];//Power on.
+                  break;
+               }
             }
          }
       }

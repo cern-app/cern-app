@@ -19,6 +19,8 @@
 #import "DeviceCheck.h"
 #import "MWFeedItem.h"
 
+#import "TwitterAPI.h"
+
 //This controller/table does not have to load/parse any feeds, it already has
 //a tableData from one level up. It only has to load images.
 //It does not support refresh - refresh is on one level up ("Bulletin" view).
@@ -244,16 +246,18 @@
          body = article.summary;
       
       if (body) {
-         if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
-            downloader = [[ImageDownloader alloc] initWithURLString : urlString];
-            downloader.indexPathInTableView = indexPath;
-            downloader.delegate = self;
-            //
-            downloader.dataSizeLimit = 500000;
-            downloader.downscaleToSize = 150.f;
-            //
-            [imageDownloaders setObject : downloader forKey : indexPath];
-            [downloader startDownload];//Power on.
+         if (NSString *urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
+            if ((urlString = CernAPP::Details::GetThumbnailURL(urlString))) {
+               downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+               downloader.indexPathInTableView = indexPath;
+               downloader.delegate = self;
+               //
+               downloader.dataSizeLimit = 500000;
+               downloader.downscaleToSize = 150.f;
+               //
+               [imageDownloaders setObject : downloader forKey : indexPath];
+               [downloader startDownload];//Power on.
+            }
          }
       }
    }
