@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="H2v-Ob-DhD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4511" systemVersion="13A598" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="H2v-Ob-DhD">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3745"/>
     </dependencies>
     <scenes>
         <!--Menu View Controller-->
@@ -542,10 +542,33 @@
             </objects>
             <point key="canvasLocation" x="-1023" y="4239"/>
         </scene>
-        <!--Credits View Controller-->
+        <!--Navigation Controller-->
+        <scene sceneID="lO1-aV-wmk">
+            <objects>
+                <navigationController storyboardIdentifier="CreditsViewControllerID" automaticallyAdjustsScrollViewInsets="NO" definesPresentationContext="YES" id="R6U-1T-FkI" sceneMemberID="viewController">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="f6f-ov-Ibq">
+                        <rect key="frame" x="0.0" y="-44" width="0.0" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="NHq-yp-OT4" kind="relationship" relationship="rootViewController" id="pfH-54-jxX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2JK-S4-Nok" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-186" y="4153"/>
+        </scene>
+        <!--Credits View Controller - Credits-->
         <scene sceneID="3A8-J7-NvV">
             <objects>
-                <viewController storyboardIdentifier="CreditsViewControllerID" id="NHq-yp-OT4" customClass="CreditsViewController" sceneMemberID="viewController">
+                <viewController id="NHq-yp-OT4" customClass="CreditsViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QfC-qN-5mJ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -561,37 +584,25 @@
                                 <attributedString key="attributedText"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <navigationBar contentMode="scaleToFill" id="NS3-4n-IGT">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <textAttributes key="titleTextAttributes">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </textAttributes>
-                                <items>
-                                    <navigationItem title="Title" id="2TC-CZ-9aL">
-                                        <barButtonItem key="rightBarButtonItem" title="Done" id="uVP-hM-gxq">
-                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <connections>
-                                                <action selector="donePressed:" destination="NHq-yp-OT4" id="NKc-Ic-JHC"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Credits" id="aCq-YS-ldu">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="0um-LE-cgP">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="donePressed:" destination="NHq-yp-OT4" id="QWq-dW-fdf"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="navigationBar" destination="NS3-4n-IGT" id="Yas-eP-6JI"/>
                         <outlet property="textView" destination="Sbg-RT-egd" id="Utl-jL-0rH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ggb-KJ-NQZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-569" y="4239"/>
+            <point key="canvasLocation" x="269" y="4151"/>
         </scene>
         <!--Menu Navigation Controller-->
         <scene sceneID="3Xe-aO-qnh">
@@ -989,15 +1000,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
         <image name="menu.png" width="20" height="20"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

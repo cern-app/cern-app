@@ -53,21 +53,10 @@ CGFloat LicenseFontSize()
    [super viewWillAppear : animated];
    
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
-      //We have a transparent nav. bar.
-      UIEdgeInsets insets = {};
-
-      if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
-         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-            navigationBar.hidden = YES;
-         else
-            insets.top = navigationBar.frame.size.height;
-      } else {
-         insets.top = navigationBar.frame.size.height;
-         navigationBar.hidden = NO;
+      if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation) &&
+         UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            self.navigationController.navigationBar.hidden = YES;
       }
-      
-      textView.contentOffset = CGPoint();
-      textView.contentInset = insets;
    }
 }
 
@@ -275,15 +264,11 @@ CGFloat LicenseFontSize()
       return;//We do not hide a navigation bar on iPad.
    
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
-      UIEdgeInsets insets = {};
       if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
-         navigationBar.hidden = YES;
+         self.navigationController.navigationBar.hidden = YES;
       } else {
-         navigationBar.hidden = NO;
-         insets.top = navigationBar.frame.size.height;
+         self.navigationController.navigationBar.hidden = NO;
       }
-
-      textView.contentInset = insets;
    } else {
       const CGRect barFrame = navigationBar.frame;
       CGRect textFrame = textView.frame;

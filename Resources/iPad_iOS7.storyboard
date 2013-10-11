@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nQl-Hn-nT2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4511" systemVersion="13A598" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nQl-Hn-nT2">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3745"/>
     </dependencies>
     <scenes>
         <!--Menu View Controller-->
@@ -808,10 +808,10 @@
             </objects>
             <point key="canvasLocation" x="2907" y="10053"/>
         </scene>
-        <!--Credits View Controller-->
+        <!--Credits View Controller - Credits-->
         <scene sceneID="Z4D-5i-5Pa">
             <objects>
-                <viewController storyboardIdentifier="CreditsViewControllerID" id="B0g-ew-1eY" customClass="CreditsViewController" sceneMemberID="viewController">
+                <viewController id="B0g-ew-1eY" customClass="CreditsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CIJ-aD-3qp"/>
                         <viewControllerLayoutGuide type="bottom" id="3qN-Lm-ckW"/>
@@ -821,52 +821,57 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rEa-Nf-yTm">
-                                <rect key="frame" x="0.0" y="-1" width="768" height="1025"/>
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                                <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XqM-VZ-VYE">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="7ZA-MW-279"/>
-                                </constraints>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <textAttributes key="titleTextAttributes">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </textAttributes>
-                                <items>
-                                    <navigationItem title="Credits" id="wa2-HE-Tpz">
-                                        <barButtonItem key="rightBarButtonItem" title="Done" id="7Wu-Pd-EXm">
-                                            <connections>
-                                                <action selector="donePressed:" destination="B0g-ew-1eY" id="h83-P7-0HA"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="top" secondItem="Fc9-a4-tOc" secondAttribute="top" constant="-1" id="1qK-Jq-cbg"/>
-                            <constraint firstItem="XqM-VZ-VYE" firstAttribute="leading" secondItem="Fc9-a4-tOc" secondAttribute="leading" id="D2g-wt-Pfs"/>
-                            <constraint firstItem="XqM-VZ-VYE" firstAttribute="top" secondItem="Fc9-a4-tOc" secondAttribute="top" id="FHh-OZ-oQ9"/>
-                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="leading" secondItem="Fc9-a4-tOc" secondAttribute="leading" id="buA-Gh-7lJ"/>
-                            <constraint firstAttribute="bottom" secondItem="rEa-Nf-yTm" secondAttribute="bottom" id="f6H-xh-Ggd"/>
-                            <constraint firstAttribute="trailing" secondItem="rEa-Nf-yTm" secondAttribute="trailing" id="iL7-DU-xuA"/>
-                            <constraint firstAttribute="trailing" secondItem="XqM-VZ-VYE" secondAttribute="trailing" id="sVY-wb-vax"/>
+                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="top" secondItem="Fc9-a4-tOc" secondAttribute="top" id="WNF-ZR-mAZ"/>
+                            <constraint firstItem="rEa-Nf-yTm" firstAttribute="leading" secondItem="Fc9-a4-tOc" secondAttribute="leading" id="fyD-Uq-JFV"/>
+                            <constraint firstAttribute="trailing" secondItem="rEa-Nf-yTm" secondAttribute="trailing" id="tjX-XJ-XYk"/>
+                            <constraint firstAttribute="bottom" secondItem="rEa-Nf-yTm" secondAttribute="bottom" id="wqJ-ER-8qW"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Credits" id="Xom-U3-W7g">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="Liu-BY-yoT">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="donePressed:" destination="B0g-ew-1eY" id="idG-2K-e1D"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="textView" destination="rEa-Nf-yTm" id="BeG-lL-j1g"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b9w-Di-J8U" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2907" y="7475"/>
+            <point key="canvasLocation" x="3855" y="7512"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="LDY-HI-zXq">
+            <objects>
+                <navigationController storyboardIdentifier="CreditsViewControllerID" automaticallyAdjustsScrollViewInsets="NO" definesPresentationContext="YES" id="mdZ-Cq-wiA" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="d9h-sI-gGk">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="B0g-ew-1eY" kind="relationship" relationship="rootViewController" id="hrr-Yv-P7r"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="W8K-b1-nvK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2974" y="7513"/>
         </scene>
     </scenes>
     <resources>
