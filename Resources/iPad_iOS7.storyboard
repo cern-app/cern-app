@@ -497,36 +497,41 @@
             </objects>
             <point key="canvasLocation" x="2907" y="6323"/>
         </scene>
-        <!--App Settings Controller-->
+        <!--Navigation Controller-->
+        <scene sceneID="Lte-XI-joz">
+            <objects>
+                <navigationController storyboardIdentifier="AppSettingsControllerID" definesPresentationContext="YES" id="iaF-na-dvA" sceneMemberID="viewController">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cXu-0x-rKF">
+                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="9UZ-Wz-VxU" kind="relationship" relationship="rootViewController" id="3By-kZ-zbM"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e6n-Pf-K0B" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1135" y="7487"/>
+        </scene>
+        <!--App Settings Controller - Settings-->
         <scene sceneID="Qwp-xH-MMn">
             <objects>
-                <viewController storyboardIdentifier="AppSettingsControllerID" id="9UZ-Wz-VxU" customClass="AppSettingsController" sceneMemberID="viewController">
+                <viewController title="Settings" id="9UZ-Wz-VxU" customClass="AppSettingsController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bGR-g9-my4"/>
                         <viewControllerLayoutGuide type="bottom" id="9nY-Se-6fI"/>
                     </layoutGuides>
                     <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="FdE-vA-1ua">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="44" width="768" height="980"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T9v-kH-YbL">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <textAttributes key="titleTextAttributes">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </textAttributes>
-                                <items>
-                                    <navigationItem title="Settings" id="eAI-5K-IBy">
-                                        <barButtonItem key="rightBarButtonItem" title="Done" id="hxF-bJ-FJS">
-                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <connections>
-                                                <action selector="donePressed:" destination="9UZ-Wz-VxU" id="pR4-f4-2mi"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oqb-Ll-uRJ">
                                 <rect key="frame" x="15" y="61" width="738" height="121"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -634,30 +639,31 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="T9v-kH-YbL" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" id="28o-Iv-bHU"/>
-                            <constraint firstAttribute="centerX" secondItem="T9v-kH-YbL" secondAttribute="centerX" id="2ig-5m-eAa"/>
                             <constraint firstItem="tsm-xr-qo7" firstAttribute="leading" secondItem="FdE-vA-1ua" secondAttribute="leading" constant="15" id="CG1-qS-Qgl"/>
-                            <constraint firstAttribute="trailing" secondItem="T9v-kH-YbL" secondAttribute="trailing" id="HcW-hS-VN2"/>
                             <constraint firstItem="Oqb-Ll-uRJ" firstAttribute="leading" secondItem="FdE-vA-1ua" secondAttribute="leading" constant="15" id="KcZ-xR-jft"/>
                             <constraint firstItem="MNo-aa-ggZ" firstAttribute="leading" secondItem="FdE-vA-1ua" secondAttribute="leading" constant="15" id="R6r-3d-3s7"/>
                             <constraint firstAttribute="trailing" secondItem="Oqb-Ll-uRJ" secondAttribute="trailing" constant="15" id="REo-oN-8tA"/>
                             <constraint firstItem="MNo-aa-ggZ" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" constant="198" id="XcU-IN-FBa"/>
                             <constraint firstItem="tsm-xr-qo7" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" constant="336" id="bnm-qU-9jt"/>
-                            <constraint firstItem="T9v-kH-YbL" firstAttribute="leading" secondItem="FdE-vA-1ua" secondAttribute="leading" id="lk8-oh-B3P"/>
                             <constraint firstAttribute="trailing" secondItem="MNo-aa-ggZ" secondAttribute="trailing" constant="15" id="luB-KM-BCJ"/>
                             <constraint firstItem="Oqb-Ll-uRJ" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" constant="61" id="t12-PR-Tx0"/>
                             <constraint firstAttribute="trailing" secondItem="tsm-xr-qo7" secondAttribute="trailing" constant="15" id="z9W-93-ABq"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <toolbarItems>
-                        <barButtonItem title="Done" id="UsS-aC-HhY"/>
-                    </toolbarItems>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Settings" id="STa-7N-NTW">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="TkQ-63-Sfh">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="donePressed:" destination="9UZ-Wz-VxU" id="dTS-eD-vj0"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="guiFontSizeSlider" destination="ShE-Nn-GaL" id="DLy-KT-5hH"/>
                         <outlet property="guiSettingsView" destination="Oqb-Ll-uRJ" id="f70-8g-O6d"/>
