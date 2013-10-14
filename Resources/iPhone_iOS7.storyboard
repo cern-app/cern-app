@@ -421,12 +421,33 @@
             </objects>
             <point key="canvasLocation" x="-1005" y="2880"/>
         </scene>
+        <!--Settings Navigation Controller-->
+        <scene sceneID="FXs-Cr-vnc">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wYe-Hw-Aj5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <navigationController storyboardIdentifier="AppSettingsControllerID" definesPresentationContext="YES" id="zyM-Na-3ox" customClass="SettingsNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="npU-8H-Fqk">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="2Om-Ou-J2S" kind="relationship" relationship="rootViewController" id="fUt-JO-U6R"/>
+                    </connections>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="-1253" y="4237"/>
+        </scene>
         <!--App Settings Controller - Settings-->
         <scene sceneID="8FL-AS-53W">
             <objects>
-                <viewController storyboardIdentifier="AppSettingsControllerID" title="Settings" id="2Om-Ou-J2S" customClass="AppSettingsController" sceneMemberID="viewController">
+                <viewController title="Settings" id="2Om-Ou-J2S" customClass="AppSettingsController" sceneMemberID="viewController">
                     <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="xju-3c-8lr">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view opaque="NO" contentMode="scaleToFill" id="RAa-kt-qtQ">
@@ -501,33 +522,15 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
-                            <navigationBar contentMode="scaleToFill" id="ojS-pK-Qso">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <textAttributes key="titleTextAttributes">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </textAttributes>
-                                <items>
-                                    <navigationItem title="Settings" id="dxy-DN-wo5">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="Dce-qP-eFA">
-                                            <connections>
-                                                <action selector="donePressed:" destination="2Om-Ou-J2S" id="Tcf-Ca-ggc"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" title="Settings" id="Tn2-Dd-2X3">
-                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="P0F-Fl-T1j">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="L9P-yG-U7A">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
-                                <action selector="revealMenu:" destination="2Om-Ou-J2S" id="Uu8-nO-ZkL"/>
+                                <action selector="donePressed:" destination="2Om-Ou-J2S" id="c21-YC-NzQ"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -540,7 +543,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1dz-OR-hgV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1023" y="4239"/>
+            <point key="canvasLocation" x="-767" y="4236"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="lO1-aV-wmk">

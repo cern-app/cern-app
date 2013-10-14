@@ -210,6 +210,7 @@
 		70AD297A17FEA4E2007011D8 /* CDSVideosParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70AD297917FEA4E2007011D8 /* CDSVideosParser.mm */; };
 		70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B22F0416F9DCAA007D88EF /* action_blue.png */; };
 		70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */; };
+		70B5E7BB180BD79900ACD47D /* SettingsNavigationController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B5E7BA180BD79900ACD47D /* SettingsNavigationController.mm */; };
 		70B6B0B9169DD2790058DADA /* live_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0B8169DD2790058DADA /* live_color.png */; };
 		70B6B0BC169DD48E0058DADA /* news_color.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BB169DD48E0058DADA /* news_color.png */; };
 		70B6B0BE169DD6BE0058DADA /* cern_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B6B0BD169DD6BE0058DADA /* cern_logo.png */; };
@@ -556,6 +557,8 @@
 		70B2A75016DBBD5200BC8657 /* ConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionController.h; sourceTree = "<group>"; };
 		70B2A75216DBBE5E00BC8657 /* HUDRefreshProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUDRefreshProtocol.h; sourceTree = "<group>"; };
 		70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HUDRefreshProtocol.mm; sourceTree = "<group>"; };
+		70B5E7B9180BD79900ACD47D /* SettingsNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsNavigationController.h; sourceTree = "<group>"; };
+		70B5E7BA180BD79900ACD47D /* SettingsNavigationController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SettingsNavigationController.mm; sourceTree = "<group>"; };
 		70B6B0B8169DD2790058DADA /* live_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = live_color.png; sourceTree = "<group>"; };
 		70B6B0BB169DD48E0058DADA /* news_color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = news_color.png; sourceTree = "<group>"; };
 		70B6B0BD169DD6BE0058DADA /* cern_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cern_logo.png; sourceTree = "<group>"; };
@@ -1225,6 +1228,8 @@
 				706A401A1754FB9E00FD8685 /* ArticleDetailViewController.mm */,
 				706A40161754FB6200FD8685 /* AppSettingsController.mm */,
 				706A40171754FB6200FD8685 /* AppSettingsController.h */,
+				70B5E7B9180BD79900ACD47D /* SettingsNavigationController.h */,
+				70B5E7BA180BD79900ACD47D /* SettingsNavigationController.mm */,
 				70A562DB173A37AA00145FEC /* iPad */,
 			);
 			path = ViewControllers;
@@ -1595,6 +1600,7 @@
 				707B13F5169AF69300180E02 /* NSString+HTML.m in Sources */,
 				707B13F6169AF69300180E02 /* Reachability.mm in Sources */,
 				707B13F7169AF69300180E02 /* UIImage+SquareScaledImage.m in Sources */,
+				70B5E7BB180BD79900ACD47D /* SettingsNavigationController.mm in Sources */,
 				707B13FA169AF6AE00180E02 /* StoryboardIdentifiers.mm in Sources */,
 				70086231169B56F2001C7BB5 /* MenuItemViews.mm in Sources */,
 				70CC55EF169EF80600292332 /* MenuNavigationController.mm in Sources */,
