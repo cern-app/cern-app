@@ -42,6 +42,7 @@
 - (id) initWithDictionary : (NSDictionary *) info;
 
 @property (nonatomic, retain) NSString *categoryName;
+@property (nonatomic) NSUInteger providerID;
 
 - (UIImage *) categoryImage;
 

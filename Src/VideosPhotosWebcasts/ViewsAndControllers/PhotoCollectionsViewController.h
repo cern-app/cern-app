@@ -17,6 +17,8 @@
 
 - (void) setURLString : (NSString *) urlString;
 
+@property (nonatomic) NSString *cacheID;
+
 //HUD/UI
 @property (nonatomic, strong) MBProgressHUD *noConnectionHUD;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;

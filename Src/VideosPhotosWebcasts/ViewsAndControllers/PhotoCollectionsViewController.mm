@@ -35,8 +35,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    return cellSize;
 }
 
-NSString * const appCacheKey = @"PhotoCollectionsControllerID";
-
 }
 
 @implementation PhotoCollectionsViewController {
@@ -69,7 +67,7 @@ NSString * const appCacheKey = @"PhotoCollectionsControllerID";
    UIFont *albumDescriptionCustomFont;//The custom font for a album's description label.
 }
 
-@synthesize noConnectionHUD, spinner;
+@synthesize cacheID, noConnectionHUD, spinner;
 
 #pragma mark - Network reachability.
 
@@ -192,8 +190,12 @@ NSString * const appCacheKey = @"PhotoCollectionsControllerID";
 {
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "initFromAppCache, app delegate is nil or has a wrong type");
+
+   if (!cacheID)
+      return NO;
+
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-   if ((photoAlbums = (NSArray *)[appDelegate cacheForKey : appCacheKey])) {
+   if ((photoAlbums = (NSArray *)[appDelegate cacheForKey : cacheID])) {
       [thumbnails removeAllObjects];
       //
       [self loadFirstThumbnailsFromCache];
@@ -838,9 +840,11 @@ NSString * const appCacheKey = @"PhotoCollectionsControllerID";
    
    photoAlbums = [items copy];
    //
-   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
-          "parserDidFinishWithItems:, app delegate is either nil or has a wrong type");
-   [(AppDelegate *)[UIApplication sharedApplication].delegate cacheData : photoAlbums withKey : appCacheKey];
+   if (cacheID) {
+      assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+             "parserDidFinishWithItems:, app delegate is either nil or has a wrong type");
+      [(AppDelegate *)[UIApplication sharedApplication].delegate cacheData : photoAlbums withKey : cacheID];
+   }
    //
    [thumbnails removeAllObjects];
 

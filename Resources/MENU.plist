@@ -159,6 +159,8 @@
 			<key>Items</key>
 			<array>
 				<dict>
+					<key>ItemID</key>
+					<integer>17</integer>
 					<key>Url</key>
 					<string>http://cdsweb.cern.ch/search?ln=en&amp;cc=Photos&amp;p=&amp;f=&amp;action_search=Search&amp;c=Photos&amp;c=&amp;sf=&amp;so=d&amp;rm=&amp;rg=10&amp;sc=1&amp;of=xm</string>
 					<key>Category name</key>

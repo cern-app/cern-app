@@ -345,7 +345,7 @@ UIViewController *FindController(UIView *view)
    UIImage *categoryImage;
 }
 
-@synthesize categoryName;
+@synthesize categoryName, providerID;
 
 //________________________________________________________________________________________
 - (id) initWithDictionary : (NSDictionary *) anInfo
@@ -366,6 +366,13 @@ UIViewController *FindController(UIView *view)
       }
       
       info = anInfo;
+      if (anInfo[@"ItemID"]) {
+         assert([anInfo[@"ItemID"] isKindOfClass : [NSNumber class]] &&
+                "initWithDictionary:, ItemID not found or has a wrong type");
+         providerID = [(NSNumber *)anInfo[@"ItemID"] unsignedIntegerValue];
+         assert(providerID > 0 && "initWithDictionary:, ItemID is invalid");
+      } else
+         providerID = 0;
    }
    
    return self;
@@ -389,6 +396,11 @@ UIViewController *FindController(UIView *view)
           "loadControllerTo:, top view controller is either nil or has a wrong type");
 
    PhotoCollectionsViewController * const topController = (PhotoCollectionsViewController *)navController.topViewController;
+   if (providerID)
+      topController.cacheID = [NSString stringWithFormat:@"%@%u", self.categoryName, providerID];
+   else
+      topController.cacheID = self.categoryName;
+
    [topController setURLString : (NSString *)info[@"Url"]];
    topController.navigationItem.title = categoryName;
 
