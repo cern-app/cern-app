@@ -37,7 +37,7 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
 //We do not start all image downloaders at once, but
 //in small "bursts" (to avoid terrible number of backgroudn threads).
-const NSUInteger burstSize = 4;
+const NSUInteger burstSize = 5;
 
 }
 
