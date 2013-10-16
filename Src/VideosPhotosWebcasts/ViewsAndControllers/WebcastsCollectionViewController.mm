@@ -83,6 +83,12 @@ using CernAPP::NetworkStatus;
    return self;
 }
 
+//________________________________________________________________________________________
+- (void) dealloc
+{
+   [self cancelAnyConnections];
+}
+
 #pragma mark - viewDid/Will/NeverDoes etc.
 
 //________________________________________________________________________________________

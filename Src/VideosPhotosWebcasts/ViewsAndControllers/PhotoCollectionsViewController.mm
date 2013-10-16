@@ -135,6 +135,12 @@ const NSUInteger burstSize = 5;
    return self;
 }
 
+//________________________________________________________________________________________
+- (void) dealloc
+{
+   [self cancelAnyConnections];
+}
+
 #pragma mark - viewDid/Done/Does/Will etc.
 
 //________________________________________________________________________________________
