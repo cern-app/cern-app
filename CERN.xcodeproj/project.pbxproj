@@ -180,7 +180,7 @@
 		707EA02817F07889006AA7A4 /* SlideWebView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707EA02717F07889006AA7A4 /* SlideWebView.mm */; };
 		70817FB417E20A4700DCD387 /* iPad_iOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70817FB217E20A4700DCD387 /* iPad_iOS7.storyboard */; };
 		70817FB517E20A4700DCD387 /* iPhone_iOS7.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 70817FB317E20A4700DCD387 /* iPhone_iOS7.storyboard */; };
-		708CF0C5180EDAE800B83058 /* ActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 708CF0C4180EDAE800B83058 /* ActivityIndicatorView.m */; };
+		708CF0C5180EDAE800B83058 /* ActivityIndicatorView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 708CF0C4180EDAE800B83058 /* ActivityIndicatorView.mm */; };
 		7098286616C404C500311025 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7098286516C404C500311025 /* Social.framework */; };
 		709A4AE517B3DB7700266374 /* twitbird.png in Resources */ = {isa = PBXBuildFile; fileRef = 709A4AE417B3DB7700266374 /* twitbird.png */; };
 		709CE6C516A5BE97006D524E /* 389-flash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C416A5BE97006D524E /* 389-flash@2x.png */; };
@@ -506,7 +506,7 @@
 		70817FB217E20A4700DCD387 /* iPad_iOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPad_iOS7.storyboard; sourceTree = "<group>"; };
 		70817FB317E20A4700DCD387 /* iPhone_iOS7.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPhone_iOS7.storyboard; sourceTree = "<group>"; };
 		708CF0C3180EDAE800B83058 /* ActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityIndicatorView.h; sourceTree = "<group>"; };
-		708CF0C4180EDAE800B83058 /* ActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityIndicatorView.m; sourceTree = "<group>"; };
+		708CF0C4180EDAE800B83058 /* ActivityIndicatorView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ActivityIndicatorView.mm; sourceTree = "<group>"; };
 		7098286516C404C500311025 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		709A4AE417B3DB7700266374 /* twitbird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitbird.png; sourceTree = "<group>"; };
 		709CE6C416A5BE97006D524E /* 389-flash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "389-flash@2x.png"; sourceTree = "<group>"; };
@@ -919,7 +919,7 @@
 				707EA02617F07889006AA7A4 /* SlideWebView.h */,
 				707EA02717F07889006AA7A4 /* SlideWebView.mm */,
 				708CF0C3180EDAE800B83058 /* ActivityIndicatorView.h */,
-				708CF0C4180EDAE800B83058 /* ActivityIndicatorView.m */,
+				708CF0C4180EDAE800B83058 /* ActivityIndicatorView.mm */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -1599,7 +1599,7 @@
 				707B13EF169AF69300180E02 /* DeviceCheck.mm in Sources */,
 				707B13F0169AF69300180E02 /* GTMNSString+HTML.m in Sources */,
 				707B13F1169AF69300180E02 /* KeyVal.mm in Sources */,
-				708CF0C5180EDAE800B83058 /* ActivityIndicatorView.m in Sources */,
+				708CF0C5180EDAE800B83058 /* ActivityIndicatorView.mm in Sources */,
 				707B13F2169AF69300180E02 /* NSDate+InternetDateTime.m in Sources */,
 				707B13F3169AF69300180E02 /* NSDate+LastOccurrenceOfWeekday.m in Sources */,
 				707B13F4169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.mm in Sources */,
