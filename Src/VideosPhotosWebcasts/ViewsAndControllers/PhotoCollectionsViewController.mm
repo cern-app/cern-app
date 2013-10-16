@@ -35,6 +35,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    return cellSize;
 }
 
+//We do not start all image downloaders at once, but
+//in small "bursts" (to avoid terrible number of backgroudn threads).
+const NSUInteger burstSize = 4;
+
 }
 
 @implementation PhotoCollectionsViewController {
@@ -62,6 +66,10 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    CDSPhotoAlbum *selectedAlbum; //Selected album.
 
    Reachability *internetReach;
+
+   //We load images in short "bursts", album by album.
+   NSUInteger coversToLoad;
+   NSIndexPath *lastThumbnailPath;
    
    UICollectionView *albumCollectionView;
    UIFont *albumDescriptionCustomFont;//The custom font for a album's description label.
@@ -114,6 +122,9 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
       selectedAlbum = nil;
       
       internetReach = [Reachability reachabilityForInternetConnection];
+
+      coversToLoad = 0;
+      lastThumbnailPath = nil;
 
       albumCollectionView = nil;
 
@@ -196,18 +207,11 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    if ((photoAlbums = (NSArray *)[appDelegate cacheForKey : cacheID])) {
-      [thumbnails removeAllObjects];
       //
-      [self loadFirstThumbnailsFromCache];
-      [self.collectionView reloadData];//Probably, we found some thumbnails already.
-      //It's possible, that not all thumbnails were previously loaded for collections we cached.
       CernAPP::ShowSpinner(self);
-      for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i)
-         [self loadThumbnailsForAlbum : i];
-      self.navigationItem.rightBarButtonItem.enabled = YES;//and it's probably enabled already.
-      if (!imageDownloaders.count)
-         CernAPP::HideSpinner(self);
-
+      [self loadThumbnailsFromCache];
+      [self.collectionView reloadData];
+      //
       return YES;
    }
 
@@ -462,8 +466,6 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    return nil;
 }
 
-
-
 #pragma mark - UICollectionView delegate + related methods.
 
 //________________________________________________________________________________________
@@ -668,138 +670,295 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    }
 }
 
-#pragma mark - ImageDownloaderDelegate and related methods.
+#pragma mark - Thubmnails (aux. methods and ImageDownloaderDelegate)
 
 //________________________________________________________________________________________
-- (void) loadFirstThumbnailsFromCache
+- (void) allImagesDidLoad
 {
+   if (albumCollectionView.hidden)                         //Otherwise, the right item is 'Back to albums'
+      self.navigationItem.rightBarButtonItem.enabled = YES;//and it's probably enabled already.
+
+   CernAPP::HideSpinner(self);
+}
+
+//1. "Top-level" functions.
+
+//________________________________________________________________________________________
+- (void) loadThumbnailsFromCache
+{
+   //We have some data in the app's "runtime cache".
+   //If there are some images in this cache - use them as collections' covers,
+   //download thumbnails if not and hide spinner if no downloaders created at the end.
+   
+   assert(photoAlbums != nil && "loadThumbnailsFromCache, photoAlbums is nil");
+   assert(thumbnails != nil && "loadThumbnailsFromCache, thumbnails is nil");
+
+   if (!photoAlbums.count)//A strange cache, but why not?
+      return [self allImagesDidLoad];
+
+   assert(imageDownloaders != nil && "loadThumbnailsFromCache, imageDownloaders is nil");
+   assert(imageDownloaders.count == 0 &&
+          "loadThumbnailsFromCache, called while some downloader(s) is still active");
+
+   [thumbnails removeAllObjects];
+   lastThumbnailPath = nil;
+   coversToLoad = photoAlbums.count;
+
+   //1. Start from the "cover" images for our collections.
    for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i) {
-      NSIndexPath * const albumKey = [NSIndexPath indexPathForRow : i inSection : 0];
       CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[i];
+      NSUInteger imageToLoad = 0;
+      bool coverFound = false, linkFound = false;
       for (NSUInteger j = 0, e1 = album.nImages; j < e1; ++j) {
          if (UIImage * const image = [album getThumbnailImageForIndex : j]) {
-            thumbnails[albumKey] = image;
+            thumbnails[[NSIndexPath indexPathForRow : i inSection : 0]] = image;
+            coverFound = true;
+            --coversToLoad;
             break;
+         } else if ([album getImageURLWithIndex : j urlType : CernAPP::thumbnailImageUrl] && !linkFound) {
+            imageToLoad = j;
+            linkFound = true;
+         }
+      }
+
+      if (!coverFound && linkFound)
+         //Ooops, no images in cache, try to load.
+         [self addThumbnailDownloader : [NSIndexPath indexPathForRow : imageToLoad inSection : i]];
+   }
+
+   if (!imageDownloaders.count) {//We found images for all "covers" in the cache.
+      //We either found all covers or some of them (or none and no valid urls),
+      coversToLoad = 0;
+      [self loadNextRange];//Download other thumbnails if needed.
+   } else
+      [self startThumbnailDownloaders];
+}
+
+//________________________________________________________________________________________
+- (void) loadThumbnails
+{
+   assert(thumbnails != nil && "loadThubmnails, thumbnails is nil");
+   assert(photoAlbums != nil && "loadThumbnails, photoAlbums is nil");
+
+   if (!photoAlbums.count)
+      return [self allImagesDidLoad];
+   
+   assert(imageDownloaders != nil && "loadThumbnails, imageDownloaders is nil");
+   assert(imageDownloaders.count == 0 &&
+          "loadThumbnails, called while some downloader(s) still active");
+
+   //We start from the "cover" images for our collections.
+   [thumbnails removeAllObjects];
+   lastThumbnailPath = nil;
+   coversToLoad = photoAlbums.count;
+   
+   for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i) {
+      CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[i];
+      for (NSUInteger j = 0, e1 = album.nImages; j < e1; ++j) {
+         if ([album getImageURLWithIndex : j urlType:CernAPP::thumbnailImageUrl]) {
+            [self addThumbnailDownloader : [NSIndexPath indexPathForRow : j inSection : i]];
+            break;//continue with a next collection.
          }
       }
    }
+
+   if (!imageDownloaders.count) {
+      coversToLoad = 0;          //No valid URL was found for any cover, so no valid url can be found at all ...
+      [self allImagesDidLoad];   //... vse propalo, shef, vse propalo!!!
+   } else
+      [self startThumbnailDownloaders];
 }
 
-//________________________________________________________________________________________
-- (void) loadFirstThumbnails
-{
-   for (NSUInteger i = 0, e = photoAlbums.count; i < e; ++i) {
-      if (((CDSPhotoAlbum *)photoAlbums[i]).nImages)
-         [self loadNextThumbnail : [NSIndexPath indexPathForRow : 0 inSection : i]];
-      //Else we do not load anything for this album (neither the cover, nor the contents).
-   }
-}
+//2. "Low-level workers" functions.
 
 //________________________________________________________________________________________
-- (void) loadNextThumbnail : (NSIndexPath *) indexPath
+- (void) loadThumbnail : (NSIndexPath *) indexPath
 {
-   assert(indexPath != nil && "loadNextThumbnail:, parameter 'indexPath' is nil");
-   assert(indexPath.section < photoAlbums.count && "loadNextThumbnail:, section index is out of bounds");
-
-   CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[indexPath.section];
-   assert(indexPath.row < album.nImages && "loadNextThumbnail:, row index is out of bounds");
-
+   assert(indexPath != nil && "loadThumbnail:, parameter 'indexPath' is nil");
+   assert(photoAlbums != nil && "loadThumbnail:, photoAlbums is nil");
+   assert(indexPath.section < photoAlbums.count && "loadThumbnail:, section index is out of bounds");
+   
+   assert(imageDownloaders != nil && "loadThumbnail:, imageDownloaders is nil");
    if (imageDownloaders[indexPath])//Downloading already.
       return;
 
-   ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL :
-                                         [album getImageURLWithIndex : indexPath.row urlType : CernAPP::thumbnailImageUrl]];
-   downloader.delegate = self;
-   downloader.indexPathInTableView = indexPath;
-   [imageDownloaders setObject : downloader forKey : indexPath];
-   [downloader startDownload];
-}
-
-//________________________________________________________________________________________
-- (void) loadThumbnailsForAlbum : (NSUInteger) index
-{
-   assert(index < photoAlbums.count && "loadThumbnailsForAlbum:, parameter 'index' is out of bounds");
+   CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[indexPath.section];
+   assert(indexPath.row < album.nImages && "loadThumbnail:, row index is out of bounds");
    
-   CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[index];
-   for (NSUInteger i = 0, e = album.nImages; i < e; ++i) {
-      NSIndexPath * const key = [NSIndexPath indexPathForRow : i inSection : index];
-      if ([album getThumbnailImageForIndex : i] || imageDownloaders[key])
-         continue;
-      ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL :
-                                            [album getImageURLWithIndex : i urlType : CernAPP::thumbnailImageUrl]];
-      downloader.indexPathInTableView = key;
+   if (NSURL * const thumbnailUrl = [album getImageURLWithIndex : indexPath.row urlType : CernAPP::thumbnailImageUrl]) {
+      ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : thumbnailUrl];
       downloader.delegate = self;
-      [imageDownloaders setObject : downloader forKey : key];
+      downloader.indexPathInTableView = indexPath;
+      [imageDownloaders setObject : downloader forKey : indexPath];
       [downloader startDownload];
    }
 }
 
 //________________________________________________________________________________________
+- (void) addThumbnailDownloader : (NSIndexPath *) indexPath
+{
+   //Add a downloader but do not start download (it'll be done somewhere else).
+   assert(indexPath != nil && "addThumbnailDownloader:, parameter 'indexPath' is nil");
+   assert(photoAlbums != nil && "addThumbnailDownloader:, photoAlbums is nil");
+   assert(indexPath.section < photoAlbums.count && "addThumbnailDownloader:, section index is out of bounds");
+
+   CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[indexPath.section];
+   assert(indexPath.row >= 0 && indexPath.row < NSInteger(album.nImages) && "addThumbnailDownloader:, row index is out of bounds");
+
+   assert(imageDownloaders != nil && "addThumbnailDownloader:, imageDownloaders is nil");
+   if (imageDownloaders[indexPath])//Downloading already.
+      return;
+
+   if (NSURL * const thumbnailUrl = [album getImageURLWithIndex : indexPath.row urlType : CernAPP::thumbnailImageUrl]) {
+      ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : thumbnailUrl];
+      downloader.delegate = self;
+      downloader.indexPathInTableView = indexPath;
+      [imageDownloaders setObject : downloader forKey : indexPath];
+      //This new downloader is not started yet.
+   }
+}
+
+//________________________________________________________________________________________
+- (void) startThumbnailDownloaders
+{
+   assert(imageDownloaders != nil && "startThumbnailDownloaders, imageDownloaders is nil");
+
+   if (imageDownloaders.count) {
+      @autoreleasepool {
+         NSArray * const values = [imageDownloaders allValues];
+         for (ImageDownloader *downloader in values)
+            [downloader startDownload];
+      }
+   }
+}
+
+//________________________________________________________________________________________
+- (void) loadNextRange
+{
+   assert(photoAlbums != nil && "loadNextRange, photoAlbums is nil");
+   assert(photoAlbums.count != 0 && "loadNextRange, no albums found");
+   assert(imageDownloaders != nil && "loadNextRange, imageDownloaders is nil");
+   assert(imageDownloaders.count == 0 &&
+          "loadNextRange, called while some downloaders are still active");
+   assert((lastThumbnailPath == nil ||
+           (lastThumbnailPath.section >= 0 && lastThumbnailPath.section < NSInteger(photoAlbums.count))) &&
+          "loadNextRange, lastThumbnailPath is invalid");
+
+   NSUInteger currAlbum = 0;
+   NSUInteger currImage = 0;
+   if (lastThumbnailPath) {
+      CDSPhotoAlbum * const ca = (CDSPhotoAlbum *)photoAlbums[lastThumbnailPath.section];
+      assert(lastThumbnailPath.row >= 0 && lastThumbnailPath.row < NSInteger(ca.nImages) &&
+             "loadNextRange, lastThumbnailPath is invalid");
+      if (lastThumbnailPath.row + 1 < NSInteger(ca.nImages)) {
+         currAlbum = lastThumbnailPath.section;
+         currImage = lastThumbnailPath.row + 1;
+      } else
+         currAlbum = lastThumbnailPath.section + 1;
+   }
+
+   if (currAlbum == photoAlbums.count) {
+      [self allImagesDidLoad];
+      return;
+   }
+   
+   NSUInteger nNew = 0;
+   for (NSUInteger e = photoAlbums.count; currAlbum < e && nNew < burstSize; ++currAlbum) {
+      
+      CDSPhotoAlbum * const ca = (CDSPhotoAlbum *)photoAlbums[currAlbum];
+      for (NSUInteger e1 = ca.nImages; currImage < e1 && nNew < burstSize; ++currImage) {
+         if ([ca getThumbnailImageForIndex : currImage])
+            continue;//We have thumbnail already, skip.
+         if (![ca getImageURLWithIndex : currImage urlType : CernAPP::thumbnailImageUrl])
+            continue;//We have no previously downloaded thumbnail and no url.
+
+         lastThumbnailPath = [NSIndexPath indexPathForRow : currImage inSection : currAlbum];
+         [self addThumbnailDownloader : lastThumbnailPath];
+         
+         ++nNew;
+      }
+      currImage = 0;
+   }
+   
+   if (imageDownloaders.count)
+      [self startThumbnailDownloaders];
+   else
+      [self allImagesDidLoad];
+}
+
+//3. ImageDownloaderDelegate - work for both "covers" and thumbnails (and also for failed images).
+
+//________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
+   assert(photoAlbums != nil && "imageDidLoad:, photoAlbums is nil");
    assert(indexPath != nil && "imageDidLoad:, parameter 'indexPath' is nil");
-   assert(indexPath.section < photoAlbums.count &&
+   assert(indexPath.section >= 0 && indexPath.section < NSInteger(photoAlbums.count) &&
           "imageDidLoad:, section index is out of bounds");
-   
+
    CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[indexPath.section];
-   assert(indexPath.row < album.nImages && "imageDidLoad:, row index is out of bounds");
-   
+   assert(indexPath.row >= 0 && indexPath.row < NSInteger(album.nImages) &&
+          "imageDidLoad:, row index is out of bounds");
+
    ImageDownloader * const downloader = (ImageDownloader *)imageDownloaders[indexPath];
    assert(downloader != nil && "imageDidLoad:, no downloader found for indexPath");
    [imageDownloaders removeObjectForKey : indexPath];
 
-   NSIndexPath * const coverImageKey = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
-   
-   if (downloader.image) {
-      [album setThumbnailImage : downloader.image withIndex : indexPath.row];
-      //Here we have to do some magic:
-      
-      if (!thumbnails[coverImageKey]) {//We have to update an album's cover.
+   if (coversToLoad) {//We were still downloading "covers".
+      if (downloader.image) {
+         assert(thumbnails != nil && "imageDidLoad:, thumbnails is nil");
+         NSIndexPath * const coverImageKey = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
+         [album setThumbnailImage : downloader.image withIndex : indexPath.row];
          [thumbnails setObject : downloader.image forKey : coverImageKey];
          //It's a bit of a mess here - section goes to the row and becomes 0.
          [self.collectionView reloadItemsAtIndexPaths : @[coverImageKey]];
-         //Load other thumbnails (not visible in a stacked mode).
-         [self loadThumbnailsForAlbum : indexPath.section];
-      }
       
-      if (selectedAlbum == album) {
-         [albumCollectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.row inSection : 0]]];
+         if (selectedAlbum == album)
+            [albumCollectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.row inSection : 0]]];
+      } else {//Ooops, try next url if any.
+         for (NSInteger i = indexPath.row + 1, e = NSInteger(album.nImages); i < e; ++i) {
+            if ([album getImageURLWithIndex : i urlType : CernAPP::thumbnailImageUrl]) {//We continue.
+               [self loadThumbnail : [NSIndexPath indexPathForRow : i inSection : indexPath.section]];
+               return;
+            }
+         }
       }
-   } else if (!thumbnails[coverImageKey] && indexPath.row + 1 < album.nImages) {
-      //We're still trying to download a cover image.
-      [self loadNextThumbnail : [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section]];
-   }
    
-   if (!imageDownloaders.count) {
-      self.navigationItem.rightBarButtonItem.enabled = YES;
-      CernAPP::HideSpinner(self);
+      if (!--coversToLoad)
+         [self loadNextRange];
+      //Else we do nothing here, somebody else will do later.
+   } else {
+      if (downloader.image) {
+         [album setThumbnailImage : downloader.image withIndex : indexPath.row];
+         if (selectedAlbum == album)
+            [albumCollectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.row inSection : 0]]];
+      }
+
+      if (!imageDownloaders.count)
+         [self loadNextRange];
    }
 }
 
 //________________________________________________________________________________________
 - (void) imageDownloadFailed : (NSIndexPath *) indexPath
 {
+   assert(photoAlbums != nil && "imageDownloadFailed:, photoAlbums is nil");
    assert(indexPath != nil && "imageDownloadFailed:, parameter 'indexPath' is nil");
-   assert(indexPath.section < photoAlbums.count &&
+   assert(indexPath.section >= 0 && indexPath.section < NSInteger(photoAlbums.count) &&
           "imageDownloadFailed:, section index is out of bounds");
 
    CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[indexPath.section];
-   assert(indexPath.row < album.nImages &&
+   assert(indexPath.row >= 0 && indexPath.row < NSInteger(album.nImages) &&
           "imageDownloadFailed:, row index is out of bounds");
 
-   assert(imageDownloaders[indexPath] != nil && "imageDownloadFailed:, no downloader found for indexPath");
-   [imageDownloaders removeObjectForKey : indexPath];
+   ImageDownloader * const failed = imageDownloaders[indexPath];
+   assert(failed != nil && "imageDownloadFailed:, no downloader found for indexPath");
    
-   NSIndexPath * const coverImageKey = [NSIndexPath indexPathForRow : indexPath.section inSection : 0];
-   if (!thumbnails[coverImageKey] && indexPath.row + 1 < album.nImages) {
-      //We're still trying to download an album's cover image.
-      [self loadNextThumbnail : [NSIndexPath indexPathForRow : indexPath.row + 1 inSection : indexPath.section]];
-   }
-   
-   if (!imageDownloaders.count) {
-      self.navigationItem.rightBarButtonItem.enabled = YES;   
-      CernAPP::HideSpinner(self);
-   }
+   //Hehe, imageDidLoad: handles the case of downloader.image == nil,
+   //no need to duplicate the code.
+   //downloader is not removed here - to be done in imageDidLoad:.
+   failed.image = nil;
+   [self imageDidLoad : indexPath];
 }
 
 #pragma mark - Parser operation delegate and related methods.
@@ -852,16 +1011,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    //But anyway - first try to download the first image from
    //every album and set the 'cover', after that, download others.
    //If albumCollectionView is active and visible now, it stil shows data from the selectedAlbum (if any).
-
-
-   [self loadFirstThumbnails];
+   [self loadThumbnails];
    [self.collectionView reloadData];
-   
-   if (albumCollectionView.hidden)                         //Otherwise, the right item is 'Back to albums'
-      self.navigationItem.rightBarButtonItem.enabled = YES;//and it's probably enabled already.
-   
-   if (!photoAlbums.count)
-      CernAPP::HideSpinner(self);
 }
 
 //________________________________________________________________________________________
@@ -893,6 +1044,8 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
    }
 
    [imageDownloaders removeAllObjects];
+   lastThumbnailPath = nil;
+   coversToLoad = 0;   
 }
 
 //________________________________________________________________________________________
