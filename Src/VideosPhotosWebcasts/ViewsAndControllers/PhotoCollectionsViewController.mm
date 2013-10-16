@@ -578,8 +578,7 @@ const NSUInteger burstSize = 5;
 
          if (spinner.isAnimating)//Do not forget to show the spinner again, we are still loading.
             [spinner.superview bringSubviewToFront : spinner];
-
-         if (!spinner.isAnimating)
+         else
             self.navigationItem.rightBarButtonItem.enabled = YES;
 
          selected = nil;
