@@ -182,7 +182,11 @@ const NSUInteger burstSize = 5;
 {
    [super viewDidLoad];
    //
-   CernAPP::AddSpinner(self);
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+      CernAPP::AddCustomSpinner(self);
+   else
+      CernAPP::AddSpinner(self);
+
    CernAPP::HideSpinner(self);
    
    self.view.backgroundColor = [UIColor blackColor];
@@ -575,7 +579,7 @@ const NSUInteger burstSize = 5;
          if (spinner.isAnimating)//Do not forget to show the spinner again, we are still loading.
             [spinner.superview bringSubviewToFront : spinner];
 
-         if (!operation)
+         if (!spinner.isAnimating)
             self.navigationItem.rightBarButtonItem.enabled = YES;
 
          selected = nil;
