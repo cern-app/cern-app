@@ -14,7 +14,8 @@
 namespace CernAPP {
 
 NSString * const CDSvideoURL = @"videoURL";
-NSString * const CDSvideoThubmnailURL = @"videoThumbnailURL";
+NSString * const CDSvideoThumbnail = @"videoThumbnail";
+NSString * const CDSvideoThumbnailURL = @"videoThumbnailURL";
 
 }
 
@@ -153,7 +154,7 @@ NSString * const CDSvideoThubmnailURL = @"videoThumbnailURL";
                             //is at 10% of video playback and is much better.
                if (NSURL * const thumbnailURL = [NSURL URLWithString : urlString]) {
                   ++frame;
-                  [video setObject:thumbnailURL forKey : CernAPP::CDSvideoThubmnailURL];
+                  [video setObject:thumbnailURL forKey : CernAPP::CDSvideoThumbnailURL];
                }
             }
          } else if ([content isEqualToString : @"mp40600"]) {

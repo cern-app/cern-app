@@ -23,9 +23,10 @@
 {
 @protected
    NSArray *videoMetadata;
-   NSMutableDictionary *videoThumbnails;
    NSMutableDictionary *imageDownloaders;
 }
+
+@property (nonatomic) NSString *cacheID;
 
 //HUD/Refresh protocol.
 @property (nonatomic, strong) MBProgressHUD *noConnectionHUD;

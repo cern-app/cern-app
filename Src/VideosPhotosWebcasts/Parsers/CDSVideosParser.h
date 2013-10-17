@@ -11,7 +11,9 @@
 namespace CernAPP {
 
 extern NSString * const CDSvideoURL;
-extern NSString * const CDSvideoThubmnailURL;
+extern NSString * const CDSvideoThumbnail;
+extern NSString * const CDSvideoThumbnailURL;
+
 
 }
 

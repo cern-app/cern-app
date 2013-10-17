@@ -397,7 +397,7 @@ UIViewController *FindController(UIView *view)
 
    PhotoCollectionsViewController * const topController = (PhotoCollectionsViewController *)navController.topViewController;
    if (providerID)
-      topController.cacheID = [NSString stringWithFormat:@"%@%u", self.categoryName, providerID];
+      topController.cacheID = [NSString stringWithFormat:@"%@%lu", self.categoryName, (unsigned long)providerID];
    else
       topController.cacheID = self.categoryName;
 
@@ -905,7 +905,7 @@ UIViewController *FindController(UIView *view)
    UIImage *image;
 }
 
-@synthesize categoryName;
+@synthesize providerID, categoryName;
 
 //________________________________________________________________________________________
 - (id) initWithDictionary : (NSDictionary *) info
@@ -921,6 +921,14 @@ UIViewController *FindController(UIView *view)
                 "initWithDictionary:, 'Image name' has a wrong type");
          image = [UIImage imageNamed : (NSString *)info[@"Image name"]];
       }
+      
+      if (info[@"ItemID"]) {
+         assert([info[@"ItemID"] isKindOfClass : [NSNumber class]] &&
+                "initWithDictionary:, ItemID not found or has a wrong type");
+         providerID = [(NSNumber *)info[@"ItemID"] unsignedIntegerValue];
+         assert(providerID > 0 && "initWithDictionary:, ItemID is invalid");
+      } else
+         providerID = 0;
    }
    
    return self;
@@ -943,18 +951,15 @@ UIViewController *FindController(UIView *view)
                   (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
                                                                      VideoCollectionsViewControllerID];
 
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      assert([navController.topViewController isKindOfClass : [VideosCollectionViewController class]] &&
-             "loadControllerTo:, top view controller is either nil or has a wrong type");
-      //Some additional setup here?.
-   
-   } else {
-      assert([navController.topViewController isKindOfClass : [VideosGridViewController class]] &&
-             "loadControllerTo:, top view controller is either nil or has a wrong type");
-      //Some additional setup here?.
-   }
+   assert([navController.topViewController isKindOfClass : [VideosGridViewController class]] &&
+          "loadControllerTo:, top view controller is eithern il or has a wrong type");
+   VideosGridViewController * const vc = (VideosGridViewController *)navController.topViewController;
 
-   UIViewController * const vc = navController.topViewController;
+   if (providerID)
+      vc.cacheID = [NSString stringWithFormat : @"%@%lu", self.categoryName, (unsigned long)providerID];
+   else
+      vc.cacheID = self.categoryName;
+
    vc.navigationItem.title = categoryName;
    
    if (controller.slidingViewController.topViewController)

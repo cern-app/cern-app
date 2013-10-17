@@ -4,6 +4,13 @@
 #import "VideoThumbnailCell.h"
 #import "CDSVideosParser.h"
 
+@interface VideosGridViewController(Private)
+
+- (void) allThumbnailsDidLoad;
+- (void) startThumbnailDownloaders;
+
+@end
+
 @implementation VideosCollectionViewController
 
 //________________________________________________________________________________________
@@ -53,14 +60,14 @@
    
    VideoThumbnailCell * const videoCell = (VideoThumbnailCell *)cell;
    
-   if (UIImage * const thumbnail = (UIImage *)videoThumbnails[indexPath])
+   NSDictionary * const metaData = (NSDictionary *)videoMetadata[indexPath.row];
+   if (UIImage * const thumbnail = (UIImage *)metaData[CernAPP::CDSvideoThumbnail])
       videoCell.imageView.image = thumbnail;
    else
       videoCell.imageView.image = nil;
    
-   NSDictionary * const metaData = (NSDictionary *)videoMetadata[indexPath.row];
    NSString * const videoTitle = (NSString *)metaData[CernAPP::CDScodeTitle];
-   if (videoTitle.length)
+   if (videoTitle)
       videoCell.title = videoTitle;
    else
       videoCell.title = @"";
@@ -102,18 +109,35 @@
 //________________________________________________________________________________________
 - (void) downloadVideoThumbnails
 {
+   assert((imageDownloaders == nil || imageDownloaders.count == 0) &&
+          "downloadVideoThumbnails, called while some downloaders are still active");
+
+   if (!imageDownloaders)
+      imageDownloaders = [[NSMutableDictionary alloc] init];
+
+
    NSUInteger row = 0;
-   imageDownloaders = [[NSMutableDictionary alloc] init];
-   videoThumbnails = [[NSMutableDictionary alloc] init];
    for (NSDictionary *metaData in videoMetadata) {
-      ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : (NSURL *)metaData[CernAPP::CDSvideoThubmnailURL]];
-      NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : row inSection : 0];
-      downloader.indexPathInTableView = indexPath;
-      downloader.delegate = self;
-      [imageDownloaders setObject : downloader forKey : indexPath];
-      [downloader startDownload];
+      if (metaData[CernAPP::CDSvideoThumbnail]) {
+         ++row;
+         continue;
+      }
+   
+      if (NSURL * const thumbnailUrl = (NSURL *)metaData[CernAPP::CDSvideoThumbnailURL]) {
+         ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : thumbnailUrl];
+         NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : row inSection : 0];
+         downloader.indexPathInTableView = indexPath;
+         downloader.delegate = self;
+         [imageDownloaders setObject : downloader forKey : indexPath];
+      }
+      
       ++row;
    }
+   
+   if (!imageDownloaders.count)
+      [self allThumbnailsDidLoad];
+   else
+      [self startThumbnailDownloaders];
 }
 
 //________________________________________________________________________________________
@@ -128,17 +152,15 @@
    assert(downloader != nil && "imageDidLoad:, no downloader found for the given index path");
    
    if (downloader.image) {
-      assert(videoThumbnails[indexPath] == nil && "imageDidLoad:, image was loaded already");
-      [videoThumbnails setObject : downloader.image forKey : indexPath];
+      NSMutableDictionary * const metaData = (NSMutableDictionary *)videoMetadata[indexPath.row];
+      [metaData setObject : downloader.image forKey : CernAPP::CDSvideoThumbnail];
       [self.collectionView reloadItemsAtIndexPaths : @[indexPath]];//may be, simply set an image for image view?
    }
 
    [imageDownloaders removeObjectForKey : indexPath];
    
-   if (!imageDownloaders.count) {
-      CernAPP::HideSpinner(self);
-      self.navigationItem.rightBarButtonItem.enabled = YES;
-   }
+   if (!imageDownloaders.count)
+      [self allThumbnailsDidLoad];
 }
 
 //________________________________________________________________________________________
@@ -157,10 +179,8 @@
    [imageDownloaders removeObjectForKey : indexPath];
    //But no need to update the collectionView.
 
-   if (!imageDownloaders.count) {
-      CernAPP::HideSpinner(self);
-      self.navigationItem.rightBarButtonItem.enabled = YES;
-   }
+   if (!imageDownloaders.count)
+      [self allThumbnailsDidLoad];
 }
 
 #pragma mark - Interface orientation.

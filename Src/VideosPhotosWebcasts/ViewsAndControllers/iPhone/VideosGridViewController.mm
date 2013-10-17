@@ -19,6 +19,7 @@
 #import "CDSVideosParser.h"
 #import "MBProgressHUD.h"
 #import "Reachability.h"
+#import "AppDelegate.h"
 #import "DeviceCheck.h"
 #import "GUIHelpers.h"
 
@@ -37,7 +38,7 @@
    Reachability *internetReach;
 }
 
-@synthesize noConnectionHUD, spinner;
+@synthesize cacheID, noConnectionHUD, spinner;
 
 #pragma mark - Reachability.
 
@@ -53,7 +54,6 @@
    if (self = [super initWithCoder : aDecoder]) {
       videoMetadata = [NSMutableArray array];
 
-      videoThumbnails = nil;
       imageDownloaders = nil;
 
       loaded = NO;
@@ -109,13 +109,39 @@
 }
 
 //________________________________________________________________________________________
+- (BOOL) initFromAppCache
+{
+   if (!cacheID)
+      return NO;
+   
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "viewDidLoad, app delegate is either nil or has a wrong type");
+   
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   
+   if ((videoMetadata = (NSArray *)[appDelegate cacheForKey : cacheID])) {
+      self.navigationItem.rightBarButtonItem.enabled = NO;
+ 
+      [noConnectionHUD hide : YES];
+      CernAPP::ShowSpinner(self);
+      [self downloadVideoThumbnails];
+      [self.collectionView reloadData];
+
+      return YES;
+   }
+   
+   return NO;
+}
+
+//________________________________________________________________________________________
 - (void) viewDidAppear : (BOOL) animated
 {
    [super viewDidAppear : animated];
 
    if (!loaded) {
       loaded = YES;
-      [self refresh];
+      if (![self initFromAppCache])
+         [self refresh];
    }
 }
 
@@ -258,6 +284,12 @@
 
    operation = nil;
    videoMetadata = [items copy];
+   
+   if (cacheID) {
+      assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+             "parserDidFinishWithItems:, app delegate is either nil or has a wrong type");
+      [(AppDelegate *)[UIApplication sharedApplication].delegate cacheData : videoMetadata withKey : cacheID];
+   }
 
    [self downloadVideoThumbnails];
    [self.collectionView reloadData];
@@ -266,24 +298,56 @@
 #pragma mark - ImageDownloader.
 
 //________________________________________________________________________________________
+- (void) allThumbnailsDidLoad
+{
+   CernAPP::HideSpinner(self);
+   self.navigationItem.rightBarButtonItem.enabled = YES;
+}
+
+//________________________________________________________________________________________
+- (void) startThumbnailDownloaders
+{
+   assert(imageDownloaders != nil && "startThumbnailDownloaders, imageDownloaders is nil");
+
+   if (imageDownloaders.count) {
+      @autoreleasepool {
+         NSArray * const values = [imageDownloaders allValues];
+         for (ImageDownloader *downloader in values)
+            [downloader startDownload];
+      }
+   }
+}
+
+//________________________________________________________________________________________
 - (void) downloadVideoThumbnails
 {
+   assert((imageDownloaders == nil || imageDownloaders.count == 0) &&
+          "downloadVideoThumbnails, called while some downloaders are still active");
+   if (!imageDownloaders)
+      imageDownloaders = [[NSMutableDictionary alloc] init];
+   
    NSUInteger section = 0;
-   imageDownloaders = [[NSMutableDictionary alloc] init];
-   videoThumbnails = [NSMutableDictionary dictionary];
-
    for (NSDictionary *metaData in videoMetadata) {
-      if (NSURL * const thumbnailURL = metaData[CernAPP::CDSvideoThubmnailURL]) {//What if we don't have a thumbnail at all?
+      if (metaData[CernAPP::CDSvideoThumbnail]) {//Got a thumbnail already.
+         ++section;
+         continue;
+      }
+
+      if (NSURL * const thumbnailURL = metaData[CernAPP::CDSvideoThumbnailURL]) {//What if we don't have a thumbnail at all?
          ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : thumbnailURL];
          NSIndexPath * const indexPath = [NSIndexPath indexPathForRow : 0 inSection : section];
          downloader.indexPathInTableView = indexPath;
          downloader.delegate = self;
          [imageDownloaders setObject : downloader forKey : indexPath];
-         [downloader startDownload];
       }
-   
+      
       ++section;
    }
+   
+   if (imageDownloaders.count)
+      [self startThumbnailDownloaders];
+   else
+      [self allThumbnailsDidLoad];
 }
 
 //________________________________________________________________________________________
@@ -299,17 +363,15 @@
    assert(downloader != nil && "imageDidLoad:, no downloader found for the given index path");
    
    if (downloader.image) {
-      assert(videoThumbnails[indexPath] == nil && "imageDidLoad:, image was loaded already");
-      [videoThumbnails setObject : downloader.image forKey : indexPath];
-      [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];//may be, simply set an image for image view?
+      NSMutableDictionary * const metaData = (NSMutableDictionary *)videoMetadata[indexPath.section];
+      [metaData setObject:downloader.image forKey : CernAPP::CDSvideoThumbnail];
+      [self.collectionView reloadItemsAtIndexPaths : @[indexPath]];//may be, simply set an image for image view?
    }
 
    [imageDownloaders removeObjectForKey : indexPath];
    
-   if (!imageDownloaders.count) {
-      CernAPP::HideSpinner(self);
-      self.navigationItem.rightBarButtonItem.enabled = YES;
-   }
+   if (!imageDownloaders.count)
+      [self allThumbnailsDidLoad];
 }
 
 //________________________________________________________________________________________
@@ -327,10 +389,8 @@
    [imageDownloaders removeObjectForKey : indexPath];
    //But no need to update the collectionView.
 
-   if (!imageDownloaders.count) {
-      CernAPP::HideSpinner(self);
-      self.navigationItem.rightBarButtonItem.enabled = YES;
-   }
+   if (!imageDownloaders.count)
+      [self allThumbnailsDidLoad];
 }
 
 #pragma mark - UICollectionViewDataSource.
@@ -367,9 +427,10 @@
           "collectionView:cellForItemAtIndexPath:, section is out of bounds");
    assert(indexPath.row == 0 && "collectionView:cellForItemAtIndexPath:, row is out of bounds");
 
-   if (UIImage * const thumbnail = (UIImage *)videoThumbnails[indexPath])
+   NSDictionary * const dict = (NSDictionary *)videoMetadata[indexPath.section];
+   if (UIImage * const thumbnail = (UIImage *)dict[CernAPP::CDSvideoThumbnail])
       videoCell.imageView.image = thumbnail;
-   
+
    return videoCell;
 }
 

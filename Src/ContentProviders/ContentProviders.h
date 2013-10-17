@@ -117,6 +117,7 @@
 
 - (id) initWithDictionary : (NSDictionary *) info;
 
+@property (nonatomic) NSUInteger providerID;
 @property (nonatomic, retain) NSString *categoryName;
 
 - (UIImage *) categoryImage;

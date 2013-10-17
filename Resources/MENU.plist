@@ -171,6 +171,8 @@
 					<string>Latest photos</string>
 				</dict>
 				<dict>
+					<key>ItemID</key>
+					<integer>18</integer>
 					<key>Image name</key>
 					<string>videos.png</string>
 					<key>Category name</key>
