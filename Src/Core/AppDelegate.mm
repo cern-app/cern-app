@@ -37,6 +37,7 @@ NSString * const deviceTokenKey = @"DeviceToken";
    
    RequestType mode;
    NSMutableData *connectionData;
+   NSString *newAPNToken;
 }
 
 @synthesize window = _window;
@@ -286,19 +287,17 @@ NSString * const deviceTokenKey = @"DeviceToken";
 
    NSString * const oldToken = [[NSUserDefaults standardUserDefaults] stringForKey : deviceTokenKey];
 
-   NSString *tokenString = [deviceToken description];
-   tokenString = [tokenString stringByTrimmingCharactersInSet : [NSCharacterSet characterSetWithCharactersInString : @"<>"]];
-   tokenString = [tokenString stringByReplacingOccurrencesOfString : @" " withString : @""];
+   newAPNToken = [deviceToken description];
+   newAPNToken  = [newAPNToken  stringByTrimmingCharactersInSet : [NSCharacterSet characterSetWithCharactersInString : @"<>"]];
+   newAPNToken  = [newAPNToken  stringByReplacingOccurrencesOfString : @" " withString : @""];
    
-   if (oldToken && [oldToken isEqualToString : tokenString])
+   if (oldToken && [oldToken isEqualToString : newAPNToken]) {
+      newAPNToken = nil;
       return;
-
+   }
    //
-   [[NSUserDefaults standardUserDefaults] setObject : tokenString forKey : deviceTokenKey];
-   [[NSUserDefaults standardUserDefaults] synchronize];
-   //
-   NSString * const request = !oldToken ? GetAPNRegisterDeviceTokenRequest(tokenString) :
-                                          GetAPNUpdateDeviceTokenRequest(oldToken, tokenString);
+   NSString * const request = !oldToken ? GetAPNRegisterDeviceTokenRequest(newAPNToken) :
+                                          GetAPNUpdateDeviceTokenRequest(oldToken, newAPNToken);
    if (request) {
       mode = RequestType::tokenRegistration;
       connection = [[NSURLConnection alloc] initWithRequest : [NSURLRequest requestWithURL : [NSURL URLWithString : request]] delegate : self];
@@ -354,6 +353,12 @@ NSString * const deviceTokenKey = @"DeviceToken";
       NSDictionary * const json = [NSJSONSerialization JSONObjectWithData : connectionData options : NSJSONReadingAllowFragments error : &err];
       if (json)
          NSLog(@"got notifications: %@", json);
+   } else if (mode == RequestType::tokenRegistration) {
+      if (newAPNToken) {//Should be assert actually.
+         [[NSUserDefaults standardUserDefaults] setObject : newAPNToken forKey : deviceTokenKey];
+         [[NSUserDefaults standardUserDefaults] synchronize];
+         newAPNToken = nil;
+      }
    }
 }
 
