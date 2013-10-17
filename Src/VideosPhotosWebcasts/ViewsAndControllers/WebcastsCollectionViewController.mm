@@ -23,7 +23,7 @@ using CernAPP::NetworkStatus;
    //Now I need 3 parsers for 3 different feeds (it's possible that user switched between the
    //different segments and thus all of them are loading now.
    MWFeedParser *parsers[3];
-   NSArray *feedData[3];
+   NSMutableArray *feedData;
    NSMutableArray *feedDataTmp[3];
    NSMutableDictionary *imageDownloaders[3];
 
@@ -56,9 +56,10 @@ using CernAPP::NetworkStatus;
 - (id) initWithCoder : (NSCoder *) aDecoder
 {
    if (self = [super initWithCoder : aDecoder]) {
+      [self resetFeedData : NO];//NO == reset all, "not only selected".
+      
       for (unsigned i = 0; i < 3; ++i) {
          parsers[i] = nil;
-         feedData[i] = nil;
          feedDataTmp[i] = nil;
          
          imageDownloaders[i] = [[NSMutableDictionary alloc] init];
@@ -151,6 +152,94 @@ using CernAPP::NetworkStatus;
    }
 }
 
+#pragma mark - feedData management.
+
+//________________________________________________________________________________________
+- (void) resetFeedData : (BOOL) selectedOnly
+{
+   if (!selectedOnly) {
+      feedData = [[NSMutableArray alloc] initWithArray : @[[NSNull null],
+                                                              [NSNull null],
+                                                              [NSNull null]]];
+   } else {
+      assert(segmentedControl != nil && "resetFeedData:, segmented control is nil");
+      const NSInteger selected = segmentedControl.selectedSegmentIndex;
+      feedData[selected] = [NSNull null];
+   }
+}
+
+//________________________________________________________________________________________
+- (NSString *) cacheID
+{
+   assert(apnID > 0 && "cacheID, ivalid apnID");
+   
+   return [NSString stringWithFormat : @"%lu", (unsigned long)apnID];
+}
+
+//________________________________________________________________________________________
+- (BOOL) emptyData
+{
+   for (NSObject * obj in feedData) {
+      if (obj != [NSNull null] && ((NSArray *)obj).count)
+         return NO;
+   }
+   
+   return YES;
+}
+
+//________________________________________________________________________________________
+- (BOOL) emptyData : (NSUInteger) index
+{
+   assert(index < 3 && "emptyData:, parameter 'index' is out of bounds");
+   
+   return feedData[index] == [NSNull null] || !((NSArray *)feedData[index]).count;
+}
+
+//________________________________________________________________________________________
+- (void) writeAppCache
+{
+   assert([self emptyData] == NO && "writeAppCache, invalid cache");
+   assert([(AppDelegate *)[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "writeAppCache, app delegate is either nil or has a wrong type");
+   
+   [(AppDelegate *)[UIApplication sharedApplication].delegate cacheData : feedData withKey : self.cacheID];
+}
+
+//________________________________________________________________________________________
+- (BOOL) initFromAppCache
+{
+   assert([(AppDelegate *)[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "initFromAppCache, app delegate is either nil or has a wrong type");
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   
+   if ((feedData = (NSMutableArray *)[appDelegate cacheForKey : [self cacheID]])) {
+      if (![self emptyData]) {
+         self.navigationItem.rightBarButtonItem.enabled = YES;
+         for (NSUInteger i = 0; i < 3; ++i)
+            [self downloadThumbnailsForPage : i];
+         
+         if (![self emptyData : 0]) {
+            [self downloadThumbnailsForPage : 0];
+            [self.collectionView reloadData];
+         } else
+            CernAPP::ShowInfoHUD(self.collectionView, @"No webcasts in this category at the moment");
+
+         for (NSUInteger i = 0; i < 2; ++i) {
+            if (![self emptyData : i + 1]) {
+               [self downloadThumbnailsForPage : i + 1];
+               [auxCollectionViews[i] reloadData];
+            } else
+               CernAPP::ShowInfoHUD(auxCollectionViews[i], @"No webcasts in this category at the moment");
+         }
+         
+         return YES;
+      }
+   } else
+      [self resetFeedData : NO];//NO == all segments.
+
+   return NO;
+}
+
 //________________________________________________________________________________________
 - (void) viewDidAppear : (BOOL) animated
 {
@@ -162,15 +251,9 @@ using CernAPP::NetworkStatus;
    if (!viewDidAppear) {
       viewDidAppear = YES;
       //Refresh all "pages".
-      [self refresh : NO];
+      if (![self initFromAppCache])
+         [self refresh : NO];
    }
-}
-
-//________________________________________________________________________________________
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Other methods.
@@ -234,6 +317,7 @@ using CernAPP::NetworkStatus;
       [MBProgressHUD hideAllHUDsForView : self.collectionView animated : NO];
       [MBProgressHUD hideAllHUDsForView : auxCollectionViews[0] animated : NO];
       [MBProgressHUD hideAllHUDsForView : auxCollectionViews[1] animated : NO];
+
    } else {
       const NSInteger selected = segmentedControl.selectedSegmentIndex;
       if (!selected)
@@ -301,14 +385,16 @@ using CernAPP::NetworkStatus;
    feedDataTmp[index] = nil;
    [self hideSpinnerForView : index];
 
-   if (!feedData[index].count)//feedData[index] is either nil or an empty array.
+   if (feedData[index] == [NSNull null] || !((NSArray *)feedData[index]).count)//feedData[index] is either nil or an empty array.
       CernAPP::ShowErrorHUD(!index ? self.collectionView : auxCollectionViews[index - 1], @"Network error");
    else
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
    
    if ([self allParsersFinished]) {
+      if (![self emptyData])
+         [self hideAPNHints];
+      
       self.navigationItem.rightBarButtonItem.enabled = YES;
-      [self hideAPNHints];
    }
 }
 
@@ -338,21 +424,19 @@ using CernAPP::NetworkStatus;
    
    if ([self allParsersFinished]) {
       self.navigationItem.rightBarButtonItem.enabled = YES;
-      assert([[UIApplication sharedApplication].delegate isKindOfClass:[AppDelegate class]] &&
-             "feedParserDidFinish:, app delegate has a wrong type");
-      assert(apnID > 0 && "feedParserDidFinish:, feedApnID is invalid");
-      [(AppDelegate *)[UIApplication sharedApplication].delegate setGMTForKey : [NSString stringWithFormat : @"%lu", (unsigned long)apnID]];
-      
+      if (![self emptyData])
+         [self writeAppCache];
+
       [self hideAPNHints];//??
    }
 
    if (!feedN) {
       [self.collectionView reloadData];
-      if (!feedData[0].count)
+      if (!((NSArray *)feedData[0]).count)
          CernAPP::ShowInfoHUD(self.collectionView, @"No webcasts in this category at the moment");
    } else {
       [auxCollectionViews[feedN - 1] reloadData];
-      if (!feedData[feedN].count)
+      if (!((NSArray *)feedData[feedN]).count)
          CernAPP::ShowInfoHUD(auxCollectionViews[feedN - 1], @"No webcasts in this category at the moment");
    }
 
@@ -422,7 +506,7 @@ using CernAPP::NetworkStatus;
    assert(aCollectionView != nil && "numberOfSectionsInCollectionView, parameter 'aCollectionView' is nil");
 
    const NSUInteger viewIndex = [self indexForCollectionView : aCollectionView];
-   if (feedData[viewIndex].count)//If feedData[viewIndex] is nil, condition is false.
+   if (feedData[viewIndex] != [NSNull null] && ((NSArray *)feedData[viewIndex]).count)//If feedData[viewIndex] is nil, condition is false.
       return 1;
 
    return 0;
@@ -435,7 +519,11 @@ using CernAPP::NetworkStatus;
    assert(section == 0 && "collectionView:numberOfItemsInSection:, parameter 'section' is out of bounds");
    
    const NSUInteger viewIndex = [self indexForCollectionView : aCollectionView];
-   return feedData[viewIndex].count;//0 if feedData[viewIndex] is nil.
+   
+   if (feedData[viewIndex] == [NSNull null])
+      return 0;
+   
+   return ((NSArray *)feedData[viewIndex]).count;
 }
 
 
@@ -499,7 +587,7 @@ using CernAPP::NetworkStatus;
    assert(indexPath != nil && "collectionView:didSelecteItemAtIndexPath:, parameter 'idnexPath' is nil");
 
    const NSUInteger viewIndex = [self indexForCollectionView : aCollectionView];
-   assert(indexPath.row >= 0 && indexPath.row < feedData[viewIndex].count &&
+   assert(indexPath.row >= 0 && indexPath.row < ((NSArray *)feedData[viewIndex]).count &&
           "collectionView:didSelecteItemAtIndexPath:, row index is out of bounds");
    
    MWFeedItem * const item = feedData[viewIndex][indexPath.row];
@@ -564,6 +652,23 @@ using CernAPP::NetworkStatus;
 #pragma mark - Thumbnails download.
 
 //________________________________________________________________________________________
+- (void) startThumbnailDownloadersForPage : (NSUInteger) pageIndex
+{
+   //This function should never be called directly (call downloadThumbnailsForPage: instead).
+   assert(pageIndex < 3 && "startThumbnailDownloadersForPage:, parameter 'pageIndex' is out of bounds");
+   assert(imageDownloaders[pageIndex] != nil &&
+          "startThumbnailDownloadersForPage:, imageDownloaders was not initialized correctly");
+   
+   assert(imageDownloaders[pageIndex].count != 0 &&
+          "startThumbnailDownloadersForPage: no downloaders found");
+   @autoreleasepool {
+      NSArray * const values = [imageDownloaders[pageIndex] allValues];
+      for (ImageDownloader *downloader in values)
+         [downloader startDownload];
+   }
+}
+
+//________________________________________________________________________________________
 - (void) downloadThumbnailsForPage : (NSUInteger) pageIndex
 {
    //On iPhone we see at max 2-3 cells (on iPad all
@@ -576,9 +681,13 @@ using CernAPP::NetworkStatus;
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
       return;
    
-   assert(imageDownloaders[pageIndex] != nil && "downloadThumbnails, imageDownloaders was not initialized correctly");
+   if (feedData[pageIndex] == [NSNull null])
+      return;
 
-   if (NSArray * const data = feedData[pageIndex]) {
+   assert(imageDownloaders[pageIndex] != nil &&
+          "downloadThumbnailsForPage:, imageDownloaders was not initialized correctly");
+
+   if (NSArray * const data = (NSArray *)feedData[pageIndex]) {
       for (NSInteger j = 0, e = data.count; j < e; ++j) {
          MWFeedItem * const feedItem = (MWFeedItem *)data[j];
          if (feedItem.image)
@@ -599,9 +708,11 @@ using CernAPP::NetworkStatus;
          newDownloader.delegate = self;
          newDownloader.indexPathInTableView = newKey;
          [imageDownloaders[pageIndex] setObject : newDownloader forKey : newKey];
-         [newDownloader startDownload];
       }
    }
+   
+   if (imageDownloaders[pageIndex].count)
+      [self startThumbnailDownloadersForPage : pageIndex];
 }
 
 //________________________________________________________________________________________
@@ -626,7 +737,6 @@ using CernAPP::NetworkStatus;
    }
    
    [imageDownloaders[indexPath.section] removeObjectForKey : indexPath];
-   //Probably (later) hide a spinner here.
 }
 
 //________________________________________________________________________________________
@@ -640,8 +750,6 @@ using CernAPP::NetworkStatus;
           "imageDownloadFailed:, no downloader found for indexPath");
    
    [imageDownloaders[indexPath.section] removeObjectForKey : indexPath];
-   
-   //Probably (later) hide a spinner here.
 }
 
 #pragma mark - Interface orientation.
