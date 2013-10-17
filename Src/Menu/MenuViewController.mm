@@ -1155,6 +1155,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       if (NSString * const updated = (NSString *)apn[@"updated"]) {
          NSArray * const updatedFeeds = [updated componentsSeparatedByString : @"|"];
          NSString * itemNames = @"";
+         NSInteger nTotal = 0;
          for (NSString * feedData in updatedFeeds) {
             NSArray * const components = [feedData componentsSeparatedByString : @":"];
             assert(components.count == 2 && "checkPushNotifications, unexpected APN payload");
@@ -1165,6 +1166,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                         //We found updated menu item.
                         const NSInteger newItems = [components[1] integerValue];
                         assert(newItems > 0 && "checkPushNotifications, invalid payload");
+                        nTotal += newItems;
                         [item resetAPNHint : newItems forID : itemID];
 
                         if (itemNames.length)
@@ -1184,7 +1186,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
             }
 
             if (itemNames.length)
-               message = [@"CERN.app got new items in: " stringByAppendingString : itemNames];
+               message = [nTotal > 1 ? @"CERN got new items in: " : @"CERN got new item in: " stringByAppendingString : itemNames];
          }
       }
       
