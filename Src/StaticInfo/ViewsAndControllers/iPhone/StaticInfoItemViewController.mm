@@ -96,6 +96,12 @@
 #pragma mark - MWPhotoBrowserDelegate methods
 
 //________________________________________________________________________________________
+- (void) photoBrowserWillDismiss
+{
+   //NOOP, nobody cares.
+}
+
+//________________________________________________________________________________________
 - (NSUInteger) numberOfPhotosInPhotoBrowser : (MWPhotoBrowser *) photoBrowser
 {
    return 1;

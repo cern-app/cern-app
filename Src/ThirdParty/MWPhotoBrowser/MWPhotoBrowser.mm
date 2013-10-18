@@ -1124,6 +1124,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 
 //________________________________________________________________________________________
 - (void) doneButtonPressed : (id)sender {
+    [_delegate photoBrowserWillDismiss];
     [self dismissViewControllerAnimated : YES completion : nil];
 }
 

@@ -73,6 +73,8 @@ const NSUInteger burstSize = 5;
    
    UICollectionView *albumCollectionView;
    UIFont *albumDescriptionCustomFont;//The custom font for a album's description label.
+   
+   BOOL ignoreTap;
 }
 
 @synthesize cacheID, noConnectionHUD, spinner;
@@ -130,6 +132,8 @@ const NSUInteger burstSize = 5;
 
       albumDescriptionCustomFont = [UIFont fontWithName : @"PTSans-Bold" size : 24];
       assert(albumDescriptionCustomFont != nil && "initWithCoder:, custom font is nil");
+      
+      ignoreTap = NO;
    }
 
    return self;
@@ -481,6 +485,11 @@ const NSUInteger burstSize = 5;
 //________________________________________________________________________________________
 - (void) collectionView : (UICollectionView *) collectionView didSelectItemAtIndexPath : (NSIndexPath *) indexPath
 {
+   if (ignoreTap)
+      return;
+
+   ignoreTap = YES;
+
    assert(indexPath != nil && "collectionView:didSelectItemAtIndexPath:, parameter 'indexPath' is nil");
    if (collectionView == albumCollectionView) {
       //Image was selected from an album, open photo browser for this album
@@ -532,6 +541,7 @@ const NSUInteger burstSize = 5;
             ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation = NO;
             [albumCollectionView reloadData];//YESSSSSS :(
             self.navigationItem.rightBarButtonItem.enabled = YES;
+            ignoreTap = NO;
          }
       }];
    }
@@ -541,6 +551,11 @@ const NSUInteger burstSize = 5;
 - (void) switchToStackedMode : (id) sender
 {
 #pragma unused(sender)
+   
+   if (ignoreTap)
+      return;
+
+   ignoreTap = YES;
 
    assert(self.collectionView.hidden == YES && "switchToStackedMode:, self.collectionView is already visible");
    assert(albumCollectionView.hidden == NO && "switchToStackedMode:, albumCollectionView is already hidden");
@@ -580,6 +595,8 @@ const NSUInteger burstSize = 5;
             [spinner.superview bringSubviewToFront : spinner];
          else
             self.navigationItem.rightBarButtonItem.enabled = YES;
+
+         ignoreTap = NO;
 
          selected = nil;
          selectedAlbum = nil;
@@ -1074,6 +1091,12 @@ const NSUInteger burstSize = 5;
 #pragma mark - MWPhotoBrowserDelegate.
 
 //________________________________________________________________________________________
+- (void) photoBrowserWillDismiss
+{
+   ignoreTap = NO;
+}
+
+//________________________________________________________________________________________
 - (NSUInteger) numberOfPhotosInPhotoBrowser : (MWPhotoBrowser *) photoBrowser
 {
 #pragma unused(photoBrowser)
@@ -1086,6 +1109,7 @@ const NSUInteger burstSize = 5;
 - (MWPhoto *) photoBrowser : (MWPhotoBrowser *) photoBrowser photoAtIndex : (NSUInteger) index
 {
 #pragma unused(photoBrowser)
+   
    assert(selectedAlbum != nil && "photoBrowser:photoAtIndex:, no album selected");
    assert(index < selectedAlbum.nImages && "photoBrowser:photoAtIndex:, index is out of bounds");
 
@@ -1099,6 +1123,9 @@ const NSUInteger burstSize = 5;
 - (IBAction) reloadImages : (id) sender
 {
 #pragma unused(sender)
+   if (ignoreTap)
+      return;
+
    assert(CDSconnection == nil && "reloadImages:, called while CDS connection is still active");
    assert(operation == nil && "reloadImages:, called while parser is still active");
    
