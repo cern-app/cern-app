@@ -527,25 +527,6 @@ enum class AnimationState : unsigned char {
 }
 
 //________________________________________________________________________________________
-- (void) updateUnstackedCollectionView
-{
-   assert(albumCollectionView.hidden == NO && "updateUnstackedCollectionView, collection view is hidden");
-   assert(animationState != AnimationState::stack && "updateUnstackedCollectionView, invalid animation type");
-   assert(delayedReload != nil && "updateUnstackedCollectionView, delayedReload is not initialized");
-
-   animationState = AnimationState::reload;
-   [delayedReload removeAllObjects];//I'm going to reload the view completely.
-      
-   [albumCollectionView performBatchUpdates : ^ {
-      [albumCollectionView reloadData];
-   } completion: ^ (BOOL finished) {
-      if (finished)//May be, we already have MORE items to reload.
-         [self reloadItemsInUnstackedCollectionView];
-   }];
-}
-
-
-//________________________________________________________________________________________
 - (void) collectionView : (UICollectionView *) collectionView didSelectItemAtIndexPath : (NSIndexPath *) indexPath
 {
    if (animationState != AnimationState::none)
