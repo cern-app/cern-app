@@ -579,15 +579,20 @@ enum class AnimationState : unsigned char {
       selectedAlbum = (CDSPhotoAlbum *)photoAlbums[indexPath.row];
 
       //1. Reload albumCollectionView (it had 0 items before).
-      //I can not do this using reloadData, since I want to know exactly when
+      //   I can not do this using reloadData, since I want to know exactly when
       //the animation finishes - to enable GUI interactions back.
+      //2. After view was reloaded ... invalidateLayout in a nested block (again, I have
+      //   to know when its work is done before I can go the next step ...
+      //3. Try to reload items with just downloaded images (if any).
 
       [albumCollectionView performBatchUpdates: ^ {
+         //At this point, all cells are 'stacked',
          [albumCollectionView reloadSections : [NSIndexSet indexSetWithIndex : 0]];
          //
        } completion : ^(BOOL finished) {
          if (finished) {
-
+            layout.inAnimation = YES;
+            ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation = YES;
             self.collectionView.hidden = YES;
             albumCollectionView.hidden = NO;
             [albumCollectionView.superview bringSubviewToFront : albumCollectionView];
@@ -599,8 +604,13 @@ enum class AnimationState : unsigned char {
                   ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation = NO;
                   //It's possible, that during 'unstack' animation some items were loaded -
                   //now refresh them in the albumCollection view (if any).
-                  [albumCollectionView.collectionViewLayout invalidateLayout];//??
-                  [self reloadItemsInUnstackedCollectionView];
+                  [albumCollectionView performBatchUpdates : ^
+                   {
+                      [albumCollectionView.collectionViewLayout invalidateLayout];//?? Show me the f..g footer!
+                   } completion:^(BOOL finished) {
+                     if (finished)
+                        [self reloadItemsInUnstackedCollectionView];
+                   }];
                }
             }];
          }
