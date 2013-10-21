@@ -181,6 +181,7 @@ enum class AnimationState : unsigned char {
    
    [albumCollectionView registerClass : [PhotoViewCell class]
            forCellWithReuseIdentifier : [PhotoViewCell cellReuseIdentifier]];
+
    [albumCollectionView registerClass: [PhotoAlbumFooterView class]
            forSupplementaryViewOfKind : UICollectionElementKindSectionFooter
                   withReuseIdentifier : [PhotoAlbumFooterView cellReuseIdentifier]];
@@ -567,6 +568,7 @@ enum class AnimationState : unsigned char {
              "collectionView:didSelectItemAtIndexPath:, albumCollectionView has a wrong layout type");
       AnimatedStackLayout * const layout = (AnimatedStackLayout *)albumCollectionView.collectionViewLayout;
       layout.stackCenter = CGPointMake(cell.center.x, cell.center.y - self.collectionView.contentOffset.y);
+      
       layout.inAnimation = YES;
       layout.stackFactor = 0.f;
 
@@ -582,8 +584,10 @@ enum class AnimationState : unsigned char {
 
       [albumCollectionView performBatchUpdates: ^ {
          [albumCollectionView reloadSections : [NSIndexSet indexSetWithIndex : 0]];
+         //
        } completion : ^(BOOL finished) {
          if (finished) {
+
             self.collectionView.hidden = YES;
             albumCollectionView.hidden = NO;
             [albumCollectionView.superview bringSubviewToFront : albumCollectionView];
@@ -595,6 +599,7 @@ enum class AnimationState : unsigned char {
                   ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation = NO;
                   //It's possible, that during 'unstack' animation some items were loaded -
                   //now refresh them in the albumCollection view (if any).
+                  [albumCollectionView.collectionViewLayout invalidateLayout];//??
                   [self reloadItemsInUnstackedCollectionView];
                }
             }];
