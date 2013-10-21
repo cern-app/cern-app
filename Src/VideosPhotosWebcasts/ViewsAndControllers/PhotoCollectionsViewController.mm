@@ -39,6 +39,14 @@ CGSize CellSizeFromImageSize(CGSize imageSize)
 //in small "bursts" (to avoid terrible number of backgroudn threads).
 const NSUInteger burstSize = 5;
 
+enum class AnimationState : unsigned char {
+   none,
+   unstack,
+   stack,
+   reload,
+   browsing
+};
+
 }
 
 @implementation PhotoCollectionsViewController {
@@ -74,7 +82,8 @@ const NSUInteger burstSize = 5;
    UICollectionView *albumCollectionView;
    UIFont *albumDescriptionCustomFont;//The custom font for a album's description label.
    
-   BOOL ignoreTap;
+   NSMutableArray *delayedReload;//Indices for items to be reloaded later.
+   AnimationState animationState;
 }
 
 @synthesize cacheID, noConnectionHUD, spinner;
@@ -133,7 +142,8 @@ const NSUInteger burstSize = 5;
       albumDescriptionCustomFont = [UIFont fontWithName : @"PTSans-Bold" size : 24];
       assert(albumDescriptionCustomFont != nil && "initWithCoder:, custom font is nil");
       
-      ignoreTap = NO;
+      delayedReload = [[NSMutableArray alloc] init];
+      animationState = AnimationState::none;
    }
 
    return self;
@@ -377,12 +387,16 @@ const NSUInteger burstSize = 5;
 //________________________________________________________________________________________
 - (NSInteger) numberOfSectionsInCollectionView : (UICollectionView *) collectionView
 {
-   if (collectionView == albumCollectionView) {
-      if (!selected)//assert?
-         return 0;//TODO
-    
+   //For album collection view we always return 1, even if there is no items at the moment
+   //in this section: albumCollectionView has quite a lot of animations to work with,
+   //and I have to somehow make them mutually exclusive, so I have to use performBatchUpdate +
+   //its completion block (which is the most important part actually). But for performBatchUpdate
+   //there are some condition checks - number of sections/rows before update and after update must
+   //be consistent (number of section before +- insert/delete == number of sections after, the same for rows).
+   //I do not insert rows, I'm reloading the only section I have.
+
+   if (collectionView == albumCollectionView)
       return 1;
-   }
 
    if (!photoAlbums)
       return 0;
@@ -393,8 +407,11 @@ const NSUInteger burstSize = 5;
 //________________________________________________________________________________________
 - (NSInteger) collectionView : (UICollectionView *) collectionView numberOfItemsInSection : (NSInteger) section
 {
+#pragma unused(section)
+   assert(collectionView != nil && "collectionView:numberOfItemsInSection:, parameter 'collectionView' is nil");
+
    if (collectionView == albumCollectionView) {
-      if (!selected)//assert?
+      if (!selected)
          return 0;
       
       assert(selectedAlbum != nil &&
@@ -414,10 +431,12 @@ const NSUInteger burstSize = 5;
    assert(indexPath != nil && "collectionView:cellForItemAtIndexPath:, parameter 'indexPath' is nil");
 
    if (collectionView == albumCollectionView) {
-      UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier : [PhotoViewCell cellReuseIdentifier] forIndexPath : indexPath];
-      assert([cell isKindOfClass : [PhotoViewCell class]] && "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
-      PhotoViewCell * const photoCell = (PhotoViewCell *)cell;
+      UICollectionViewCell * const cell = [collectionView dequeueReusableCellWithReuseIdentifier :
+                                           [PhotoViewCell cellReuseIdentifier] forIndexPath : indexPath];
+      assert([cell isKindOfClass : [PhotoViewCell class]] &&
+             "collectionView:cellForItemAtIndexPath:, reusable cell has a wrong type");
 
+      PhotoViewCell * const photoCell = (PhotoViewCell *)cell;
       if (selectedAlbum) {         
          if (UIImage * const image = [selectedAlbum getThumbnailImageForIndex : indexPath.row])
             photoCell.imageView.image = image;
@@ -483,15 +502,60 @@ const NSUInteger burstSize = 5;
 #pragma mark - UICollectionView delegate + related methods.
 
 //________________________________________________________________________________________
+- (void) reloadItemsInUnstackedCollectionView
+{
+   assert(albumCollectionView.hidden == NO && "reloadItemsInUnstackedCollectionView, collection view is hidden");
+   assert(animationState != AnimationState::stack && "reloadItemsInUnstackedCollectionView, invalid animation type");
+   assert(delayedReload != nil && "reloadItemsInUnstackedCollectionView, delayedReload is not initialized");
+
+   if (delayedReload.count) {
+      animationState = AnimationState::reload;
+      NSArray * const cp = [delayedReload copy];
+      [delayedReload removeAllObjects];
+
+      [albumCollectionView performBatchUpdates : ^ {
+         [albumCollectionView reloadItemsAtIndexPaths : cp];
+       } completion: ^ (BOOL finished) {
+         if (finished)//May be, we already have MORE items to reload.
+            [self reloadItemsInUnstackedCollectionView];
+      }];
+   } else {
+      animationState = AnimationState::none;
+      if (self.navigationItem.rightBarButtonItem.enabled == NO)
+         self.navigationItem.rightBarButtonItem.enabled = YES;//"Back to albums" button.
+   }
+}
+
+//________________________________________________________________________________________
+- (void) updateUnstackedCollectionView
+{
+   assert(albumCollectionView.hidden == NO && "updateUnstackedCollectionView, collection view is hidden");
+   assert(animationState != AnimationState::stack && "updateUnstackedCollectionView, invalid animation type");
+   assert(delayedReload != nil && "updateUnstackedCollectionView, delayedReload is not initialized");
+
+   animationState = AnimationState::reload;
+   [delayedReload removeAllObjects];//I'm going to reload the view completely.
+      
+   [albumCollectionView performBatchUpdates : ^ {
+      [albumCollectionView reloadData];
+   } completion: ^ (BOOL finished) {
+      if (finished)//May be, we already have MORE items to reload.
+         [self reloadItemsInUnstackedCollectionView];
+   }];
+}
+
+
+//________________________________________________________________________________________
 - (void) collectionView : (UICollectionView *) collectionView didSelectItemAtIndexPath : (NSIndexPath *) indexPath
 {
-   if (ignoreTap)
+   if (animationState != AnimationState::none)
+      //Ignore, some animation is already active.
       return;
 
-   ignoreTap = YES;
-
    assert(indexPath != nil && "collectionView:didSelectItemAtIndexPath:, parameter 'indexPath' is nil");
+
    if (collectionView == albumCollectionView) {
+      animationState = AnimationState::browsing;
       //Image was selected from an album, open photo browser for this album
       //with the selected image on the visible page.
       assert(selectedAlbum != nil && "collectionView:didSelectItemAtIndexPath:, no album selected");
@@ -508,6 +572,9 @@ const NSUInteger burstSize = 5;
    } else {
       //Album (stack of images) was selected. Show "un-stack" animation -
       //hide stacked albums and show the selected album contents instead.
+      //Unless an animation finished, ignore every other interaction.
+      animationState = AnimationState::unstack;
+      //
       self.navigationItem.rightBarButtonItem.enabled = NO;
       [self swapNavigationBarButtons : NO];//Switch to "Back to albums"
       self.navigationItem.rightBarButtonItem.enabled = NO;//Disable "Back to albums"
@@ -528,22 +595,31 @@ const NSUInteger burstSize = 5;
       selected = indexPath;
       selectedAlbum = (CDSPhotoAlbum *)photoAlbums[indexPath.row];
 
-      [albumCollectionView reloadData];
+      //1. Reload albumCollectionView (it had 0 items before).
+      //I can not do this using reloadData, since I want to know exactly when
+      //the animation finishes - to enable GUI interactions back.
 
-      self.collectionView.hidden = YES;
-      albumCollectionView.hidden = NO;
-      [albumCollectionView.superview bringSubviewToFront : albumCollectionView];
-      
-      [albumCollectionView performBatchUpdates : ^ {
-         ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 1.f;
-      } completion : ^(BOOL finished) {
+      [albumCollectionView performBatchUpdates: ^ {
+         [albumCollectionView reloadSections : [NSIndexSet indexSetWithIndex : 0]];
+       } completion : ^(BOOL finished) {
          if (finished) {
-            ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation = NO;
-            [albumCollectionView reloadData];//YESSSSSS :(
-            self.navigationItem.rightBarButtonItem.enabled = YES;
-            ignoreTap = NO;
+            self.collectionView.hidden = YES;
+            albumCollectionView.hidden = NO;
+            [albumCollectionView.superview bringSubviewToFront : albumCollectionView];
+         
+            [albumCollectionView performBatchUpdates : ^ {
+               ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).stackFactor = 1.f;
+            } completion : ^(BOOL finished) {
+               if (finished) {
+                  ((AnimatedStackLayout *)albumCollectionView.collectionViewLayout).inAnimation = NO;
+                  //It's possible, that during 'unstack' animation some items were loaded -
+                  //now refresh them in the albumCollection view (if any).
+                  [self reloadItemsInUnstackedCollectionView];
+               }
+            }];
          }
-      }];
+       }
+      ];
    }
 }
 
@@ -552,10 +628,12 @@ const NSUInteger burstSize = 5;
 {
 #pragma unused(sender)
    
-   if (ignoreTap)
+   if (animationState != AnimationState::none)
+      //Ignore, still some animation is active.
       return;
 
-   ignoreTap = YES;
+   animationState = AnimationState::stack;
+   [delayedReload removeAllObjects];
 
    assert(self.collectionView.hidden == YES && "switchToStackedMode:, self.collectionView is already visible");
    assert(albumCollectionView.hidden == NO && "switchToStackedMode:, albumCollectionView is already hidden");
@@ -596,8 +674,7 @@ const NSUInteger burstSize = 5;
          else
             self.navigationItem.rightBarButtonItem.enabled = YES;
 
-         ignoreTap = NO;
-
+         animationState = AnimationState::none;
          selected = nil;
          selectedAlbum = nil;
       }
@@ -915,6 +992,29 @@ const NSUInteger burstSize = 5;
 //3. ImageDownloaderDelegate - work for both "covers" and thumbnails (and also for failed images).
 
 //________________________________________________________________________________________
+- (void) tryToReloadItem : (NSIndexPath *) indexPath
+{
+   assert(indexPath != nil && "tryToReloadItem:, parameter 'indexPath' is invalid");
+   assert(indexPath.section >= 0 && indexPath.section < NSInteger(photoAlbums.count) &&
+          "tryToReloadItem:, section index is out of bounds");
+
+   CDSPhotoAlbum * const album = (CDSPhotoAlbum *)photoAlbums[indexPath.section];
+   assert(indexPath.row >= 0 && indexPath.row < NSInteger(album.nImages) &&
+          "tryToReloadItem:, row index is out of bounds");
+   
+   if (selectedAlbum != album)
+      return;
+   
+   if (animationState == AnimationState::none) {
+      [delayedReload addObject : [NSIndexPath indexPathForRow : indexPath.row inSection : 0]];
+      [self reloadItemsInUnstackedCollectionView];
+   } else if (animationState != AnimationState::stack) {//Nothing to reload if animating back to a 'stack'.
+      //We're already in animation, postpone the update.
+      [delayedReload addObject : [NSIndexPath indexPathForRow : indexPath.row inSection : 0]];
+   }
+}
+
+//________________________________________________________________________________________
 - (void) imageDidLoad : (NSIndexPath *) indexPath
 {
    assert(photoAlbums != nil && "imageDidLoad:, photoAlbums is nil");
@@ -940,7 +1040,7 @@ const NSUInteger burstSize = 5;
          [self.collectionView reloadItemsAtIndexPaths : @[coverImageKey]];
       
          if (selectedAlbum == album)
-            [albumCollectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.row inSection : 0]]];
+            [self tryToReloadItem : indexPath];
       } else {//Ooops, try next url if any.
          for (NSInteger i = indexPath.row + 1, e = NSInteger(album.nImages); i < e; ++i) {
             if ([album getImageURLWithIndex : i urlType : CernAPP::thumbnailImageUrl]) {//We continue.
@@ -957,7 +1057,7 @@ const NSUInteger burstSize = 5;
       if (downloader.image) {
          [album setThumbnailImage : downloader.image withIndex : indexPath.row];
          if (selectedAlbum == album)
-            [albumCollectionView reloadItemsAtIndexPaths : @[[NSIndexPath indexPathForRow : indexPath.row inSection : 0]]];
+            [self tryToReloadItem : indexPath];
       }
 
       if (!imageDownloaders.count)
@@ -1093,7 +1193,8 @@ const NSUInteger burstSize = 5;
 //________________________________________________________________________________________
 - (void) photoBrowserWillDismiss
 {
-   ignoreTap = NO;
+   if (animationState == AnimationState::browsing)
+      animationState = AnimationState::none;
 }
 
 //________________________________________________________________________________________
@@ -1123,7 +1224,7 @@ const NSUInteger burstSize = 5;
 - (IBAction) reloadImages : (id) sender
 {
 #pragma unused(sender)
-   if (ignoreTap)
+   if (animationState != AnimationState::none || operation)
       return;
 
    assert(CDSconnection == nil && "reloadImages:, called while CDS connection is still active");
