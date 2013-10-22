@@ -144,7 +144,7 @@
 //Ad-hoc content provider.
 //
 
-@interface ModalViewVideoProvider : ModalViewProvider
+@interface ModalViewVideoProvider : ModalViewProvider<UIActionSheetDelegate>
 
 - (id) initWithDictionary : (NSDictionary *) info;
 - (UIImage *) categoryImage;

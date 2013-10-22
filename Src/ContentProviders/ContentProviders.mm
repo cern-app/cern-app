@@ -1080,15 +1080,41 @@ UIViewController *FindController(UIView *view)
 //________________________________________________________________________________________
 - (void) loadControllerTo : (UIViewController *) controller
 {
-   if (links[@"medium"]) {
+   ActionSheetWithController * const dialog = [[ActionSheetWithController alloc] initWithTitle : @"Select the quality, please:" delegate : self cancelButtonTitle : @"Cancel"
+                                   destructiveButtonTitle : @"High" otherButtonTitles : @"Medium", nil];
+
+   dialog.controller = controller;
+   [dialog showInView : controller.view];
+}
+
+#pragma mark - Action sheet delegate, use a "medium" or "high" link.
+
+//____________________________________________________________________________________________________
+- (void) actionSheet : (UIActionSheet *) actionSheet didDismissWithButtonIndex : (NSInteger) buttonIndex
+{
+   using namespace CernAPP;
+
+   assert(buttonIndex >= 0 && "actionSheet:didDisimssWithButtonIndex:, button index must be non-negative");
+
+   NSURL *url = nil;
+   if (buttonIndex == 1) {
+      //Medium.
       assert([links[@"medium"] isKindOfClass : [NSString class]] &&
-             "loadControllerTo:, value for 'medium' key has a wrong type");
-      if (NSURL * const url = [NSURL URLWithString:(NSString *)links[@"medium"]]) {
-         UIGraphicsBeginImageContext(CGSizeMake(1.f, 1.f));
-         MPMoviePlayerViewController * const playerController = [[MPMoviePlayerViewController alloc] initWithContentURL : url];
-         UIGraphicsEndImageContext();
-         [controller presentMoviePlayerViewControllerAnimated : playerController];
-      }
+             "loadControllerTo:, 'medium' not found or has a wrong type");
+      url = [NSURL URLWithString : (NSString *)links[@"medium"]];
+   } else {
+      //High.
+      assert([links[@"high"] isKindOfClass : [NSString class]] &&
+             "loadControllerTo:, 'high' not found or has a wrong type");
+      url = [NSURL URLWithString : (NSString *)links[@"high"]];
+   }
+   
+   ActionSheetWithController * const dialog = (ActionSheetWithController *)actionSheet;
+   if (url && dialog.controller) {
+      UIGraphicsBeginImageContext(CGSizeMake(1.f, 1.f));
+      MPMoviePlayerViewController * const playerController = [[MPMoviePlayerViewController alloc] initWithContentURL : url];
+      UIGraphicsEndImageContext();
+      [dialog.controller presentMoviePlayerViewControllerAnimated : playerController];
    }
 }
 

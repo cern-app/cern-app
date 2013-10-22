@@ -411,14 +411,17 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(menuGroup != nil && "addAnimation:, parameter 'menuGroup' is nil");
    
    NSMutableArray * const subMenu = [[NSMutableArray alloc] init];
+
    
    NSDictionary *itemData = @{@"Name" : @"Introduction", @"links" :
-   @{@"medium" : @"https://mediastream.cern.ch/MediaArchive/Video/Public/Movies/2012/CERN-MOVIE-2012-193/CERN-MOVIE-2012-193-0600-kbps-maxH-360-25-fps-audio-128-kbps-48-kHz-stereo.mp4"}};
+   @{@"medium" : @"https://mediastream.cern.ch/MediaArchive/Video/Public/Movies/2012/CERN-MOVIE-2012-193/CERN-MOVIE-2012-193-0600-kbps-maxH-360-25-fps-audio-128-kbps-48-kHz-stereo.mp4",
+   @"high" : @"https://mediastream.cern.ch/MediaArchive/Video/Public/Movies/2012/CERN-MOVIE-2012-193/CERN-MOVIE-2012-193-0600-kbps-maxH-360-25-fps-audio-128-kbps-48-kHz-stereo.mp4"}};
    ModalViewVideoProvider * provider = [[ModalViewVideoProvider alloc] initWithDictionary : itemData];
    [subMenu addObject : [[MenuItem alloc] initWithContentProvider : provider]];
    
    itemData = @{@"Name" : @"Acceleration network", @"links" :
-   @{@"medium" : @"https://mediastream.cern.ch/MediaArchive/Video/Public/Movies/2013/CERN-MOVIE-2013-121/CERN-MOVIE-2013-121-001/CERN-MOVIE-2013-121-001-1000-kbps-640x360-audio-64-kbps-stereo.mp4"}};
+   @{@"medium" : @"https://mediastream.cern.ch/MediaArchive/Video/Public/Movies/2013/CERN-MOVIE-2013-121/CERN-MOVIE-2013-121-001/CERN-MOVIE-2013-121-001-1000-kbps-640x360-audio-64-kbps-stereo.mp4",
+   @"high" : @"https://mediastream.cern.ch/MediaArchive/Video/Public/Movies/2013/CERN-MOVIE-2013-121/CERN-MOVIE-2013-121-001/CERN-MOVIE-2013-121-001-10000-kbps-1920x1080-audio-128-kbps-stereo.mp4"}};
    provider = [[ModalViewVideoProvider alloc] initWithDictionary : itemData];
    [subMenu addObject : [[MenuItem alloc] initWithContentProvider : provider]];
    
