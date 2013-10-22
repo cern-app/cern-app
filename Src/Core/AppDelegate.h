@@ -9,6 +9,7 @@ enum class TwitterFeedShowOption : char {
    builtinView
 };
 
+extern NSString * const tweetViewKey;
 NSDate *GetCurrentGMT();
 
 }

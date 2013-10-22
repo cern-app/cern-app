@@ -334,6 +334,11 @@ UIViewController *FindController(UIView *view)
          [controller.slidingViewController resetTopView];
       }];
    }
+   
+   [[NSUserDefaults standardUserDefaults] setObject : [NSNumber numberWithInteger : NSInteger(appDelegate.tweetOption)]
+                                             forKey : CernAPP::tweetViewKey];
+   [[NSUserDefaults standardUserDefaults] synchronize];
+
 }
 
 @end

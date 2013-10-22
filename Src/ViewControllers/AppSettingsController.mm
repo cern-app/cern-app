@@ -133,6 +133,11 @@ using CernAPP::TwitterFeedShowOption;
    
    sender.isOn ? appDelegate.tweetOption = TwitterFeedShowOption::externalView :
                  appDelegate.tweetOption = TwitterFeedShowOption::builtinView;
+   
+
+   [[NSUserDefaults standardUserDefaults] setObject : [NSNumber numberWithInteger : NSInteger(appDelegate.tweetOption)]
+                                             forKey : CernAPP::tweetViewKey];
+   [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark - Interface orientation.

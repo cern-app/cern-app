@@ -8,6 +8,8 @@
 
 namespace CernAPP {
 
+NSString * const tweetViewKey = @"ShowTwitterFeedIn";
+
 //________________________________________________________________________________________
 NSDate *GetCurrentGMT()
 {
@@ -71,9 +73,17 @@ NSString * const deviceTokenKey = @"DeviceToken";
    NSDictionary * const appDefaults = [NSDictionary dictionaryWithObjectsAndKeys : @13, @"GUIFontSize", @0, @"HTMLBodyFontSize", nil];
    [defaults registerDefaults : appDefaults];
    [defaults synchronize];
-   
-   tweetOption = CernAPP::TwitterFeedShowOption::notSet;
-   
+
+   if (NSObject * const obj = [[NSUserDefaults standardUserDefaults] objectForKey : CernAPP::tweetViewKey]) {
+      assert([obj isKindOfClass : [NSNumber class]] &&
+             "application:didFinishLaunchingWithOptions:, twitter option has a wrong type");
+      const NSInteger opt = [(NSNumber *)obj integerValue];
+      assert(opt >= 0 && (opt == NSInteger(CernAPP::TwitterFeedShowOption::builtinView) ||
+             opt == NSInteger(CernAPP::TwitterFeedShowOption::externalView)) &&
+             "application:didFinishLaunchingWithOptions:, unexpected twitter option");
+      tweetOption = CernAPP::TwitterFeedShowOption(opt);
+   } else
+      tweetOption = CernAPP::TwitterFeedShowOption::notSet;
    
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
    /*   const unsigned cacheSizeMemory = 4 * 1024 * 1024; // 4MB
