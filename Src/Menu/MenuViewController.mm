@@ -414,8 +414,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    
    NSDictionary *itemData = @{@"Name" : @"Introduction", @"links" :
-   @{@"medium" : @"https://mediastream.cern.ch/MediaArchive/Video/Public/Movies/2012/CERN-MOVIE-2012-193/CERN-MOVIE-2012-193-0600-kbps-maxH-360-25-fps-audio-128-kbps-48-kHz-stereo.mp4",
-   @"high" : @"https://mediastream.cern.ch/MediaArchive/Video/Public/Movies/2012/CERN-MOVIE-2012-193/CERN-MOVIE-2012-193-0600-kbps-maxH-360-25-fps-audio-128-kbps-48-kHz-stereo.mp4"}};
+   @{@"medium" : @"https://mediastream.cern.ch/MediaArchive/Video/Public/Movies/2012/CERN-MOVIE-2012-193/CERN-MOVIE-2012-193-0600-kbps-maxH-360-25-fps-audio-128-kbps-48-kHz-stereo.mp4"}};
    ModalViewVideoProvider * provider = [[ModalViewVideoProvider alloc] initWithDictionary : itemData];
    [subMenu addObject : [[MenuItem alloc] initWithContentProvider : provider]];
    

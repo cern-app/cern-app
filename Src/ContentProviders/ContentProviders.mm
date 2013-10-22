@@ -1080,14 +1080,36 @@ UIViewController *FindController(UIView *view)
 //________________________________________________________________________________________
 - (void) loadControllerTo : (UIViewController *) controller
 {
-   ActionSheetWithController * const dialog = [[ActionSheetWithController alloc] initWithTitle : @"Select the quality, please:" delegate : self cancelButtonTitle : @"Cancel"
-                                   destructiveButtonTitle : @"High" otherButtonTitles : @"Medium", nil];
+   if (links.count > 1) {
+      ActionSheetWithController * const dialog = [[ActionSheetWithController alloc] initWithTitle : @"Select the quality, please:" delegate : self cancelButtonTitle : @"Cancel"
+                                      destructiveButtonTitle : @"High" otherButtonTitles : @"Medium", nil];
 
-   dialog.controller = controller;
-   [dialog showInView : controller.view];
+      dialog.controller = controller;
+      [dialog showInView : controller.view];
+   } else {
+      NSObject * key = [[links keyEnumerator] nextObject];
+      assert([key isKindOfClass : [NSString class]] &&
+             "loadControllerTo:, no key found in links or key has a wrong type");
+      [self presentMediaPlayerIn : controller withKey : (NSString *)key];
+   }
 }
 
 #pragma mark - Action sheet delegate, use a "medium" or "high" link.
+
+- (void) presentMediaPlayerIn : (UIViewController *) controller withKey : (NSString *) key
+{
+   assert(controller != nil && "presentMediaPlayerIn:withKey:, parameter 'controller' is nil");
+   assert(key != nil && "presentMediaPlayerIn:withKey:, parameter 'key' is nil");
+   
+   assert([links[key] isKindOfClass : [NSString class]] &&
+          "loadControllerTo:, a key not found or a value has a wrong type");
+   
+   NSURL * const url = [NSURL URLWithString : (NSString *)links[key]];
+   UIGraphicsBeginImageContext(CGSizeMake(1.f, 1.f));
+   MPMoviePlayerViewController * const playerController = [[MPMoviePlayerViewController alloc] initWithContentURL : url];
+   UIGraphicsEndImageContext();
+   [controller presentMoviePlayerViewControllerAnimated : playerController];
+}
 
 //____________________________________________________________________________________________________
 - (void) actionSheet : (UIActionSheet *) actionSheet didDismissWithButtonIndex : (NSInteger) buttonIndex
@@ -1096,26 +1118,10 @@ UIViewController *FindController(UIView *view)
 
    assert(buttonIndex >= 0 && "actionSheet:didDisimssWithButtonIndex:, button index must be non-negative");
 
-   NSURL *url = nil;
-   if (buttonIndex == 1) {
-      //Medium.
-      assert([links[@"medium"] isKindOfClass : [NSString class]] &&
-             "loadControllerTo:, 'medium' not found or has a wrong type");
-      url = [NSURL URLWithString : (NSString *)links[@"medium"]];
-   } else {
-      //High.
-      assert([links[@"high"] isKindOfClass : [NSString class]] &&
-             "loadControllerTo:, 'high' not found or has a wrong type");
-      url = [NSURL URLWithString : (NSString *)links[@"high"]];
-   }
-   
    ActionSheetWithController * const dialog = (ActionSheetWithController *)actionSheet;
-   if (url && dialog.controller) {
-      UIGraphicsBeginImageContext(CGSizeMake(1.f, 1.f));
-      MPMoviePlayerViewController * const playerController = [[MPMoviePlayerViewController alloc] initWithContentURL : url];
-      UIGraphicsEndImageContext();
-      [dialog.controller presentMoviePlayerViewControllerAnimated : playerController];
-   }
+   assert(dialog.controller != nil && "actionSheet:didDisimssWithButtonIndex:, controller is nil");
+   
+   [self presentMediaPlayerIn : dialog.controller withKey: buttonIndex == 1 ? @"medium" : @"high"];
 }
 
 @end
