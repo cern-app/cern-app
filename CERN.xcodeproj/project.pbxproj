@@ -591,6 +591,7 @@
 		70CC55ED169EF80500292332 /* MenuNavigationController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MenuNavigationController.mm; sourceTree = "<group>"; };
 		70CC55EE169EF80600292332 /* MenuNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuNavigationController.h; sourceTree = "<group>"; };
 		70D2629416F8948600883316 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		70D77E541816913700B821A5 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		70D98B2916F786D8003C42E7 /* SlideScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideScrollView.h; sourceTree = "<group>"; };
 		70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SlideScrollView.mm; sourceTree = "<group>"; };
 		70E69AC0170EC2D700384523 /* ArticleiPadCSS.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = ArticleiPadCSS.css; sourceTree = "<group>"; };
@@ -1356,6 +1357,7 @@
 		E1F7B689156EDC7C0092367F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				70D77E541816913700B821A5 /* CoreTelephony.framework */,
 				70D2629416F8948600883316 /* CoreText.framework */,
 				7004A14616CBB8E60097435D /* CoreData.framework */,
 				7098286516C404C500311025 /* Social.framework */,

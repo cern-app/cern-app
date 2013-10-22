@@ -1,5 +1,7 @@
 #import <cassert>
 
+#import <MediaPlayer/MediaPlayer.h>
+
 #import "PhotoCollectionsViewController.h"
 #import "StaticInfoScrollViewController.h"
 #import "VideosCollectionViewController.h"
@@ -1078,7 +1080,16 @@ UIViewController *FindController(UIView *view)
 //________________________________________________________________________________________
 - (void) loadControllerTo : (UIViewController *) controller
 {
-
+   if (links[@"medium"]) {
+      assert([links[@"medium"] isKindOfClass : [NSString class]] &&
+             "loadControllerTo:, value for 'medium' key has a wrong type");
+      if (NSURL * const url = [NSURL URLWithString:(NSString *)links[@"medium"]]) {
+         UIGraphicsBeginImageContext(CGSizeMake(1.f, 1.f));
+         MPMoviePlayerViewController * const playerController = [[MPMoviePlayerViewController alloc] initWithContentURL : url];
+         UIGraphicsEndImageContext();
+         [controller presentMoviePlayerViewControllerAnimated : playerController];
+      }
+   }
 }
 
 @end
