@@ -402,6 +402,29 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 }
 
 //________________________________________________________________________________________
+- (void) addAnimations : (NSMutableArray *) menuGroup
+{
+   //Ad hoc menu items.
+   //They are not part of StaticInformation.plist - added 1.5 years later and have nothing
+   //to do with 'off-line information about CERN".
+   
+   assert(menuGroup != nil && "addAnimation:, parameter 'menuGroup' is nil");
+   
+   NSMutableArray * const subMenu = [[NSMutableArray alloc] init];
+   
+   NSDictionary *itemData = @{@"Name" : @"Introduction", @"links" : @{}};
+   ModalViewVideoProvider * provider = [[ModalViewVideoProvider alloc] initWithDictionary : itemData];
+   [subMenu addObject : [[MenuItem alloc] initWithContentProvider : provider]];
+   
+   itemData = @{@"Name" : @"Acceleration network", @"links" : @{}};
+   provider = [[ModalViewVideoProvider alloc] initWithDictionary : itemData];
+   [subMenu addObject : [[MenuItem alloc] initWithContentProvider : provider]];
+   
+   MenuItemsGroup * const newGroup = [[MenuItemsGroup alloc] initWithTitle:@"3D animations" image : nil items : subMenu];
+   [menuGroup addObject : newGroup];
+}
+
+//________________________________________________________________________________________
 - (BOOL) loadStaticInfo : (NSDictionary *) desc
 {
    //This is another 'ad-hoc' menu-group, base on StaticInformation.plist from
@@ -428,6 +451,9 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    if (entries.count) {
       //Items for a new group.
       NSMutableArray * const items = [[NSMutableArray alloc] init];
+      //Ad hoc menu items.
+      [self addAnimations : items];
+      //
       for (objBase in entries) {
          assert([objBase isKindOfClass : [NSDictionary class]] &&
                 "loadStaticInfo:, array of dictionaries expected");

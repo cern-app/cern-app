@@ -227,7 +227,7 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 //________________________________________________________________________________________
 - (BOOL) isModalViewItem
 {
-   if ([menuItem respondsToSelector:@selector(contentProvider)]) {
+   if ([menuItem respondsToSelector : @selector(contentProvider)]) {
       NSObject<ContentProvider> * const provider = [menuItem performSelector : @selector(contentProvider)];
       return [provider isKindOfClass : [ModalViewProvider class]];
    }

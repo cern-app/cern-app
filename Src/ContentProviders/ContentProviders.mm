@@ -1036,7 +1036,52 @@ UIViewController *FindController(UIView *view)
    [controller presentViewController : vc animated : YES completion : nil];
 }
 
-@end 
+@end
+
+@implementation ModalViewVideoProvider {
+   UIImage *image;
+   NSDictionary *links;
+}
+
+//________________________________________________________________________________________
+- (id) initWithDictionary : (NSDictionary *) dict
+{
+   assert(dict != nil && "initWithDictionary:, parameter 'dict' is nil");
+
+   if (self = [super init]) {
+      assert([dict[@"Name"] isKindOfClass : [NSString class]] &&
+             "initWithDictionary:, 'Name' not found or has a wrong type");
+      self.categoryName = (NSString *)dict[@"Name"];
+      
+      if (dict[@"Image name"]) {
+         assert([dict[@"Image name"] isKindOfClass : [NSString class]] &&
+                "initWithDictionary:, 'Image name' has a wrong type");
+         image = [UIImage imageNamed : (NSString *)dict[@"Image name"]];
+      } else
+         image = nil;
+
+      assert([dict[@"links"] isKindOfClass : [NSDictionary class]] &&
+             "initWithDictionary:, 'links' not found or has a wrong type");
+
+      links = (NSDictionary *)dict[@"links"];
+   }
+   
+   return self;
+}
+
+//________________________________________________________________________________________
+- (UIImage *) categoryImage
+{
+   return image;
+}
+
+//________________________________________________________________________________________
+- (void) loadControllerTo : (UIViewController *) controller
+{
+
+}
+
+@end
 
 @implementation NavigationViewProvider {
    UIImage *image;

@@ -141,6 +141,18 @@
 @end
 
 //
+//Ad-hoc content provider.
+//
+
+@interface ModalViewVideoProvider : ModalViewProvider
+
+- (id) initWithDictionary : (NSDictionary *) info;
+- (UIImage *) categoryImage;
+- (void) loadControllerTo : (UIViewController *) controller;
+
+@end
+
+//
 //Content provider for a navigation view controller.
 //
 
