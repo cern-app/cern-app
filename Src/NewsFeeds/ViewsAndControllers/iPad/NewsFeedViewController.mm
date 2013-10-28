@@ -128,14 +128,14 @@
    
    [self.view addSubview : currPage];
    [self.view bringSubviewToFront : currPage];
-   
+ /*
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
       //http://stackoverflow.com/questions/18897485/achieving-bright-vivid-colors-for-an-ios-7-translucent-uinavigationbar
       UIView * const backgroundView = [[UIView alloc] initWithFrame : CGRectMake(0, 0, CGRectGetWidth(self.navigationController.navigationBar.frame), 64)];
-      backgroundView.backgroundColor = [UIColor colorWithRed : 0.f green : 83.f / 255.f blue : 161.f / 255.f alpha : 0.75f];
+      backgroundView.backgroundColor = [UIColor colorWithRed : 0.f green : 83.f / 255.f blue : 161.f / 255.f alpha : 0.15f];
       backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
       [self.navigationController.view insertSubview:backgroundView belowSubview:self.navigationController.navigationBar];
-   }
+   }*/
 }
 
 //________________________________________________________________________________________
