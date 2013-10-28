@@ -197,6 +197,11 @@
    if (![self hasConnection] && !dataItems.count) {
       //Network problems, we can not reload
       //and do not have any previous data to show.
+      [self setPagesData];
+      
+      [self layoutPages : NO];//NO - no tiles to layout.
+      [self layoutFlipView];
+      
       CernAPP::ShowErrorHUD(self, @"No network");
 
       return;
@@ -262,8 +267,14 @@
    if (self.navigationController.topViewController == self)
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
 
-   if (!dataItems.count)
+   if (!dataItems.count) {
+      //
+      [self setPagesData];
+      [self layoutPages : NO];//NO tiles to layout.
+      [self layoutFlipView];
+      //
       CernAPP::ShowErrorHUD(self, @"No network");//TODO: better error message?
+   }
    
    parserOp = nil;
    if (!apnItems)
