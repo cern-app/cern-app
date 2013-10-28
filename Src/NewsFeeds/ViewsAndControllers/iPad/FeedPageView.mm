@@ -63,6 +63,18 @@ const NSUInteger tilesOnPage = 4;
    return range;
 }
 
+//________________________________________________________________________________________
+- (void) clearPage
+{
+   if (tiles) {
+      for (FeedItemTileView *v in tiles)
+         [v removeFromSuperview];
+      [tiles removeAllObjects];
+   }
+   
+   pageRange.location = 0;
+   pageRange.length = 0;
+}
 
 //________________________________________________________________________________________
 - (NSUInteger) setPageItems : (NSArray *) feedItems startingFrom : (NSUInteger) index
@@ -71,9 +83,7 @@ const NSUInteger tilesOnPage = 4;
    assert(index < feedItems.count && "setPageItems:startingFrom:, parameter 'index' is out of range");
 
    if (tiles) {
-      for (FeedItemTileView *v in tiles)
-         [v removeFromSuperview];
-      [tiles removeAllObjects];
+      [self clearPage];
    } else
       tiles = [[NSMutableArray alloc] init];
 

@@ -114,35 +114,34 @@ const NSUInteger nAutoAnimationSteps = 10;
    //TODO: find a better ("idiomatic") solution for this problem.
    [super viewWillAppear : animated];
 
-   if (nPages) {
-      //it can happen, that we have a wrong geometry: detail view
-      //controller was pushed on a stack, we rotate a device and press
-      //a 'back' button. geometry is wrong now.
-      
-      if (currPage && currPage.frame.size.width) {
-         const CGRect currFrame = currPage.frame;// self.view.frame;
-         const UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-         bool layoutBroken = false;
-         if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
-            if (currFrame.size.width < currFrame.size.height) {
-               //Nice! Thank you, Apple's engineers!
-               self.view.frame = CGRectMake(0.f, 0.f, 1024.f, 704.f);
-               layoutBroken = true;
-            }
-         } else {
-            if (currFrame.size.width > currFrame.size.height) {
-               //Nice! Thank you, Apple's engineers!
-               self.view.frame = CGRectMake(0.f, 0.f, 768.f, 960.f);
-               layoutBroken = true;
-            }
-         }
 
-         if (layoutBroken) {
-            [self layoutPages : YES];
-            [self layoutFlipView];
-            [self layoutPanRegion];
-            [self fixFlipHintGeometry];
+   //it can happen, that we have a wrong geometry: detail view
+   //controller was pushed on a stack, we rotate a device and press
+   //a 'back' button. geometry is wrong now.
+   
+   if (currPage && currPage.frame.size.width) {
+      const CGRect currFrame = currPage.frame;// self.view.frame;
+      const UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+      bool layoutBroken = false;
+      if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
+         if (currFrame.size.width < currFrame.size.height) {
+            //Nice! Thank you, Apple's engineers!
+            self.view.frame = CGRectMake(0.f, 0.f, 1024.f, 704.f);
+            layoutBroken = true;
          }
+      } else {
+         if (currFrame.size.width > currFrame.size.height) {
+            //Nice! Thank you, Apple's engineers!
+            self.view.frame = CGRectMake(0.f, 0.f, 768.f, 960.f);
+            layoutBroken = true;
+         }
+      }
+
+      if (layoutBroken) {
+         [self layoutPages : YES];
+         [self layoutFlipView];
+         [self layoutPanRegion];
+         [self fixFlipHintGeometry];
       }
    }
 }
@@ -171,6 +170,10 @@ const NSUInteger nAutoAnimationSteps = 10;
       assert(currPage != nil && "setPagesData, currPage is nil");
       [currPage setPageItems : dataItems startingFrom : 0];
       currPage.pageNumber = 0;
+   } else {
+      //
+      [currPage clearPage];
+      currPage.pageNumber = 0;
    }
 }
 
@@ -185,12 +188,10 @@ const NSUInteger nAutoAnimationSteps = 10;
 //________________________________________________________________________________________
 - (void) layoutPages : (BOOL) layoutTiles
 {
-   if (!nPages)
-      return;
-   
+   //Set the geometry for page views (and their subviews).
    CGRect currentFrame = self.view.frame;
    currentFrame.origin = CGPoint();
-   
+
    if (nPages > 1) {
       prevPage.frame = currentFrame;
       if (layoutTiles)
@@ -204,7 +205,7 @@ const NSUInteger nAutoAnimationSteps = 10;
    }
    
    currPage.frame = currentFrame;
-   if (layoutTiles)
+   if (layoutTiles && nPages)//if nPages == 0 I have no tiles.
       [currPage layoutTiles];
 }
 
@@ -212,6 +213,8 @@ const NSUInteger nAutoAnimationSteps = 10;
 - (void) layoutFlipView
 {
    assert(flipView != nil && "layoutFlipView, flipView is nil");
+
+   //Set the correct geometry for a flip view and re-create snapshots for pages.
 
    CGRect frame = self.view.frame;
    frame.origin = CGPoint();
@@ -226,12 +229,14 @@ const NSUInteger nAutoAnimationSteps = 10;
    if (nPages > 2)
       [flipView addFrame : nextPage];
 
-   [flipView addFrame : currPage];
+   if (nPages)
+      [flipView addFrame : currPage];
 }
 
 //________________________________________________________________________________________
 - (void) layoutPanRegion
 {
+   //Geometry for a pan region view.
    assert(panRegion != nil && "layoutPanRegion, panRegion is nil");
 
    CGRect frame = self.view.frame;
@@ -274,7 +279,6 @@ const NSUInteger nAutoAnimationSteps = 10;
       [self.view addSubview : flipHintView];
 
    [self fixFlipHintGeometry];
-
    [self showFlipHint];
 }
 
@@ -327,12 +331,13 @@ const NSUInteger nAutoAnimationSteps = 10;
    assert(flipAnimator.animationLock == NO &&
           "willAnimateRotationToInterfaceOrientation:duration:, flip animation is active");
 
+   [self fixFlipHintGeometry];
+   [self layoutPages : YES];
+
+   //No additional animation needed if we have an empty page.
    if (!nPages)
       return;
-
-   [self fixFlipHintGeometry];
-
-   [self layoutPages : YES];
+   
    [currPage explodeTiles : toInterfaceOrientation];
    [currPage collectTilesAnimatedForOrientation : toInterfaceOrientation from : CACurrentMediaTime() + duration withDuration : 0.5f];
 }
@@ -340,9 +345,6 @@ const NSUInteger nAutoAnimationSteps = 10;
 //________________________________________________________________________________________
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
-   if (!nPages)
-      return;
-
    [self layoutFlipView];
    [self layoutPanRegion];
 }
@@ -528,6 +530,9 @@ const NSUInteger nAutoAnimationSteps = 10;
 - (BOOL) canStartFlipAnimation : (UIPanGestureRecognizer *) recognizer
 {
    assert(recognizer != nil && "canStartFlipAnimation:, parameter 'recognizer' is nil");
+   
+   if (!nPages)
+      return NO;
    
    if (flipAnimator.flipStartedOnTheLeft)
       return currPage.pageNumber;

@@ -81,7 +81,8 @@
    [self layoutPages : YES];
    [self layoutFlipView];
 
-   [self loadVisiblePageData];
+   if (dataItems.count)
+      [self loadVisiblePageData];
    
    if (nPages > 1)
       [self showRightFlipHint];
@@ -96,7 +97,9 @@
 {
    if (feedCache || parserOp)//We're refreshing, do not load images, anyway, at the end of refresh
       return;                //operation they'll become invalid (potentially).
-   
+
+   if (!dataItems.count)
+      return;
 
    const CGFloat minImageSize = [BulletinIssueTileView minImageSize];
 
@@ -406,12 +409,12 @@
 {
    assert(articles != nil && "sortArticlesIntoIssues:, parameter 'articles' is nil");
 
+   if (dataItems)
+      [dataItems removeAllObjects];
+   else
+      dataItems = [[NSMutableArray alloc] init];
+
    if (articles.count) {
-      if (dataItems)
-         [dataItems removeAllObjects];
-      else
-         dataItems = [[NSMutableArray alloc] init];
-   
       NSMutableArray *weekData = [[NSMutableArray alloc] init];
       MWFeedItem * const firstArticle = [articles objectAtIndex : 0];
       [weekData addObject : firstArticle];

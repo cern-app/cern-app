@@ -333,7 +333,9 @@
    [self layoutPages : YES];
    [self layoutFlipView];
    
-   [self loadVisiblePageData];
+   if (dataItems.count)
+      [self loadVisiblePageData];
+
    if (nPages > 1)
       [self showRightFlipHint];
    else
@@ -347,6 +349,9 @@
 {
    if (feedCache || parserOp)//Do not start any downloader while refreshing:
       return;                //by the end of refresh all images will become (possibly) invalid.
+   
+   if (!dataItems.count)
+      return;
 
    if (!downloaders)
       downloaders = [[NSMutableDictionary alloc] init];
@@ -533,7 +538,6 @@
 - (void) addTileTapObserver
 {
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(articleSelected:) name : CernAPP::feedItemSelectionNotification object : nil];
-//   [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(sendSelectedArticle:) name : CernAPP::feedItemSendItemNotification object : nil];
 }
 
 //________________________________________________________________________________________

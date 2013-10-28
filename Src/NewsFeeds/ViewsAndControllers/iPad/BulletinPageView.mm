@@ -70,11 +70,8 @@ const CGFloat tileShift = 0.2f;
    //Items in the 'items' array are arrays with MWFeedItems sorted by the date.
    if (!tiles)
       tiles = [[NSMutableArray alloc] init];
-   else {
-      for (BulletinIssueTileView *tile in tiles)
-         [tile removeFromSuperview];
-      [tiles removeAllObjects];
-   }
+   else
+      [self clearPage];
    
    //A primitive attempt to make a tile's layout more interesting.
    //[0] == wideImageOnTop, [1] == squareImageOnLeft
@@ -105,6 +102,19 @@ const CGFloat tileShift = 0.2f;
 }
 
 //________________________________________________________________________________________
+- (void) clearPage
+{
+   if (tiles) {
+      for (BulletinIssueTileView *tile in tiles)
+         [tile removeFromSuperview];
+      [tiles removeAllObjects];
+   }
+   
+   pageRange.location = 0;
+   pageRange.length = 0;
+}
+
+//________________________________________________________________________________________
 - (void) setThumbnail : (UIImage *) thumbnailImage forTile : (NSUInteger) tileIndex doLayout : (BOOL) layout
 {
 #pragma unused(layout)
@@ -128,7 +138,11 @@ const CGFloat tileShift = 0.2f;
 //________________________________________________________________________________________
 - (void) layoutTiles
 {
-   assert(tiles.count > 0 && tiles.count <= 3 && "layoutTiles, unexpected number of tiles on a page");
+   assert(tiles.count >= 0 && tiles.count <= 3 && "layoutTiles, unexpected number of tiles on a page");
+   
+   if (!tiles.count)
+      return;
+
    //Depending on orientation and the pageRange, layout the slides.
    CGRect frame = self.frame;
    frame.origin = CGPoint();
