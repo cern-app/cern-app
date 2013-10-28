@@ -428,6 +428,9 @@ NSString *ImageURLFromEnclosures(MWFeedItem *article)
 
    assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
    assert(feedCacheID != nil && "parserDidFinishWithInfo:items:, feedCacheID is nil, can not write a DB cache");
+   
+   if (!items.count)
+      return [self parserDidFailWithError : nil];
 
    CernAPP::WriteFeedCache(feedCacheID, feedCache, items);
 
@@ -466,6 +469,7 @@ NSString *ImageURLFromEnclosures(MWFeedItem *article)
 //________________________________________________________________________________________
 - (void) parserDidFailWithError : (NSError *) error
 {
+//Error is ignored in the current version.
 #pragma unused(error)
    [self hideActivityIndicators];
 

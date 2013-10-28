@@ -268,6 +268,11 @@
 
    assert(articles != nil && "parserDidFinishWithInfo:, parameter 'articles' is nil");
    
+   if (!articles.count)
+      //Handle this as an error.
+      return [self parserDidFailWithError : nil];
+
+   
    [self hideActivityIndicators];
 
    //Here we split sorted (by date) articles into the bulletin's issues (by week).

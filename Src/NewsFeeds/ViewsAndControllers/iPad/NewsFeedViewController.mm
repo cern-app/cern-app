@@ -286,11 +286,9 @@
 
    assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
    
-   if (!items.count) {
+   if (!items.count)
       //Consider this as a network error.
-      [self parserDidFailWithError : nil];
-      return;
-   }
+      return [self parserDidFailWithError : nil];
    
    assert(feedCacheID.length && "parserDidFinishWithInfo:items:, feedCacheID is invalid");
    CernAPP::WriteFeedCache(feedCacheID, feedCache, items);

@@ -229,7 +229,8 @@ const NSUInteger nAutoAnimationSteps = 10;
    if (nPages > 2)
       [flipView addFrame : nextPage];
 
-   [flipView addFrame : currPage];
+   if (nPages)
+      [flipView addFrame : currPage];
 }
 
 //________________________________________________________________________________________
