@@ -104,7 +104,7 @@
 {
    if (!self.isCancelled) {
       if (self.delegate) {
-         NSIndexSet * const validItems = [feedItems indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+         NSIndexSet * const validItems = [feedItems indexesOfObjectsPassingTest : ^BOOL(id obj, NSUInteger idx, BOOL *stop) {
             return ((MWFeedItem *)obj).link != nil;
          }];
          
