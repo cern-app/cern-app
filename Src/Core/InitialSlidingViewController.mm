@@ -183,7 +183,7 @@
 {
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone && [self underLeftShowing])
       return NO;
-
+   
    return [self.topViewController shouldAutorotate];
 }
 

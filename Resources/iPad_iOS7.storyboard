@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4511" systemVersion="13A598" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nQl-Hn-nT2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A598" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nQl-Hn-nT2">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3745"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <scenes>
         <!--Menu View Controller-->
@@ -96,7 +96,7 @@
                     <navigationBar key="navigationBar" alpha="0.89999999999999991" contentMode="scaleToFill" id="PiZ-K9-22d">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -187,7 +187,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="DpK-ej-iXd">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -239,7 +239,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="9p3-r5-X7e">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -285,7 +285,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Hr-O5-ixb">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -353,7 +353,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -438,7 +438,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -507,7 +507,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -529,11 +529,11 @@
                         <viewControllerLayoutGuide type="bottom" id="9nY-Se-6fI"/>
                     </layoutGuides>
                     <view key="view" autoresizesSubviews="NO" contentMode="scaleToFill" id="FdE-vA-1ua">
-                        <rect key="frame" x="0.0" y="44" width="768" height="980"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oqb-Ll-uRJ">
-                                <rect key="frame" x="15" y="61" width="738" height="121"/>
+                                <rect key="frame" x="15" y="81" width="738" height="121"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="13" minValue="13" maxValue="17" translatesAutoresizingMaskIntoConstraints="NO" id="ShE-Nn-GaL">
@@ -570,7 +570,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MNo-aa-ggZ">
-                                <rect key="frame" x="15" y="198" width="738" height="121"/>
+                                <rect key="frame" x="15" y="218" width="738" height="121"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="20" translatesAutoresizingMaskIntoConstraints="NO" id="qNq-T6-h58">
@@ -603,7 +603,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsm-xr-qo7">
-                                <rect key="frame" x="15" y="336" width="738" height="121"/>
+                                <rect key="frame" x="15" y="356" width="738" height="121"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use the external Twitter app:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X8E-oM-SdO">
@@ -645,14 +645,13 @@
                             <constraint firstItem="Oqb-Ll-uRJ" firstAttribute="leading" secondItem="FdE-vA-1ua" secondAttribute="leading" constant="15" id="KcZ-xR-jft"/>
                             <constraint firstItem="MNo-aa-ggZ" firstAttribute="leading" secondItem="FdE-vA-1ua" secondAttribute="leading" constant="15" id="R6r-3d-3s7"/>
                             <constraint firstAttribute="trailing" secondItem="Oqb-Ll-uRJ" secondAttribute="trailing" constant="15" id="REo-oN-8tA"/>
-                            <constraint firstItem="MNo-aa-ggZ" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" constant="198" id="XcU-IN-FBa"/>
-                            <constraint firstItem="tsm-xr-qo7" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" constant="336" id="bnm-qU-9jt"/>
+                            <constraint firstItem="MNo-aa-ggZ" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" constant="218" id="XcU-IN-FBa"/>
+                            <constraint firstItem="tsm-xr-qo7" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" constant="356" id="bnm-qU-9jt"/>
                             <constraint firstAttribute="trailing" secondItem="MNo-aa-ggZ" secondAttribute="trailing" constant="15" id="luB-KM-BCJ"/>
-                            <constraint firstItem="Oqb-Ll-uRJ" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" constant="61" id="t12-PR-Tx0"/>
+                            <constraint firstItem="Oqb-Ll-uRJ" firstAttribute="top" secondItem="FdE-vA-1ua" secondAttribute="top" constant="81" id="t12-PR-Tx0"/>
                             <constraint firstAttribute="trailing" secondItem="tsm-xr-qo7" secondAttribute="trailing" constant="15" id="z9W-93-ABq"/>
                         </constraints>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Settings" id="STa-7N-NTW">
                         <barButtonItem key="rightBarButtonItem" title="Done" id="TkQ-63-Sfh">
@@ -686,7 +685,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -766,7 +765,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -850,6 +849,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="textView" destination="rEa-Nf-yTm" id="BeG-lL-j1g"/>
                     </connections>
@@ -866,7 +866,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>

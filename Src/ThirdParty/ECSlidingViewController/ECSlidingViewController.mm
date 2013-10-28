@@ -7,6 +7,7 @@
 //
 
 #import "ECSlidingViewController.h"
+#import "DeviceCheck.h"
 
 NSString *const ECSlidingViewUnderRightWillAppear    = @"ECSlidingViewUnderRightWillAppear";
 NSString *const ECSlidingViewUnderLeftWillAppear     = @"ECSlidingViewUnderLeftWillAppear";
@@ -66,7 +67,9 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
 
 @end
 
-@implementation ECSlidingViewController
+@implementation ECSlidingViewController {
+   BOOL viewDidAppear;
+}
 
 // public properties
 @synthesize underLeftViewController  = _underLeftViewController;
@@ -179,7 +182,7 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
   self.resetTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resetTopView)];
   _panGesture          = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(updateTopViewHorizontalCenterWithRecognizer:)];
   self.resetTapGesture.enabled = NO;
-  self.resetStrategy = ECTapping | ECPanning;
+  self.resetStrategy = ECResetStrategy(ECTapping | ECPanning);
   
   self.topViewSnapshot = [[UIView alloc] initWithFrame:self.topView.bounds];
   [self.topViewSnapshot setAutoresizingMask:self.autoResizeToFillScreen];
@@ -192,6 +195,18 @@ NSString *const ECSlidingViewTopDidReset             = @"ECSlidingViewTopDidRese
   self.topView.layer.shadowOffset = CGSizeZero;
   self.topView.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.layer.bounds].CGPath;
   [self adjustLayout];
+}
+
+- (void) viewDidAppear : (BOOL) animated
+{
+   [super viewDidAppear : animated];
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && !viewDidAppear) {
+      //Fuckup with transparent nav bars and initialization order.
+      viewDidAppear = YES;
+      self.topView.layer.shadowOffset = CGSizeZero;
+      self.topView.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.view.layer.bounds].CGPath;
+      [self adjustLayout];
+   }
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
