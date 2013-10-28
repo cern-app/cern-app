@@ -104,19 +104,26 @@
 {
    if (!self.isCancelled) {
       if (self.delegate) {
-         NSArray *const sortedItems = [feedItems sortedArrayUsingComparator :
-                                       ^ NSComparisonResult(id a, id b)
-                                        {
-                                           const NSComparisonResult cmp = [((MWFeedItem *)a).date compare : ((MWFeedItem *)b).date];
-                                           if (cmp == NSOrderedAscending)
-                                              return NSOrderedDescending;
-                                           else if (cmp == NSOrderedDescending)
-                                              return NSOrderedAscending;
-                                           return cmp;
-                                        }
-                                      ];
-
-         [delegate parserDidFinishWithInfo : feedInfo items : sortedItems];
+         NSIndexSet * const validItems = [feedItems indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            return ((MWFeedItem *)obj).link != nil;
+         }];
+         
+         if (validItems.count) {
+            NSArray * const filtered = [feedItems objectsAtIndexes : validItems];
+            NSArray * const sortedItems = [filtered sortedArrayUsingComparator :
+                                          ^ NSComparisonResult(id a, id b)
+                                           {
+                                              const NSComparisonResult cmp = [((MWFeedItem *)a).date compare : ((MWFeedItem *)b).date];
+                                              if (cmp == NSOrderedAscending)
+                                                 return NSOrderedDescending;
+                                              else if (cmp == NSOrderedDescending)
+                                                 return NSOrderedAscending;
+                                              return cmp;
+                                           }
+                                         ];
+            [delegate parserDidFinishWithInfo : feedInfo items : sortedItems];
+         } else
+            [delegate parserDidFinishWithInfo : feedInfo items : @[]];
       }
    }
 }
