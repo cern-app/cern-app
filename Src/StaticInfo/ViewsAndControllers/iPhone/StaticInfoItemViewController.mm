@@ -28,7 +28,10 @@
 {
    [super viewDidLoad];
    
-   scrollView.backgroundColor = [UIColor colorWithWhite : 0.9f alpha : 1.f];
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+      scrollView.backgroundColor = [UIColor colorWithWhite : 1.f alpha : 1.f];
+   else
+      scrollView.backgroundColor = [UIColor colorWithWhite : 0.9f alpha : 1.f];
 
    UITapGestureRecognizer * const singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(handleSingleTap:)];
    [self.view addGestureRecognizer : singleFingerTap];

@@ -59,6 +59,11 @@
    pageControl.numberOfPages = dataSource.count;
    scrollView.backgroundColor = [UIColor clearColor];
    self.view.backgroundColor = [UIColor blackColor];
+   
+   if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
+      pageControl.pageIndicatorTintColor = [UIColor blackColor];
+      pageControl.currentPageIndicatorTintColor = [UIColor colorWithRed : 107 / 255.f green : 141 / 255.f blue : 191 / 255.f alpha : 1.f];
+   }
 
    for (NSUInteger i = 0, e = dataSource.count; i < e; ++i) {
       StaticInfoItemViewController *detailViewController = [self viewControllerForPage: i];

@@ -10,6 +10,7 @@
 #import <cassert>
 
 #import "StaticInfoTileView.h"
+#import "DeviceCheck.h"
 
 namespace CernAPP {
 
@@ -61,7 +62,10 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
 
       layoutHint = StaticInfoTileHint::none;
       
-      self.backgroundColor = [UIColor colorWithRed : 0.85f green : 0.85f blue : 0.85f alpha : 1.f];
+      if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
+         self.backgroundColor = [UIColor whiteColor];
+      else
+         self.backgroundColor = [UIColor colorWithRed : 0.85f green : 0.85f blue : 0.85f alpha : 1.f];
       
       UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(handleTap:)];
       [self addGestureRecognizer : tapRecognizer];
