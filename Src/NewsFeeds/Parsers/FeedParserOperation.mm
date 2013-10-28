@@ -108,7 +108,7 @@
             return ((MWFeedItem *)obj).link != nil;
          }];
          
-         if (validItems.count) {
+        if (validItems.count) {
             NSArray * const filtered = [feedItems objectsAtIndexes : validItems];
             NSArray * const sortedItems = [filtered sortedArrayUsingComparator :
                                           ^ NSComparisonResult(id a, id b)

@@ -258,23 +258,18 @@
 //________________________________________________________________________________________
 - (void) parserDidFailWithError : (NSError *) error
 {
+//In the current version error is ignored.
 #pragma unused(error)
 
    //TODO: test this!
    CernAPP::HideSpinner(self);
    [self hideNavBarSpinner];
 
-   if (self.navigationController.topViewController == self)
+   if (self.navigationController.topViewController == self)//animation lock?
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
 
-   if (!dataItems.count) {
-      //
-      [self setPagesData];
-      [self layoutPages : NO];//NO tiles to layout.
-      [self layoutFlipView];
-      //
+   if (!dataItems.count)
       CernAPP::ShowErrorHUD(self, @"No network");//TODO: better error message?
-   }
    
    parserOp = nil;
    if (!apnItems)
@@ -290,6 +285,12 @@
 #pragma unused(info)
 
    assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
+   
+   if (!items.count) {
+      //Consider this as a network error.
+      [self parserDidFailWithError : nil];
+      return;
+   }
    
    assert(feedCacheID.length && "parserDidFinishWithInfo:items:, feedCacheID is invalid");
    CernAPP::WriteFeedCache(feedCacheID, feedCache, items);
@@ -344,8 +345,7 @@
    [self layoutPages : YES];
    [self layoutFlipView];
    
-   if (dataItems.count)
-      [self loadVisiblePageData];
+   [self loadVisiblePageData];
 
    if (nPages > 1)
       [self showRightFlipHint];
@@ -358,12 +358,9 @@
 //________________________________________________________________________________________
 - (void) loadVisiblePageData
 {
-   if (feedCache || parserOp)//Do not start any downloader while refreshing:
-      return;                //by the end of refresh all images will become (possibly) invalid.
+   if (feedCache || parserOp || !dataItems.count)//Do not start any downloader while refreshing:
+      return;                 //by the end of refresh all images will become (possibly) invalid.
    
-   if (!dataItems.count)
-      return;
-
    if (!downloaders)
       downloaders = [[NSMutableDictionary alloc] init];
 

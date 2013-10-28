@@ -64,26 +64,15 @@ const NSUInteger tilesOnPage = 4;
 }
 
 //________________________________________________________________________________________
-- (void) clearPage
-{
-   if (tiles) {
-      for (FeedItemTileView *v in tiles)
-         [v removeFromSuperview];
-      [tiles removeAllObjects];
-   }
-   
-   pageRange.location = 0;
-   pageRange.length = 0;
-}
-
-//________________________________________________________________________________________
 - (NSUInteger) setPageItems : (NSArray *) feedItems startingFrom : (NSUInteger) index
 {
    assert(feedItems != nil && "setPageItems:startingFrom:, parameter 'feedItems' is nil");
    assert(index < feedItems.count && "setPageItems:startingFrom:, parameter 'index' is out of range");
 
    if (tiles) {
-      [self clearPage];
+      for (FeedItemTileView *v in tiles)
+         [v removeFromSuperview];
+      [tiles removeAllObjects];
    } else
       tiles = [[NSMutableArray alloc] init];
 

@@ -43,6 +43,9 @@
 
    assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
    
+   if (!items.count)
+      return [self parserDidFailWithError : nil];
+   
    assert(self.feedCacheID.length && "allFeedDidLoadForAggregator:, feedCacheID is invalid");
    CernAPP::WriteFeedCache(self.feedCacheID, feedCache, items);
 
@@ -409,12 +412,12 @@
 {
    assert(articles != nil && "sortArticlesIntoIssues:, parameter 'articles' is nil");
 
-   if (dataItems)
-      [dataItems removeAllObjects];
-   else
-      dataItems = [[NSMutableArray alloc] init];
-
    if (articles.count) {
+      if (dataItems)
+         [dataItems removeAllObjects];
+      else
+         dataItems = [[NSMutableArray alloc] init];
+   
       NSMutableArray *weekData = [[NSMutableArray alloc] init];
       MWFeedItem * const firstArticle = [articles objectAtIndex : 0];
       [weekData addObject : firstArticle];

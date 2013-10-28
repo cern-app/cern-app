@@ -19,7 +19,6 @@
 + (NSRange) suggestRangeBackward : (NSArray *) items endingWith : (NSUInteger) index;
 
 - (NSUInteger) setPageItems : (NSArray *) items startingFrom : (NSUInteger) index;
-- (void) clearPage;
 
 @property (nonatomic, readonly) NSRange pageRange;
 

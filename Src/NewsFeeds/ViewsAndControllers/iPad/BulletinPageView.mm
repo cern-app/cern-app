@@ -70,8 +70,11 @@ const CGFloat tileShift = 0.2f;
    //Items in the 'items' array are arrays with MWFeedItems sorted by the date.
    if (!tiles)
       tiles = [[NSMutableArray alloc] init];
-   else
-      [self clearPage];
+   else {
+      for (BulletinIssueTileView *tile in tiles)
+         [tile removeFromSuperview];
+      [tiles removeAllObjects];
+   }
    
    //A primitive attempt to make a tile's layout more interesting.
    //[0] == wideImageOnTop, [1] == squareImageOnLeft
@@ -99,19 +102,6 @@ const CGFloat tileShift = 0.2f;
    }
 
    return pageRange.length;
-}
-
-//________________________________________________________________________________________
-- (void) clearPage
-{
-   if (tiles) {
-      for (BulletinIssueTileView *tile in tiles)
-         [tile removeFromSuperview];
-      [tiles removeAllObjects];
-   }
-   
-   pageRange.location = 0;
-   pageRange.length = 0;
 }
 
 //________________________________________________________________________________________
