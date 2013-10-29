@@ -265,7 +265,7 @@
    CernAPP::HideSpinner(self);
    [self hideNavBarSpinner];
 
-   if (self.navigationController.topViewController == self)//animation lock?
+   if (self.navigationController.topViewController == self && !flipAnimator.animationLock)
       CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
 
    if (!dataItems.count)
