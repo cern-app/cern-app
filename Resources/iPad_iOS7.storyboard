@@ -96,7 +96,7 @@
                     <navigationBar key="navigationBar" alpha="0.89999999999999991" contentMode="scaleToFill" id="PiZ-K9-22d">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.4392156862745098" green="0.59607843137254901" blue="0.80784313725490198" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -187,7 +187,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="DpK-ej-iXd">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.43921568630000002" green="0.59607843140000005" blue="0.80784313730000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -239,7 +239,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="9p3-r5-X7e">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.43921568630000002" green="0.59607843140000005" blue="0.80784313730000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -285,7 +285,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Hr-O5-ixb">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.43921568630000002" green="0.59607843140000005" blue="0.80784313730000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -353,7 +353,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.43921568630000002" green="0.59607843140000005" blue="0.80784313730000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -405,7 +405,7 @@
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="CmG-Do-qKy">
                             <rect key="frame" x="231" y="7" width="307" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" red="0.43921568630000002" green="0.59607843140000005" blue="0.80784313730000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                             <segments>
                                 <segment title="Live"/>
                                 <segment title="Upcoming"/>
@@ -438,7 +438,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.43921568630000002" green="0.59607843140000005" blue="0.80784313730000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -507,7 +507,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.43921568630000002" green="0.59607843140000005" blue="0.80784313730000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -685,7 +685,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.43921568630000002" green="0.59607843140000005" blue="0.80784313730000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -765,7 +765,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.43921568630000002" green="0.59607843140000005" blue="0.80784313730000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
@@ -866,7 +866,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.43921568630000002" green="0.59607843140000005" blue="0.80784313730000001" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
