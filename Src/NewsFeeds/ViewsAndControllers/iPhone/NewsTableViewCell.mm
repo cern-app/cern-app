@@ -21,7 +21,6 @@ const CGFloat dateLabelWidthRatio = 0.75;
 const CGFloat bulletinCellHeight = cellInset * 2 + defaultImageSize;
 const CGFloat bulletinTextHeight = 40.f;
 
-//TODO: check WHY do I have images of size 1x1 ????
 const CGFloat minImageSize = 10.f;//??
 
 //This is for "Author" and "Date" labels.

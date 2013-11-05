@@ -54,6 +54,17 @@ bool IsWideImage(UIImage *image)
    return imageSize.width / imageSize.height >= 2.f;
 }
 
+//________________________________________________________________________________________
+bool ImageSizeIsValid(UIImage *image)
+{
+   assert(image != nil && "ImageSizeIsValid, parameter 'image' is nil");
+   
+   const CGFloat minImageSize = 50.f;
+   const CGSize imageSize = image.size;
+   
+   return imageSize.width > minImageSize && imageSize.height > minImageSize;
+}
+
 }
 
 @implementation FeedItemTileView {
@@ -275,7 +286,11 @@ CGPathRef CreateTextPath(FeedItemTileView *view)
    [self setAttributedTextFromSummary];
    [self setStringAttributes];
    
-   thumbnailView.image = aFeedItem.image;
+   if (aFeedItem.image && ImageSizeIsValid(aFeedItem.image))
+      thumbnailView.image = aFeedItem.image;
+   else
+      thumbnailView.image = nil;
+
    imageCut = aFeedItem.imageCut;
    wideImageOnTop = aFeedItem.wideImageOnTop;
 }
@@ -355,10 +370,9 @@ CGPathRef CreateTextPath(FeedItemTileView *view)
 {
    assert(image != nil && "setTileThumbnail, parameter 'image' is nil");
    //CERN Courie's items have an image of size 1x1.
-   const CGFloat minImageSize = 50.f;//??
-   if (image.size.width < minImageSize || image.size.height < minImageSize)
+   if (!ImageSizeIsValid(image))
       return;
-
+   
    thumbnailView.image = image;
    if (layout)
       [self layoutTile];
