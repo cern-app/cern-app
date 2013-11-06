@@ -127,7 +127,7 @@
 {
    for (NSUInteger i = 0, e = dataItems.count; i < e; ++i) {
       NSMutableDictionary * const itemDict = (NSMutableDictionary *)dataItems[i];
-      UIImage * const newImage = [UIImage imageNamed : (NSString *)itemDict[@"Image"]];
+      UIImage * const newImage = [UIImage imageWithContentsOfFile : [[NSBundle mainBundle] pathForResource : (NSString *)itemDict[@"Image"] ofType : nil]];
       if (!newImage)
          continue;
 

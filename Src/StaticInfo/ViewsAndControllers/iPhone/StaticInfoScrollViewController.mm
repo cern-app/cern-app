@@ -119,8 +119,8 @@
 
    assert([imageDict[@"Image"] isKindOfClass : [NSString class]] &&
           "loadImageInBackgroundThread:, 'Image' not found or has a wrong type");
-   
-   UIImage * const newImage = [UIImage imageNamed : (NSString *)imageDict[@"Image"]];
+
+   UIImage * const newImage = [UIImage imageWithContentsOfFile : [[NSBundle mainBundle] pathForResource : (NSString *)imageDict[@"Image"] ofType : nil]];
    KeyVal * const retPair = [[KeyVal alloc] init];
    retPair.key = obj;
    retPair.val = newImage;
