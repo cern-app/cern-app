@@ -57,7 +57,7 @@
 					<key>Url</key>
 					<string>http://home.web.cern.ch/cern-people/updates/feed</string>
 					<key>Name</key>
-					<string>For staff</string>
+					<string>For CERN people</string>
 				</dict>
 				<dict>
 					<key>ItemID</key>
