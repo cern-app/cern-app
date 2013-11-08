@@ -17,7 +17,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>One of the magnetic coils for the first CERN accelerator - the synchro-cyclotron (or the "SC") - being transported through Switzerland. The coil weighted 60 tonnes and was 7.2m in diameter. The SC operated for 34 years, starting in 1957.</string>
+					<string>One of the magnetic coils for the first CERN accelerator - the synchro-cyclotron (or the &quot;SC&quot;) - being transported through Switzerland. The coil weighted 60 tonnes and was 7.2m in diameter. The SC operated for 34 years, starting in 1957.</string>
 					<key>Image</key>
 					<string>D2.png</string>
 					<key>Title</key>
@@ -25,7 +25,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>CERN's first computer, a huge vacuum-tube Ferranti Mercury, was a million times slower than today's big computers and took 3 months to install. It was replaced in 1960 by the transistor-powered IBM 709, seen here being unloaded in Geneva.</string>
+					<string>CERN&apos;s first computer, a huge vacuum-tube Ferranti Mercury, was a million times slower than today&apos;s big computers and took 3 months to install. It was replaced in 1960 by the transistor-powered IBM 709, seen here being unloaded in Geneva.</string>
 					<key>Image</key>
 					<string>D3.png</string>
 					<key>Title</key>
@@ -49,7 +49,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>In July 1973 a groundbreaking discovery was announced at CERN: pictures (such as the one above) observed in the Gargamelle bubble chamber proved that the electromagnetic and weak forces were both facets of a single 'electroweak' force.</string>
+					<string>In July 1973 a groundbreaking discovery was announced at CERN: pictures (such as the one above) observed in the Gargamelle bubble chamber proved that the electromagnetic and weak forces were both facets of a single &apos;electroweak&apos; force.</string>
 					<key>Image</key>
 					<string>D6.png</string>
 					<key>Title</key>
@@ -81,7 +81,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>Aerial view of the CERN region showing the path of the 27 kilometre tunnel that housed the largest scientific instrument ever made - the Large Electron-Positron collider (LEP). The same tunnel will be used for the Large Hadron Collider (LHC).</string>
+					<string>Aerial view of the CERN region showing the path of the 27 kilometre tunnel that housed the largest scientific instrument ever made - the Large Electron-Positron collider (LEP). The same tunnel is being used for the Large Hadron Collider (LHC).</string>
 					<key>Image</key>
 					<string>D10.png</string>
 					<key>Title</key>
@@ -105,7 +105,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>In the fractions of a second after the Big Bang, quarks and gluons (the consituents of protons and neutrons) were free to move around in a 'primordial soup'. This state of matter, known as the 'quark-gluon plasma' was recreated at CERN in 2000.</string>
+					<string>In the fractions of a second after the Big Bang, quarks and gluons (the consituents of protons and neutrons) were free to move around in a &apos;primordial soup&apos;. This state of matter, known as the &apos;quark-gluon plasma&apos; was recreated at CERN in 2000.</string>
 					<key>Image</key>
 					<string>DK.png</string>
 					<key>Title</key>
@@ -120,7 +120,7 @@
 			<array>
 				<dict>
 					<key>Description</key>
-					<string>t=0 seconds: temperature=infinite! Universe expands from a single point. t~10^-43 seconds: temperature=10^32K. Gravity "freezes out". Other 3 forces are indistinguishable.</string>
+					<string>t=0 seconds: temperature=infinite! Universe expands from a single point. t~10^-43 seconds: temperature=10^32K. Gravity &quot;freezes out&quot;. Other 3 forces are indistinguishable.</string>
 					<key>Image</key>
 					<string>C2.png</string>
 					<key>Title</key>
@@ -128,7 +128,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>t~10^-35 seconds: temperature=10^27K. Inflation period; exponential expansion of the universe for a short period. t~10^-32 seconds: strong nuclear force "freezes out".</string>
+					<string>t~10^-35 seconds: temperature=10^27K. Inflation period; exponential expansion of the universe for a short period. t~10^-32 seconds: strong nuclear force &quot;freezes out&quot;.</string>
 					<key>Image</key>
 					<string>C3.png</string>
 					<key>Title</key>
@@ -136,7 +136,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>t~10^-10 seconds: temperature=10^15K. Weak nuclear force "freezes out". All 4 forces are now distinct. Antiquarks and quarks annihilate, leaving an excess of matter. W and Z bosons decay.</string>
+					<string>t~10^-10 seconds: temperature=10^15K. Weak nuclear force &quot;freezes out&quot;. All 4 forces are now distinct. Antiquarks and quarks annihilate, leaving an excess of matter. W and Z bosons decay.</string>
 					<key>Image</key>
 					<string>C4.png</string>
 					<key>Title</key>
@@ -176,7 +176,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>Quarks always combine to form "hadrons" with integer electric charge, e.g. protons and neutrons. Leptons differ from quarks in that they can be found in isolation and don't feel the effects of the strong nuclear force.</string>
+					<string>Quarks always combine to form &quot;hadrons&quot; with integer electric charge, e.g. protons and neutrons. Leptons differ from quarks in that they can be found in isolation and don&apos;t feel the effects of the strong nuclear force.</string>
 					<key>Image</key>
 					<string>C10.png</string>
 					<key>Title</key>
@@ -184,7 +184,7 @@
 				</dict>
 				<dict>
 					<key>Description</key>
-					<string>Four forces are responsible for all of the interactions between particles. Each force has an associated "carrier" (in red) that transmits the force between one particle and another. Relative strenghts of the forces are also noted.</string>
+					<string>Four forces are responsible for all of the interactions between particles. Each force has an associated &quot;carrier&quot; (in red) that transmits the force between one particle and another. Relative strenghts of the forces are also noted.</string>
 					<key>Image</key>
 					<string>CJ.png</string>
 					<key>Title</key>
@@ -226,7 +226,7 @@
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>The LHC will accelerate protons (and heavy ions) to unprecedented energies, in order to answer some of the open questions in particle physics. Five de- tectors (ALICE, CMS+TOTEM, ATLAS, LHCb) will be placed around the 27km ring, about 100m underground.</string>
+							<string>The LHC accelerates protons (and heavy ions) to unprecedented energies, in order to answer some of the open questions in particle physics. Five detectors (ALICE, CMS+TOTEM, ATLAS, LHCb) are placed around the 27km ring, about 100m underground.</string>
 							<key>Image</key>
 							<string>HJ.png</string>
 							<key>Title</key>
@@ -234,7 +234,7 @@
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>1232 15m-long dipole magnets will be used to steer protons on their course around the LHC. The superconducting niobium-titanium/copper cables will be cooled by liquid helium to about -271°C – colder than outer space!</string>
+							<string>1232 15m-long dipole magnets are being used to steer protons on their course around the LHC. The superconducting niobium-titanium/copper cables are cooled by liquid helium to about -271°C – colder than outer space!</string>
 							<key>Image</key>
 							<string>HK.png</string>
 							<key>Title</key>
@@ -242,7 +242,7 @@
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>High temperature superconducting ma- terial (left of photo) is used to transmit 13000 amps to the low temperature superconductor of the LHC dipoles and quadrupoles. These "current leads" are immersed in liquid helium.</string>
+							<string>High temperature superconducting ma- terial (left of photo) is used to transmit 13000 amps to the low temperature superconductor of the LHC dipoles and quadrupoles. These &quot;current leads&quot; are immersed in liquid helium.</string>
 							<key>Image</key>
 							<string>HQ.png</string>
 							<key>Title</key>
@@ -258,7 +258,7 @@
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>Controlling the world's largest scientific instrument is a complex task. 27km of magnets, accelerating cavities and crogenic installations will need to be monitored 24 hours a day, 7 days a week!</string>
+							<string>Controlling the world&apos;s largest scientific instrument is a complex task. 27km of magnets, accelerating cavities and crogenic installations will need to be monitored 24 hours a day, 7 days a week!</string>
 							<key>Image</key>
 							<string>SK.png</string>
 							<key>Title</key>
@@ -266,7 +266,7 @@
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>These devices produce radio-frequency waves that the protons "ride", like a surfer riding a wave on the sea. After traversing these cavities many times, the protons approach the speed of light.</string>
+							<string>These devices produce radio-frequency waves that the protons &quot;ride&quot;, like a surfer riding a wave on the sea. After traversing these cavities many times, the protons approach the speed of light.</string>
 							<key>Image</key>
 							<string>SQ.png</string>
 							<key>Title</key>
@@ -283,7 +283,7 @@
 					<array>
 						<dict>
 							<key>Description</key>
-							<string>One of the magnetic coils for the first CERN accelerator - the synchro-cyclotron (or "SC") - being transported through Switzerland. The coil weighed 60 tonnes and was 7.2m in diameter. The SC operated for 34 years, starting in 1957.</string>
+							<string>One of the magnetic coils for the first CERN accelerator - the synchro-cyclotron (or &quot;SC&quot;) - being transported through Switzerland. The coil weighed 60 tonnes and was 7.2m in diameter. The SC operated for 34 years, starting in 1957.</string>
 							<key>Image</key>
 							<string>D2.png</string>
 							<key>Title</key>
@@ -323,7 +323,7 @@
 					<array>
 						<dict>
 							<key>Description</key>
-							<string>The ATLAS detector will search for new discoveries in the head-on collisions of protons accelerated in the LHC. ATLAS will be about 42m long, 22m in diameter and will weigh 7000 tonnes, making it the largest colliding-beam detector ever constructed.</string>
+							<string>The ATLAS detector searches for new discoveries in the head-on collisions of protons accelerated in the LHC. ATLAS is about 42m long, 22m in diameter and weighs 7000 tonnes, making it the largest colliding-beam detector ever constructed.</string>
 							<key>Image</key>
 							<string>SA.png</string>
 							<key>Title</key>
@@ -332,7 +332,7 @@
 						<dict>
 							<key>Description</key>
 							<string>The ATLAS cavern in early 2004
-In the centre, the support "feet" have been assembled. On the floor to the right are some modules of the tile calorimeter.</string>
+In the centre, the support &quot;feet&quot; have been assembled. On the floor to the right are some modules of the tile calorimeter.</string>
 							<key>Image</key>
 							<string>S2.png</string>
 							<key>Title</key>
@@ -340,7 +340,7 @@ In the centre, the support "feet" have been assembled. On the floor to the right
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>One of the two endcap toroid magnet vacuum vessels. These 11m diameter devices will supply a magnetic field of 4.7 Tesla - more than 100000 times stronger than that of the earth.</string>
+							<string>One of the two endcap toroid magnet vacuum vessels. These 11m diameter devices supply a magnetic field of 4.7 Tesla - more than 100000 times stronger than that of the earth.</string>
 							<key>Image</key>
 							<string>S3.png</string>
 							<key>Title</key>
@@ -373,7 +373,7 @@ In the centre, the support "feet" have been assembled. On the floor to the right
 					<array>
 						<dict>
 							<key>Description</key>
-							<string>A "general purpose" detector designed to be sensitive to any new physics created in proton collisions in the LHC. CMS is based around the world's largest superconducting solenoid. More than 2800 physicists from 38 countries collaborate on this project.</string>
+							<string>A &quot;general purpose&quot; detector designed to be sensitive to any new physics created in proton collisions in the LHC. CMS is based around the world&apos;s largest superconducting solenoid. More than 2800 physicists from 38 countries collaborate on this project.</string>
 							<key>Image</key>
 							<string>S6.png</string>
 							<key>Title</key>
@@ -381,7 +381,7 @@ In the centre, the support "feet" have been assembled. On the floor to the right
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>The CMS hadron calorimeter (HCAL -the gold-coloured device) will be inserted into the red magnet yoke ring. The HCAL will measure the energies of particles such as protons and pions.</string>
+							<string>The CMS hadron calorimeter (HCAL, the gold-coloured device) will be inserted into the red magnet yoke ring. The HCAL measures the energies of particles such as protons and pions.</string>
 							<key>Image</key>
 							<string>S7.png</string>
 							<key>Title</key>
@@ -389,7 +389,7 @@ In the centre, the support "feet" have been assembled. On the floor to the right
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>About 80000 crystals of lead tungstate (PbWO4) will form the CMS ECAL (electromagnetic calorimeter), to measure the energies of electrons and photons with unprecidented precision.</string>
+							<string>About 80000 crystals of lead tungstate (PbWO4) form the CMS ECAL (electromagnetic calorimeter), to measure the energies of electrons and photons with unprecidented precision.</string>
 							<key>Image</key>
 							<string>S8.png</string>
 							<key>Title</key>
@@ -397,7 +397,7 @@ In the centre, the support "feet" have been assembled. On the floor to the right
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>Thin wafers of silicon, divided into strips or pixels finer than a human hair, will be used to measure the tracks of charged particles through CMS and identify positions of particle decays.</string>
+							<string>Thin wafers of silicon, divided into strips or pixels finer than a human hair, are being used to measure the tracks of charged particles through CMS and identify positions of particle decays.</string>
 							<key>Image</key>
 							<string>S9.png</string>
 							<key>Title</key>
@@ -422,7 +422,7 @@ In the centre, the support "feet" have been assembled. On the floor to the right
 					<array>
 						<dict>
 							<key>Description</key>
-							<string>In addition to proton collisions, the LHC will also collide beams of heavy ions, in order to study the quark-gluon plasma. ALICE is dedicated to the study of this phase of matter that existed naturally for just a fraction of a second after the Big Bang.</string>
+							<string>In addition to proton collisions, the LHC can also collide beams of heavy ions, in order to study the quark-gluon plasma. ALICE is dedicated to the study of this phase of matter that existed naturally for just a fraction of a second after the Big Bang.</string>
 							<key>Image</key>
 							<string>HA.png</string>
 							<key>Title</key>
@@ -446,7 +446,7 @@ In the centre, the support "feet" have been assembled. On the floor to the right
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>The extremely high volumes of data coming from the detectors of the LHC (equivalent to the data throughput of the world's telecom networks!) nece- ssitate high bandwidth communication networks, based on optical fibres.</string>
+							<string>The extremely high volumes of data coming from the detectors of the LHC (equivalent to the data throughput of the world&apos;s telecom networks!) necessitate high bandwidth communication networks, based on optical fibres.</string>
 							<key>Image</key>
 							<string>H4.png</string>
 							<key>Title</key>
@@ -487,7 +487,7 @@ In the centre, the support "feet" have been assembled. On the floor to the right
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>The LHCb Hadron Calorimeter meas- ures the energies of particles contain- ing quarks. It comprises 500 tonnes of iron interleaved with transparent plastic plates. 80km of fibres transport light generated in these plates to sensors.</string>
+							<string>The LHCb Hadron Calorimeter measures the energies of particles containing quarks. It comprises 500 tonnes of iron interleaved with transparent plastic plates. 80km of fibres transport light generated in these plates to sensors.</string>
 							<key>Image</key>
 							<string>H8.png</string>
 							<key>Title</key>
@@ -495,7 +495,7 @@ In the centre, the support "feet" have been assembled. On the floor to the right
 						</dict>
 						<dict>
 							<key>Description</key>
-							<string>Antimatter is the "mirror image" of matter. However, the mirror image is not always perfect. In about one case out of a thousand, antimatter behaves a little differently. Understanding this behaviour may help us understand why there is no antimatter in our universe.</string>
+							<string>Antimatter is the &quot;mirror image&quot; of matter. However, the mirror image is not always perfect. In about one case out of a thousand, antimatter behaves a little differently. Understanding this behaviour may help us understand why there is no antimatter in our universe.</string>
 							<key>Image</key>
 							<string>H9.png</string>
 							<key>Title</key>
