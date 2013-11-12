@@ -1179,8 +1179,9 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    
-   if (NSDictionary * const apn = appDelegate.APNdictionary) {
-      NSString * message = nil;
+//   if (NSDictionary * const apn = appDelegate.APNdictionary) {
+   if (appDelegate.APNdictionary) {
+   /*   NSString * message = nil;
 
       if (NSString * const updated = (NSString *)apn[@"updated"]) {
          NSArray * const updatedFeeds = [updated componentsSeparatedByString : @"|"];
@@ -1238,7 +1239,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       //Do whatever you want, but it works like a crap in any way,
       //so we just have to "think different" and embrace it.
       //Thanks to Apple again for this, sometimes notifications are not
-      //deleted even if you set a badge to 0.
+      //deleted even if you set a badge to 0.*/
       [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
    }
 }
