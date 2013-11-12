@@ -846,13 +846,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XAD-a8-WSQ">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XAD-a8-WSQ">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="XAD-a8-WSQ" secondAttribute="trailing" id="7Le-b6-zK3"/>
+                            <constraint firstItem="XAD-a8-WSQ" firstAttribute="top" secondItem="gAg-06-1IC" secondAttribute="top" id="S8K-zM-x5s"/>
+                            <constraint firstItem="XAD-a8-WSQ" firstAttribute="leading" secondItem="gAg-06-1IC" secondAttribute="leading" id="TQS-3T-Xrm"/>
+                            <constraint firstAttribute="bottom" secondItem="XAD-a8-WSQ" secondAttribute="bottom" id="mST-Lt-Z1Y"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="LWf-gY-NYW">
                         <barButtonItem key="leftBarButtonItem" image="menu.png" id="gkl-aw-MUy">

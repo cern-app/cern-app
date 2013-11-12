@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12E55" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nQl-Hn-nT2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A598" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nQl-Hn-nT2">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <scenes>
         <!--Menu View Controller-->
@@ -801,6 +801,81 @@
             </objects>
             <point key="canvasLocation" x="2907" y="10053"/>
         </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="nVF-po-rJC">
+            <objects>
+                <navigationController storyboardIdentifier="ArticleDetailStandaloneControllerID" automaticallyAdjustsScrollViewInsets="NO" definesPresentationContext="YES" id="ea4-3g-RnF" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="UUA-tp-MZE">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="OQn-HG-A9m" kind="relationship" relationship="rootViewController" id="aTx-ZQ-HyF"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tKd-IP-RKz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2067" y="11465"/>
+        </scene>
+        <!--Article Detail View Controller-->
+        <scene sceneID="dVx-UL-5h3">
+            <objects>
+                <viewController id="OQn-HG-A9m" customClass="ArticleDetailViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="oo5-ak-MDK"/>
+                        <viewControllerLayoutGuide type="bottom" id="Odw-dc-8Kk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="j0c-eS-1qI">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sDo-6o-LRW">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="sDo-6o-LRW" secondAttribute="bottom" id="16j-Xs-k3P"/>
+                            <constraint firstItem="sDo-6o-LRW" firstAttribute="top" secondItem="j0c-eS-1qI" secondAttribute="top" id="2xU-Hq-E8N"/>
+                            <constraint firstAttribute="trailing" secondItem="sDo-6o-LRW" secondAttribute="trailing" id="ICj-ma-wwQ"/>
+                            <constraint firstItem="sDo-6o-LRW" firstAttribute="leading" secondItem="j0c-eS-1qI" secondAttribute="leading" id="w0F-3b-KUo"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="BZn-5C-UgZ">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="P5y-h4-hBP">
+                            <connections>
+                                <action selector="revealMenu:" destination="OQn-HG-A9m" id="KaA-Ga-4oO"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="containerView" destination="sDo-6o-LRW" id="b53-c3-SNE"/>
+                        <outlet property="pageView" destination="v7x-30-xwy" id="0Hv-2Z-Bcu"/>
+                        <outlet property="rdbView" destination="R3a-hC-vaf" id="WuR-YZ-Ur3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OyB-mW-rm8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <webView contentMode="scaleToFill" scalesPageToFit="YES" id="v7x-30-xwy" customClass="SlideWebView">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="delegate" destination="OQn-HG-A9m" id="BAI-1E-mbB"/>
+                    </connections>
+                </webView>
+                <webView contentMode="scaleToFill" scalesPageToFit="YES" id="R3a-hC-vaf" customClass="SlideWebView">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="delegate" destination="OQn-HG-A9m" id="c6C-7b-DhG"/>
+                    </connections>
+                </webView>
+            </objects>
+            <point key="canvasLocation" x="3003" y="11465"/>
+        </scene>
         <!--Credits View Controller-->
         <scene sceneID="Z4D-5i-5Pa">
             <objects>
@@ -854,13 +929,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
-        <image name="menu.png" width="20" height="20"/>
         <image name="menu.png" width="20" height="20"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
