@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="H2v-Ob-DhD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A598" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="H2v-Ob-DhD">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
     </dependencies>
     <scenes>
         <!--Menu View Controller-->
@@ -581,7 +581,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TweetCell" id="7iQ-PI-Df5" customClass="TweetCell">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7iQ-PI-Df5" id="BCM-0X-03T">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -606,6 +606,71 @@
             </objects>
             <point key="canvasLocation" x="-510" y="4946"/>
         </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="Z18-hi-ThG">
+            <objects>
+                <navigationController storyboardIdentifier="ArticleDetailStandaloneControllerID" definesPresentationContext="YES" id="A0f-Oc-E1g" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="gUf-Ta-GxY">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="upX-FA-gUN" kind="relationship" relationship="rootViewController" id="Uk8-0I-Udh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Oy9-nK-A7w" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-973" y="5560"/>
+        </scene>
+        <!--Article Detail View Controller-->
+        <scene sceneID="mBw-uf-mD9">
+            <objects>
+                <viewController id="upX-FA-gUN" customClass="ArticleDetailViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Pd6-1Q-Thv">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="2qB-vP-VCh">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Qud-Cg-srX">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="5bJ-g0-SeK">
+                            <connections>
+                                <action selector="revealMenu:" destination="upX-FA-gUN" id="2Yd-tH-0FF"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="containerView" destination="2qB-vP-VCh" id="aQC-f6-ZXX"/>
+                        <outlet property="pageView" destination="rUS-Yi-zUQ" id="T7A-Nr-Nb9"/>
+                        <outlet property="rdbView" destination="7K8-Ao-Pty" id="XI4-gR-99I"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kCJ-lR-56d" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <webView contentMode="scaleToFill" scalesPageToFit="YES" id="rUS-Yi-zUQ" customClass="SlideWebView">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="delegate" destination="upX-FA-gUN" id="VMw-nf-ZKC"/>
+                    </connections>
+                </webView>
+                <webView contentMode="scaleToFill" scalesPageToFit="YES" id="7K8-Ao-Pty" customClass="SlideWebView">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="delegate" destination="upX-FA-gUN" id="Pjm-pE-5Gi"/>
+                    </connections>
+                </webView>
+            </objects>
+            <point key="canvasLocation" x="-525" y="5562"/>
+        </scene>
         <!--Videos Grid View Controller-->
         <scene sceneID="c6R-3r-itA">
             <objects>
@@ -628,7 +693,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" id="Ixj-cr-Bwu">
-                                            <rect key="frame" x="5" y="6" width="182" height="116.99999999999999"/>
+                                            <rect key="frame" x="5" y="6" width="182" height="117"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         </imageView>
                                     </subviews>
@@ -702,7 +767,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoThumbnailCell" id="njD-hx-LBh" customClass="VideoThumbnailCell">
-                                <rect key="frame" x="33" y="0.0" width="254" height="239"/>
+                                <rect key="frame" x="33" y="64" width="254" height="239"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="254" height="239"/>
@@ -724,7 +789,7 @@
                             </connections>
                         </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="iA3-CK-wrS">
-                            <rect key="frame" x="53" y="7" width="220" height="30"/>
+                            <rect key="frame" x="53" y="7" width="216" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="Live"/>
