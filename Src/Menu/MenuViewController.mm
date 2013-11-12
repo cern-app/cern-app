@@ -1229,7 +1229,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       }//Else: as we are not able to identify, which menu
        //item was updated, forget about the notification at all.
 
-      appDelegate.APNdictionary = nil;
+
       
       //Now, many thanks to Apple for this SHI...T:
       //1. If I do not touch this thing, the notification will stay in the notification center's panel +
@@ -1240,6 +1240,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       //so we just have to "think different" and embrace it.
       //Thanks to Apple again for this, sometimes notifications are not
       //deleted even if you set a badge to 0.*/
+      appDelegate.APNdictionary = nil;      
       [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
    }
 }
