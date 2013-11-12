@@ -118,6 +118,7 @@ enum class LoadStage : unsigned char {
    inactive,
    lostNetworkConnection,
    auth,
+   linkRequest,
    rdbRequest,
    rdbCacheLoad,
    originalPageLoad
@@ -145,6 +146,7 @@ const NSUInteger fontIncreaseStep = 4;
 
 @implementation ArticleDetailViewController {
    NSString *articleLink;
+   NSString *sha1Link;
    
    UIActivityIndicatorView *spinner;
    
@@ -279,7 +281,7 @@ const NSUInteger fontIncreaseStep = 4;
 }
 
 //________________________________________________________________________________________
-- (void) viewWillAppear:(BOOL)animated
+- (void) viewWillAppear : (BOOL)animated
 {
    [super viewWillAppear : animated];
    
@@ -295,7 +297,6 @@ const NSUInteger fontIncreaseStep = 4;
 - (void) viewDidAppear : (BOOL) animated
 {
    //Called only once (?)
-   
    [super viewDidAppear : animated];
    
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
@@ -337,12 +338,15 @@ const NSUInteger fontIncreaseStep = 4;
       [self.view addSubview : spinner];
    }
    
-   if (canUseReadability && articleID && [ArticleDetailViewController articleCached : articleID])
+   if (canUseReadability && articleID && [ArticleDetailViewController articleCached : articleID] && !sha1Link)
       [self getReadabilityCache];
 
    [self startSpinner];
 
-   if (rdbCache && rdbCache.length) {
+   if (sha1Link) {
+      [self switchToRdbView];
+      [self loadArticleLink];
+   } else if (rdbCache && rdbCache.length) {
       [self switchToRdbView];
       [self loadReadabilityCache];
    } else {
@@ -404,6 +408,16 @@ const NSUInteger fontIncreaseStep = 4;
    
    articleLink = link;
    title = aTitle;
+}
+
+//________________________________________________________________________________________
+- (void) setSha1Link : (NSString *) link
+{
+   assert(link != nil && "setSha1Link:, parameter 'link' is nil");
+   
+   sha1Link = link;
+   articleID = link;
+   title = @"";
 }
 
 #pragma mark - UIWebViewDelegate protocol.
@@ -477,6 +491,29 @@ const NSUInteger fontIncreaseStep = 4;
    //try to either auth and parse, or pars (if auth was done already).
 
    [self readabilityParseHtml];
+}
+
+//________________________________________________________________________________________
+- (void) loadArticleLink
+{
+   assert(currentConnection == nil && "loadArticleLink, has an active connection");
+
+   using CernAPP::NetworkStatus;
+   
+   if (internetReach && [internetReach currentReachabilityStatus] != NetworkStatus::notReachable) {
+      assert(sha1Link != nil && "loadArticleLink, sha1Link is invalid");
+    
+      NSString * const urlString =[NSString stringWithFormat : @"http://cernapp.cern.ch/%@.lnk", sha1Link];
+      if (NSURL * const url = [NSURL URLWithString : urlString]) {
+         if (NSURLRequest * const urlRequest = [NSURLRequest requestWithURL : url]) {
+            stage = LoadStage::linkRequest;
+            currentConnection = [NSURLConnection connectionWithRequest : urlRequest delegate : self];
+            return;
+         }
+      }
+   }
+
+   [self stopOnLinkLoadError];
 }
 
 //________________________________________________________________________________________
@@ -585,7 +622,7 @@ const NSUInteger fontIncreaseStep = 4;
 {
 #pragma unused(connection)
 
-   assert((stage == LoadStage::auth || stage == LoadStage::rdbRequest) &&
+   assert((stage == LoadStage::auth || stage == LoadStage::rdbRequest || stage == LoadStage::linkRequest) &&
           "connection:didReceiveResponse:, wrong stage");
    assert(response != nil && "connection:didReceiveResponse:, parameter 'response' is nil");
 
@@ -602,7 +639,9 @@ const NSUInteger fontIncreaseStep = 4;
       [currentConnection cancel];
       currentConnection = nil;
       
-      if (stage == LoadStage::auth) {
+      if (stage == LoadStage::linkRequest) {
+         [self stopOnLinkLoadError];
+      } else if (stage == LoadStage::auth) {
          //Load original page, we can not try authorization again
          //(it can fail again and again).
          [self switchToPageView];
@@ -626,7 +665,7 @@ const NSUInteger fontIncreaseStep = 4;
 - (void) connection : (NSURLConnection *) connection didReceiveData : (NSData *) data
 {
 #pragma unused(connection)
-   assert(stage == LoadStage::auth || stage == LoadStage::rdbRequest &&
+   assert((stage == LoadStage::auth || stage == LoadStage::rdbRequest || stage == LoadStage::linkRequest) &&
           "connection:didReceiveData:, wrong stage");
    assert(responseData != nil && "connection:didReceiveData:, 'responseData' is nil");
    
@@ -636,14 +675,22 @@ const NSUInteger fontIncreaseStep = 4;
 //________________________________________________________________________________________
 - (void) connectionDidFinishLoading : (NSURLConnection *) connection
 {
-   assert(stage == LoadStage::auth || stage == LoadStage::rdbRequest &&
+   assert((stage == LoadStage::auth || stage == LoadStage::rdbRequest || stage == LoadStage::linkRequest) &&
           "connectionDidFinishLoading:, wrong stage");
 
    using CernAPP::NetworkStatus;
 
    currentConnection = nil;
 
-   if (stage == LoadStage::auth) {
+   if (stage == LoadStage::linkRequest) {
+      if (responseData.length) {
+         sha1Link = nil;
+         articleLink = [[NSString alloc] initWithData : responseData encoding : NSUTF8StringEncoding];
+         [self loadHtmlFromReadability];
+      } else {
+         [self stopOnLinkLoadError];
+      }
+   } else if (stage == LoadStage::auth) {
       //Ok, we, probably, received tokens, try to extract them.
       if ([self extractAuthTokens])
          [self readabilityParseHtml];
@@ -670,11 +717,15 @@ const NSUInteger fontIncreaseStep = 4;
    
    currentConnection = nil;
 
-   //Something is wrong with readability, either auth. failed
-   //or readability parse stage, do not try anything else,
-   //load the original page.
-   [self switchToPageView];
-   [self loadOriginalPage];
+   if (sha1Link) {
+      [self stopOnLinkLoadError];
+   } else {
+      //Something is wrong with readability, either auth. failed
+      //or readability parse stage, do not try anything else,
+      //load the original page.
+      [self switchToPageView];
+      [self loadOriginalPage];
+   }
 }
 
 #pragma mark - "Browser"
@@ -848,6 +899,9 @@ const NSUInteger fontIncreaseStep = 4;
    [self startSpinner];
    //Remove error HUD.
 
+   if (sha1Link)
+      return [self loadArticleLink];
+
    if (rdbView.superview)
       [self loadHtmlFromReadability];
    else
@@ -938,6 +992,16 @@ const NSUInteger fontIncreaseStep = 4;
 
 
 #pragma mark - GUI.
+
+//________________________________________________________________________________________
+- (void) stopOnLinkLoadError
+{
+   [self stopSpinner];
+   stage = LoadStage::lostNetworkConnection;
+   [self showErrorHUD];
+   [self addWebBrowserButtons];
+}
+
 
 //________________________________________________________________________________________
 - (void) startSpinner
@@ -1469,6 +1533,15 @@ const NSUInteger fontIncreaseStep = 4;
 - (UIView *) viewForZoomingInScrollView : (UIScrollView *) scrollView
 {
    return nil;
+}
+
+#pragma mark - ECSlidingViewController.
+
+//________________________________________________________________________________________
+- (IBAction) revealMenu : (id) sender
+{
+#pragma unused(sender)
+   [self.slidingViewController anchorTopViewTo : ECRight];
 }
 
 @end

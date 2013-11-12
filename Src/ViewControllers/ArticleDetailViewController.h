@@ -31,5 +31,6 @@
 - (void) setContentForArticle : (MWFeedItem *) article;
 //Setup view controller from the cached feed.
 - (void) setLink : (NSString *) link title : (NSString *) title;
+- (void) setSha1Link : (NSString *) link;
 
 @end

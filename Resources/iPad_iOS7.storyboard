@@ -813,6 +813,80 @@
             </objects>
             <point key="canvasLocation" x="2907" y="10053"/>
         </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="N2R-Uu-Mrk">
+            <objects>
+                <navigationController storyboardIdentifier="ArticleDetailStandaloneControllerID" automaticallyAdjustsScrollViewInsets="NO" definesPresentationContext="YES" id="UWe-hv-93s" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xRO-6H-MEx">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.14117647059999999" green="0.44705882349999998" blue="0.72941176470000002" alpha="0.65000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="0Ap-sm-K06" kind="relationship" relationship="rootViewController" id="weP-SM-Rcu"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QJw-0V-vGx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2068" y="11337"/>
+        </scene>
+        <!--Article Detail View Controller-->
+        <scene sceneID="dgw-va-VQC">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="0Ap-sm-K06" customClass="ArticleDetailViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="HSu-Bs-VDD"/>
+                        <viewControllerLayoutGuide type="bottom" id="K7R-zc-mPE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gAg-06-1IC">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XAD-a8-WSQ">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="LWf-gY-NYW">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="gkl-aw-MUy">
+                            <connections>
+                                <action selector="revealMenu:" destination="0Ap-sm-K06" id="JL8-wf-KUa"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="containerView" destination="XAD-a8-WSQ" id="jPE-S9-B5m"/>
+                        <outlet property="pageView" destination="VNM-s2-dWA" id="T1y-WV-Lwf"/>
+                        <outlet property="rdbView" destination="uJU-Vq-LzV" id="XzU-J0-G1r"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bpP-cA-5TR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <webView contentMode="scaleToFill" id="VNM-s2-dWA" customClass="SlideWebView">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="delegate" destination="0Ap-sm-K06" id="tlO-Z8-rQZ"/>
+                    </connections>
+                </webView>
+                <webView contentMode="scaleToFill" id="uJU-Vq-LzV" customClass="SlideWebView">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="delegate" destination="0Ap-sm-K06" id="yWM-ZL-2x5"/>
+                    </connections>
+                </webView>
+            </objects>
+            <point key="canvasLocation" x="2947" y="11334"/>
+        </scene>
         <!--Credits View Controller - Credits-->
         <scene sceneID="Z4D-5i-5Pa">
             <objects>

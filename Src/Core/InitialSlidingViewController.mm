@@ -13,6 +13,7 @@
 #import <cassert>
 
 #import "InitialSlidingViewController.h"
+#import "ArticleDetailViewController.h"
 #import "MenuNavigationController.h"
 #import "NewsTableViewController.h"
 #import "NewsFeedViewController.h"
@@ -120,8 +121,10 @@
 }
 
 //________________________________________________________________________________________
-- (void) initSlidingViewController : (NSString *) feedToSkip
+- (void) initAPNViewController : (NSString *) sha1Link
 {
+   assert(sha1Link != nil && sha1Link.length == 40 && "initAPNViewController:, parameter 'sha1Link' is invalid");
+
    UIStoryboard *storyboard = nil;
    
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -135,7 +138,57 @@
       self.anchorLeftRevealAmount = CernAPP::menuWidthPad;
    }
 
-   assert(storyboard != nil && "viewDidLoad, storyboard is nil");
+   assert(storyboard != nil && "iniAPNViewController:, storyboard is nil");
+
+   MenuNavigationController * const top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
+                                                                       CernAPP::ArticleDetailStandaloneControllerID];
+   assert([top.topViewController isKindOfClass : [ArticleDetailViewController class]] &&
+          "viewDidLoad:, top view controller is either nil or has a wrong type");
+   [(ArticleDetailViewController *)top.topViewController setSha1Link : sha1Link];
+   self.topViewController = top;
+}
+
+//________________________________________________________________________________________
+- (void) initSlidingViewController : (NSString *) feedToSkip
+{
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "initSlidingViewController:, application delegate has a wrong type");
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   
+   //Test:
+   appDelegate.APNdictionary = @{@"sha1" : @"9d4b5bfd6179c328e93dafd8e963e85f9951262d"};
+   
+   //Special case: we were started from a notification center (or just from a notification).
+   if (!feedToSkip && appDelegate.APNdictionary) {//UGLY, but feedToSkip means we're reloading after a memory warning, forget about any notifications!
+      NSString * const sha1Hash = (NSString *)appDelegate.APNdictionary[@"sha1"];
+      if (sha1Hash && sha1Hash.length == 40) {
+         [self initAPNViewController : sha1Hash];
+         appDelegate.APNdictionary = nil;
+         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+         return;
+      }
+   }
+   
+   if (appDelegate.APNdictionary) {
+      //Ignore.
+      appDelegate.APNdictionary = nil;
+      [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+   }
+
+   UIStoryboard *storyboard = nil;
+   
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+      NSString * const fileName = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPhone_iOS7" : @"iPhone";
+      storyboard = [UIStoryboard storyboardWithName : fileName bundle : nil];
+   } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      NSString * const fileName = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPad_iOS7" : @"iPad";
+      storyboard = [UIStoryboard storyboardWithName : fileName bundle : nil];
+      //For iPad, limit the visible width of under left view.
+      self.shouldAllowPanningPastAnchor = NO;
+      self.anchorLeftRevealAmount = CernAPP::menuWidthPad;
+   }
+
+   assert(storyboard != nil && "initSlidingViewController:, storyboard is nil");
 
    MenuNavigationController * top = nil;
 
@@ -143,14 +196,14 @@
       top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
                                                     CernAPP::TableNavigationControllerNewsID];
       assert([top.topViewController isKindOfClass : [NewsTableViewController class]] &&
-             "viewDidLoad:, top view controller is either nil or has a wrong type");
+             "initSlidingViewController:, top view controller is either nil or has a wrong type");
       //The very first view a user see - is a news table. We create a navigation controller
       //with such a table here, also, we have to add a news feed here.
    } else {
       top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
                                                     CernAPP::FeedTileViewControllerID];
       assert([top.topViewController isKindOfClass : [NewsFeedViewController class]] &&
-             "viewDidLoad:, top view controller is either nil or has a wrong type");
+             "initSlidingViewController:, top view controller is either nil or has a wrong type");
    }
 
    [self loadFirstNewsFeed : top.topViewController skip : feedToSkip];
