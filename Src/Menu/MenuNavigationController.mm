@@ -6,6 +6,7 @@
 #import "NewsTableViewController.h"
 #import "ECSlidingViewController.h"
 #import "MenuViewController.h"
+#import "TileViewController.h"
 
 //This controller is a base for all other controllers we load into the
 //sliding view controller (except trivial event displays, like CMS DAQ, etc.).
@@ -85,6 +86,18 @@
    
    return controllerToPop;
 }
+
+#pragma mark - Can we show APN alert now?
+
+//________________________________________________________________________________________
+- (BOOL) canInterruptWithAlert
+{
+   if ([self.topViewController isKindOfClass : [TileViewController class]])
+      return [(TileViewController *)self.topViewController canInterruptWithAlert];
+   
+   return YES;
+}
+
 
 #pragma mark - APNEnabledViewController.
 

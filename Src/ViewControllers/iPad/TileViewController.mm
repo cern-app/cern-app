@@ -705,4 +705,10 @@ const NSUInteger nAutoAnimationSteps = 10;
 {
 }
 
+//________________________________________________________________________________________
+- (BOOL) canInterruptWithAlert
+{
+   return YES;
+}
+
 @end

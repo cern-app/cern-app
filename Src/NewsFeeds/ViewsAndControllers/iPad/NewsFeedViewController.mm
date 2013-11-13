@@ -351,6 +351,12 @@
       [self hideFlipHint];
 }
 
+//________________________________________________________________________________________
+- (BOOL) canInterruptWithAlert
+{
+   return !flipAnimator.animationLock;
+}
+
 #pragma mark - Overriders for TileViewController's methods.
 
 //________________________________________________________________________________________

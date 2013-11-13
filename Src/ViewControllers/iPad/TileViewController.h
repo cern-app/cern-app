@@ -85,5 +85,7 @@
 //To be overriden:
 - (void) refreshAfterFlip;
 
+- (BOOL) canInterruptWithAlert;
+
 
 @end

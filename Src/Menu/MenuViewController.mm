@@ -1,6 +1,7 @@
 #import <cassert>
 #import <cmath>
 
+#import "MenuNavigationController.h"
 #import "ECSlidingViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "APNEnabledController.h"
@@ -1174,6 +1175,12 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       return;
    }
 
+   NSObject * const obj = self.slidingViewController.topViewController;
+   if ([obj isKindOfClass : [MenuNavigationController class]] && ![(MenuNavigationController *)obj canInterruptWithAlert]) {
+      [self performSelector : @selector(checkPushNotifications) withObject : nil afterDelay : 1.f];
+      return;
+   }
+
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "checkPushNotifications, application delegate has a wrong type");
 
@@ -1181,6 +1188,11 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    
 //   if (NSDictionary * const apn = appDelegate.APNdictionary) {
    if (appDelegate.APNdictionary) {
+      UIAlertView * const alert = [[UIAlertView alloc] initWithTitle:@"CERN notification"
+                                          message : @"Got APN" delegate : self cancelButtonTitle : @"close"
+                                          otherButtonTitles : nil];
+      [alert show];
+
    /*   NSString * message = nil;
 
       if (NSString * const updated = (NSString *)apn[@"updated"]) {

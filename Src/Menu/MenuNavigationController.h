@@ -15,4 +15,6 @@
 @property (nonatomic) NSUInteger apnID;
 @property (nonatomic) NSUInteger apnItems;
 
+- (BOOL) canInterruptWithAlert;
+
 @end
