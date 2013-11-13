@@ -21,7 +21,9 @@
 #import "GUIHelpers.h"
 #import "FeedCache.h"
 
+//Should be PrivateAPI.h or something like this.
 #import "TwitterAPI.h"
+#import "APNUtils.h"
 
 @interface NewsTableViewController(Private)
 
@@ -467,6 +469,24 @@
 
    [self addNavBarSpinner];
    [self startFeedParsing];
+}
+
+//________________________________________________________________________________________
+- (BOOL) containsArticleForAPNHash : (NSString *) apnHash
+{
+   assert(apnHash != nil && "containsArticleForAPNHash:, parameter 'apnHash' is nil");
+   assert(apnHash.length == CernAPP::apnHashSize && "containsArticleForAPNHash:, invalid sha1 hash");
+   
+   for (NSArray * issue in bulletins) {
+      for (MWFeedItem * item in issue) {
+         assert(item.link != nil && "containsArticleForAPNHash:, invalid MWFeedItem with nil link");
+         NSString * const itemHash = CernAPP::Sha1Hash(item.link);
+         if ([itemHash isEqualToString : apnHash])
+            return YES;
+      }
+   }   
+   
+   return NO;
 }
 
 @end

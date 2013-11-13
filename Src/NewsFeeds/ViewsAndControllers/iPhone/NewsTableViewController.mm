@@ -24,6 +24,7 @@
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
 #import "FeedCache.h"
+#import "APNUtils.h"
 #import "KeyVal.h"
 
 namespace CernAPP {
@@ -798,6 +799,10 @@ NSString *ImageURLFromEnclosures(MWFeedItem *article)
 //________________________________________________________________________________________
 - (void) hideAPNHints
 {
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "hideAPNHints, app delegate has a wrong type");
+   [(AppDelegate *)[UIApplication sharedApplication].delegate removeAPNHashForFeed : apnID];
+
    if (!apnItems)
       return;
    
@@ -813,12 +818,42 @@ NSString *ImageURLFromEnclosures(MWFeedItem *article)
 }
 
 //________________________________________________________________________________________
+- (BOOL) containsArticleForAPNHash : (NSString *) apnHash
+{
+   assert(apnHash != nil && "containsArticleForAPNHash:, parameter 'apnHash' is nil");
+   assert(apnHash.length == CernAPP::apnHashSize && "containsArticleForAPNHash:, invalid sha1 hash");
+   
+   for (MWFeedItem *item in allArticles) {
+      assert(item.link != nil && "containsArticleForAPNHash:, invalid MWFeedItem with nil link");
+      NSString * const itemHash = CernAPP::Sha1Hash(item.link);
+      if ([itemHash isEqualToString : apnHash])
+         return YES;
+   }
+   
+   return NO;
+}
+
+//________________________________________________________________________________________
 - (void) showAPNHints
 {
    if (!apnItems)
       return;
 
    if (!navBarSpinner.isAnimating) {
+      //First, let's check if we already have this item in a feed, if yes, we just remove all apn hints
+      //and pretend there is nothing really new.
+      assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+             "showAPNHints, app delegate has a wrong type");
+      AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+      NSString * const apnHash = [appDelegate APNHashForFeed : apnID];
+      if (apnHash) {
+         if ([self containsArticleForAPNHash : apnHash]) {
+            [self hideAPNHints];
+            return;
+         }
+      }
+      //
+   
       APNHintView * apnHint = nil;
       if ([self.navigationItem.rightBarButtonItem.customView isKindOfClass : [APNHintView class]]) {
          apnHint = (APNHintView *)self.navigationItem.rightBarButtonItem.customView;
