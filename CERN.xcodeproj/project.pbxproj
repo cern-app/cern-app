@@ -158,7 +158,7 @@
 		70767DC916CE922D00164516 /* MWPhotoBrowserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */; };
 		707720331761F23E001FE45F /* WebcastsCollectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707720311761F23E001FE45F /* WebcastsCollectionViewController.mm */; };
 		707B03D418339E8C00443448 /* ConnectionController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B03D318339E8C00443448 /* ConnectionController.mm */; };
-		707B03D71833AD7D00443448 /* Hash.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B03D51833AD7D00443448 /* Hash.mm */; };
+		707B03D71833AD7D00443448 /* APNUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B03D51833AD7D00443448 /* APNUtils.mm */; };
 		707B137C169AEB6300180E02 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B137A169AEB6300180E02 /* AppDelegate.mm */; };
 		707B137D169AEB6300180E02 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B137B169AEB6300180E02 /* main.mm */; };
 		707B1380169AEC4700180E02 /* InitialSlidingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B137E169AEC4700180E02 /* InitialSlidingViewController.mm */; };
@@ -465,8 +465,8 @@
 		707720311761F23E001FE45F /* WebcastsCollectionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsCollectionViewController.mm; sourceTree = "<group>"; };
 		707720321761F23E001FE45F /* WebcastsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsCollectionViewController.h; sourceTree = "<group>"; };
 		707B03D318339E8C00443448 /* ConnectionController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConnectionController.mm; sourceTree = "<group>"; };
-		707B03D51833AD7D00443448 /* Hash.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Hash.mm; sourceTree = "<group>"; };
-		707B03D61833AD7D00443448 /* Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hash.h; sourceTree = "<group>"; };
+		707B03D51833AD7D00443448 /* APNUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = APNUtils.mm; sourceTree = "<group>"; };
+		707B03D61833AD7D00443448 /* APNUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APNUtils.h; sourceTree = "<group>"; };
 		707B1379169AEB6300180E02 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		707B137A169AEB6300180E02 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		707B137B169AEB6300180E02 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
@@ -1087,8 +1087,8 @@
 		707B139D169AF07D00180E02 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				707B03D51833AD7D00443448 /* Hash.mm */,
-				707B03D61833AD7D00443448 /* Hash.h */,
+				707B03D51833AD7D00443448 /* APNUtils.mm */,
+				707B03D61833AD7D00443448 /* APNUtils.h */,
 				70BC655C1770A92800358CD1 /* Twitter-sample.h */,
 				700B978216AEB03D0006EAD3 /* ImageDownloader.h */,
 				700B978316AEB03D0006EAD3 /* ImageDownloader.mm */,
@@ -1671,7 +1671,7 @@
 				70A562D5173A35C300145FEC /* NewsTableViewCell.mm in Sources */,
 				70A562D6173A35C300145FEC /* NewsTableViewController.mm in Sources */,
 				70A562DE173A37AA00145FEC /* TileViewController.mm in Sources */,
-				707B03D71833AD7D00443448 /* Hash.mm in Sources */,
+				707B03D71833AD7D00443448 /* APNUtils.mm in Sources */,
 				70A562EC173A382A00145FEC /* StaticInfoPageView.mm in Sources */,
 				70A562ED173A382A00145FEC /* StaticInfoTileView.mm in Sources */,
 				70A562EE173A382A00145FEC /* StaticInfoTileViewController.mm in Sources */,

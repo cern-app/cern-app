@@ -2,7 +2,7 @@
 
 #import <CommonCrypto/CommonCrypto.h>
 
-#import "Hash.h"
+#import "APNUtils.h"
 
 namespace CernAPP {
 
@@ -20,5 +20,9 @@ NSString *Sha1Hash(NSString *src)
 
    return output;
 }
+
+const NSUInteger apnHashSize = 40;
+NSString * const apnHashKey = @"sha1";
+NSString * const apnFeedKey = @"updated";
 
 }

@@ -15,6 +15,7 @@
 #import "Experiments.h"
 #import "GUIHelpers.h"
 #import "MenuItems.h"
+#import "APNUtils.h"
 
 using CernAPP::ItemStyle;
 
@@ -1171,7 +1172,9 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 //________________________________________________________________________________________
 - (void) checkPushNotifications
 {
-   //
+   using CernAPP::apnFeedKey;
+   using CernAPP::apnHashKey;
+   using CernAPP::apnHashSize;
 
    if (updateStage != MenuUpdateStage::none || inAnimation) {
       [self performSelector : @selector(checkPushNotifications) withObject : nil afterDelay : 1.f];
@@ -1189,10 +1192,10 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    
    if (NSDictionary * const apn = appDelegate.APNdictionary) {
-      if (apn[@"sha1"] && apn[@"updated"]) {
-         assert([apn[@"sha1"] isKindOfClass : [NSString class]] && "checkPushNotifications, sha1 has a wrong type");
-         NSString * const sha1 = (NSString *)apn[@"sha1"];
-         if (sha1.length == 40) {
+      if (apn[apnHashKey] && apn[apnFeedKey]) {
+         assert([apn[apnHashKey] isKindOfClass : [NSString class]] && "checkPushNotifications, sha1 has a wrong type");
+         NSString * const sha1 = (NSString *)apn[apnHashKey];
+         if (sha1.length == apnHashSize) {
             NSString * message = @"News!";
             if (apn[@"aps"]) {
                assert([apn[@"aps"] isKindOfClass : [NSDictionary class]] &&
@@ -1245,17 +1248,20 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 //________________________________________________________________________________________
 - (void) loadNewArticleFromAPN
 {
+   using CernAPP::apnHashKey;
+   using CernAPP::apnHashSize;
+
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "loadNewArticleFromAPN, application delegate has a wrong type");
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    assert(appDelegate.APNdictionary != nil && "loadNewArticleFromAPN, APNDictionary is nil");
    NSDictionary * const apn = appDelegate.APNdictionary;
    
-   assert(apn[@"sha1"] != nil && "loadNewArticleFromAPN, sha hash not found");
-   assert([apn[@"sha1"] isKindOfClass : [NSString class]] &&
+   assert(apn[apnHashKey] != nil && "loadNewArticleFromAPN, sha hash not found");
+   assert([apn[apnHashKey] isKindOfClass : [NSString class]] &&
           "loadNewArticleFromAPN, sha hash has a wrong type");
-   NSString * const sha1 = (NSString *)apn[@"sha1"];
-   assert(sha1.length == 40 && "loadNewArticleFromAPN, sha hash is invalid");
+   NSString * const sha1 = (NSString *)apn[apnHashKey];
+   assert(sha1.length == apnHashSize && "loadNewArticleFromAPN, sha hash is invalid");
    //
    UIStoryboard *storyboard = nil;
 
@@ -1289,17 +1295,21 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 //________________________________________________________________________________________
 - (void) setupAPNHints
 {
+   using CernAPP::apnHashKey;
+   using CernAPP::apnFeedKey;
+   using CernAPP::apnHashSize;
+
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "setupAPNHints, application delegate has a wrong type");
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    assert(appDelegate.APNdictionary != nil && "setupAPNHints, APNDictionary is nil");
 
    NSDictionary * const apn = appDelegate.APNdictionary;
-   assert(apn[@"updated"] != nil && "setAPNHints, feed id not found");
-   assert([apn[@"updated"] isKindOfClass : [NSString class]] &&
+   assert(apn[apnFeedKey] != nil && "setAPNHints, feed id not found");
+   assert([apn[apnFeedKey] isKindOfClass : [NSString class]] &&
           "setAPNHints, feed id has an invalid type");
 
-   const NSInteger feedID = [apn[@"updated"] integerValue];
+   const NSInteger feedID = [apn[apnFeedKey] integerValue];
    if (feedID > 0) {
       for (NSObject<MenuItemProtocol> *item in menuItems) {
          if ([item findItemForID : feedID]) {
@@ -1312,6 +1322,13 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                if (tvc.apnID == feedID)
                   tvc.apnItems = 1;//Inform the current top-level controller about an APN.
             }
+            
+            assert(apn[apnHashKey] != nil && "setupAPNHints, sha1 hash not found");
+            assert([apn[apnHashKey] isKindOfClass : [NSString class]] &&
+                   "setupAPNHints, sha1 hash has a wrong type");
+            NSString * const sha = (NSString *)apn[apnHashKey];
+            assert(sha.length == apnHashSize && "setupAPNHints, sha1 hash is invalid");
+            [appDelegate cacheAPNHash : sha forFeed : NSUInteger(feedID)];
          }
       }
    }
