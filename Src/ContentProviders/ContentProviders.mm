@@ -209,9 +209,19 @@ UIViewController *FindController(UIView *view)
          if (twitterUrl && [[UIApplication sharedApplication] canOpenURL : twitterUrl]) {
             NSString * const message = [NSString stringWithFormat : @"Do you want to use an external application to open %@?"
                                                                      " (you can change this option in the 'Settings')", feedName];
-            ActionSheetWithController * const dialog = [[ActionSheetWithController alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
-                                                                                 destructiveButtonTitle : @"No, show in a built-in view"
-                                                                                      otherButtonTitles : @"Yes", nil];
+            
+            ActionSheetWithController *dialog = nil;
+            
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+               dialog = [[ActionSheetWithController alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
+                                                                                              destructiveButtonTitle : @"No, show in a built-in view"
+                                                                                                   otherButtonTitles : @"Yes", nil];
+            } else {
+               dialog = [[ActionSheetWithController alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Yes"
+                                                                                              destructiveButtonTitle : @"No, show in a built-in view"
+                                                                                                   otherButtonTitles : nil];
+            }
+            
             dialog.controller = controller;
             [dialog showInView : controller.view];
             return;
@@ -300,7 +310,13 @@ UIViewController *FindController(UIView *view)
           "actionSheet:didDisimssWithButtonIndex:, application delegate has a wrong type");
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
-   if (buttonIndex == 1) {
+   bool externalApp = false;
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+      externalApp = buttonIndex != actionSheet.destructiveButtonIndex;
+   else
+      externalApp = buttonIndex ==actionSheet.cancelButtonIndex;
+
+   if (externalApp) {
       appDelegate.tweetOption = TwitterFeedShowOption::externalView;
       
       if(![[UIApplication sharedApplication] openURL : twitterUrl])
@@ -1081,8 +1097,14 @@ UIViewController *FindController(UIView *view)
 - (void) loadControllerTo : (UIViewController *) controller
 {
    if (links.count > 1) {
-      ActionSheetWithController * const dialog = [[ActionSheetWithController alloc] initWithTitle : @"Select the quality, please:" delegate : self cancelButtonTitle : @"Cancel"
-                                      destructiveButtonTitle : @"High" otherButtonTitles : @"Medium", nil];
+      ActionSheetWithController *dialog = nil;
+      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+         dialog = [[ActionSheetWithController alloc] initWithTitle : @"Select the quality, please:" delegate : self cancelButtonTitle : @"Cancel"
+                   destructiveButtonTitle : @"High" otherButtonTitles : @"Medium", nil];
+      } else {
+         dialog = [[ActionSheetWithController alloc] initWithTitle : @"Select the quality, please:" delegate : self cancelButtonTitle : @"Medium"
+                   destructiveButtonTitle : @"High" otherButtonTitles : nil];
+      }
 
       dialog.controller = controller;
       [dialog showInView : controller.view];
@@ -1096,6 +1118,7 @@ UIViewController *FindController(UIView *view)
 
 #pragma mark - Action sheet delegate, use a "medium" or "high" link.
 
+//____________________________________________________________________________________________________
 - (void) presentMediaPlayerIn : (UIViewController *) controller withKey : (NSString *) key
 {
    assert(controller != nil && "presentMediaPlayerIn:withKey:, parameter 'controller' is nil");
@@ -1120,8 +1143,9 @@ UIViewController *FindController(UIView *view)
 
    ActionSheetWithController * const dialog = (ActionSheetWithController *)actionSheet;
    assert(dialog.controller != nil && "actionSheet:didDisimssWithButtonIndex:, controller is nil");
-   
-   [self presentMediaPlayerIn : dialog.controller withKey: buttonIndex == 1 ? @"medium" : @"high"];
+
+   NSString * const key = buttonIndex != actionSheet.destructiveButtonIndex ? @"medium" : @"high";
+   [self presentMediaPlayerIn : dialog.controller withKey : key];
 }
 
 @end
