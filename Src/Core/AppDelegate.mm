@@ -328,7 +328,7 @@ NSString * const deviceTokenKey = @"DeviceToken";
 {
 #pragma unused(application)
 
-   if (userInfo) {
+   if (userInfo && !APNdictionary) {//We still have an active APN, forget about this new one.
       APNdictionary = userInfo;
       InitialSlidingViewController * controller = (InitialSlidingViewController *)_window.rootViewController;
       if ([controller.underLeftViewController isKindOfClass : [MenuViewController class]]) {

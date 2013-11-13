@@ -1186,12 +1186,33 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    
-//   if (NSDictionary * const apn = appDelegate.APNdictionary) {
-   if (appDelegate.APNdictionary) {
-      UIAlertView * const alert = [[UIAlertView alloc] initWithTitle:@"CERN notification"
-                                          message : @"Got APN" delegate : self cancelButtonTitle : @"close"
-                                          otherButtonTitles : nil];
-      [alert show];
+   if (NSDictionary * const apn = appDelegate.APNdictionary) {
+      if (apn[@"sha1"] && apn[@"updated"]) {
+         assert([apn[@"sha1"] isKindOfClass : [NSString class]] && "checkPushNotifications, sha1 has a wrong type");
+         NSString * const sha1 = (NSString *)apn[@"sha1"];
+         if (sha1.length == 40) {
+            NSString * message = @"News!";
+            if (apn[@"aps"]) {
+               assert([apn[@"aps"] isKindOfClass : [NSDictionary class]] &&
+                      "checkPushNotifications, dictionary expected for the key 'aps'");
+               NSDictionary * const dict = (NSDictionary *)apn[@"aps"];
+               if (dict[@"alert"]) {
+                  assert([dict[@"alert"] isKindOfClass : [NSString class]] &&
+                         "checkPushNotifications, alert message has a wrong type");
+                  message = (NSString *)dict[@"alert"];
+               }
+            }
+            
+            UIActionSheet * const dialog = [[UIActionSheet alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
+                                                                                                     destructiveButtonTitle : @"Open now"
+                                                                                                          otherButtonTitles : @"Open later", nil];
+            [dialog showInView : [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject]];
+         } else {
+            //Something is wrong and we simply ignore this apn.
+            appDelegate.APNdictionary = nil;
+            [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+         }
+      }
 
    /*   NSString * message = nil;
 
@@ -1255,6 +1276,13 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       appDelegate.APNdictionary = nil;      
       [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
    }
+}
+
+//________________________________________________________________________________________
+- (void) actionSheet : (UIActionSheet *) actionSheet didDismissWithButtonIndex : (NSInteger) buttonIndex
+{
+#pragma unused(actionSheet)
+   //NOOP.
 }
 
 @end

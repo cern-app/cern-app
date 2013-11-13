@@ -3,7 +3,7 @@
 @class MenuItemsGroupView;
 @class MenuItemView;
 
-@interface MenuViewController : UIViewController<NSURLConnectionDelegate> {
+@interface MenuViewController : UIViewController<NSURLConnectionDelegate, UIActionSheetDelegate> {
    IBOutlet __weak UIScrollView *scrollView;
 }
 
