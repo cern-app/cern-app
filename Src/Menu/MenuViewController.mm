@@ -1285,6 +1285,14 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       self.slidingViewController.topViewController.view.frame = frame;
       [self.slidingViewController resetTopView];
    }];
+   
+   //This is a special standalone view controller, it's NEVER selected from any menu item,
+   //so de-select if selected.
+   if (selectedItemView) {
+      selectedItemView.isSelected = NO;
+      [selectedItemView setNeedsDisplay];
+      selectedItemView = nil;
+   }
 }
 
 //________________________________________________________________________________________
