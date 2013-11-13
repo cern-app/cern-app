@@ -1293,48 +1293,88 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    assert(appDelegate.APNdictionary != nil && "actionSheet:didDismissWithButtonIndex:, APNDictionary is nil");
 
-   NSDictionary * const apn = appDelegate.APNdictionary;
-   if (buttonIndex == actionSheet.destructiveButtonIndex) {
-      assert(apn[@"sha1"] != nil && "actionSheet:didDismissWithButtonIndex:, sha hash not found");
-      assert([apn[@"sha1"] isKindOfClass : [NSString class]] &&
-             "actionSheet:didDismissWithButtonIndex:, sha hash has a wrong type");
-      NSString * const sha1 = (NSString *)apn[@"sha1"];
-      assert(sha1.length == 40 && "actionSheet:didDismissWithButtonIndex:, sha hash is invalid");
-      //
-      UIStoryboard *storyboard = nil;
-   
-      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-         NSString * const fileName = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPhone_iOS7" : @"iPhone";
-         storyboard = [UIStoryboard storyboardWithName : fileName bundle : nil];
-      } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-         NSString * const fileName = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPad_iOS7" : @"iPad";
-         storyboard = [UIStoryboard storyboardWithName : fileName bundle : nil];
-      }
+   if (buttonIndex == actionSheet.destructiveButtonIndex)
+      [self loadNewArticleFromAPN];
+   else
+      [self setupAPNHints];
 
-      assert(storyboard != nil && "actionSheet:didDismissWithButtonIndex:, storyboard is nil");
-
-      MenuNavigationController * const top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
-                                                                          CernAPP::ArticleDetailStandaloneControllerID];
-      assert([top.topViewController isKindOfClass : [ArticleDetailViewController class]] &&
-             "actionSheet:didDismissWithButtonIndex, top view controller is either nil or has a wrong type");
-      [(ArticleDetailViewController *)top.topViewController setSha1Link : sha1];
-
-      if (self.slidingViewController.topViewController)
-         CernAPP::CancelConnections(self.slidingViewController.topViewController);
-   
-      [self.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete : ^ {
-         CGRect frame = self.slidingViewController.topViewController.view.frame;
-         self.slidingViewController.topViewController = top;
-         self.slidingViewController.topViewController.view.frame = frame;
-         [self.slidingViewController resetTopView];
-      }];
-      //
-   } else {
-      //This is much more difficult.
-   }
-   
    appDelegate.APNdictionary = nil;
    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+}
+
+//________________________________________________________________________________________
+- (void) loadNewArticleFromAPN
+{
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "loadNewArticleFromAPN, application delegate has a wrong type");
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   assert(appDelegate.APNdictionary != nil && "loadNewArticleFromAPN, APNDictionary is nil");
+   NSDictionary * const apn = appDelegate.APNdictionary;
+   
+   assert(apn[@"sha1"] != nil && "loadNewArticleFromAPN, sha hash not found");
+   assert([apn[@"sha1"] isKindOfClass : [NSString class]] &&
+          "loadNewArticleFromAPN, sha hash has a wrong type");
+   NSString * const sha1 = (NSString *)apn[@"sha1"];
+   assert(sha1.length == 40 && "loadNewArticleFromAPN, sha hash is invalid");
+   //
+   UIStoryboard *storyboard = nil;
+
+   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+      NSString * const fileName = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPhone_iOS7" : @"iPhone";
+      storyboard = [UIStoryboard storyboardWithName : fileName bundle : nil];
+   } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+      NSString * const fileName = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPad_iOS7" : @"iPad";
+      storyboard = [UIStoryboard storyboardWithName : fileName bundle : nil];
+   }
+
+   assert(storyboard != nil && "loadNewArticleFromAPN, storyboard is nil");
+
+   MenuNavigationController * const top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
+                                                                       CernAPP::ArticleDetailStandaloneControllerID];
+   assert([top.topViewController isKindOfClass : [ArticleDetailViewController class]] &&
+          "loadNewArticleFromAPN, top view controller is either nil or has a wrong type");
+   [(ArticleDetailViewController *)top.topViewController setSha1Link : sha1];
+
+   if (self.slidingViewController.topViewController)
+      CernAPP::CancelConnections(self.slidingViewController.topViewController);
+
+   [self.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete : ^ {
+      CGRect frame = self.slidingViewController.topViewController.view.frame;
+      self.slidingViewController.topViewController = top;
+      self.slidingViewController.topViewController.view.frame = frame;
+      [self.slidingViewController resetTopView];
+   }];
+}
+
+//________________________________________________________________________________________
+- (void) setupAPNHints
+{
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "setupAPNHints, application delegate has a wrong type");
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   assert(appDelegate.APNdictionary != nil && "setupAPNHints, APNDictionary is nil");
+
+   NSDictionary * const apn = appDelegate.APNdictionary;
+   assert(apn[@"updated"] != nil && "setAPNHints, feed id not found");
+   assert([apn[@"updated"] isKindOfClass : [NSString class]] &&
+          "setAPNHints, feed id has an invalid type");
+
+   const NSInteger feedID = [apn[@"updated"] integerValue];
+   if (feedID > 0) {
+      for (NSObject<MenuItemProtocol> *item in menuItems) {
+         if ([item findItemForID : feedID]) {
+            //We found updated menu item.
+            [item resetAPNHint : 1 forID : feedID];
+
+            if ([self.slidingViewController.topViewController conformsToProtocol : @protocol(APNEnabledController)]) {
+               UIViewController<APNEnabledController> * const tvc =
+                     (UIViewController<APNEnabledController> *)self.slidingViewController.topViewController;
+               if (tvc.apnID == feedID)
+                  tvc.apnItems = 1;//Inform the current top-level controller about an APN.
+            }
+         }
+      }
+   }
 }
 
 @end
