@@ -1316,19 +1316,19 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
             //We found updated menu item.
             [item resetAPNHint : 1 forID : feedID];
 
-            if ([self.slidingViewController.topViewController conformsToProtocol : @protocol(APNEnabledController)]) {
-               UIViewController<APNEnabledController> * const tvc =
-                     (UIViewController<APNEnabledController> *)self.slidingViewController.topViewController;
-               if (tvc.apnID == feedID)
-                  tvc.apnItems = 1;//Inform the current top-level controller about an APN.
-            }
-            
             assert(apn[apnHashKey] != nil && "setupAPNHints, sha1 hash not found");
             assert([apn[apnHashKey] isKindOfClass : [NSString class]] &&
                    "setupAPNHints, sha1 hash has a wrong type");
             NSString * const sha = (NSString *)apn[apnHashKey];
             assert(sha.length == apnHashSize && "setupAPNHints, sha1 hash is invalid");
             [appDelegate cacheAPNHash : sha forFeed : NSUInteger(feedID)];
+
+            if ([self.slidingViewController.topViewController conformsToProtocol : @protocol(APNEnabledController)]) {
+               UIViewController<APNEnabledController> * const tvc =
+                     (UIViewController<APNEnabledController> *)self.slidingViewController.topViewController;
+               if (tvc.apnID == feedID)
+                  tvc.apnItems = 1;//Inform the current top-level controller about an APN.
+            }
          }
       }
    }

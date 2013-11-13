@@ -30,6 +30,7 @@
 #import "MWFeedItem.h"
 #import "FeedCache.h"
 #import "FlipView.h"
+#import "APNUtils.h"
 #import "KeyVal.h"
 
 @implementation NewsFeedViewController {
@@ -623,6 +624,23 @@
 #pragma mark - APNEnabledController and aux. methods.
 
 //________________________________________________________________________________________
+- (BOOL) containsArticleForAPNHash : (NSString *) apnHash
+{
+   assert(apnHash != nil && apnHash.length == 40 && "containsArticleForAPNHash: invalid apn hash");
+
+   for (MWFeedItem * item in dataItems) {
+      //Link MUST be valid.
+      assert(item.link != nil && "containsArticleForAPNHash:, MWFeedItem with an invalid link");
+      NSString * const itemHash = CernAPP::Sha1Hash(item.link);
+      if ([apnHash isEqualToString : itemHash]) {
+         return YES;
+      }
+   }
+   
+   return NO;
+}
+
+//________________________________________________________________________________________
 - (void) setApnItems : (NSUInteger) nItems
 {
    if (nItems) {
@@ -642,6 +660,17 @@
       return;
    
    if (!navBarSpinner.isAnimating) {
+      //First, let's check if we already have this item in a feed, if yes, we just remove all apn hints
+      //and pretend there is nothing really new.
+      assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+             "showAPNHints, app delegate has a wrong type");
+      if (NSString * const apnHash = [(AppDelegate *)[UIApplication sharedApplication].delegate APNHashForFeed : apnID]) {
+         if ([self containsArticleForAPNHash : apnHash]) {
+            [self hideAPNHints];
+            return;
+         }
+      }
+      //
       APNHintView * apnHint = nil;
       if ([self.navigationItem.rightBarButtonItem.customView isKindOfClass : [APNHintView class]]) {
          apnHint = (APNHintView *)self.navigationItem.rightBarButtonItem.customView;
@@ -653,6 +682,7 @@
 
       apnHint.delegate = self;
       apnHint.count = apnItems;
+      //
    }
 }
 
