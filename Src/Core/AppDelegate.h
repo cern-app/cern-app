@@ -33,6 +33,8 @@ NSDate *GetCurrentGMT();
 @property (nonatomic, copy) NSString *OAuthTokenSecret;
 
 @property (nonatomic, strong) NSDictionary *APNdictionary;
+- (void) cacheAPNHash : (NSString *) hash forFeed : (NSUInteger) apnID;
+- (NSString *) APNHashForFeed : (NSUInteger) feedID;
 
 //CoreData to save/restore feeds.
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;

@@ -40,6 +40,7 @@ NSString * const deviceTokenKey = @"DeviceToken";
    RequestType mode;
    NSMutableData *connectionData;
    NSString *newAPNToken;
+   NSMutableDictionary *apnCache;
 }
 
 @synthesize window = _window;
@@ -336,6 +337,24 @@ NSString * const deviceTokenKey = @"DeviceToken";
          [mvc checkPushNotifications];
       }
    }
+}
+
+//________________________________________________________________________________________
+- (void) cacheAPNHash : (NSString *) hash forFeed : (NSUInteger) apnID
+{
+   if (!apnCache)
+      apnCache = [[NSMutableDictionary alloc] init];
+   
+   [apnCache setObject : hash forKey : [NSString stringWithFormat : @"apn%lu", (unsigned long)apnID]];
+}
+
+//________________________________________________________________________________________
+- (NSString *) APNHashForFeed : (NSUInteger) feedID
+{
+   if (!apnCache)//Should be assert actually.
+      return nil;
+   
+   return (NSString *)apnCache[[NSString stringWithFormat : @"apn%lu", (unsigned long)feedID]];
 }
 
 #pragma mark - NSURLConnectionDataDelegate.
