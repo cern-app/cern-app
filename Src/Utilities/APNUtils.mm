@@ -9,8 +9,9 @@ namespace CernAPP {
 //________________________________________________________________________________________
 NSString *Sha1Hash(NSString *src)
 {
+   //From: https://github.com/hypercrypt/NSString-Hashes/blob/master/NSString%2BHashes.m
    assert(src != nil && "Sha1Hash, parameter 'src' is nil");
-   NSData * const data = [src dataUsingEncoding:NSUTF8StringEncoding];
+   NSData * const data = [src dataUsingEncoding : NSUTF8StringEncoding];
    uint8_t digest[CC_SHA1_DIGEST_LENGTH] = {};
 
    CC_SHA1(data.bytes, data.length, digest);
