@@ -1222,66 +1222,6 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
             [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
          }
       }
-
-   /*   NSString * message = nil;
-
-      if (NSString * const updated = (NSString *)apn[@"updated"]) {
-         NSArray * const updatedFeeds = [updated componentsSeparatedByString : @"|"];
-         NSString * itemNames = @"";
-         NSInteger nTotal = 0;
-         for (NSString * feedData in updatedFeeds) {
-            NSArray * const components = [feedData componentsSeparatedByString : @":"];
-            assert(components.count == 2 && "checkPushNotifications, unexpected APN payload");
-            if (const NSInteger itemID = [components[0] integerValue]) {
-               if (itemID > 0) {
-                  for (NSObject<MenuItemProtocol> *item in menuItems) {
-                     if (NSObject<MenuItemProtocol> * const found = [item findItemForID : itemID]) {
-                        //We found updated menu item.
-                        const NSInteger newItems = [components[1] integerValue];
-                        assert(newItems > 0 && "checkPushNotifications, invalid payload");
-                        nTotal += newItems;
-                        [item resetAPNHint : newItems forID : itemID];
-
-                        if (itemNames.length)
-                           itemNames = [itemNames stringByAppendingFormat : @", %@", found.itemText];
-                        else
-                           itemNames = [itemNames stringByAppendingFormat : @"%@", found.itemText];
-                        
-                        if ([self.slidingViewController.topViewController conformsToProtocol : @protocol(APNEnabledController)]) {
-                           UIViewController<APNEnabledController> * const tvc =
-                                 (UIViewController<APNEnabledController> *)self.slidingViewController.topViewController;
-                           if (tvc.apnID == itemID)
-                              tvc.apnItems = newItems;//Inform the current top-level controller about an APN.
-                        }
-                     }
-                  }
-               }
-            }
-
-            if (itemNames.length)
-               message = [nTotal > 1 ? @"CERN got new items in: " : @"CERN got new item in: " stringByAppendingString : itemNames];
-         }
-      }
-      
-      if (message.length) {
-         UIAlertView * const alert = [[UIAlertView alloc] initWithTitle:@"CERN notification"
-                                       message : message delegate : self cancelButtonTitle : @"close"
-                                       otherButtonTitles : nil];
-         [alert show];
-      }//Else: as we are not able to identify, which menu
-       //item was updated, forget about the notification at all.
-
-
-      
-      //Now, many thanks to Apple for this SHI...T:
-      //1. If I do not touch this thing, the notification will stay in the notification center's panel +
-      //   red circle with a number will stick forever to our app.
-      //2. If I do this ... despite the name, resetting application's badge will
-      //   also remove all notifications from the notificationi center.
-      //Do whatever you want, but it works like a crap in any way,
-      //so we just have to "think different" and embrace it.
-      //Thanks to Apple again for this, sometimes notifications are not
-      //deleted even if you set a badge to 0.*/
    }
 }
 
