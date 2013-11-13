@@ -1212,9 +1212,9 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                dialog = [[UIActionSheet alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
                                                                                   destructiveButtonTitle : @"Open now"
-                                                                                       otherButtonTitles : @"Cancel", nil];
+                                                                                       otherButtonTitles : @"Open later", nil];
             } else {
-               dialog = [[UIActionSheet alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
+               dialog = [[UIActionSheet alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Open later"
                                                                                   destructiveButtonTitle : @"Open now"
                                                                                        otherButtonTitles : nil];
             }
