@@ -30,6 +30,7 @@ enum class RequestType : unsigned char {
 };
 
 NSString * const deviceTokenKey = @"DeviceToken";
+NSString * const apnKeyFormat = @"apn%lu";
 
 }
 
@@ -98,7 +99,8 @@ NSString * const deviceTokenKey = @"DeviceToken";
 
    [[UIApplication sharedApplication] registerForRemoteNotificationTypes : UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
    //TODO: this should go away - in the nearest future all the data will be removed from the payload.
-   APNdictionary = (NSDictionary *)[launchOptions objectForKey : UIApplicationLaunchOptionsRemoteNotificationKey];
+   if (!APNdictionary)
+      APNdictionary = (NSDictionary *)[launchOptions objectForKey : UIApplicationLaunchOptionsRemoteNotificationKey];
 
    return YES;
 }
@@ -340,21 +342,45 @@ NSString * const deviceTokenKey = @"DeviceToken";
 }
 
 //________________________________________________________________________________________
-- (void) cacheAPNHash : (NSString *) hash forFeed : (NSUInteger) apnID
+- (NSString *) apnKey : (NSUInteger) apnID
 {
-   if (!apnCache)
-      apnCache = [[NSMutableDictionary alloc] init];
-   
-   [apnCache setObject : hash forKey : [NSString stringWithFormat : @"apn%lu", (unsigned long)apnID]];
+   assert(apnID != 0 && "apnKey:, parameter 'apnID' is not a valid id");
+   return [NSString stringWithFormat : @"apn%lu", (unsigned long)apnID];
 }
 
 //________________________________________________________________________________________
-- (NSString *) APNHashForFeed : (NSUInteger) feedID
+- (void) cacheAPNHash : (NSString *) hash forFeed : (NSUInteger) apnID
 {
+   assert(apnID != 0 && "cacheAPNHash:forFeed:, parameter 'apnID' is invalid");
+
+   if (!apnCache)
+      apnCache = [[NSMutableDictionary alloc] init];
+   
+   [apnCache setObject : hash forKey : [self apnKey : apnID]];
+}
+
+//________________________________________________________________________________________
+- (NSString *) APNHashForFeed : (NSUInteger) apnID
+{
+   assert(apnID != 0 && "APNHashForFeed:, parameter 'apnID' is invalid");
+   
    if (!apnCache)//Should be assert actually.
       return nil;
    
-   return (NSString *)apnCache[[NSString stringWithFormat : @"apn%lu", (unsigned long)feedID]];
+   return (NSString *)apnCache[[self apnKey : apnID]];
+}
+
+//________________________________________________________________________________________
+- (void) removeAPNHashForFeed : (NSUInteger) apnID
+{
+   assert(apnID != 0 && "removeAPNHashForFeed:, parameter 'apnID' is invalid");
+   
+   if (!apnCache)
+      return;
+   
+   NSString * const key = [self apnKey : apnID];
+   if (apnCache[key])
+      [apnCache removeObjectForKey : key];
 }
 
 #pragma mark - NSURLConnectionDataDelegate.

@@ -664,7 +664,9 @@
       //and pretend there is nothing really new.
       assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
              "showAPNHints, app delegate has a wrong type");
-      if (NSString * const apnHash = [(AppDelegate *)[UIApplication sharedApplication].delegate APNHashForFeed : apnID]) {
+      AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+      NSString * const apnHash = [appDelegate APNHashForFeed : apnID];
+      if (apnHash) {
          if ([self containsArticleForAPNHash : apnHash]) {
             [self hideAPNHints];
             return;
@@ -689,6 +691,10 @@
 //________________________________________________________________________________________
 - (void) hideAPNHints
 {
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "hideAPNHints, app delegate has a wrong type");
+   [(AppDelegate *)[UIApplication sharedApplication].delegate removeAPNHashForFeed : apnID];
+
    if (!apnItems)
       return;
    
@@ -698,7 +704,7 @@
 
    [mvc removeNotifications : apnItems forID : apnID];
    apnItems = 0;
-   
+
    if ([self.navigationItem.rightBarButtonItem.customView isKindOfClass : [APNHintView class]]) {
       self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
                                                 initWithBarButtonSystemItem : UIBarButtonSystemItemRefresh

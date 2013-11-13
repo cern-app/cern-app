@@ -93,6 +93,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    NSDictionary *livePlist;
    
    MenuUpdateStage updateStage;
+   BOOL apnProcessing;
 }
 
 //________________________________________________________________________________________
@@ -1092,7 +1093,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    connection = nil;//Can I do this??? (I'm in a callback function now)
    updateStage = MenuUpdateStage::none;
 
-   [self checkPushNotifications];
+   //[self checkPushNotifications];
 }
 
 //________________________________________________________________________________________
@@ -1151,7 +1152,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       [self layoutMenuResetOffset : YES resetContentSize : YES];
       //We update the menu only once, after the app started.
       //So now we can, probably, check if we have any notifications.
-      [self checkPushNotifications];
+     // [self checkPushNotifications];
    }
 }
 

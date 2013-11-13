@@ -35,4 +35,7 @@
 //We load controller in response to APN.
 - (void) setSha1Link : (NSString *) link;
 
+//
+//- (BOOL) canInterruptWithAlert;
+
 @end
