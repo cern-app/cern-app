@@ -147,6 +147,7 @@ const NSUInteger fontIncreaseStep = 4;
 @implementation ArticleDetailViewController {
    NSString *articleLink;
    NSString *sha1Link;
+   BOOL apnLoaded;
    
    UIActivityIndicatorView *spinner;
    
@@ -259,6 +260,8 @@ const NSUInteger fontIncreaseStep = 4;
 - (id) initWithNibName : (NSString *) nibNameOrNil bundle : (NSBundle *) nibBundleOrNil
 {
    if (self = [super initWithNibName : nibNameOrNil bundle : nibBundleOrNil]) {
+      apnLoaded = NO;
+      
       status = 200;
       stage = LoadStage::inactive;
       pageLoaded = NO;
@@ -305,6 +308,7 @@ const NSUInteger fontIncreaseStep = 4;
 #endif
    }
 
+   //1. Setup views.
    CGRect frame = self.view.frame;
    frame.origin = CGPoint();
    
@@ -318,26 +322,15 @@ const NSUInteger fontIncreaseStep = 4;
    rdbView.multipleTouchEnabled = YES;
    pageView.multipleTouchEnabled = YES;
    
+   //2. Load something: cached html/article link/readability's html/original page.
    pageLoaded = NO;
    authDone = NO;
 
    status = 200;
    stage = LoadStage::inactive;
 
-   if (!spinner) {
-      using CernAPP::spinnerSize;
+   [self addSpinner];
 
-      const CGPoint spinnerOrigin = CGPointMake(self.view.frame.size.width / 2 - spinnerSize / 2, self.view.frame.size.height / 2 - spinnerSize / 2);
-      spinner = [[UIActivityIndicatorView alloc] initWithFrame : CGRectMake(spinnerOrigin.x, spinnerOrigin.y, spinnerSize, spinnerSize)];
-      spinner.color = [UIColor grayColor];
-      //
-      spinner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight |
-                                 UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
-                                 UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-      //
-      [self.view addSubview : spinner];
-   }
-   
    if (canUseReadability && articleID && [ArticleDetailViewController articleCached : articleID] && !sha1Link)
       [self getReadabilityCache];
 
@@ -416,8 +409,9 @@ const NSUInteger fontIncreaseStep = 4;
    assert(link != nil && "setSha1Link:, parameter 'link' is nil");
    
    sha1Link = link;
-   articleID = link;
+   articleID = nil;//link;
    title = @"";
+   apnLoaded = YES;
 }
 
 #pragma mark - UIWebViewDelegate protocol.
@@ -490,6 +484,7 @@ const NSUInteger fontIncreaseStep = 4;
    //We do not have a cached html from Readability yet,
    //try to either auth and parse, or pars (if auth was done already).
 
+   //TODO: why do I have this method at all and
    [self readabilityParseHtml];
 }
 
@@ -687,9 +682,8 @@ const NSUInteger fontIncreaseStep = 4;
          sha1Link = nil;
          articleLink = [[NSString alloc] initWithData : responseData encoding : NSUTF8StringEncoding];
          [self loadHtmlFromReadability];
-      } else {
+      } else
          [self stopOnLinkLoadError];
-      }
    } else if (stage == LoadStage::auth) {
       //Ok, we, probably, received tokens, try to extract them.
       if ([self extractAuthTokens])
@@ -1002,6 +996,24 @@ const NSUInteger fontIncreaseStep = 4;
    [self addWebBrowserButtons];
 }
 
+//________________________________________________________________________________________
+- (void) addSpinner
+{
+   if (!spinner) {
+      using CernAPP::spinnerSize;
+
+      const CGPoint spinnerOrigin = CGPointMake(self.view.frame.size.width / 2 - spinnerSize / 2, self.view.frame.size.height / 2 - spinnerSize / 2);
+      spinner = [[UIActivityIndicatorView alloc] initWithFrame : CGRectMake(spinnerOrigin.x, spinnerOrigin.y, spinnerSize, spinnerSize)];
+      spinner.color = [UIColor grayColor];
+      //
+      spinner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight |
+                                 UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
+                                 UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+      //
+      [self.view addSubview : spinner];
+   }
+}
+
 
 //________________________________________________________________________________________
 - (void) startSpinner
@@ -1274,6 +1286,9 @@ const NSUInteger fontIncreaseStep = 4;
 //________________________________________________________________________________________
 - (BOOL) shouldAutorotate
 {
+   if (apnLoaded && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+      return YES;
+
    if ((rdbCache && rdbView.superview) || (pageLoaded && pageView.superview))
       return YES;
    
