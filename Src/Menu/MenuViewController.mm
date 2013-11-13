@@ -673,8 +673,6 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    
    //TODO: We also have to subscribe for push notifications here - the 'MENU.plist' on a server can be updated.
    [self updateMenuFromServer];
-   //
-   //[self checkPushNotifications];
 }
 
 //________________________________________________________________________________________
@@ -1092,8 +1090,6 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    menuData = nil;
    connection = nil;//Can I do this??? (I'm in a callback function now)
    updateStage = MenuUpdateStage::none;
-
-   //[self checkPushNotifications];
 }
 
 //________________________________________________________________________________________
@@ -1151,8 +1147,6 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       [self loadMenuContents];
       [self layoutMenuResetOffset : YES resetContentSize : YES];
       //We update the menu only once, after the app started.
-      //So now we can, probably, check if we have any notifications.
-     // [self checkPushNotifications];
    }
 }
 
