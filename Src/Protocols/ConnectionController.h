@@ -12,3 +12,9 @@
 @required
 - (void) cancelAnyConnections;
 @end
+
+namespace CernAPP {
+
+void CancelConnections(UIViewController *controller);
+
+}

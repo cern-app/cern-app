@@ -157,6 +157,7 @@
 		70767DC716CE8F4D00164516 /* MWFeedParserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */; };
 		70767DC916CE922D00164516 /* MWPhotoBrowserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */; };
 		707720331761F23E001FE45F /* WebcastsCollectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707720311761F23E001FE45F /* WebcastsCollectionViewController.mm */; };
+		707B03D418339E8C00443448 /* ConnectionController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B03D318339E8C00443448 /* ConnectionController.mm */; };
 		707B137C169AEB6300180E02 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B137A169AEB6300180E02 /* AppDelegate.mm */; };
 		707B137D169AEB6300180E02 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B137B169AEB6300180E02 /* main.mm */; };
 		707B1380169AEC4700180E02 /* InitialSlidingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B137E169AEC4700180E02 /* InitialSlidingViewController.mm */; };
@@ -462,6 +463,7 @@
 		70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWPhotoBrowserLicense.txt; sourceTree = "<group>"; };
 		707720311761F23E001FE45F /* WebcastsCollectionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsCollectionViewController.mm; sourceTree = "<group>"; };
 		707720321761F23E001FE45F /* WebcastsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsCollectionViewController.h; sourceTree = "<group>"; };
+		707B03D318339E8C00443448 /* ConnectionController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConnectionController.mm; sourceTree = "<group>"; };
 		707B1379169AEB6300180E02 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		707B137A169AEB6300180E02 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		707B137B169AEB6300180E02 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
@@ -1286,6 +1288,7 @@
 		70B2A74F16DBBD5200BC8657 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				707B03D318339E8C00443448 /* ConnectionController.mm */,
 				7072B3271713F72F00515DA8 /* TiledPage.h */,
 				70B2A75016DBBD5200BC8657 /* ConnectionController.h */,
 				70B2A75216DBBE5E00BC8657 /* HUDRefreshProtocol.h */,
@@ -1628,6 +1631,7 @@
 				41B3D9E916B12D6E00AF4463 /* UIImageView+WebCache.m in Sources */,
 				41B3D9F216B12D8000AF4463 /* MWFeedInfo.m in Sources */,
 				41B3D9F316B12D8000AF4463 /* MWFeedItem.m in Sources */,
+				707B03D418339E8C00443448 /* ConnectionController.mm in Sources */,
 				41B3D9F416B12D8000AF4463 /* MWFeedParser.m in Sources */,
 				7043C29A17FD68E100ECE1E5 /* CDSPhotoAlbum.mm in Sources */,
 				41B3D9F916B12D9000AF4463 /* MBProgressHUD.m in Sources */,

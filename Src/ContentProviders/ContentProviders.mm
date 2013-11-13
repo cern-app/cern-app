@@ -31,15 +31,6 @@ using CernAPP::TwitterFeedShowOption;
 namespace {
 
 //________________________________________________________________________________________
-void CancelConnections(UIViewController *controller)
-{
-   assert(controller != nil && "CancelConnections, parameter 'controller' is nil");
-
-   if ([controller respondsToSelector : @selector(cancelAnyConnections)])
-      [controller performSelector : @selector(cancelAnyConnections)];
-}
-
-//________________________________________________________________________________________
 NSString *TwitterUserName(NSString *htmlGet)
 {
    //our 'url' in a MENU.plist or CERNLive.plist has a form:
@@ -1211,7 +1202,7 @@ UIViewController *FindController(UIView *view)
    
    MenuNavigationController *navController = [controller.storyboard instantiateViewControllerWithIdentifier : controllerID];
    if (controller.slidingViewController.topViewController)
-      CancelConnections(controller.slidingViewController.topViewController);
+      CernAPP::CancelConnections(controller.slidingViewController.topViewController);
 
    if (itemData && [navController.topViewController respondsToSelector:@selector(setControllerData:)])
       [navController.topViewController performSelector : @selector(setControllerData:) withObject : itemData];

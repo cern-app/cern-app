@@ -1,14 +1,17 @@
 #import <cassert>
 #import <cmath>
 
+#import "ArticleDetailViewController.h"
 #import "MenuNavigationController.h"
 #import "ECSlidingViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "APNEnabledController.h"
+#import "ConnectionController.h"
 #import "MenuViewController.h"
 #import "ContentProviders.h"
 #import "MenuItemViews.h"
 #import "AppDelegate.h"
+#import "DeviceCheck.h"
 #import "Experiments.h"
 #import "GUIHelpers.h"
 #import "MenuItems.h"
@@ -1183,7 +1186,6 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "checkPushNotifications, application delegate has a wrong type");
-
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    
    if (NSDictionary * const apn = appDelegate.APNdictionary) {
@@ -1203,9 +1205,16 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                }
             }
             
-            UIActionSheet * const dialog = [[UIActionSheet alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
-                                                                                                     destructiveButtonTitle : @"Open now"
-                                                                                                          otherButtonTitles : @"Open later", nil];
+            UIActionSheet *dialog = nil;
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+               dialog = [[UIActionSheet alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
+                                                                                  destructiveButtonTitle : @"Open now"
+                                                                                       otherButtonTitles : @"Cancel", nil];
+            } else {
+               dialog = [[UIActionSheet alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
+                                                                                  destructiveButtonTitle : @"Open now"
+                                                                                       otherButtonTitles : nil];
+            }
             [dialog showInView : [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject]];
          } else {
             //Something is wrong and we simply ignore this apn.
@@ -1273,16 +1282,59 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       //so we just have to "think different" and embrace it.
       //Thanks to Apple again for this, sometimes notifications are not
       //deleted even if you set a badge to 0.*/
-      appDelegate.APNdictionary = nil;      
-      [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
    }
 }
 
 //________________________________________________________________________________________
 - (void) actionSheet : (UIActionSheet *) actionSheet didDismissWithButtonIndex : (NSInteger) buttonIndex
 {
-#pragma unused(actionSheet)
-   //NOOP.
+   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+          "actionSheet:didDismissWithButtonIndex:, application delegate has a wrong type");
+   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   assert(appDelegate.APNdictionary != nil && "actionSheet:didDismissWithButtonIndex:, APNDictionary is nil");
+
+   NSDictionary * const apn = appDelegate.APNdictionary;
+   if (buttonIndex == actionSheet.destructiveButtonIndex) {
+      assert(apn[@"sha1"] != nil && "actionSheet:didDismissWithButtonIndex:, sha hash not found");
+      assert([apn[@"sha1"] isKindOfClass : [NSString class]] &&
+             "actionSheet:didDismissWithButtonIndex:, sha hash has a wrong type");
+      NSString * const sha1 = (NSString *)apn[@"sha1"];
+      assert(sha1.length == 40 && "actionSheet:didDismissWithButtonIndex:, sha hash is invalid");
+      //
+      UIStoryboard *storyboard = nil;
+   
+      if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+         NSString * const fileName = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPhone_iOS7" : @"iPhone";
+         storyboard = [UIStoryboard storyboardWithName : fileName bundle : nil];
+      } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+         NSString * const fileName = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? @"iPad_iOS7" : @"iPad";
+         storyboard = [UIStoryboard storyboardWithName : fileName bundle : nil];
+      }
+
+      assert(storyboard != nil && "actionSheet:didDismissWithButtonIndex:, storyboard is nil");
+
+      MenuNavigationController * const top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
+                                                                          CernAPP::ArticleDetailStandaloneControllerID];
+      assert([top.topViewController isKindOfClass : [ArticleDetailViewController class]] &&
+             "actionSheet:didDismissWithButtonIndex, top view controller is either nil or has a wrong type");
+      [(ArticleDetailViewController *)top.topViewController setSha1Link : sha1];
+
+      if (self.slidingViewController.topViewController)
+         CernAPP::CancelConnections(self.slidingViewController.topViewController);
+   
+      [self.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete : ^ {
+         CGRect frame = self.slidingViewController.topViewController.view.frame;
+         self.slidingViewController.topViewController = top;
+         self.slidingViewController.topViewController.view.frame = frame;
+         [self.slidingViewController resetTopView];
+      }];
+      //
+   } else {
+      //This is much more difficult.
+   }
+   
+   appDelegate.APNdictionary = nil;
+   [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 }
 
 @end
