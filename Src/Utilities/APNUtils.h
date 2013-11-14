@@ -13,4 +13,6 @@ extern NSString * const apnTitleKey;
 extern NSString * const apnUrlKey;
 
 
+bool FindItem(NSString *sha1Hash, NSObject *feedCache);
+
 }

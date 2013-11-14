@@ -71,6 +71,5 @@
 //APNEnabledController.
 @property (nonatomic) NSUInteger apnID;
 @property (nonatomic) NSUInteger apnItems;
-- (BOOL) containsArticleForAPNHash : (NSString *) apnHash;
 
 @end

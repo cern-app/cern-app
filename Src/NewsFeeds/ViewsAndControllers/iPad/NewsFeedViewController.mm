@@ -624,23 +624,6 @@
 #pragma mark - APNEnabledController and aux. methods.
 
 //________________________________________________________________________________________
-- (BOOL) containsArticleForAPNHash : (NSString *) apnHash
-{
-   assert(apnHash != nil && apnHash.length == 40 && "containsArticleForAPNHash: invalid apn hash");
-
-   for (MWFeedItem * item in dataItems) {
-      //Link MUST be valid.
-      assert(item.link != nil && "containsArticleForAPNHash:, MWFeedItem with an invalid link");
-      NSString * const itemHash = CernAPP::Sha1Hash(item.link);
-      if ([apnHash isEqualToString : itemHash]) {
-         return YES;
-      }
-   }
-   
-   return NO;
-}
-
-//________________________________________________________________________________________
 - (void) setApnItems : (NSUInteger) nItems
 {
    if (nItems) {
@@ -667,7 +650,11 @@
       AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
       NSString * const apnHash = [appDelegate APNHashForFeed : apnID];
       if (apnHash) {
-         if ([self containsArticleForAPNHash : apnHash]) {
+         //Well, the version wich accepts NSArray is not visible here,
+         //but to be sure it's never called (since the bulletin has array of array,
+         //not array of feed items, for example).
+         if (CernAPP::FindItem(apnHash, (NSObject *)dataItems)) {
+            //Ooops, cached, seen already.
             [self hideAPNHints];
             return;
          }

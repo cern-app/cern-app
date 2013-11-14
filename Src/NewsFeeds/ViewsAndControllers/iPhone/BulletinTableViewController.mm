@@ -477,16 +477,7 @@
    assert(apnHash != nil && "containsArticleForAPNHash:, parameter 'apnHash' is nil");
    assert(apnHash.length == CernAPP::apnHashSize && "containsArticleForAPNHash:, invalid sha1 hash");
    
-   for (NSArray * issue in bulletins) {
-      for (MWFeedItem * item in issue) {
-         assert(item.link != nil && "containsArticleForAPNHash:, invalid MWFeedItem with nil link");
-         NSString * const itemHash = CernAPP::Sha1Hash(item.link);
-         if ([itemHash isEqualToString : apnHash])
-            return YES;
-      }
-   }   
-   
-   return NO;
+   return CernAPP::FindItem(apnHash, (NSObject *)bulletins);
 }
 
 @end

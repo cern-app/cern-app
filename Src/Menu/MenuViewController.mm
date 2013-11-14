@@ -1165,6 +1165,50 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 }
 
 //________________________________________________________________________________________
+- (bool) itemCached : (NSDictionary *) apnDict
+{
+   using CernAPP::apnHashKey;
+   using CernAPP::apnFeedKey;
+   
+   //Check, if this 'new item' in apn is actually new.
+   assert(apnDict != nil && "itemCached:, parameter 'apnDict' is nil");
+   assert(apnDict[apnHashKey] != nil && "itemCached:, no sha1 hash found");
+   assert([apnDict[apnHashKey] isKindOfClass : [NSString class]] &&
+          "itemCached:, hash has a wrong type");
+   NSString * const sha1 = (NSString *)apnDict[apnHashKey];
+   
+   assert(apnDict[apnFeedKey] != nil && "itemCached:, no feed ID found");
+   
+   const NSInteger feedID = [(NSString *)apnDict[apnFeedKey] integerValue];
+   if (feedID > 0) {
+      for (NSObject<MenuItemProtocol> *item in menuItems) {
+         if (NSObject<MenuItemProtocol> * const found = [item findItemForID : feedID]) {
+            if (![found respondsToSelector:@selector(contentProvider)])
+               return false;
+            
+            NSObject<ContentProvider> * const provider =
+               (NSObject<ContentProvider> *)[found performSelector : @selector(contentProvider) withObject : nil];
+
+            if (!provider || ![provider respondsToSelector : @selector(feedCacheID)])
+               return false;
+   
+            NSString * const feedCacheID = [provider performSelector : @selector(feedCacheID) withObject : nil];
+            if (feedCacheID) {
+               assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
+                      "itemCached:, the app delegate has a wrong type");
+               if (NSObject * const cache = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForKey : feedCacheID])
+                  return CernAPP::FindItem(sha1, cache);
+            }
+            
+            return false;
+         }
+      }
+   }
+   
+   return false;
+}
+
+//________________________________________________________________________________________
 - (void) checkPushNotifications
 {
    using CernAPP::apnFeedKey;
@@ -1190,7 +1234,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       if (apn[apnHashKey] && apn[apnFeedKey]) {
          assert([apn[apnHashKey] isKindOfClass : [NSString class]] && "checkPushNotifications, sha1 has a wrong type");
          NSString * const sha1 = (NSString *)apn[apnHashKey];
-         if (sha1.length == apnHashSize) {
+         if (sha1.length == apnHashSize && ![self itemCached : apn]) {
             NSString * message = @"News!";
             if (apn[@"aps"]) {
                assert([apn[@"aps"] isKindOfClass : [NSDictionary class]] &&
@@ -1312,7 +1356,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert([apn[apnFeedKey] isKindOfClass : [NSString class]] &&
           "setAPNHints, feed id has an invalid type");
 
-   const NSInteger feedID = [apn[apnFeedKey] integerValue];
+   const NSInteger feedID = [(NSString *)apn[apnFeedKey] integerValue];
    if (feedID > 0) {
       for (NSObject<MenuItemProtocol> *item in menuItems) {
          if ([item findItemForID : feedID]) {

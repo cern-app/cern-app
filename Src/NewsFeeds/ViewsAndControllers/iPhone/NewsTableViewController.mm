@@ -823,14 +823,8 @@ NSString *ImageURLFromEnclosures(MWFeedItem *article)
    assert(apnHash != nil && "containsArticleForAPNHash:, parameter 'apnHash' is nil");
    assert(apnHash.length == CernAPP::apnHashSize && "containsArticleForAPNHash:, invalid sha1 hash");
    
-   for (MWFeedItem *item in allArticles) {
-      assert(item.link != nil && "containsArticleForAPNHash:, invalid MWFeedItem with nil link");
-      NSString * const itemHash = CernAPP::Sha1Hash(item.link);
-      if ([itemHash isEqualToString : apnHash])
-         return YES;
-   }
-   
-   return NO;
+   //I have two FindItem, make more obvious, which one is called - do an explicit cast.
+   return CernAPP::FindItem(apnHash, (NSObject *)allArticles);
 }
 
 //________________________________________________________________________________________

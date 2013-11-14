@@ -28,6 +28,8 @@
 - (id) initWith : (NSDictionary *) feedInfo;
 
 @property (nonatomic, retain) NSString *categoryName;
+//
+@property (nonatomic) NSString *feedCacheID;
 @property (nonatomic) NSUInteger providerID;
 @property (nonatomic) NSUInteger nAPNHints;
 
@@ -88,6 +90,7 @@
 - (id) initWithDictionary : (NSDictionary *) info;
 
 @property (nonatomic, retain) NSString *categoryName;
+@property (nonatomic) NSString *feedCacheID;
 @property (nonatomic) NSUInteger providerID;
 @property (nonatomic) NSUInteger nAPNHints;
 

@@ -452,24 +452,4 @@
    }
 }
 
-#pragma mark - APN.
-
-//________________________________________________________________________________________
-- (BOOL) containsArticleForAPNHash : (NSString *) apnHash
-{
-   assert(apnHash != nil && apnHash.length == 40 && "containsArticleForAPNHash: invalid apn hash");
-
-   for (NSArray * item in dataItems) {
-      for (MWFeedItem * feedItem in item) {
-         assert(feedItem.link != nil && "containsArticleForAPNHash, MWFeedItem with an invalid link");
-         NSString * const itemHash = CernAPP::Sha1Hash(feedItem.link);
-         if ([apnHash isEqualToString : itemHash])
-            return YES;
-      }
-   }
-   
-   return NO;
-}
-
-
 @end

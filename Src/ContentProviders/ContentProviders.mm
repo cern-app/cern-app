@@ -98,7 +98,7 @@ UIViewController *FindController(UIView *view)
    NSObject *filters;
 }
 
-@synthesize providerID, nAPNHints;
+@synthesize feedCacheID, providerID, nAPNHints;
 
 //Aux. fun to force the same id generation algorithm.
 //________________________________________________________________________________________
@@ -156,6 +156,13 @@ UIViewController *FindController(UIView *view)
    }
    
    return self;
+}
+
+//________________________________________________________________________________________
+- (NSString *) feedCacheID
+{
+   assert(providerID > 0 && "feedCacheID, providerID is invalid");
+   return [NSString stringWithFormat : @"%@%lu", self.categoryName, (unsigned long)providerID];
 }
 
 //________________________________________________________________________________________
@@ -247,9 +254,9 @@ UIViewController *FindController(UIView *view)
       NewsTableViewController * const nt = (NewsTableViewController *)navController.topViewController;
       nt.navigationItem.title = feedName;
       //
-      assert(providerID > 0 && "loadControllerTo:, providerID is invalid");//required for caching.
+      assert(providerID != 0 && "loadControllerTo:, invalid providerID");
       nt.apnID = providerID;
-      nt.feedCacheID = [NSString stringWithFormat : @"%@%lu", self.categoryName, (unsigned long)providerID];
+      nt.feedCacheID = self.feedCacheID;
       
       if (nAPNHints)
          nt.apnItems = nAPNHints;
@@ -265,9 +272,9 @@ UIViewController *FindController(UIView *view)
       NewsFeedViewController * const nt = (NewsFeedViewController *)navController.topViewController;
       nt.navigationItem.title = feedName;
       //
-      assert(providerID > 0 && "loadControllerTo:, providerID is invalid");
+      assert(providerID != 0 && "loadControllerTo:, invalid providerID");      
       nt.apnID = providerID;
-      nt.feedCacheID = [NSString stringWithFormat : @"%@%lu", self.categoryName, (unsigned long)providerID];
+      nt.feedCacheID = self.feedCacheID;
 
       if (nAPNHints)
          nt.apnItems = nAPNHints;
@@ -744,7 +751,7 @@ UIViewController *FindController(UIView *view)
    NSString *url;
 }
 
-@synthesize categoryName, providerID, nAPNHints;
+@synthesize feedCacheID, categoryName, providerID, nAPNHints;
 
 //________________________________________________________________________________________
 - (id) initWithDictionary : (NSDictionary *) info
@@ -774,6 +781,13 @@ UIViewController *FindController(UIView *view)
 }
 
 //________________________________________________________________________________________
+- (NSString *) feedCacheID
+{
+   assert(providerID > 0 && "feedCacheID, invalid providerID");
+   return [NSString stringWithFormat : @"%@%lu", categoryName, (unsigned long)providerID];
+}
+
+//________________________________________________________________________________________
 - (UIImage *) categoryImage
 {
    return menuImage;
@@ -800,7 +814,7 @@ UIViewController *FindController(UIView *view)
       if (nAPNHints)
          nt.apnItems = nAPNHints;
 
-      nt.feedCacheID = [NSString stringWithFormat : @"%@%lu", categoryName, (unsigned long)providerID];
+      nt.feedCacheID = self.feedCacheID;
 
       [nt setFeedURLString : url];
    } else {
@@ -816,7 +830,7 @@ UIViewController *FindController(UIView *view)
       if (nAPNHints)
          bc.apnItems = nAPNHints;
       
-      bc.feedCacheID = [NSString stringWithFormat : @"%@%lu", categoryName, (unsigned long)providerID];
+      bc.feedCacheID = self.feedCacheID;
       [bc setFeedURLString : url];
    }
    
