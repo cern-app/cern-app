@@ -156,7 +156,7 @@
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    
    //Test:
-   //appDelegate.APNdictionary = @{@"sha1" : @"e98ed108ee23b160bf69c12f228b0a735955f6e3"};
+   appDelegate.APNdictionary = @{@"sha1" : @"c48c2f58b203bb20460162f12b613aaf72ece14c"};
    
    //Special case: we were started from a notification center (or just from a notification).
    if (!feedToSkip && appDelegate.APNdictionary) {//UGLY, but feedToSkip means we're reloading after a memory warning, forget about any notifications!

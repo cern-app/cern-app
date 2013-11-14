@@ -9,5 +9,8 @@ NSString *Sha1Hash(NSString *src);
 extern const NSUInteger apnHashSize;
 extern NSString * const apnHashKey;
 extern NSString * const apnFeedKey;
+extern NSString * const apnTitleKey;
+extern NSString * const apnUrlKey;
+
 
 }

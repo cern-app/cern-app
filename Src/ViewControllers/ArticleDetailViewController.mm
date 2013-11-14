@@ -110,6 +110,7 @@
 #import "DeviceCheck.h"
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
+#import "APNUtils.h"
 #import "GCOAuth.h"
 
 namespace {
@@ -679,11 +680,27 @@ const NSUInteger fontIncreaseStep = 4;
 
    if (stage == LoadStage::linkRequest) {
       if (responseData.length) {
-         sha1Link = nil;
-         articleLink = [[NSString alloc] initWithData : responseData encoding : NSUTF8StringEncoding];
-         [self loadHtmlFromReadability];
-      } else
-         [self stopOnLinkLoadError];
+         NSError * err = nil;
+         NSDictionary * const json = [NSJSONSerialization JSONObjectWithData : responseData options : NSJSONReadingAllowFragments error : &err];
+         if (json) {
+            if (json[CernAPP::apnTitleKey]) {
+               assert([json[CernAPP::apnTitleKey] isKindOfClass : [NSString class]] &&
+                      "connectionDidFinishLoading:, title has a wrong type");
+               title = (NSString *)json[CernAPP::apnTitleKey];
+            }
+
+            if (json[CernAPP::apnUrlKey]) {
+               assert([json[CernAPP::apnUrlKey] isKindOfClass : [NSString class]] &&
+                      "connectionDidFinishLoading:, article link has a wrong type");
+               sha1Link = nil;
+               articleLink = json[CernAPP::apnUrlKey];
+               return [self loadHtmlFromReadability];
+            }
+         }
+      }
+
+      //If no url found:
+      [self stopOnLinkLoadError];
    } else if (stage == LoadStage::auth) {
       //Ok, we, probably, received tokens, try to extract them.
       if ([self extractAuthTokens])

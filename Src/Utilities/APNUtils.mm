@@ -22,8 +22,11 @@ NSString *Sha1Hash(NSString *src)
    return output;
 }
 
+//These constant should be the same as nd_v3.py/feed_parser.py are using.
 const NSUInteger apnHashSize = 40;
 NSString * const apnHashKey = @"sha1";
 NSString * const apnFeedKey = @"updated";
+NSString * const apnTitleKey = @"item title";
+NSString * const apnUrlKey = @"item url";
 
 }
