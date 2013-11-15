@@ -1245,6 +1245,14 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          assert([apn[apnHashKey] isKindOfClass : [NSString class]] && "checkPushNotifications, sha1 has a wrong type");
          NSString * const sha1 = (NSString *)apn[apnHashKey];
          if (sha1.length == apnHashSize && ![self itemCached : apn]) {
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+               [self loadNewArticleFromAPN];
+               appDelegate.APNdictionary = nil;
+               [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+               return;
+            }
+
+         
             NSString * message = @"News!";
             if (apn[@"aps"]) {
                assert([apn[@"aps"] isKindOfClass : [NSDictionary class]] &&
