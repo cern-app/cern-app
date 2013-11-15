@@ -1167,6 +1167,16 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 //________________________________________________________________________________________
 - (bool) itemCached : (NSDictionary *) apnDict
 {
+   //This function works only if the app receives a notification while running:
+   //   I can check this notification and react accordingly - either
+   //   we've seen this item already - and notification is ignored,
+   //   or we have not - and I show an alert. But this logic
+   //   does not work when a notification is selected from the notification
+   //   center, who does not care about our logic and contains all notifications.
+
+   if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive)
+      return false;//I'm not sure, if it's always correct.
+
    using CernAPP::apnHashKey;
    using CernAPP::apnFeedKey;
    
@@ -1204,7 +1214,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          }
       }
    }
-   
+
    return false;
 }
 
