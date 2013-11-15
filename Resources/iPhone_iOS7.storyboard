@@ -667,6 +667,75 @@
             </objects>
             <point key="canvasLocation" x="-510" y="4946"/>
         </scene>
+        <!--Menu Navigation Controller-->
+        <scene sceneID="dhP-ju-Xgg">
+            <objects>
+                <navigationController storyboardIdentifier="ArticleDetailStandaloneControllerID" definesPresentationContext="YES" id="OpV-Di-Zw1" customClass="MenuNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="QTY-7a-8c3">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.14117647059999999" green="0.44705882349999998" blue="0.72941176470000002" alpha="0.65000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="wv1-Th-yPV" kind="relationship" relationship="rootViewController" id="QgE-OJ-Krn"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rk5-4W-YB1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-971" y="5558"/>
+        </scene>
+        <!--Article Detail View Controller-->
+        <scene sceneID="W99-i3-ACX">
+            <objects>
+                <viewController id="wv1-Th-yPV" customClass="ArticleDetailViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ggf-RZ-ItG">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" id="fy9-JA-Xxq">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="mY1-iv-K62">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="3Z4-Jq-UfE">
+                            <connections>
+                                <action selector="revealMenu:" destination="wv1-Th-yPV" id="l8B-1L-ggD"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="containerView" destination="fy9-JA-Xxq" id="Uu1-Dh-iCS"/>
+                        <outlet property="pageView" destination="WH3-Zh-mhB" id="MN9-fN-9BC"/>
+                        <outlet property="rdbView" destination="1Xu-eW-mxV" id="cMH-i7-rRP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FJN-BZ-tRU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <webView contentMode="scaleToFill" scalesPageToFit="YES" id="WH3-Zh-mhB" customClass="SlideWebView">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="delegate" destination="wv1-Th-yPV" id="d2a-y7-mNz"/>
+                    </connections>
+                </webView>
+                <webView contentMode="scaleToFill" scalesPageToFit="YES" id="1Xu-eW-mxV" customClass="SlideWebView">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="delegate" destination="wv1-Th-yPV" id="128-Pv-BqV"/>
+                    </connections>
+                </webView>
+            </objects>
+            <point key="canvasLocation" x="-559" y="5564"/>
+        </scene>
         <!--Videos Grid View Controller-->
         <scene sceneID="c6R-3r-itA">
             <objects>
