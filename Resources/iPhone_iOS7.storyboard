@@ -670,7 +670,7 @@
         <!--Menu Navigation Controller-->
         <scene sceneID="dhP-ju-Xgg">
             <objects>
-                <navigationController storyboardIdentifier="ArticleDetailStandaloneControllerID" definesPresentationContext="YES" id="OpV-Di-Zw1" customClass="MenuNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ArticleDetailStandaloneControllerID" automaticallyAdjustsScrollViewInsets="NO" definesPresentationContext="YES" id="OpV-Di-Zw1" customClass="MenuNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QTY-7a-8c3">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -690,7 +690,7 @@
         <!--Article Detail View Controller-->
         <scene sceneID="W99-i3-ACX">
             <objects>
-                <viewController id="wv1-Th-yPV" customClass="ArticleDetailViewController" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="wv1-Th-yPV" customClass="ArticleDetailViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ggf-RZ-ItG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
