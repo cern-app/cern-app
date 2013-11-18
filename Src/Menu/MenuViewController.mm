@@ -1381,9 +1381,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       self.slidingViewController.topViewController.view.frame = frame;
       [self.slidingViewController resetTopView];
    }];
-   
-   
-   
+
    //This is a special standalone view controller, it's NEVER selected from any menu item,
    //so de-select if selected.
    if (selectedItemView) {
@@ -1398,7 +1396,14 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    const NSInteger feedID = [apn[apnFeedKey] integerValue];
    if (feedID > 0) {
-      if (NSObject<MenuItemProtocol> * const newSelected = [self findUpdatedItem : feedID]) {
+      if (NSObject<MenuItemProtocol> * const newSelected = [self findUpdatedItem : NSUInteger(feedID)]) {
+         //If we are opening some new item from a given feed, remove an APN hint from this menu item
+         //(we do not accumulate items on feeds, only on groups).
+         for (NSObject<MenuItemProtocol> *item in menuItems) {
+            if ([item resetAPNHint : 0 forID : feedID])
+               break;
+         }
+         
          if ((selectedItemView = newSelected.itemView)) {
             apnSelectedFeed = feedID;
             selectedItemView.isSelected = YES;
