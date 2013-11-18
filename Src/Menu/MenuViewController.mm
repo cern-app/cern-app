@@ -80,6 +80,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 @implementation MenuViewController {
    NSMutableArray *menuItems;
    MenuItemView *selectedItemView;
+   NSUInteger apnSelectedFeed;
    
    BOOL inAnimation;
    __weak MenuItemsGroup *newOpen;
@@ -93,7 +94,6 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    NSDictionary *livePlist;
    
    MenuUpdateStage updateStage;
-   BOOL apnProcessing;
 }
 
 //________________________________________________________________________________________
@@ -701,6 +701,15 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    //Return YES if an action is required from the content provider
    //(either a new menu item was selected, or menu item for
    //a modal view was (re)selected).
+   
+   if (apnSelectedFeed && selectedItemView == view) {
+      //It's a special case we could not foresee a year ago,
+      //hence this ugliness :)
+      apnSelectedFeed = 0;
+      return YES;
+   }
+   
+   apnSelectedFeed = 0;
 
    if (selectedItemView != view || [view isModalViewItem]) {
       //Quite an ugly ad-hoc solution for modal view controllers:
@@ -1146,11 +1155,35 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    else {
       [self loadMenuContents];
       [self layoutMenuResetOffset : YES resetContentSize : YES];
+      
+      if (apnSelectedFeed) {
+         //Re-select the previously selected item.
+         if (NSObject<MenuItemProtocol> * const found = [self findUpdatedItem : apnSelectedFeed]) {
+            selectedItemView = found.itemView;
+            selectedItemView.isSelected = YES;
+            [selectedItemView setNeedsDisplay];
+         }
+      }
       //We update the menu only once, after the app started.
    }
 }
 
 #pragma mark - Check for APNs.
+
+//________________________________________________________________________________________
+- (NSObject<MenuItemProtocol> *) findUpdatedItem : (NSUInteger) feedID
+{
+   using CernAPP::apnFeedKey;
+
+   assert(feedID > 0 && "findUpdatedItem:, parameter 'feedID' is invalid");
+   
+   for (NSObject<MenuItemProtocol> * item in menuItems) {
+      if (NSObject<MenuItemProtocol> * const found = [item findItemForID : (NSUInteger)feedID])
+         return found;
+   }
+   
+   return nil;
+}
 
 //________________________________________________________________________________________
 - (void) removeNotifications : (NSUInteger) nItems forID : (NSUInteger) itemID
@@ -1307,6 +1340,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    using CernAPP::apnHashKey;
    using CernAPP::apnHashSize;
+   using CernAPP::apnFeedKey;
 
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "loadNewArticleFromAPN, application delegate has a wrong type");
@@ -1348,12 +1382,29 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       [self.slidingViewController resetTopView];
    }];
    
+   
+   
    //This is a special standalone view controller, it's NEVER selected from any menu item,
    //so de-select if selected.
    if (selectedItemView) {
       selectedItemView.isSelected = NO;
       [selectedItemView setNeedsDisplay];
       selectedItemView = nil;
+   }
+
+   assert(apn[apnFeedKey] != nil && "loadNewArticleFromAPN, feed ID not found");
+   assert([apn[apnFeedKey] isKindOfClass : [NSString class]] &&
+          "loadNewArticleFromAPN, feed ID has a wrong type");
+
+   const NSInteger feedID = [apn[apnFeedKey] integerValue];
+   if (feedID > 0) {
+      if (NSObject<MenuItemProtocol> * const newSelected = [self findUpdatedItem : feedID]) {
+         if ((selectedItemView = newSelected.itemView)) {
+            apnSelectedFeed = feedID;
+            selectedItemView.isSelected = YES;
+            [selectedItemView setNeedsDisplay];
+         }
+      }
    }
 }
 
