@@ -104,6 +104,15 @@
 {
    if (!self.isCancelled) {
       if (self.delegate) {
+         //Some feeds have nil links and using 'guid' instead.
+         for (MWFeedItem * item in feedItems) {
+            if (!item.link && item.identifier) {
+               NSURL * const testUrl = [NSURL URLWithString : item.identifier];
+               if (testUrl && testUrl.scheme && testUrl.host)
+                  item.link = item.identifier;
+            }
+         }
+         //
          NSIndexSet * const validItems = [feedItems indexesOfObjectsPassingTest : ^BOOL(id obj, NSUInteger idx, BOOL *stop) {
             return ((MWFeedItem *)obj).link != nil;
          }];
