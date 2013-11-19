@@ -1226,7 +1226,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    if (feedID > 0) {
       for (NSObject<MenuItemProtocol> *item in menuItems) {
          if (NSObject<MenuItemProtocol> * const found = [item findItemForID : feedID]) {
-            if (![found respondsToSelector:@selector(contentProvider)])
+            if (![found respondsToSelector : @selector(contentProvider)])
                return false;
             
             NSObject<ContentProvider> * const provider =
@@ -1235,7 +1235,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
             if (!provider || ![provider respondsToSelector : @selector(feedCacheID)])
                return false;
    
-            NSString * const feedCacheID = [provider performSelector : @selector(feedCacheID) withObject : nil];
+            NSString * const feedCacheID = (NSString *)[provider performSelector : @selector(feedCacheID) withObject : nil];
             if (feedCacheID) {
                assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
                       "itemCached:, the app delegate has a wrong type");
@@ -1279,15 +1279,17 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          NSString * const sha1 = (NSString *)apn[apnHashKey];
          if (sha1.length == apnHashSize && ![self itemCached : apn]) {
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+               //The app is back from background or started
+               //by APN (either just received or selected from the notification center).
                [self loadNewArticleFromAPN];
                appDelegate.APNdictionary = nil;
                [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
                return;
             }
-
          
             NSString * message = @"News!";
             if (apn[@"aps"]) {
+               //Find a title for an action sheet.
                assert([apn[@"aps"] isKindOfClass : [NSDictionary class]] &&
                       "checkPushNotifications, dictionary expected for the key 'aps'");
                NSDictionary * const dict = (NSDictionary *)apn[@"aps"];
@@ -1308,6 +1310,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                                                                                   destructiveButtonTitle : @"Open now"
                                                                                        otherButtonTitles : nil];
             }
+            //self.view is not valid for showInView (hidden by other views at the moment?).
             [dialog showInView : [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject]];
          } else {
             //Something is wrong and we simply ignore this apn.
@@ -1383,13 +1386,14 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    }];
 
    //This is a special standalone view controller, it's NEVER selected from any menu item,
-   //so de-select if selected.
+   //so de-select any menu item previously selected.
    if (selectedItemView) {
       selectedItemView.isSelected = NO;
       [selectedItemView setNeedsDisplay];
       selectedItemView = nil;
    }
 
+   //Try to highlight a menu item for an updated feed.
    assert(apn[apnFeedKey] != nil && "loadNewArticleFromAPN, feed ID not found");
    assert([apn[apnFeedKey] isKindOfClass : [NSString class]] &&
           "loadNewArticleFromAPN, feed ID has a wrong type");
@@ -1434,7 +1438,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    if (feedID > 0) {
       for (NSObject<MenuItemProtocol> *item in menuItems) {
          if ([item findItemForID : feedID]) {
-            //We found updated menu item.
+            //We found an updated menu item.
             [item resetAPNHint : 1 forID : feedID];
 
             assert(apn[apnHashKey] != nil && "setupAPNHints, sha1 hash not found");
