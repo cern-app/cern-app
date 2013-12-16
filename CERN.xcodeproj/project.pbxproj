@@ -210,6 +210,8 @@
 		70A562EE173A382A00145FEC /* StaticInfoTileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562E6173A382A00145FEC /* StaticInfoTileViewController.mm */; };
 		70A562EF173A382A00145FEC /* StaticInfoItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562E9173A382A00145FEC /* StaticInfoItemViewController.mm */; };
 		70A562F0173A382A00145FEC /* StaticInfoScrollViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A562EB173A382A00145FEC /* StaticInfoScrollViewController.mm */; };
+		70A67A44185F70A40079839E /* CAPPPageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A67A40185F70A40079839E /* CAPPPageView.mm */; };
+		70A67A47185F70EB0079839E /* CAPPPageControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70A67A45185F70EB0079839E /* CAPPPageControl.mm */; };
 		70AD297A17FEA4E2007011D8 /* CDSVideosParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70AD297917FEA4E2007011D8 /* CDSVideosParser.mm */; };
 		70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 70B22F0416F9DCAA007D88EF /* action_blue.png */; };
 		70B2A75416DBBE5E00BC8657 /* HUDRefreshProtocol.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70B2A75316DBBE5E00BC8657 /* HUDRefreshProtocol.mm */; };
@@ -559,6 +561,10 @@
 		70A562E9173A382A00145FEC /* StaticInfoItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoItemViewController.mm; sourceTree = "<group>"; };
 		70A562EA173A382A00145FEC /* StaticInfoScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticInfoScrollViewController.h; sourceTree = "<group>"; };
 		70A562EB173A382A00145FEC /* StaticInfoScrollViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = StaticInfoScrollViewController.mm; sourceTree = "<group>"; };
+		70A67A40185F70A40079839E /* CAPPPageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CAPPPageView.mm; sourceTree = "<group>"; };
+		70A67A41185F70A40079839E /* CAPPPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAPPPageView.h; sourceTree = "<group>"; };
+		70A67A45185F70EB0079839E /* CAPPPageControl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CAPPPageControl.mm; sourceTree = "<group>"; };
+		70A67A46185F70EB0079839E /* CAPPPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAPPPageControl.h; sourceTree = "<group>"; };
 		70AD297817FEA4E2007011D8 /* CDSVideosParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDSVideosParser.h; sourceTree = "<group>"; };
 		70AD297917FEA4E2007011D8 /* CDSVideosParser.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CDSVideosParser.mm; sourceTree = "<group>"; };
 		70B22F0416F9DCAA007D88EF /* action_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action_blue.png; sourceTree = "<group>"; };
@@ -912,6 +918,10 @@
 		7069F76016C14D6D006BC78B /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				70A67A45185F70EB0079839E /* CAPPPageControl.mm */,
+				70A67A46185F70EB0079839E /* CAPPPageControl.h */,
+				70A67A40185F70A40079839E /* CAPPPageView.mm */,
+				70A67A41185F70A40079839E /* CAPPPageView.h */,
 				70D98B2916F786D8003C42E7 /* SlideScrollView.h */,
 				70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */,
 				7069F76116C14D6D006BC78B /* OverlayView.h */,
@@ -1601,8 +1611,10 @@
 				707B1380169AEC4700180E02 /* InitialSlidingViewController.mm in Sources */,
 				707B138D169AECE800180E02 /* MenuItems.mm in Sources */,
 				707B138E169AECE800180E02 /* MenuViewController.mm in Sources */,
+				70A67A44185F70A40079839E /* CAPPPageView.mm in Sources */,
 				707B1394169AEDA000180E02 /* ContentProviders.mm in Sources */,
 				707B1395169AEDA000180E02 /* Experiments.mm in Sources */,
+				70A67A47185F70EB0079839E /* CAPPPageControl.mm in Sources */,
 				707B13A0169AF07D00180E02 /* GUIHelpers.mm in Sources */,
 				707B13AD169AF1E500180E02 /* ApplicationErrors.mm in Sources */,
 				707EA02517F07216006AA7A4 /* SlideTableView.mm in Sources */,
