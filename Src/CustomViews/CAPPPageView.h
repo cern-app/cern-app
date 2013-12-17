@@ -10,9 +10,7 @@
 
 @interface CAPPPageView : UIView
 
-- (void) layoutInRect : (CGRect) frameHint;
-
-- (BOOL) selectPageAtPoint : (CGPoint) point;
++ (CGFloat) defaultCellWidth;
 
 @property (nonatomic) NSUInteger numberOfPages;
 @property (nonatomic) NSUInteger activePage;

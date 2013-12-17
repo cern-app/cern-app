@@ -16,11 +16,12 @@
 
 @end
 
-@interface CAPPPageControl : UIView
+@interface CAPPPageControl : UIView<UIScrollViewDelegate>
 
 - (BOOL) interestedInTouch : (UITouch *) touch;
 
 @property (nonatomic, weak) NSObject<CAPPPageControlDelegate> *delegate;
+@property (nonatomic) BOOL animating;
 @property (nonatomic) NSUInteger numberOfPages;
 @property (nonatomic) NSUInteger activePage;
 
