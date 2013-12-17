@@ -41,6 +41,9 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 //________________________________________________________________________________________
 - (instancetype) initWithFrame : (CGRect) frame
 {
+   if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad)
+      @throw [NSException exceptionWithName : @"CAPPPageControl's exception" reason : @"Unsupported UI idiom" userInfo : nil];
+
    if (self = [super initWithFrame : frame]) {
       [self createSubviews];
       [self layoutSubviews : frame];
@@ -54,6 +57,9 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 //________________________________________________________________________________________
 - (instancetype) initWithCoder : (NSCoder *) aDecoder
 {
+   if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad)
+      @throw [NSException exceptionWithName : @"CAPPPageControl's exception" reason : @"Unsupported UI idiom" userInfo : nil];
+
    if (self = [super initWithCoder : aDecoder]) {
       [self createSubviews];
       animating = NO;
