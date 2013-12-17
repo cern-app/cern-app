@@ -108,6 +108,8 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    rightLabel.hidden = YES;
    rightLabel.userInteractionEnabled = YES;
    
+   //TODO: disabled for the moment.
+  /*
    UITapGestureRecognizer * const tap1 = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(jumpToFirstPage:)];
    [leftLabel addGestureRecognizer : tap1];
 
@@ -115,7 +117,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    [rightLabel addGestureRecognizer : tap2];
 
    UITapGestureRecognizer * const tap3 = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(jumpToPage:)];
-   [self addGestureRecognizer : tap3];
+   [self addGestureRecognizer : tap3];*/
 }
 
 #pragma mark - Geometry and layout.

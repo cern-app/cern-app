@@ -7,6 +7,7 @@
 
 #import "ECSlidingViewController.h"
 #import "TileViewController.h"
+#import "CAPPPageControl.h"
 #import "DeviceCheck.h"
 #import "FlipView.h"
 
@@ -30,7 +31,7 @@ const NSUInteger nAutoAnimationSteps = 10;
    UIImageView *flipHintView;
 }
 
-@synthesize noConnectionHUD, spinner;
+@synthesize pageControl, noConnectionHUD, spinner;
 
 #pragma mark - Lifecycle.
 
@@ -478,6 +479,13 @@ const NSUInteger nAutoAnimationSteps = 10;
          [self.view addSubview : currPage];
 
       [currPage.superview bringSubviewToFront : currPage];
+      //
+      //
+      [currPage.superview bringSubviewToFront : self.pageControl];
+      //
+      self.pageControl.activePage = currPage.pageNumber;
+      //
+      
       
       if (!spinner.hidden)
          [spinner.superview bringSubviewToFront : spinner];
@@ -512,6 +520,7 @@ const NSUInteger nAutoAnimationSteps = 10;
          [self.view addSubview : currPage];
 
       [currPage.superview bringSubviewToFront : currPage];
+      [currPage.superview bringSubviewToFront : self.pageControl];
 
       if (!spinner.hidden)
          [spinner.superview bringSubviewToFront : spinner];

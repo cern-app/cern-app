@@ -14,6 +14,7 @@
 //rotation animations, and "infinite scroll view" trick.
 
 @class AnimationDelegate;
+@class CAPPPageControl;
 @class FlipView;
 
 @interface TileViewController : UIViewController<FlipAnimatedViewController, HUDRefreshProtocol> {
@@ -36,6 +37,8 @@
    
    BOOL delayedFlipRefresh;
 }
+
+@property (nonatomic, weak) CAPPPageControl *pageControl;
 
 - (id) initWithCoder : (NSCoder *) aDecoder;
 
