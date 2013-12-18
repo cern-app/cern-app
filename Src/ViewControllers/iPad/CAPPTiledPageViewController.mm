@@ -5,7 +5,7 @@
 //  Created by Timur Pocheptsov on 18/12/13.
 //  Copyright (c) 2013 CERN. All rights reserved.
 //
-
+#import <algorithm>
 #import <cassert>
 
 #import "CAPPTiledPageViewController.h"
@@ -97,7 +97,8 @@
    if (nPages <= 3 || !currPage.pageNumber) {
       UIView<TiledPage> * pages[3] = {currPage, nextPage, prevPage};
       //No magic, we have only <= 3 pages.
-      for (NSUInteger i = 0; i < nPages; ++i) {
+      const NSUInteger end = std::min(nPages, NSUInteger(3));
+      for (NSUInteger i = 0; i < end; ++i) {
          pages[i].frame = currentFrame;
          if (layoutTiles)
             [pages[i] layoutTiles];
@@ -123,6 +124,8 @@
          [currPage layoutTiles];
       }
    }
+   
+   [parentScroll setContentSize : CGSizeMake(currentFrame.size.width * nPages, currentFrame.size.height)];
 }
 
 //________________________________________________________________________________________

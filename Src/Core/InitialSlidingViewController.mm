@@ -14,6 +14,7 @@
 
 #import "InitialSlidingViewController.h"
 #import "ArticleDetailViewController.h"
+#import "CAPPNewsPageViewController.h"
 #import "MenuNavigationController.h"
 #import "NewsTableViewController.h"
 #import "NewsFeedViewController.h"
@@ -200,6 +201,18 @@
       //The very first view a user see - is a news table. We create a navigation controller
       //with such a table here, also, we have to add a news feed here.
    } else {
+      //
+      /*
+      top = [storyboard instantiateViewControllerWithIdentifier : CernAPP::CAPPNewsPageViewControllerID];
+      assert([top.topViewController isKindOfClass : [CAPPNewsPageViewController class]] &&
+             "initSlidingViewController:, top view controller is either nil or has a wrong type");
+      CAPPNewsPageViewController * const c = (CAPPNewsPageViewController *)top.topViewController;
+      c.feedCacheID = @"General1";
+      c.apnID = 1;
+      self.topViewController = top;
+      return;
+      */
+      //
       top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
                                                     CernAPP::FeedTileViewControllerID];
       assert([top.topViewController isKindOfClass : [NewsFeedViewController class]] &&

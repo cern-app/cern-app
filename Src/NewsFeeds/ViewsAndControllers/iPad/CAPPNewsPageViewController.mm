@@ -145,6 +145,9 @@
       }
 
       (void)[self initTilesFromDBCache];
+#warning "FIX THE LOGIC, refresh must be called now instead of layoutFeedViews"
+      [self layoutFeedViews];
+      //
       [self refresh];
    }
 #warning "viewDidAppear:, show apn hints!"
@@ -179,7 +182,8 @@
 //________________________________________________________________________________________
 - (void) addTileTapObserver
 {
-   [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(articleSelected:) name : CernAPP::feedItemSelectionNotification object : nil];
+#warning "addTileTapObserver, TO BE IMPLEMENTED"
+   //[[NSNaotificationCenter defaultCenter] addObserver : self selector : @selector(articleSelected:) name : CernAPP::feedItemSelectionNotification object : nil];
 }
 
 #pragma mark - APNEnabledController and aux. methods.
