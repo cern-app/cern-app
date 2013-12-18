@@ -25,8 +25,8 @@
    BOOL delayedRefresh;
 }
 
-@property (nonatomic, weak) CAPPPageControl *pageControl;
-@property (nonatomic, weak) UIScrollView *parentScroll;
+@property (nonatomic, weak) IBOutlet CAPPPageControl *pageControl;
+@property (nonatomic, weak) IBOutlet UIScrollView *parentScroll;
 
 //After dataItems were loaded (either the first time
 //or after refreshing, this function (re)sets pages.

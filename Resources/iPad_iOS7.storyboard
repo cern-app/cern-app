@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A598" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nQl-Hn-nT2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nQl-Hn-nT2">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
@@ -911,6 +911,87 @@
             </objects>
             <point key="canvasLocation" x="2947" y="11334"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Leg-cx-oXn">
+            <objects>
+                <navigationController storyboardIdentifier="CAPPNewsPageViewControllerID" automaticallyAdjustsScrollViewInsets="NO" definesPresentationContext="YES" id="K03-jE-j7u" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="mba-dU-dDY">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.0" green="0.32549019610000002" blue="0.63137254899999995" alpha="0.65000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="FkA-JO-juN" kind="relationship" relationship="rootViewController" id="vOk-bx-MVC"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VJG-1d-C5c" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2057" y="12505"/>
+        </scene>
+        <!--News Page View Controller-->
+        <scene sceneID="yuV-Uv-wIt">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="FkA-JO-juN" customClass="CAPPNewsPageViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TOt-O4-BCj"/>
+                        <viewControllerLayoutGuide type="bottom" id="YUA-Z2-D0a"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="d7a-Xg-4KE">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WO3-oL-foT">
+                                <rect key="frame" x="0.0" y="1" width="768" height="926"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </scrollView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X0w-16-4Jv" customClass="CAPPPageControl">
+                                <rect key="frame" x="72" y="926" width="624" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="N0n-o2-O4l"/>
+                                    <constraint firstAttribute="width" constant="624" id="ksB-wn-NR5"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="WO3-oL-foT" firstAttribute="top" secondItem="d7a-Xg-4KE" secondAttribute="top" constant="1" id="0Eh-wE-2ZW"/>
+                            <constraint firstAttribute="trailing" secondItem="WO3-oL-foT" secondAttribute="trailing" id="1se-OK-xXn"/>
+                            <constraint firstAttribute="bottom" secondItem="X0w-16-4Jv" secondAttribute="bottom" constant="2" id="6vQ-ur-voQ"/>
+                            <constraint firstItem="WO3-oL-foT" firstAttribute="leading" secondItem="d7a-Xg-4KE" secondAttribute="leading" id="8zO-Hv-v2X"/>
+                            <constraint firstAttribute="bottom" secondItem="WO3-oL-foT" secondAttribute="bottom" constant="33" id="TSt-FF-4is"/>
+                            <constraint firstAttribute="centerX" secondItem="X0w-16-4Jv" secondAttribute="centerX" id="dKs-hf-k2l"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <navigationItem key="navigationItem" id="kPY-tP-Luh">
+                        <barButtonItem key="leftBarButtonItem" image="menu.png" id="55t-aF-Lsb">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="revealMenu:" destination="FkA-JO-juN" id="rmN-kG-Rd3"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="gCF-FK-urq">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="refresh:" destination="FkA-JO-juN" id="nXU-G9-9wl"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="pageControl" destination="X0w-16-4Jv" id="rET-Y6-J8x"/>
+                        <outlet property="parentScroll" destination="WO3-oL-foT" id="WJi-dX-OEd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HOU-BL-cIg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2961" y="12505"/>
+        </scene>
         <!--Credits View Controller - Credits-->
         <scene sceneID="Z4D-5i-5Pa">
             <objects>
@@ -976,6 +1057,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W8K-b1-nvK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2974" y="7513"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="YHM-3V-VDM">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="cgf-ou-04Y" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="HtQ-zW-XA8"/>
+                        <viewControllerLayoutGuide type="bottom" id="PyW-pW-JWg"/>
+                    </layoutGuides>
+                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="o3c-FM-16I">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ziq-xK-sNh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
     <resources>

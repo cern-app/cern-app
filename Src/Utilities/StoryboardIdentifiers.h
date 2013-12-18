@@ -30,5 +30,6 @@ extern NSString * const StaticInfoTileViewControllerID;
 extern NSString * const PhotoCollectionsViewControllerID;
 extern NSString * const TwitterViewControllerID;
 extern NSString * const ArticleDetailStandaloneControllerID;
+extern NSString * const CAPPNewsPageViewControllerID;
 
 }

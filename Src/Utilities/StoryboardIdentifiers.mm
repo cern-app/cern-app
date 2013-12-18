@@ -27,5 +27,6 @@ NSString * const StaticInfoTileViewControllerID = @"StaticInfoTileViewController
 NSString * const PhotoCollectionsViewControllerID = @"PhotoCollectionsViewControllerID";
 NSString * const TwitterViewControllerID = @"TwitterViewControllerID";
 NSString * const ArticleDetailStandaloneControllerID = @"ArticleDetailStandaloneControllerID";
+NSString * const CAPPNewsPageViewControllerID = @"CAPPNewsPageViewControllerID";
 
 }
