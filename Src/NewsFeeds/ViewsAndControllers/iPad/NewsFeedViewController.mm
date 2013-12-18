@@ -131,7 +131,6 @@
    
    [self.view addSubview : currPage];
    [self.view bringSubviewToFront : currPage];
-   [self.view bringSubviewToFront : self.pageControl];
  /*
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
       //http://stackoverflow.com/questions/18897485/achieving-bright-vivid-colors-for-an-ios-7-translucent-uinavigationbar
@@ -352,9 +351,6 @@
       [self showRightFlipHint];
    else
       [self hideFlipHint];
-   //
-   self.pageControl.numberOfPages = nPages;
-   //
 }
 
 //________________________________________________________________________________________
@@ -567,9 +563,6 @@
       //Set the data from the cache at the beginning!
       dataItems = CernAPP::ConvertFeedCache(feedCache);
       [self setPagesData];
-      //
-      self.pageControl.numberOfPages = nPages;
-      //
       return YES;
    }
    
@@ -589,9 +582,6 @@
    
       dataItems = (NSMutableArray *)cache;
       [self setPagesData];
-      //
-      self.pageControl.numberOfPages = nPages;
-      //
    }
 
    return dataItems != nil;//no ptr to BOOL conversion.

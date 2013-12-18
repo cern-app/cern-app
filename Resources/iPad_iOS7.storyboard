@@ -120,22 +120,7 @@
                     <view key="view" contentMode="scaleToFill" id="zv5-z5-Gmm" customClass="FlipParentView">
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7hi-7t-IzO" customClass="CAPPPageControl">
-                                <rect key="frame" x="72" y="927" width="624" height="32"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="624" id="aVc-BV-qvB"/>
-                                    <constraint firstAttribute="height" constant="32" id="mwX-BN-VdL"/>
-                                </constraints>
-                            </view>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="7hi-7t-IzO" secondAttribute="bottom" constant="1" id="ELL-Qa-z2s"/>
-                            <constraint firstAttribute="centerX" secondItem="7hi-7t-IzO" secondAttribute="centerX" id="Vdw-ri-Z8d"/>
-                        </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" id="Yxv-KD-QgN">
@@ -152,9 +137,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <outlet property="pageControl" destination="7hi-7t-IzO" id="RwT-HJ-clv"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ca9-H5-EO5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
