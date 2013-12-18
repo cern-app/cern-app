@@ -52,7 +52,6 @@
 
 //To be overriden:
 - (void) refreshAfterDelay;
-
-- (BOOL) canShowWithAlert;
+- (BOOL) canShowAlert;
 
 @end

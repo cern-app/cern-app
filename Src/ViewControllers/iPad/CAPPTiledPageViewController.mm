@@ -144,6 +144,14 @@
    [self.slidingViewController anchorTopViewTo : ECRight];
 }
 
+#pragma mark - Misc.
+
+//________________________________________________________________________________________
+- (BOOL) canShowAlert
+{
+   return YES;//to be overriden.
+}
+
 #pragma mark - Aux. methods.
 
 //________________________________________________________________________________________
