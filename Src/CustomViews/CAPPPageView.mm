@@ -13,23 +13,26 @@
 const CGFloat circleRadius = 3.f;
 const CGFloat pegRadius = 7.f;
 const CGFloat dotRadius = 5.f;
-const CGFloat fontSize = 7.f;
+const CGFloat fontSize = 6.f;
+const CGFloat fontSizeExtraSmall = 4.5f;
 
 @implementation CAPPPageView {
    NSUInteger numberOfPages;
    NSUInteger activePage;
    
    UIFont *textFont;
+   UIFont *textFontExtraSmall;
    CGFloat textHeight;
+   CGFloat textHeightExtraSmall;
 }
 
-//________________________________________________________________________________
+//________________________________________________________________________________________
 + (CGFloat) defaultCellWidth
 {
    return 60.f;
 }
 
-//________________________________________________________________________________
+//________________________________________________________________________________________
 - (instancetype) initWithFrame : (CGRect) frame
 {
    if (self = [super initWithFrame : frame]) {
@@ -40,14 +43,16 @@ const CGFloat fontSize = 7.f;
       self.opaque = NO;
       
       UIFontDescriptor * const textFD = [UIFontDescriptor preferredFontDescriptorWithTextStyle : UIFontTextStyleFootnote];
-      textFont = [UIFont fontWithDescriptor:textFD size : fontSize];
+      textFont = [UIFont fontWithDescriptor : textFD size : fontSize];
       textHeight = [@"0123456789" sizeWithAttributes : @{NSFontAttributeName : textFont}].height;//:)
+      textFontExtraSmall = [UIFont fontWithDescriptor : textFD size : fontSizeExtraSmall];
+      textHeightExtraSmall = [@"0123456789" sizeWithAttributes : @{NSFontAttributeName : textFontExtraSmall}].height;//:)
    }
 
    return self;
 }
 
-//________________________________________________________________________________
+//________________________________________________________________________________________
 - (void) drawRect : (CGRect) rect
 {
    UIColor * const strokeColor = [UIColor darkGrayColor];
@@ -74,7 +79,7 @@ const CGFloat fontSize = 7.f;
 
 #pragma mark - properties.
 
-//________________________________________________________________________________
+//________________________________________________________________________________________
 - (void) setNumberOfPages : (NSUInteger) aNumberOfPages
 {
    numberOfPages = aNumberOfPages;
@@ -84,13 +89,13 @@ const CGFloat fontSize = 7.f;
       [self setNeedsDisplay];
 }
 
-//________________________________________________________________________________
+//________________________________________________________________________________________
 - (NSUInteger) numberOfPages
 {
    return numberOfPages;
 }
 
-//________________________________________________________________________________
+//________________________________________________________________________________________
 - (void) setActivePage : (NSUInteger) anActivePage
 {
    assert(anActivePage < numberOfPages && "setActivePage:, parameter 'anActivePage' is out of bounds");
@@ -101,7 +106,7 @@ const CGFloat fontSize = 7.f;
    }
 }
 
-//________________________________________________________________________________
+//________________________________________________________________________________________
 - (NSUInteger) activePage
 {
    return activePage;
@@ -109,7 +114,7 @@ const CGFloat fontSize = 7.f;
 
 #pragma mark - Aux. methods.
 
-//________________________________________________________________________________
+//________________________________________________________________________________________
 - (void) drawPegAtPoint : (CGPoint) centre
 {
    //Aux function to show the active page.
@@ -125,23 +130,22 @@ const CGFloat fontSize = 7.f;
    UIBezierPath * const filledCircle = [UIBezierPath bezierPathWithOvalInRect : fillRect];
    [[UIColor orangeColor] set];
    [filledCircle fill];
-         
-   if (activePage + 1 < 100) {//2-digits, must fit.
-      assert(textFont != nil && "drawPegAtPoint:, textFont is nil");
-      
-      NSMutableParagraphStyle * const paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-      paragraphStyle.alignment = NSTextAlignmentCenter;
 
-      NSDictionary * const attributes = @{NSFontAttributeName : textFont,
-                                          NSParagraphStyleAttributeName : paragraphStyle,
-                                          NSForegroundColorAttributeName : [UIColor blueColor]};
-      
-      const CGRect textRect = CGRectMake(centre.x - fillRect.size.width / 2,//x
-                                         centre.y - textHeight / 2,//y
-                                         fillRect.size.width, textHeight);//w, h
-      NSString * const text = [NSString stringWithFormat : @"%u", unsigned(activePage + 1)];
-      [text drawInRect : textRect withAttributes : attributes];
-   }
+   assert(textFont != nil && "drawPegAtPoint:, textFont is nil");
+   assert(textFontExtraSmall != nil && "drawPegAtPoint:, textFontExtraSmall is nil");
+   
+   NSMutableParagraphStyle * const paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+   paragraphStyle.alignment = NSTextAlignmentCenter;
+
+   NSDictionary * const attributes = @{NSFontAttributeName : (activePage + 1 < 100 ?  textFont : textFontExtraSmall),
+                                       NSParagraphStyleAttributeName : paragraphStyle,
+                                       NSForegroundColorAttributeName : [UIColor blueColor]};
+   
+   const CGRect textRect = CGRectMake(centre.x - fillRect.size.width / 2,//x
+                                      activePage + 1 < 100 ? centre.y - textHeight / 2 : centre.y - textHeightExtraSmall / 2,//y
+                                      fillRect.size.width, activePage + 1 < 100 ? textHeight : textHeightExtraSmall);//w, h
+   NSString * const text = [NSString stringWithFormat : @"%u", unsigned(activePage + 1)];
+   [text drawInRect : textRect withAttributes : attributes];
 }
 
 @end
