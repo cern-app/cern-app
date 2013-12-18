@@ -936,14 +936,14 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X0w-16-4Jv" customClass="CAPPPageControl">
                                 <rect key="frame" x="72" y="926" width="624" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="N0n-o2-O4l"/>
                                     <constraint firstAttribute="width" constant="624" id="ksB-wn-NR5"/>
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="WO3-oL-foT" firstAttribute="top" secondItem="d7a-Xg-4KE" secondAttribute="top" constant="1" id="0Eh-wE-2ZW"/>
                             <constraint firstAttribute="trailing" secondItem="WO3-oL-foT" secondAttribute="trailing" id="1se-OK-xXn"/>

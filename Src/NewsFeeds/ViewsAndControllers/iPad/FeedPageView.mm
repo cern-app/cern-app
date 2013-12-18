@@ -226,4 +226,21 @@ const NSUInteger tilesOnPage = 4;
    }
 }
 
+//________________________________________________________________________________________
+- (void) setScaleFactor : (CGFloat) factor
+{
+    assert(factor > 0.f && "setScaleFactor:, invalid parameter 'factor'");
+    
+    for (UIView *child in self.subviews)
+        child.transform = CGAffineTransformMakeScale(factor, factor);
+}
+
+//________________________________________________________________________________________
+- (void) unscale
+{
+    for (UIView *child in self.subviews)
+        child.transform = CGAffineTransformIdentity;
+}
+
+
 @end

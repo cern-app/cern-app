@@ -10,6 +10,11 @@
 
 @protocol TiledPage <NSObject>
 
+@optional
+
+- (void) setScaleFactor : (CGFloat) factor;
+- (void) unscale;
+
 @required
 
 @property (nonatomic) NSUInteger pageNumber;

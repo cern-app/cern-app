@@ -24,6 +24,10 @@
 - (void) explodeTiles : (UIInterfaceOrientation) orientation;
 //Actually, both CFTimeInterval and NSTimeInterval are typedefs for double.
 - (void) collectTilesAnimatedForOrientation : (UIInterfaceOrientation) orientation from : (CFTimeInterval) start withDuration : (CFTimeInterval) duration;
+//
+- (void) setScaleFactor : (CGFloat) factor;
+- (void) unscale;
+//
 
 
 @end

@@ -7,6 +7,7 @@
 //
 #import <algorithm>
 #import <cassert>
+#import <cmath>
 
 #import "CAPPTiledPageViewController.h"
 #import "ECSlidingViewController.h"
@@ -14,6 +15,7 @@
 
 @implementation CAPPTiledPageViewController {
    NSUInteger pageBeforeRotation;//To adjust a scroll view. TODO: check if a really need this.
+   BOOL rotating;
 }
 
 @synthesize pageControl, parentScroll, noConnectionHUD, spinner;
@@ -152,6 +154,14 @@
 - (void) scrollViewDidEndDecelerating : (UIScrollView *) scrollView
 {
 #pragma unused(scrollView)
+
+#warning "scrollViewDidEndDecelerating:, check 'respondsToSelector:"
+   [currPage unscale];
+   if (nPages > 1)
+      [nextPage unscale];
+   if (nPages > 2)
+      [prevPage unscale];
+   
    if (nPages > 3) {
       [self adjustPages];
       self.pageControl.activePage = currPage.pageNumber;
@@ -225,6 +235,33 @@
       [self scrollViewDidEndDecelerating : scrollView];
 }
 
+//_______________________________________________________________________
+-(void) scrollViewDidScroll : (UIScrollView *) scrollView
+{
+#pragma unused(scrollView)
+#warning "scrollViewDidScroll:, check 'respondsToSelector:"
+
+   if (rotating)
+      return;
+
+   //We map [0 1] from offset to [0.7, 1.] scale factor.
+   const CGFloat off = currPage.frame.origin.x - parentScroll.contentOffset.x;
+   if (!off)
+      return;
+   //scale down the current page, scale up the next.
+   
+   CGFloat scaleFactor = (parentScroll.frame.size.width - std::abs(off)) / parentScroll.frame.size.width;
+   scaleFactor = scaleFactor * 0.3f + 0.7f;
+   [currPage setScaleFactor : scaleFactor];
+   
+   scaleFactor = std::abs(off) / scrollView.frame.size.width;
+   scaleFactor = scaleFactor * 0.3f + 0.7f;
+   if (off < 0.f)
+      [nextPage setScaleFactor : scaleFactor];
+   else
+      [prevPage setScaleFactor : scaleFactor];
+}
+
 #pragma mark - Device orientation changes.
 
 //________________________________________________________________________________________
@@ -243,6 +280,7 @@
    if (!nPages)
       return;
 
+   rotating = YES;
    pageBeforeRotation = NSUInteger(parentScroll.contentOffset.x / parentScroll.frame.size.width);
 }
 
@@ -282,6 +320,8 @@
 - (void) didRotateFromInterfaceOrientation : (UIInterfaceOrientation) fromInterfaceOrientation
 {
 #pragma unused(fromInterfaceOrientation)
+
+   rotating = NO;
 
    if (!nPages)
       return;
