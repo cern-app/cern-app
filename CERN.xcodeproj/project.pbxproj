@@ -186,6 +186,7 @@
 		708FA77C1861A43100D18DF4 /* CAPPTiledPageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 708FA77B1861A43100D18DF4 /* CAPPTiledPageViewController.mm */; };
 		7098286616C404C500311025 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7098286516C404C500311025 /* Social.framework */; };
 		709A4AE517B3DB7700266374 /* twitbird.png in Resources */ = {isa = PBXBuildFile; fileRef = 709A4AE417B3DB7700266374 /* twitbird.png */; };
+		709C2BBA1861D700007DC65D /* CAPPNewsPageViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 709C2BB91861D700007DC65D /* CAPPNewsPageViewController.mm */; };
 		709CE6C516A5BE97006D524E /* 389-flash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C416A5BE97006D524E /* 389-flash@2x.png */; };
 		709CE6C816A5C045006D524E /* 112-group@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C716A5C045006D524E /* 112-group@2x.png */; };
 		709CE6CA16A5C287006D524E /* 180-stickynote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 709CE6C916A5C287006D524E /* 180-stickynote@2x.png */; };
@@ -519,6 +520,8 @@
 		708FA77B1861A43100D18DF4 /* CAPPTiledPageViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CAPPTiledPageViewController.mm; sourceTree = "<group>"; };
 		7098286516C404C500311025 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		709A4AE417B3DB7700266374 /* twitbird.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitbird.png; sourceTree = "<group>"; };
+		709C2BB81861D700007DC65D /* CAPPNewsPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAPPNewsPageViewController.h; sourceTree = "<group>"; };
+		709C2BB91861D700007DC65D /* CAPPNewsPageViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CAPPNewsPageViewController.mm; sourceTree = "<group>"; };
 		709CE6C416A5BE97006D524E /* 389-flash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "389-flash@2x.png"; sourceTree = "<group>"; };
 		709CE6C716A5C045006D524E /* 112-group@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "112-group@2x.png"; sourceTree = "<group>"; };
 		709CE6C916A5C287006D524E /* 180-stickynote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "180-stickynote@2x.png"; sourceTree = "<group>"; };
@@ -1224,6 +1227,8 @@
 				70A562B4173A35C300145FEC /* FeedPageView.mm */,
 				70A562B5173A35C300145FEC /* NewsFeedViewController.h */,
 				70A562B6173A35C300145FEC /* NewsFeedViewController.mm */,
+				709C2BB81861D700007DC65D /* CAPPNewsPageViewController.h */,
+				709C2BB91861D700007DC65D /* CAPPNewsPageViewController.mm */,
 			);
 			path = iPad;
 			sourceTree = "<group>";
@@ -1707,6 +1712,7 @@
 				7040F0EC1761FD780050DEF6 /* AnimatedStackLayout.mm in Sources */,
 				7040F0ED1761FD780050DEF6 /* ImageStackViewCell.mm in Sources */,
 				70B875DB17FC69EA00773913 /* CDSParser.mm in Sources */,
+				709C2BBA1861D700007DC65D /* CAPPNewsPageViewController.mm in Sources */,
 				70AD297A17FEA4E2007011D8 /* CDSVideosParser.mm in Sources */,
 				7040F0EE1761FD780050DEF6 /* PhotoAlbumCoverView.mm in Sources */,
 				7040F0EF1761FD780050DEF6 /* PhotoAlbumFooterView.mm in Sources */,
