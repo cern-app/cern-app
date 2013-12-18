@@ -189,6 +189,7 @@
          const NSRange rangeToLoad = [self findItemRangeForPage : newCurrentPageIndex + 1];
          assert(rangeToLoad.location < dataItems.count && "adjustPages, new page range is out of bounds");
          [nextPage setPageItems : dataItems startingFrom : rangeToLoad.location];
+         [nextPage layoutTiles];
          nextPage.pageNumber = newCurrentPageIndex + 1;
       }
    } else {
