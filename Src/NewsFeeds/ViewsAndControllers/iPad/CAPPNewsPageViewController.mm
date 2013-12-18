@@ -114,6 +114,10 @@
    
    [self createPages];
    [self addTileTapObserver];
+   
+   [self.parentScroll addSubview : currPage];
+   [self.parentScroll addSubview : nextPage];
+   [self.parentScroll addSubview : prevPage];
 }
 
 //________________________________________________________________________________________
