@@ -18,7 +18,7 @@ const CGSize defaultSize = CGSizeMake(400.f, 50.f);
 const CGFloat defaultLabelFontSize = 14.f;
 const NSUInteger fastNavigatePages = 5;
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 bool EqualOffsets(CGFloat x1, CGFloat x2)
 {
    return std::abs(x1 - x2) < 0.1;
@@ -38,11 +38,12 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 
 @synthesize delegate, animating;
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (instancetype) initWithFrame : (CGRect) frame
 {
    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad)
       @throw [NSException exceptionWithName : @"CAPPPageControl's exception" reason : @"Unsupported UI idiom" userInfo : nil];
+
 
    if (self = [super initWithFrame : frame]) {
       [self createSubviews];
@@ -54,11 +55,12 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    return self;
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (instancetype) initWithCoder : (NSCoder *) aDecoder
 {
    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad)
       @throw [NSException exceptionWithName : @"CAPPPageControl's exception" reason : @"Unsupported UI idiom" userInfo : nil];
+
 
    if (self = [super initWithCoder : aDecoder]) {
       [self createSubviews];
@@ -69,7 +71,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    return self;
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) createSubviews
 {
    assert(pageView == nil && "createChildView, page view is nil");
@@ -107,9 +109,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    [self addSubview : rightLabel];
    rightLabel.hidden = YES;
    rightLabel.userInteractionEnabled = YES;
-   
-   //TODO: disabled for the moment.
-  /*
+ /*
    UITapGestureRecognizer * const tap1 = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(jumpToFirstPage:)];
    [leftLabel addGestureRecognizer : tap1];
 
@@ -122,7 +122,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 
 #pragma mark - Geometry and layout.
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) layoutSubviews : (CGRect) frame
 {
    //What about the animation???
@@ -159,7 +159,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    }
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) layoutSubviews
 {
    assert(animating == NO && "layoutSubviews, called while animating");
@@ -172,7 +172,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 
 #pragma mark - page control interface.
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) setNumberOfPages : (NSUInteger) nPages
 {
    if (animating)
@@ -195,13 +195,13 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    }
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (NSUInteger) numberOfPages
 {
    return pageView.numberOfPages;//0 if pageView is nil, still ok.
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) setActivePage : (NSUInteger) activePage informDelegate : (BOOL) inform
 {
    if (animating)
@@ -215,13 +215,13 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    [self adjustOffsetAnimated];
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) setActivePage : (NSUInteger) activePage
 {
    [self setActivePage : activePage informDelegate : NO];
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (NSUInteger) activePage
 {
    return pageView.activePage;//0 if pageView is nil, still ok.
@@ -229,21 +229,24 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 
 #pragma mark - UIScrollViewDelegate and related methods.
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) adjustOffsetAnimated
 {
    assert(animating == NO && "adjustOffsetAnimated, called while animating");
    
-   const CGFloat activePageX = pageView.activePage * [CAPPPageView defaultCellWidth];
+   const CGFloat cellW = [CAPPPageView defaultCellWidth];
+   const CGFloat activePageX = pageView.activePage * cellW;
    if (EqualOffsets(activePageX, scroll.contentOffset.x)) {
       if (activePageX) {
          animating = YES;
-         [scroll setContentOffset : CGPointMake(activePageX - [CAPPPageView defaultCellWidth], 0.f) animated : YES];
+         const CGFloat shift = std::min(scroll.contentOffset.x, 3 * cellW);
+         [scroll setContentOffset : CGPointMake(activePageX - shift, 0.f) animated : YES];
       }
-   } else if (EqualOffsets(activePageX - scroll.contentOffset.x, scroll.frame.size.width - [CAPPPageView defaultCellWidth])) {
+   } else if (EqualOffsets(activePageX - scroll.contentOffset.x, scroll.frame.size.width - cellW)) {
       if (pageView.activePage + 1 < pageView.numberOfPages) {
          animating = YES;
-         [scroll setContentOffset : CGPointMake(scroll.contentOffset.x + [CAPPPageView defaultCellWidth], 0.f) animated : YES];
+         const CGFloat shift = std::min(3 * cellW, scroll.contentSize.width - activePageX - cellW);
+         [scroll setContentOffset : CGPointMake(scroll.contentOffset.x + shift, 0.f) animated : YES];
       }
    } else if (informDelegateAfterAnimation) {
       informDelegateAfterAnimation = NO;
@@ -252,7 +255,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    }
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) scrollViewDidEndScrollingAnimation : (UIScrollView *) scrollView
 {
    assert(animating == YES && "scrollViewDidEndDecelerating:, called while not animating");
@@ -267,14 +270,14 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 
 #pragma mark - user interaction.
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (BOOL) interestedInTouch : (UITouch *) touch
 {
    assert(touch != nil && "interestedInTouch:, parameter 'touch' is nil");
    return touch.view == self || touch.view == leftLabel || touch.view == rightLabel;
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) jumpToFirstPage : (UITapGestureRecognizer *) tap
 {
 #pragma unused(tap)
@@ -291,7 +294,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    }
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) jumpToLastPage : (UITapGestureRecognizer *) tap
 {
 #pragma unused(tap)
@@ -311,7 +314,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    }
 }
 
-//________________________________________________________________________________________
+//________________________________________________________________________________
 - (void) jumpToPage : (UITapGestureRecognizer *) tap
 {
    assert(tap != nil && "jumpToPage:, parameter 'tap' is nil");

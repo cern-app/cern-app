@@ -122,19 +122,19 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7hi-7t-IzO" customClass="CAPPPageControl">
-                                <rect key="frame" x="72" y="919" width="624" height="32"/>
+                                <rect key="frame" x="72" y="927" width="624" height="32"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="624" id="dmK-DN-rc1"/>
-                                    <constraint firstAttribute="height" constant="32" id="etc-Pt-epp"/>
+                                    <constraint firstAttribute="width" constant="624" id="aVc-BV-qvB"/>
+                                    <constraint firstAttribute="height" constant="32" id="mwX-BN-VdL"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="7hi-7t-IzO" secondAttribute="bottom" constant="9" id="8EG-Qk-Sz3"/>
-                            <constraint firstAttribute="centerX" secondItem="7hi-7t-IzO" secondAttribute="centerX" id="bTa-Nq-fdl"/>
+                            <constraint firstAttribute="bottom" secondItem="7hi-7t-IzO" secondAttribute="bottom" constant="1" id="ELL-Qa-z2s"/>
+                            <constraint firstAttribute="centerX" secondItem="7hi-7t-IzO" secondAttribute="centerX" id="Vdw-ri-Z8d"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
