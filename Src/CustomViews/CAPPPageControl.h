@@ -12,7 +12,8 @@
 @protocol CAPPPageControlDelegate
 @optional
 
-- (void) pageControl : (CAPPPageControl *) control selectedPage : (NSUInteger) page;
+- (void) pageControlSelectedPage : (CAPPPageControl *) control;
+- (void) pageControlDidEndAnimating : (CAPPPageControl *) control;
 
 @end
 

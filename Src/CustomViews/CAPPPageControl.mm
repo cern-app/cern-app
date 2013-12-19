@@ -32,8 +32,6 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    
    UIScrollView *scroll;//pageView is placed in a scroll view.
    CAPPPageView *pageView;
-   
-   BOOL informDelegateAfterAnimation;
 }
 
 @synthesize delegate, animating;
@@ -49,7 +47,6 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
       [self createSubviews];
       [self layoutSubviews : frame];
       animating = NO;
-      informDelegateAfterAnimation = NO;
    }
 
    return self;
@@ -65,7 +62,6 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    if (self = [super initWithCoder : aDecoder]) {
       [self createSubviews];
       animating = NO;
-      informDelegateAfterAnimation = NO;
    }
    
    return self;
@@ -191,7 +187,6 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
       
       scroll.hidden = nPages == 1;
 
-      informDelegateAfterAnimation = NO;
       rightLabel.text = [NSString stringWithFormat : @"Page %u", unsigned(nPages)];
       [self setNeedsLayout];
    }
@@ -204,7 +199,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 }
 
 //________________________________________________________________________________
-- (void) setActivePage : (NSUInteger) activePage informDelegate : (BOOL) inform
+- (void) setActivePage : (NSUInteger) activePage
 {
    if (animating)
       return;
@@ -213,14 +208,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    assert(activePage < pageView.numberOfPages && "setActivePageNumber:, parameter 'activePage' is out of bounds");
 
    pageView.activePage = activePage;
-   informDelegateAfterAnimation = inform;
    [self adjustOffsetAnimated];
-}
-
-//________________________________________________________________________________
-- (void) setActivePage : (NSUInteger) activePage
-{
-   [self setActivePage : activePage informDelegate : NO];
 }
 
 //________________________________________________________________________________
@@ -232,6 +220,13 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 #pragma mark - UIScrollViewDelegate and related methods.
 
 //________________________________________________________________________________
+- (void) informDelegateAnimationDidEnd
+{
+   if (delegate && [delegate respondsToSelector : @selector(pageControlDidEndAnimating:)])
+      [delegate pageControlDidEndAnimating : self];
+}
+
+//________________________________________________________________________________
 - (void) adjustOffsetAnimated
 {
    assert(animating == NO && "adjustOffsetAnimated, called while animating");
@@ -241,20 +236,19 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    if (EqualOffsets(activePageX, scroll.contentOffset.x)) {
       if (activePageX) {
          animating = YES;
-         const CGFloat shift = std::min(scroll.contentOffset.x, 3 * cellW);
+         const CGFloat shift = std::min(scroll.contentOffset.x, 5 * cellW);
          [scroll setContentOffset : CGPointMake(activePageX - shift, 0.f) animated : YES];
-      }
+      } else
+         [self informDelegateAnimationDidEnd];
    } else if (EqualOffsets(activePageX - scroll.contentOffset.x, scroll.frame.size.width - cellW)) {
       if (pageView.activePage + 1 < pageView.numberOfPages) {
          animating = YES;
-         const CGFloat shift = std::min(3 * cellW, scroll.contentSize.width - activePageX - cellW);
+         const CGFloat shift = std::min(5 * cellW, scroll.contentSize.width - activePageX - cellW);
          [scroll setContentOffset : CGPointMake(scroll.contentOffset.x + shift, 0.f) animated : YES];
-      }
-   } else if (informDelegateAfterAnimation) {
-      informDelegateAfterAnimation = NO;
-      if (delegate && [delegate respondsToSelector : @selector(pageControl:selectedPage:)])
-         [delegate pageControl : self selectedPage : pageView.activePage];
-   }
+      } else
+         [self informDelegateAnimationDidEnd];
+   } else
+      [self informDelegateAnimationDidEnd];
 }
 
 //________________________________________________________________________________
@@ -263,11 +257,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    assert(animating == YES && "scrollViewDidEndDecelerating:, called while not animating");
    animating = NO;
    
-   if (informDelegateAfterAnimation) {
-      informDelegateAfterAnimation = NO;
-      if (delegate && [delegate respondsToSelector : @selector(pageControl:selectedPage:)])
-         [delegate pageControl : self selectedPage : pageView.activePage];
-   }
+   [self informDelegateAnimationDidEnd];
 }
 
 #pragma mark - user interaction.
@@ -286,13 +276,14 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 
    if (animating)
       return;
+   
+   if (!delegate || ![delegate respondsToSelector : @selector(pageControlSelectedPage:)])
+      return;
 
    if (pageView.numberOfPages && pageView.activePage) {
       pageView.activePage = 0;
       [scroll setContentOffset : CGPoint() animated : NO];
-      
-      if (delegate && [delegate respondsToSelector : @selector(pageControl:selectedPage:)])
-         [delegate pageControl : self selectedPage : 0];
+      [delegate pageControlSelectedPage : self];
    }
 }
 
@@ -304,14 +295,17 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    if (animating)
       return;
 
+   if (!delegate || ![delegate respondsToSelector  : @selector(pageControlSelectedPage:)])
+      return;
+
    if (const NSUInteger nPages = pageView.numberOfPages) {
       if (pageView.activePage != nPages - 1) {
+         //1. Set the page view/scroll view _without_ animation.
          pageView.activePage = nPages - 1;
-         if (scroll.contentSize.width > scroll.frame.size.width) {
+         if (scroll.contentSize.width > scroll.frame.size.width)
             [scroll setContentOffset : CGPointMake(scroll.contentSize.width - scroll.frame.size.width, 0.f) animated : NO];
-         }
-         if (delegate && [delegate respondsToSelector : @selector(pageControl:selectedPage:)])
-            [delegate pageControl : self selectedPage : nPages - 1];
+         //2. Inform the delegate (so that it can switch pages).
+         [delegate pageControlSelectedPage : self];
       }
    }
 }
@@ -322,6 +316,9 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    assert(tap != nil && "jumpToPage:, parameter 'tap' is nil");
 
    if (animating)
+      return;
+   
+   if (!delegate || ![delegate respondsToSelector:@selector(pageControlSelectedPage:)])
       return;
 
    CGPoint tapPoint = [tap locationInView : scroll];
@@ -334,8 +331,11 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
       tapPoint = [tap locationInView : pageView];
       const NSUInteger newPage = NSUInteger(tapPoint.x / [CAPPPageView defaultCellWidth]);
 
-      if (newPage != pageView.activePage)
-         [self setActivePage : newPage informDelegate : YES];
+      if (newPage != pageView.activePage) {
+         pageView.activePage = newPage;
+         [delegate pageControlSelectedPage : self];//Delegate will probably disable its own user interactions now.
+         [self adjustOffsetAnimated];
+      }
    }
 }
 

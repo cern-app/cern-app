@@ -35,6 +35,7 @@
 
       nPages = 0;
       pageBeforeRotation = 0;
+      rotating = NO;
 
       delayedRefresh = NO;
    }
@@ -48,6 +49,7 @@
    [super viewDidLoad];
    parentScroll.checkDragging = YES;
    parentScroll.decelerationRate = UIScrollViewDecelerationRateFast;
+   pageControl.delegate = self;
 }
 
 //________________________________________________________________________________________
@@ -154,7 +156,7 @@
 //________________________________________________________________________________________
 - (void) refreshAfterDelay
 {
-#warning "tile page view controller: refreshAfterDelay, TO BE IMPLEMENTED"
+#warning "refreshAfterDelay, TO BE IMPLEMENTED"
 }
 
 #pragma mark - UIScrollViewDelegate, page management, etc.
@@ -164,16 +166,30 @@
 {
 #pragma unused(scrollView)
 
-#warning "scrollViewDidEndDecelerating:, check 'respondsToSelector:"
-   [currPage unscale];
-   if (nPages > 1)
-      [nextPage unscale];
-   if (nPages > 2)
-      [prevPage unscale];
+   const bool supportsZoom = [currPage respondsToSelector : @selector(unscale)];
+   
+   pageControl.userInteractionEnabled = YES;
+
+   if (supportsZoom) {
+      [currPage unscale];
+      if (nPages > 1)
+         [nextPage unscale];
+      if (nPages > 2)
+         [prevPage unscale];
+   }
    
    if (nPages > 3) {
       [self adjustPages];
-      self.pageControl.activePage = currPage.pageNumber;
+      if (currPage.pageNumber != pageControl.activePage) {
+         parentScroll.userInteractionEnabled = NO;
+         pageControl.activePage = currPage.pageNumber;
+      }
+   } else {
+      const NSUInteger currPageIndex = NSUInteger(parentScroll.contentOffset.x / parentScroll.frame.size.width);
+      if (currPageIndex != pageControl.activePage) {
+         parentScroll.userInteractionEnabled = NO;
+         pageControl.activePage = currPageIndex;
+      }
    }
 }
 
@@ -248,9 +264,15 @@
 -(void) scrollViewDidScroll : (UIScrollView *) scrollView
 {
 #pragma unused(scrollView)
-#warning "scrollViewDidScroll:, check 'respondsToSelector:"
 
    if (rotating)
+      return;
+
+   //while we're scrolling, it's not good to navigate via pageControl at the same time.
+   pageControl.userInteractionEnabled = NO;
+   //
+
+   if (![currPage respondsToSelector : @selector(setScaleFactor:)])
       return;
 
    //We map [0 1] from offset to [0.7, 1.] scale factor.
@@ -277,8 +299,7 @@
 - (BOOL) shouldAutorotate
 {
    //We do not rotate if flip animation is still active.
-#warning "shouldAutorotate, TO BE IMPLEMENTED"
-   return !self.pageControl.animating;
+   return !rotating && !pageControl.animating;
 }
 
 //________________________________________________________________________________________
@@ -289,7 +310,6 @@
    if (!nPages)
       return;
 
-   rotating = YES;
    pageBeforeRotation = NSUInteger(parentScroll.contentOffset.x / parentScroll.frame.size.width);
 }
 
@@ -373,6 +393,153 @@
    }
 
    return pages;
+}
+
+#pragma mark - CAPPPageControllerDelegate.
+
+//________________________________________________________________________________________
+- (void) jumpToFirstPage
+{
+   pageControl.userInteractionEnabled = NO;
+   
+   [self setPagesData];
+   parentScroll.delegate = nil;//I do not want to receive didScroll.
+   [parentScroll setContentOffset : CGPoint() animated : NO];
+   parentScroll.delegate = self;
+   [self layoutPages : YES];
+
+   pageControl.userInteractionEnabled = YES;
+}
+
+//________________________________________________________________________________________
+- (void) jumpToLastPage
+{
+   pageControl.userInteractionEnabled = NO;
+
+   if (nPages <= 3) {
+      //Simple case.
+      parentScroll.delegate = nil;
+      [parentScroll setContentOffset : CGPointMake(2 * parentScroll.frame.size.width, 0.f) animated : NO];
+      parentScroll.delegate = self;
+   } else {
+      UIView<TiledPage> * const oldPrev = prevPage;
+      prevPage = currPage;
+      currPage = nextPage;
+      nextPage = oldPrev;
+
+      [currPage setPageItems : dataItems startingFrom : [self findItemRangeForPage : nPages - 1].location];
+      currPage.pageNumber = nPages - 1;
+      [currPage layoutTiles];
+      
+      CGRect frame = currPage.frame;
+      frame.origin.x = parentScroll.contentSize.width - frame.size.width;
+      currPage.frame = frame;
+      
+      [prevPage setPageItems : dataItems startingFrom : [self findItemRangeForPage : nPages - 2].location];
+      prevPage.pageNumber = nPages - 2;
+      [prevPage layoutTiles];
+      frame.origin.x -= frame.size.width;
+      prevPage.frame = frame;
+      
+      [nextPage setPageItems : dataItems startingFrom : [self findItemRangeForPage : nPages - 3].location];
+      nextPage.pageNumber = nPages - 3;
+      [nextPage layoutTiles];
+      frame.origin.x -= frame.size.width;
+      nextPage.frame = frame;
+      
+      parentScroll.delegate = nil;
+      [parentScroll setContentOffset : CGPointMake(parentScroll.contentSize.width - frame.size.width, 0.f) animated : NO];
+      parentScroll.delegate = self;
+   }
+   
+   pageControl.userInteractionEnabled = YES;
+}
+
+//________________________________________________________________________________________
+- (void) jumpToActivePage
+{
+   //0 and nPages - 1 is processed in other methods.
+   assert(pageControl.activePage != 0 && pageControl.activePage != nPages - 1 &&
+          "jumpToActivePage, called for the first or the last page as active");
+
+
+   if (!pageControl.activePage)
+      return [self jumpToFirstPage];
+
+   if (pageControl.activePage == nPages - 1)
+      return [self jumpToLastPage];
+   
+   pageControl.userInteractionEnabled = NO;
+   
+   if (nPages <= 3) {
+      //Simple case.
+      parentScroll.delegate = nil;
+      [parentScroll setContentOffset : CGPointMake(parentScroll.frame.size.width * pageControl.activePage, 0.f) animated : NO];
+      parentScroll.delegate = self;
+   } else {
+      [currPage setPageItems : dataItems startingFrom : [self findItemRangeForPage : pageControl.activePage].location];
+      currPage.pageNumber = pageControl.activePage;
+      [currPage layoutTiles];
+      
+      CGRect frame = currPage.frame;
+      frame.origin.x = pageControl.activePage * frame.size.width;
+      currPage.frame = frame;
+      
+      [prevPage setPageItems : dataItems startingFrom : [self findItemRangeForPage : pageControl.activePage - 1].location];
+      prevPage.pageNumber = pageControl.activePage - 1;
+      [prevPage layoutTiles];
+      frame.origin.x -= frame.size.width;
+      prevPage.frame = frame;
+      
+      [nextPage setPageItems : dataItems startingFrom : [self findItemRangeForPage : pageControl.activePage + 1].location];
+      nextPage.pageNumber = pageControl.activePage + 1;
+      [nextPage layoutTiles];
+      frame.origin.x += 2 * frame.size.width;
+      nextPage.frame = frame;
+      
+      parentScroll.delegate = nil;
+      [parentScroll setContentOffset:CGPointMake(currPage.frame.origin.x, 0.f) animated : NO];
+      parentScroll.delegate = self;
+   }
+   
+   pageControl.userInteractionEnabled = YES;
+}
+
+//________________________________________________________________________________________
+- (void) pageControlSelectedPage : (CAPPPageControl *) control
+{
+#pragma unused(control)
+
+   if (!pageControl.activePage) {
+      //We reset all pages.
+      [self jumpToFirstPage];
+   } else if (pageControl.activePage == nPages - 1) {
+      //We reset all pages.
+      [self jumpToLastPage];
+   } else {
+      //We have to wait: first, page control must adjust its offset (probably, with an animation);
+      //second, we switch pages accordingly.
+      parentScroll.hidden = YES;
+      parentScroll.userInteractionEnabled = NO;
+   }
+}
+
+//________________________________________________________________________________________
+- (void) pageControlDidEndAnimating : (CAPPPageControl *) control
+{
+#pragma unused(control)
+
+   parentScroll.userInteractionEnabled = YES;
+   parentScroll.hidden = NO;
+   
+   NSUInteger currPageIndex = 0;
+   if (nPages <= 3)
+      currPageIndex = NSUInteger(parentScroll.contentOffset.x / parentScroll.frame.size.width);
+   else
+      currPageIndex = currPage.pageNumber;
+
+   if (currPageIndex != pageControl.activePage)
+      [self jumpToActivePage];
 }
 
 @end
