@@ -179,17 +179,15 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    if (!pageView)
       [self createSubviews];
    
-   if (nPages != pageView.numberOfPages) {
-      pageView.numberOfPages = nPages;//This also resets active page to 0.
-      
-      leftLabel.hidden = nPages < fastNavigatePages;
-      rightLabel.hidden = leftLabel.hidden;
-      
-      scroll.hidden = nPages == 1;
+   pageView.numberOfPages = nPages;//This also resets active page to 0.
+   
+   leftLabel.hidden = nPages < fastNavigatePages;
+   rightLabel.hidden = leftLabel.hidden;
+   
+   scroll.hidden = nPages == 1;
 
-      rightLabel.text = [NSString stringWithFormat : @"Page %u", unsigned(nPages)];
-      [self setNeedsLayout];
-   }
+   rightLabel.text = [NSString stringWithFormat : @"Page %u", unsigned(nPages)];
+   [self setNeedsLayout];
 }
 
 //________________________________________________________________________________

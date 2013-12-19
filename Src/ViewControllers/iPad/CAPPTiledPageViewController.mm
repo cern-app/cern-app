@@ -88,6 +88,8 @@
          [prevPage setPageItems : dataItems startingFrom : pageRange.location];
          prevPage.pageNumber = 2;
       }
+      
+      pageControl.numberOfPages = nPages;
    }
 }
 
@@ -156,7 +158,6 @@
 //________________________________________________________________________________________
 - (void) refreshAfterDelay
 {
-#warning "refreshAfterDelay, TO BE IMPLEMENTED"
 }
 
 #pragma mark - UIScrollViewDelegate, page management, etc.
@@ -190,6 +191,11 @@
          parentScroll.userInteractionEnabled = NO;
          pageControl.activePage = currPageIndex;
       }
+   }
+   
+   if (delayedRefresh) {
+      [self refreshAfterDelay];
+      delayedRefresh = NO;
    }
 }
 
@@ -376,7 +382,15 @@
 //________________________________________________________________________________________
 - (BOOL) canShowAlert
 {
-   return YES;//to be overriden.
+   //TODO: check this!
+   return !rotating && pageControl.userInteractionEnabled && parentScroll.userInteractionEnabled;
+}
+
+//________________________________________________________________________________________
+- (BOOL) hasAnimationLock
+{
+   //TODO: check this!
+   return rotating || !pageControl.userInteractionEnabled || !parentScroll.userInteractionEnabled;
 }
 
 #pragma mark - Aux. methods.
@@ -397,7 +411,7 @@
    return pages;
 }
 
-#pragma mark - CAPPPageControllerDelegate.
+#pragma mark - CAPPPageControllerDelegate + page management (pages are selected from the page control).
 
 //________________________________________________________________________________________
 - (void) jumpToFirstPage

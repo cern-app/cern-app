@@ -55,5 +55,6 @@
 //To be overriden:
 - (void) refreshAfterDelay;
 - (BOOL) canShowAlert;
+- (BOOL) hasAnimationLock;
 
 @end

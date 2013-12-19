@@ -209,6 +209,7 @@
       CAPPNewsPageViewController * const c = (CAPPNewsPageViewController *)top.topViewController;
       c.feedCacheID = @"General1";
       c.apnID = 1;
+      [c setFeedURLString : @"http://home.web.cern.ch/about/updates/feed"];
       self.topViewController = top;
       return;
       */

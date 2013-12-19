@@ -8,13 +8,21 @@
 
 #import "CAPPTiledPageViewController.h"
 #import "APNEnabledController.h"
+#import "FeedParserOperation.h"
 
-@interface CAPPNewsPageViewController : CAPPTiledPageViewController { //<APNEnabledController> {
+@interface CAPPNewsPageViewController : CAPPTiledPageViewController<APNEnabledController, FeedParserOperationDelegate,
+                                                                    ConnectionController>
+{
 @protected
    NSMutableDictionary *downloaders;//image downloaders.
    NSArray *feedCache;
-   //FeedParserOperation *parserOp;
+
+   FeedParserOperation *parserOp;
 }
+
+
+- (void) setFeedURLString : (NSString *) urlString;
+- (void) setFilters : (NSObject *) filters;
 
 //Aux. methods, can be overriden.
 //Create views: prevPage, currPage, nextPage.

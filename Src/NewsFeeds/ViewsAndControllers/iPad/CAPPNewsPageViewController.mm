@@ -9,9 +9,12 @@
 #import <cassert>
 #import <cstdlib>
 
+#import "ArticleDetailViewController.h"
 #import "CAPPNewsPageViewController.h"
 #import "ECSlidingViewController.h"
+#import "StoryboardIdentifiers.h"
 #import "MenuViewController.h"
+#import "ApplicationErrors.h"
 #import "FeedItemTileView.h"
 #import "SlideScrollView.h"
 #import "FeedPageView.h"
@@ -20,6 +23,7 @@
 #import "APNHintView.h"
 #import "MWFeedItem.h"
 #import "FeedCache.h"
+#import "APNUtils.h"
 
 
 @implementation CAPPNewsPageViewController {
@@ -27,6 +31,12 @@
 
    UIActivityIndicatorView *navBarSpinner;
    Reachability *internetReach;
+   
+   //The queue with only one operation - parsing.
+   NSOperationQueue *parserQueue;
+   
+   NSString *feedURLString;
+   NSArray *feedFilters;
 }
 
 @synthesize feedCacheID, apnID, apnItems;
@@ -52,6 +62,13 @@
       navBarSpinner = nil;
       
       internetReach = [Reachability reachabilityForInternetConnection];
+      
+      feedURLString = nil;
+      feedFilters = nil;
+      
+      parserQueue = [[NSOperationQueue alloc] init];
+      parserOp = nil;
+      
       apnItems = 0;
    }
    
@@ -134,40 +151,186 @@
       viewDidAppear = YES;
       
       if ([self initTilesFromAppCache]) {
-#warning "viewDidAppear:, show apn hints!"
-         //[self showAPNHints];
-         //[self layoutFeedViews];
-         //
-         [self layoutFeedViews];
-         //
-         [self loadVisiblePageData];
-         
+         [self showAPNHints];
+         [self layoutPages : YES];
+#warning "image downloaders, TO BE IMPLEMENTED"
+         //[self loadVisiblePageData];
          return;//No need to refresh.
       }
 
       (void)[self initTilesFromDBCache];
-#warning "FIX THE LOGIC, refresh must be called now instead of layoutFeedViews"
-      [self layoutFeedViews];
-      //
       [self refresh];
    }
-#warning "viewDidAppear:, show apn hints!"
-//   [self showAPNHints];
+
+   [self showAPNHints];
 }
+
+#pragma mark - Feed's setters.
+
+//________________________________________________________________________________________
+- (void) setFeedURLString : (NSString *) urlString
+{
+   assert(urlString != nil && "setFeedURLString:, parameter 'urlString' is nil");
+   
+   feedURLString = urlString;
+}
+
+//________________________________________________________________________________________
+- (void) setFilters : (NSObject *) filters
+{
+   assert(filters != nil && "setFilters:, parameter 'filters' is nil");
+   
+   //At the moment I filter only using strings (invalid urls to exclude).
+   assert([filters isKindOfClass : [NSArray class]] && "setFilters:, filters has a wrong type");
+   
+   feedFilters = (NSArray *)filters;
+   //filters[i] must be a string!
+}
+
+#pragma mark - FeedParserOperationDelegate and related methods.
+
+//________________________________________________________________________________________
+- (void) startFeedParser
+{
+   assert(parserOp == nil && "startFeedParser, parsing operation is still active");
+   assert(parserQueue != nil && "startFeedParser, operation queue is nil");
+   assert(feedURLString != nil && "startFeedParser, feedURLString is nil");
+
+   parserOp = [[FeedParserOperation alloc] initWithFeedURLString : feedURLString];
+   parserOp.delegate = self;
+   [parserQueue addOperation : parserOp];
+}
+
+#pragma mark - FeedParseOperationDelegate
+
+//________________________________________________________________________________________
+- (void) parserDidFailWithError : (NSError *) error
+{
+//In the current version error is ignored.
+#pragma unused(error)
+
+   //TODO: test this!
+   CernAPP::HideSpinner(self);
+   [self hideNavBarSpinner];
+
+   if (self.navigationController.topViewController == self && [self canShowAlert])
+      CernAPP::ShowErrorAlert(@"Please, check network!", @"Close");
+
+   if (!dataItems.count)
+      CernAPP::ShowErrorHUD(self, @"No network");//TODO: better error message?
+   
+   parserOp = nil;
+   if (!apnItems)
+      self.navigationItem.rightBarButtonItem.enabled = YES;
+   else {
+      [self showAPNHints];
+   }
+}
+
+//________________________________________________________________________________________
+- (void) parserDidFinishWithInfo : (MWFeedInfo *) info items : (NSArray *) items
+{
+#pragma unused(info)
+
+   assert(items != nil && "parserDidFinishWithInfo:items:, parameter 'items' is nil");
+   
+   if (!items.count)
+      //Consider this as a network error.
+      return [self parserDidFailWithError : nil];
+   
+   assert(feedCacheID.length && "parserDidFinishWithInfo:items:, feedCacheID is invalid");
+   CernAPP::WriteFeedCache(feedCacheID, feedCache, items);
+
+   dataItems = [[NSMutableArray alloc] init];
+   for (MWFeedItem *item in items) {
+      //Ooops, can be quite expensive :)
+      bool filterOut = false;
+      for (NSObject *filter in feedFilters) {
+         assert([filter isKindOfClass : [NSString class]] &&
+                "parserDidFinishWithInfo:items:, filter is expected to be a string");
+         const NSRange subRange = [item.link rangeOfString : (NSString *)filter];//filter must be a substring.
+         if (subRange.location != NSNotFound) {
+            filterOut = true;
+            break;
+         }
+      }
+      
+      if (!filterOut)
+         [dataItems addObject : item];
+   }
+
+   if (feedCache)
+      feedCache = nil;
+   
+   [self hideNavBarSpinner];
+   CernAPP::HideSpinner(self);
+   [self hideAPNHints];
+   //Cache data in app delegate.
+   [self cacheInAppDelegate];
+   //
+   parserOp = nil;
+   
+   if ([self hasAnimationLock])
+      delayedRefresh = YES;
+   else {
+      delayedRefresh = NO;
+      [self refreshAfterDelay];
+   }
+}
+
+
 
 #pragma mark - Refresh and related logic.
 
 //________________________________________________________________________________________
-- (void) layoutFeedViews
+- (void) refreshAfterDelay
 {
+   self.navigationItem.rightBarButtonItem.enabled = YES;
+
+   [self setTilesLayoutHints];
+   [self setPagesData];
    [self layoutPages : YES];
-   self.pageControl.numberOfPages = nPages;
+   
+   self.parentScroll.delegate = nil;
+   [self.parentScroll setContentOffset : CGPoint() animated : NO];
+   self.parentScroll.delegate = self;
+
+#warning "image downloaders - TO BE IMPLEMENTED"
+   //[self loadVisiblePageData];
 }
 
 //________________________________________________________________________________________
 - (void) refresh
 {
-#warning "refresh, TO BE IMPLEMENTED"
+if (parserOp)
+      return;
+
+   //Stop any image download if we have any.
+   [self cancelAllImageDownloaders];
+
+   if (![self hasConnection] && !dataItems.count) {
+      //Network problems, we can not reload
+      //and do not have any previous data to show.
+
+      //TODO: is it kind of a legacy crap? Why setPagesData/layoutPages?
+      //Check in real conditions, if I can remove it.
+      [self setPagesData];
+      [self layoutPages : NO];//NO - no tiles to layout.
+      CernAPP::ShowErrorHUD(self, @"No network");
+      return;
+   }//If we do not have connection, but have articles,
+    //the network error will be reported by the feedParser. (TODO: check this!)
+   [self.noConnectionHUD hide : YES];
+
+   if (!feedCache) {
+      self.navigationItem.rightBarButtonItem.enabled = NO;
+      CernAPP::ShowSpinner(self);
+   } else {
+      [self addNavBarSpinner];//A spinner will replace a button in a navigation bar
+      [self layoutPages : YES];
+   }
+
+   [self startFeedParser];
 }
 
 #pragma mark - Aux. methods which can be overriden.
@@ -183,12 +346,11 @@
 //________________________________________________________________________________________
 - (void) addTileTapObserver
 {
-#warning "addTileTapObserver, TO BE IMPLEMENTED"
-   //[[NSNaotificationCenter defaultCenter] addObserver : self selector : @selector(articleSelected:) name : CernAPP::feedItemSelectionNotification object : nil];
+   [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(articleSelected:) name : CernAPP::feedItemSelectionNotification object : nil];
 }
 
 #pragma mark - APNEnabledController and aux. methods.
-/*
+
 //________________________________________________________________________________________
 - (void) setApnItems : (NSUInteger) nItems
 {
@@ -282,13 +444,25 @@
    [self addNavBarSpinner];
    [self startFeedParser];
 }
-*/
 
 #pragma mark - UI.
 
+//________________________________________________________________________________________
 - (IBAction) refresh : (id) sender
 {
+#pragma unused(sender)
 
+   if (parserOp)//assert? can this ever happen?
+      return;
+
+   if (![self hasConnection]) {
+      CernAPP::ShowErrorAlert(@"Please, check network", @"Close");
+      CernAPP::HideSpinner(self);
+      [self showAPNHints];
+      return;
+   }
+
+   [self refresh];
 }
 
 #pragma mark - Aux. methods.
@@ -313,5 +487,65 @@
    }
 }
 
+#pragma mark - UI.
+
+//________________________________________________________________________________________
+- (void) addNavBarSpinner
+{
+   navBarSpinner = [[UIActivityIndicatorView alloc] initWithFrame : CGRectMake(0.f, 0.f, 20.f, 20.f)];
+   UIBarButtonItem * barButton = [[UIBarButtonItem alloc] initWithCustomView : navBarSpinner];
+   // Set to Left or Right
+   self.navigationItem.rightBarButtonItem = barButton;
+   [navBarSpinner startAnimating];
+}
+
+//________________________________________________________________________________________
+- (void) hideNavBarSpinner
+{
+   if (navBarSpinner) {
+      [navBarSpinner stopAnimating];
+      navBarSpinner = nil;
+      self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                                initWithBarButtonSystemItem : UIBarButtonSystemItemRefresh
+                                                target : self action : @selector(refresh:)];
+   }
+}
+
+#pragma mark - User interactions.
+
+//________________________________________________________________________________________
+- (void) articleSelected : (NSNotification *) notification
+{
+   assert(notification != nil && "articleSelected:, parameter 'notification' is nil");
+   assert([notification.object isKindOfClass : [MWFeedItem class]] &&
+          "articleSelected:, an object in a notification has a wrong type");
+   
+   MWFeedItem * const feedItem = (MWFeedItem *)notification.object;
+   ArticleDetailViewController * const viewController = [self.storyboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailViewControllerID];
+   [viewController setContentForArticle : feedItem];
+   viewController.navigationItem.title = @"";
+
+   if (feedItem.title && feedCacheID)
+      viewController.articleID = [feedCacheID stringByAppendingString : feedItem.title];
+
+   viewController.canUseReadability = YES;
+   [self.navigationController pushViewController : viewController animated : YES];
+}
+
+#pragma mark - ConnectionController protocol.
+
+//________________________________________________________________________________________
+- (void) cancelAllImageDownloaders
+{
+#warning "cancelAllImageDownloaders - TO BE IMPLEMENTED"
+}
+
+//________________________________________________________________________________________
+- (void) cancelAnyConnections
+{
+   [parserQueue cancelAllOperations];
+   parserOp = nil;
+   [self cancelAllImageDownloaders];
+}
 
 @end
