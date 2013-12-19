@@ -127,7 +127,6 @@
 		7049BBBC16B078060045834E /* photos_videos.png in Resources */ = {isa = PBXBuildFile; fileRef = 7049BBBB16B078060045834E /* photos_videos.png */; };
 		7049BBBF16B081340045834E /* more.png in Resources */ = {isa = PBXBuildFile; fileRef = 7049BBBE16B081340045834E /* more.png */; };
 		7049BBC116B0836C0045834E /* photos.png in Resources */ = {isa = PBXBuildFile; fileRef = 7049BBC016B0836C0045834E /* photos.png */; };
-		704B3D6618631CC800904E91 /* CAPPPageControlPegView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 704B3D6518631CC800904E91 /* CAPPPageControlPegView.mm */; };
 		70501E3C16B6E180002C0F48 /* GCOAuth.m in Sources */ = {isa = PBXBuildFile; fileRef = 70501E3816B6E180002C0F48 /* GCOAuth.m */; };
 		70501E3D16B6E180002C0F48 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 70501E3A16B6E180002C0F48 /* NSData+Base64.m */; };
 		705185521755F16700CE9EB8 /* LiveEventTableController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 705185511755F16700CE9EB8 /* LiveEventTableController.mm */; };
@@ -419,8 +418,6 @@
 		7049BBBB16B078060045834E /* photos_videos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photos_videos.png; sourceTree = "<group>"; };
 		7049BBBE16B081340045834E /* more.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more.png; sourceTree = "<group>"; };
 		7049BBC016B0836C0045834E /* photos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photos.png; sourceTree = "<group>"; };
-		704B3D6418631CC800904E91 /* CAPPPageControlPegView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAPPPageControlPegView.h; sourceTree = "<group>"; };
-		704B3D6518631CC800904E91 /* CAPPPageControlPegView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CAPPPageControlPegView.mm; sourceTree = "<group>"; };
 		70501E3716B6E180002C0F48 /* GCOAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCOAuth.h; sourceTree = "<group>"; };
 		70501E3816B6E180002C0F48 /* GCOAuth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCOAuth.m; sourceTree = "<group>"; };
 		70501E3916B6E180002C0F48 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
@@ -945,8 +942,6 @@
 				707EA02717F07889006AA7A4 /* SlideWebView.mm */,
 				708CF0C3180EDAE800B83058 /* ActivityIndicatorView.h */,
 				708CF0C4180EDAE800B83058 /* ActivityIndicatorView.mm */,
-				704B3D6418631CC800904E91 /* CAPPPageControlPegView.h */,
-				704B3D6518631CC800904E91 /* CAPPPageControlPegView.mm */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -1694,7 +1689,6 @@
 				70A562CE173A35C300145FEC /* NewsFeedViewController.mm in Sources */,
 				70A562D1173A35C300145FEC /* BulletinIssueTableViewController.mm in Sources */,
 				70A562D2173A35C300145FEC /* BulletinTableViewController.mm in Sources */,
-				704B3D6618631CC800904E91 /* CAPPPageControlPegView.mm in Sources */,
 				70A562D3173A35C300145FEC /* CellBackgroundView.mm in Sources */,
 				70A562D5173A35C300145FEC /* NewsTableViewCell.mm in Sources */,
 				70A562D6173A35C300145FEC /* NewsTableViewController.mm in Sources */,
