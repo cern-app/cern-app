@@ -83,6 +83,8 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    scroll.showsVerticalScrollIndicator = NO;
    scroll.clipsToBounds = YES;
    scroll.delegate = self;
+   scroll.decelerationRate = UIScrollViewDecelerationRateFast;
+   scroll.bounces = NO;
    [self addSubview : scroll];
    //
    pageView = [[CAPPPageView alloc] initWithFrame : CGRect()];

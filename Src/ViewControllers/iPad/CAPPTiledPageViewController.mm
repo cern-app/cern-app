@@ -47,6 +47,7 @@
 {
    [super viewDidLoad];
    parentScroll.checkDragging = YES;
+   parentScroll.decelerationRate = UIScrollViewDecelerationRateFast;
 }
 
 //________________________________________________________________________________________
