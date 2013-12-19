@@ -14,6 +14,7 @@
 
 - (void) setScaleFactor : (CGFloat) factor;
 - (void) unscale;
+- (void) unzoomAnimatedWithZoom : (CGFloat) zoom from : (CFTimeInterval) start withDuration : (CFTimeInterval) duration;
 
 @required
 

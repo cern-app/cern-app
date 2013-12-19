@@ -184,6 +184,25 @@ const NSUInteger tilesOnPage = 4;
 }
 
 //________________________________________________________________________________________
+- (void) unzoomAnimatedWithZoom : (CGFloat) zoom from : (CFTimeInterval) start withDuration : (CFTimeInterval) duration
+{
+   for (FeedItemTileView *tile in tiles) {
+      const CATransform3D startPoint = CATransform3DMakeScale(zoom, zoom, 1.f);
+      const CATransform3D endPoint = CATransform3DIdentity;
+      
+      CABasicAnimation * const animation = [CABasicAnimation animationWithKeyPath : @"transform"];
+      animation.fromValue = [NSValue valueWithCATransform3D : startPoint];
+      animation.toValue = [NSValue valueWithCATransform3D : endPoint];
+      animation.beginTime = start;
+      [animation setTimingFunction : [CAMediaTimingFunction functionWithControlPoints : 0.6f : 1.5f : 0.8f : 0.8f]];
+
+      animation.duration = duration;
+      [tile.layer addAnimation : animation forKey : [NSString stringWithFormat : @"bounce%lu", (unsigned long)index]];
+      tile.layer.transform = endPoint;
+   }
+}
+
+//________________________________________________________________________________________
 - (void) collectTilesAnimatedForOrientation : (UIInterfaceOrientation) orientation from : (CFTimeInterval) start withDuration : (CFTimeInterval) duration
 {
 #pragma unused(orientation)

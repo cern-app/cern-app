@@ -333,16 +333,17 @@
          pages[pageBeforeRotation + 1].hidden = YES;
 
       [self layoutPages : YES];
-      [pages[pageBeforeRotation] explodeTiles : toInterfaceOrientation];
-      [pages[pageBeforeRotation] collectTilesAnimatedForOrientation : toInterfaceOrientation from : CACurrentMediaTime() + duration withDuration : 0.5f];
+      
+      if ([currPage respondsToSelector : @selector(unzoomAnimatedWithZoom:from:withDuration:)])
+         [pages[pageBeforeRotation] unzoomAnimatedWithZoom : 0.7f from : CACurrentMediaTime() + duration withDuration : 0.5f];
    } else {
       prevPage.hidden = YES;
       nextPage.hidden = YES;
 
       [self layoutPages : YES];
 
-      [currPage explodeTiles : toInterfaceOrientation];
-      [currPage collectTilesAnimatedForOrientation : toInterfaceOrientation from : CACurrentMediaTime() + duration withDuration : 0.5f];
+      if ([currPage respondsToSelector : @selector(unzoomAnimatedWithZoom:from:withDuration:)])
+         [currPage unzoomAnimatedWithZoom : 0.7f from : CACurrentMediaTime() + duration withDuration : 0.5f];
    }
 }
 
