@@ -202,7 +202,7 @@
       //with such a table here, also, we have to add a news feed here.
    } else {
       //
-      
+      /*
       top = [storyboard instantiateViewControllerWithIdentifier : CernAPP::CAPPNewsPageViewControllerID];
       assert([top.topViewController isKindOfClass : [CAPPNewsPageViewController class]] &&
              "initSlidingViewController:, top view controller is either nil or has a wrong type");
@@ -211,7 +211,7 @@
       c.apnID = 1;
       self.topViewController = top;
       return;
-      
+      */
       //
       top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
                                                     CernAPP::FeedTileViewControllerID];

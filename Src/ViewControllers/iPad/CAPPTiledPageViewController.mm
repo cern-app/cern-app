@@ -310,6 +310,7 @@
    if (!nPages)
       return;
 
+   rotating = YES;
    pageBeforeRotation = NSUInteger(parentScroll.contentOffset.x / parentScroll.frame.size.width);
 }
 
