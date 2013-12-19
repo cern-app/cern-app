@@ -11,6 +11,7 @@
 
 #import "CAPPTiledPageViewController.h"
 #import "ECSlidingViewController.h"
+#import "SlideScrollView.h"
 #import "DeviceCheck.h"
 
 @implementation CAPPTiledPageViewController {
@@ -39,6 +40,13 @@
    }
    
    return self;
+}
+
+//________________________________________________________________________________________
+- (void) viewDidLoad
+{
+   [super viewDidLoad];
+   parentScroll.checkDragging = YES;
 }
 
 //________________________________________________________________________________________

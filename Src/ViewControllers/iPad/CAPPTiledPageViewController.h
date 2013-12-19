@@ -12,6 +12,8 @@
 #import "CAPPPageControl.h"
 #import "TiledPage.h"
 
+@class SlideScrollView;
+
 @interface CAPPTiledPageViewController : UIViewController<UIScrollViewDelegate, HUDRefreshProtocol, CAPPPageControlDelegate> {
 @protected
    //Data items: can be feed entries or grouped feed entries (for the bulletin).
@@ -26,7 +28,7 @@
 }
 
 @property (nonatomic, weak) IBOutlet CAPPPageControl *pageControl;
-@property (nonatomic, weak) IBOutlet UIScrollView *parentScroll;
+@property (nonatomic, weak) IBOutlet SlideScrollView *parentScroll;
 
 //After dataItems were loaded (either the first time
 //or after refreshing, this function (re)sets pages.

@@ -13,6 +13,7 @@
 #import "ECSlidingViewController.h"
 #import "MenuViewController.h"
 #import "FeedItemTileView.h"
+#import "SlideScrollView.h"
 #import "FeedPageView.h"
 #import "Reachability.h"
 #import "AppDelegate.h"
