@@ -16,6 +16,7 @@ namespace {
 
 const CGSize defaultSize = CGSizeMake(400.f, 50.f);
 const CGFloat defaultLabelFontSize = 14.f;
+const CGFloat buttonLabelMargin = 20.f;
 const NSUInteger fastNavigatePages = 5;
 
 //________________________________________________________________________________
@@ -27,11 +28,11 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 }
 
 @implementation CAPPPageControl {
-   UILabel *leftLabel;
-   UILabel *rightLabel;
-   
    UIScrollView *scroll;//pageView is placed in a scroll view.
    CAPPPageView *pageView;
+   
+   UIButton *firstPage;
+   UIButton *lastPage;
 }
 
 @synthesize delegate, animating;
@@ -68,6 +69,12 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 }
 
 //________________________________________________________________________________
+- (void) dealloc
+{
+   [NSObject cancelPreviousPerformRequestsWithTarget : self];
+}
+
+//________________________________________________________________________________
 - (void) createSubviews
 {
    assert(pageView == nil && "createChildView, page view is nil");
@@ -85,34 +92,22 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    //
    pageView = [[CAPPPageView alloc] initWithFrame : CGRect()];
    [scroll addSubview : pageView];
-   //
-   UIFontDescriptor * const labelFD = [UIFontDescriptor preferredFontDescriptorWithTextStyle : UIFontTextStyleCaption2];
-   assert(labelFD != nil && "createChildViews, failed to create a font descriptor");
-   UIFont * const labelFont = [UIFont fontWithDescriptor : labelFD size : defaultLabelFontSize];
    
-   leftLabel = [[UILabel alloc] initWithFrame : CGRect()];
-   leftLabel.backgroundColor = [UIColor clearColor];
-   leftLabel.font = labelFont;
-   leftLabel.text = @"Page 1";
-   leftLabel.textColor = [UIColor darkGrayColor];
-   [self addSubview : leftLabel];
-   leftLabel.hidden = YES;
-   leftLabel.userInteractionEnabled = YES;
+   firstPage = [UIButton buttonWithType : UIButtonTypeSystem];
+   [firstPage setTitle : @"Page 1" forState : UIControlStateNormal];
+   [self addSubview : firstPage];
+   firstPage.hidden = YES;
+   //Because of the Control Center buttons at the bottom of the screen are not working properly.
+   firstPage.showsTouchWhenHighlighted = YES;
    
-   rightLabel = [[UILabel alloc] initWithFrame : CGRect()];
-   rightLabel.backgroundColor = [UIColor clearColor];
-   rightLabel.font = labelFont;
-   rightLabel.text = @"Last page";
-   rightLabel.textColor = [UIColor darkGrayColor];
-   [self addSubview : rightLabel];
-   rightLabel.hidden = YES;
-   rightLabel.userInteractionEnabled = YES;
-   
-   UITapGestureRecognizer * const tap1 = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(jumpToFirstPage:)];
-   [leftLabel addGestureRecognizer : tap1];
+   lastPage = [UIButton buttonWithType : UIButtonTypeSystem];
+   [lastPage setTitle : @"Last page" forState : UIControlStateNormal];
+   [self addSubview : lastPage];
+   lastPage.hidden = YES;
+   lastPage.showsTouchWhenHighlighted = YES;
 
-   UITapGestureRecognizer * const tap2 = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(jumpToLastPage:)];
-   [rightLabel addGestureRecognizer : tap2];
+   [firstPage addTarget : self action : @selector(jumpToFirstPage) forControlEvents : UIControlEventTouchUpInside];
+   [lastPage addTarget : self action : @selector(jumpToLastPage) forControlEvents : UIControlEventTouchUpInside];
 
    UITapGestureRecognizer * const tap3 = [[UITapGestureRecognizer alloc] initWithTarget : self action : @selector(jumpToPage:)];
    [self addGestureRecognizer : tap3];
@@ -127,20 +122,26 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    assert(animating == NO && "layoutSubviews:, called while an animation is active");
 
    //I do not check that frame is wide enough and high to place all the staff. It should be forced externally.
-   const CGSize leftLabelSize = [leftLabel.text sizeWithAttributes : @{NSFontAttributeName : leftLabel.font}];
-   const CGSize rightLabelSize = [rightLabel.text sizeWithAttributes : @{NSFontAttributeName : rightLabel.font}];
+   CGSize leftLabelSize = [firstPage.titleLabel.text sizeWithAttributes : @{NSFontAttributeName : firstPage.titleLabel.font}];
+   leftLabelSize.width += buttonLabelMargin;
+   
+   CGSize rightLabelSize = [lastPage.titleLabel.text sizeWithAttributes : @{NSFontAttributeName : lastPage.titleLabel.font}];
+   rightLabelSize.width += buttonLabelMargin;
+   
    const CGSize labelSize = CGSizeMake(std::max(leftLabelSize.width, rightLabelSize.width), std::max(leftLabelSize.height, rightLabelSize.height));
    
-   //Left label.
-   leftLabel.frame = CGRectMake(labelSize.width / 2 - leftLabelSize.width / 2,
+   //"Page 1" button.
+   firstPage.frame = CGRectMake(labelSize.width / 2 - leftLabelSize.width / 2,
                                 frame.size.height / 2. - leftLabelSize.height / 2,
                                 leftLabelSize.width, leftLabelSize.height);
-   
+
    //"Hint" for a pageView's frame.
    const CGRect hintFrame = CGRectMake(labelSize.width, 0.f, frame.size.width - labelSize.width * 2, frame.size.height);
    //Right label with such a hint.
-   rightLabel.frame = CGRectMake(hintFrame.origin.x + hintFrame.size.width + labelSize.width / 2 - rightLabelSize.width / 2,
-                                 frame.size.height / 2 - rightLabelSize.height / 2, rightLabelSize.width, rightLabelSize.height);
+   
+   //"Page N" button.
+   lastPage.frame = CGRectMake(hintFrame.origin.x + hintFrame.size.width + labelSize.width / 2 - rightLabelSize.width / 2,
+                               frame.size.height / 2 - rightLabelSize.height / 2, rightLabelSize.width, rightLabelSize.height);
 
    if (pageView.numberOfPages) {
       const CGFloat visibleW = NSUInteger(hintFrame.size.width / [CAPPPageView defaultCellWidth]) * [CAPPPageView defaultCellWidth];
@@ -181,12 +182,12 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
    
    pageView.numberOfPages = nPages;//This also resets active page to 0.
    
-   leftLabel.hidden = nPages < fastNavigatePages;
-   rightLabel.hidden = leftLabel.hidden;
+   firstPage.hidden = nPages < fastNavigatePages;
+   lastPage.hidden = firstPage.hidden;
    
    scroll.hidden = nPages == 1;
+   [lastPage setTitle : [NSString stringWithFormat : @"Page %u", unsigned(nPages)] forState : UIControlStateNormal];
 
-   rightLabel.text = [NSString stringWithFormat : @"Page %u", unsigned(nPages)];
    [self setNeedsLayout];
 }
 
@@ -264,20 +265,12 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 - (BOOL) interestedInTouch : (UITouch *) touch
 {
    assert(touch != nil && "interestedInTouch:, parameter 'touch' is nil");
-   return touch.view == self || touch.view == leftLabel || touch.view == rightLabel;
+   return touch.view == self || touch.view == firstPage || touch.view == lastPage;
 }
 
 //________________________________________________________________________________
-- (void) jumpToFirstPage : (UITapGestureRecognizer *) tap
+- (void) jumpToFirstPageAfterDelay
 {
-#pragma unused(tap)
-
-   if (animating)
-      return;
-   
-   if (!delegate || ![delegate respondsToSelector : @selector(pageControlSelectedPage:)])
-      return;
-
    if (pageView.numberOfPages && pageView.activePage) {
       pageView.activePage = 0;
       [scroll setContentOffset : CGPoint() animated : NO];
@@ -286,16 +279,23 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 }
 
 //________________________________________________________________________________
-- (void) jumpToLastPage : (UITapGestureRecognizer *) tap
+- (void) jumpToFirstPage
 {
-#pragma unused(tap)
-
    if (animating)
       return;
-
-   if (!delegate || ![delegate respondsToSelector  : @selector(pageControlSelectedPage:)])
+   
+   if (!delegate || ![delegate respondsToSelector : @selector(pageControlSelectedPage:)])
       return;
 
+   if (pageView.numberOfPages && pageView.activePage) {
+      [NSObject cancelPreviousPerformRequestsWithTarget : self];
+      [self performSelector : @selector(jumpToFirstPageAfterDelay) withObject : nil afterDelay : 0.25];
+   }
+}
+
+//________________________________________________________________________________
+- (void) jumpToLastPageAfterDelay
+{
    if (const NSUInteger nPages = pageView.numberOfPages) {
       if (pageView.activePage != nPages - 1) {
          //1. Set the page view/scroll view _without_ animation.
@@ -309,14 +309,29 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
 }
 
 //________________________________________________________________________________
+- (void) jumpToLastPage
+{
+   if (animating)
+      return;
+
+   if (!delegate || ![delegate respondsToSelector  : @selector(pageControlSelectedPage:)])
+      return;
+
+   if (const NSUInteger nPages = pageView.numberOfPages) {
+      if (pageView.activePage != nPages - 1)
+         [self performSelector : @selector(jumpToLastPageAfterDelay) withObject : nil afterDelay : 0.05f];
+   }
+}
+
+//________________________________________________________________________________
 - (void) jumpToPage : (UITapGestureRecognizer *) tap
 {
    assert(tap != nil && "jumpToPage:, parameter 'tap' is nil");
-
+   
    if (animating)
       return;
    
-   if (!delegate || ![delegate respondsToSelector:@selector(pageControlSelectedPage:)])
+   if (!delegate || ![delegate respondsToSelector : @selector(pageControlSelectedPage:)])
       return;
 
    CGPoint tapPoint = [tap locationInView : scroll];
@@ -330,6 +345,7 @@ bool EqualOffsets(CGFloat x1, CGFloat x2)
       const NSUInteger newPage = NSUInteger(tapPoint.x / [CAPPPageView defaultCellWidth]);
 
       if (newPage != pageView.activePage) {
+         [NSObject cancelPreviousPerformRequestsWithTarget : self];
          pageView.activePage = newPage;
          [delegate pageControlSelectedPage : self];//Delegate will probably disable its own user interactions now.
          [self adjustOffsetAnimated];
