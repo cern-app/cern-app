@@ -12,14 +12,11 @@
 @protocol CAPPPageControlDelegate
 @optional
 
-- (void) pageControlSelectedPage : (CAPPPageControl *) control;
 - (void) pageControlDidEndAnimating : (CAPPPageControl *) control;
 
 @end
 
 @interface CAPPPageControl : UIView<UIScrollViewDelegate>
-
-- (BOOL) interestedInTouch : (UITouch *) touch;
 
 @property (nonatomic, weak) NSObject<CAPPPageControlDelegate> *delegate;
 @property (nonatomic) BOOL animating;

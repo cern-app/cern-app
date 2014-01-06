@@ -927,30 +927,30 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WO3-oL-foT" customClass="SlideScrollView">
-                                <rect key="frame" x="0.0" y="1" width="768" height="926"/>
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <connections>
                                     <outlet property="delegate" destination="FkA-JO-juN" id="98g-dR-lAr"/>
                                 </connections>
                             </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X0w-16-4Jv" customClass="CAPPPageControl">
-                                <rect key="frame" x="72" y="926" width="624" height="32"/>
+                                <rect key="frame" x="184" y="933" width="400" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="32" id="N0n-o2-O4l"/>
-                                    <constraint firstAttribute="width" constant="624" id="ksB-wn-NR5"/>
+                                    <constraint firstAttribute="height" constant="19" id="8Qe-vt-3Cu"/>
+                                    <constraint firstAttribute="width" constant="400" id="nG5-09-nxJ"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="WO3-oL-foT" firstAttribute="top" secondItem="d7a-Xg-4KE" secondAttribute="top" constant="1" id="0Eh-wE-2ZW"/>
-                            <constraint firstAttribute="trailing" secondItem="WO3-oL-foT" secondAttribute="trailing" id="1se-OK-xXn"/>
-                            <constraint firstAttribute="bottom" secondItem="X0w-16-4Jv" secondAttribute="bottom" constant="2" id="6vQ-ur-voQ"/>
-                            <constraint firstItem="WO3-oL-foT" firstAttribute="leading" secondItem="d7a-Xg-4KE" secondAttribute="leading" id="8zO-Hv-v2X"/>
-                            <constraint firstAttribute="bottom" secondItem="WO3-oL-foT" secondAttribute="bottom" constant="33" id="TSt-FF-4is"/>
-                            <constraint firstAttribute="centerX" secondItem="X0w-16-4Jv" secondAttribute="centerX" id="dKs-hf-k2l"/>
+                            <constraint firstItem="WO3-oL-foT" firstAttribute="leading" secondItem="d7a-Xg-4KE" secondAttribute="leading" id="2YE-ut-D9F"/>
+                            <constraint firstAttribute="bottom" secondItem="X0w-16-4Jv" secondAttribute="bottom" constant="8" id="Eld-te-dw9"/>
+                            <constraint firstAttribute="bottom" secondItem="WO3-oL-foT" secondAttribute="bottom" id="N3s-Vk-px0"/>
+                            <constraint firstAttribute="centerX" secondItem="X0w-16-4Jv" secondAttribute="centerX" id="bbh-eM-hpC"/>
+                            <constraint firstAttribute="trailing" secondItem="WO3-oL-foT" secondAttribute="trailing" id="dvW-3H-shK"/>
+                            <constraint firstItem="WO3-oL-foT" firstAttribute="top" secondItem="d7a-Xg-4KE" secondAttribute="top" id="wtl-Tt-zwB"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
