@@ -49,7 +49,7 @@ NSString *FirstImageURLFromHTMLString(NSString *htmlString)
       NSString *urlString = nil;
       [theScanner scanUpToCharactersFromSet : charset intoString : &urlString];
       // "url" now contains the URL of the img
-      return urlString;
+      return [urlString stringByAddingPercentEscapesUsingEncoding : NSUTF8StringEncoding];
    }
 
    //No img url was found.

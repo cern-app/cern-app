@@ -164,8 +164,10 @@ NSString *LargeIconImageType()
       if (!thumbnailUrl)
          thumbnailUrl = imageUrl;
 
-      [newAlbum addImageData : @{CernAPP::iPadImageUrl : [NSURL URLWithString : [imageUrl stringByTrimmingCharactersInSet : charSet]],
-                                 CernAPP::thumbnailImageUrl : [NSURL URLWithString : [thumbnailUrl stringByTrimmingCharactersInSet : charSet]]}];
+      [newAlbum addImageData : @{CernAPP::iPadImageUrl : [NSURL URLWithString : [[imageUrl stringByTrimmingCharactersInSet : charSet]
+                                                                                 stringByAddingPercentEscapesUsingEncoding : NSUTF8StringEncoding]],
+                                 CernAPP::thumbnailImageUrl : [NSURL URLWithString : [[thumbnailUrl stringByTrimmingCharactersInSet : charSet]
+                                                                                      stringByAddingPercentEscapesUsingEncoding : NSUTF8StringEncoding]]}];
    }
    
    imageUrls = nil;
