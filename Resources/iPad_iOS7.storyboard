@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nQl-Hn-nT2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="nQl-Hn-nT2">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
         <!--Menu View Controller-->
@@ -574,8 +574,11 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="20" translatesAutoresizingMaskIntoConstraints="NO" id="qNq-T6-h58">
-                                        <rect key="frame" x="393" y="47" width="275" height="34"/>
+                                        <rect key="frame" x="392" y="50" width="275" height="31"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="i8u-Qu-cFH"/>
+                                        </constraints>
                                         <color key="maximumTrackTintColor" red="0.23921568630000001" green="0.25490196079999999" blue="0.31764705879999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <action selector="htmlFontSizeChanged:" destination="9UZ-Wz-VxU" eventType="valueChanged" id="pCk-AI-pCf"/>
@@ -593,12 +596,12 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="qNq-T6-h58" firstAttribute="top" secondItem="MNo-aa-ggZ" secondAttribute="top" constant="47" id="2k9-sU-YZS"/>
+                                    <constraint firstItem="qNq-T6-h58" firstAttribute="top" secondItem="MNo-aa-ggZ" secondAttribute="top" constant="50" id="2k9-sU-YZS"/>
                                     <constraint firstAttribute="trailing" secondItem="zMh-uE-rjq" secondAttribute="trailing" constant="451" id="5Rl-f7-aUl"/>
                                     <constraint firstAttribute="height" constant="121" id="Iic-3O-dca"/>
-                                    <constraint firstAttribute="trailing" secondItem="qNq-T6-h58" secondAttribute="trailing" constant="72" id="JaB-6w-5Cy"/>
+                                    <constraint firstAttribute="trailing" secondItem="qNq-T6-h58" secondAttribute="trailing" constant="73" id="JaB-6w-5Cy"/>
                                     <constraint firstItem="zMh-uE-rjq" firstAttribute="top" secondItem="MNo-aa-ggZ" secondAttribute="top" constant="46" id="Tqk-BJ-RL7"/>
-                                    <constraint firstItem="qNq-T6-h58" firstAttribute="leading" secondItem="MNo-aa-ggZ" secondAttribute="leading" constant="395" id="m2j-js-Vi4"/>
+                                    <constraint firstItem="qNq-T6-h58" firstAttribute="leading" secondItem="MNo-aa-ggZ" secondAttribute="leading" constant="394" id="m2j-js-Vi4"/>
                                     <constraint firstItem="zMh-uE-rjq" firstAttribute="leading" secondItem="MNo-aa-ggZ" secondAttribute="leading" constant="31" id="ynp-vx-uaZ"/>
                                 </constraints>
                             </view>
@@ -1042,24 +1045,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W8K-b1-nvK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2974" y="7513"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="YHM-3V-VDM">
-            <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="cgf-ou-04Y" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="HtQ-zW-XA8"/>
-                        <viewControllerLayoutGuide type="bottom" id="PyW-pW-JWg"/>
-                    </layoutGuides>
-                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="o3c-FM-16I">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <toolbarItems/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ziq-xK-sNh" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
     <resources>
