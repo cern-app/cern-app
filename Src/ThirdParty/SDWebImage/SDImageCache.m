@@ -403,7 +403,7 @@ static natural_t get_free_memory(void)
 {
     int count = 0;
     NSDirectoryEnumerator *fileEnumerator = [[NSFileManager defaultManager] enumeratorAtPath:diskCachePath];
-    for (NSString *fileName in fileEnumerator)
+    while ([fileEnumerator nextObject])
     {
         count += 1;
     }

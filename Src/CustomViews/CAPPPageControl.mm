@@ -15,9 +15,6 @@
 namespace {
 
 const CGSize defaultSize = CGSizeMake(400.f, 50.f);
-const CGFloat defaultLabelFontSize = 14.f;
-const CGFloat buttonLabelMargin = 20.f;
-const NSUInteger fastNavigatePages = 5;
 
 //________________________________________________________________________________
 bool EqualOffsets(CGFloat x1, CGFloat x2)

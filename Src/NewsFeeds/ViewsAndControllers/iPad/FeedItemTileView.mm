@@ -37,10 +37,6 @@ const CGFloat titleH = 0.18f;
 const CGFloat footerY = 0.9f;
 const CGFloat textH = footerY - titleH;
 const CGFloat verticalImageTextGap = 0.03f;
-const CGFloat wideImageH = 0.5 * textH;
-
-//
-const CGFloat hyphenShift = 5.f;
 
 //________________________________________________________________________________________
 bool IsWideImage(UIImage *image)

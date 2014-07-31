@@ -240,7 +240,8 @@ using CernAPP::NetworkStatus;
 
    for (NSDictionary *source in sources) {
       if (NSArray * const boundaryRects = source[sourceBoundaryRects]) {
-         for (NSDictionary *boundaryInfo in boundaryRects)
+         NSUInteger count = [boundaryRects count];
+         for (NSUInteger index = 0; index < count ; index++)
             [self addEventDisplayPage];
       } else
          [self addEventDisplayPage];

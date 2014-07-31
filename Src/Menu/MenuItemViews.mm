@@ -21,16 +21,11 @@
 //It's a C++, all these constants have
 //internal linkage without any 'static',
 //and no need for unnamed namespace.
-const CGFloat groupMenuLeftMargin = 4.f;
 const CGFloat groupMenuItemFontSize = 17.f;
 const CGFloat childMenuItemFontSize = 13.f;
 const CGSize menuTextShadowOffset = CGSizeMake(2.f, 2.f);
-const CGFloat menuTextShadowAlpha = 0.5f;
-const CGFloat menuItemImageSize = 24.f;//must be square image.
-const CGFloat groupMenuItemTextIndent = 10.f;
 const CGFloat discloseTriangleSize = 14.f;
 const CGFloat groupMenuItemLeftMargin = 80.f;
-const CGFloat childMenuItemImageSize = 15.f;
 const CGFloat itemImageMargin = 2.f;
 
 const CGFloat groupMenuFillColor[][4] = {{0.247f, 0.29f, 0.36f, 1.f}, {0.242f, 0.258f, 0.321f, 1.f}};
