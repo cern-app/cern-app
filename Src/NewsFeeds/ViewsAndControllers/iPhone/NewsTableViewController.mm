@@ -23,70 +23,10 @@
 #import "APNHintView.h"
 #import "AppDelegate.h"
 #import "GUIHelpers.h"
+#import "URLHelpers.h"
 #import "FeedCache.h"
 #import "APNUtils.h"
 #import "KeyVal.h"
-
-namespace CernAPP {
-
-//________________________________________________________________________________________
-NSString *FirstImageURLFromHTMLString(NSString *htmlString)
-{
-   //This trick/code is taken from the v.1 of our app.
-   //Author - Eamon Ford (with my modifications).
-   if (!htmlString)
-      return nil;
-
-   NSScanner * const theScanner = [NSScanner scannerWithString : htmlString];
-   //Find the start of IMG tag
-   [theScanner scanUpToString : @"<img" intoString : nil];
-   
-   if (![theScanner isAtEnd]) {
-      [theScanner scanUpToString : @"src" intoString : nil];
-      NSCharacterSet * const charset = [NSCharacterSet characterSetWithCharactersInString : @"\"'"];
-      [theScanner scanUpToCharactersFromSet : charset intoString : nil];
-      [theScanner scanCharactersFromSet : charset intoString : nil];
-      NSString *urlString = nil;
-      [theScanner scanUpToCharactersFromSet : charset intoString : &urlString];
-      // "url" now contains the URL of the img
-      return [urlString stringByAddingPercentEscapesUsingEncoding : NSUTF8StringEncoding];
-   }
-
-   //No img url was found.
-   return nil;
-}
-
-//________________________________________________________________________________________
-NSString *ImageURLFromEnclosures(MWFeedItem *article)
-{
-   //Now we have some feeds with enclosures and this enclosures contains images
-   //for feed's entries.
-   assert(article != nil && "ImageURLFromEnclosures, parameter 'article' is nil");
-   
-   if (!article.enclosures)
-      return nil;
-
-   for (id arrayItem in article.enclosures) {
-      if ([arrayItem isKindOfClass : [NSDictionary class]]) {
-         NSDictionary * const dict = (NSDictionary *)arrayItem;
-         id val = nil;
-         if ((val = dict[@"type"]) && [val isKindOfClass : [NSString class]]) {
-            NSString * const enclosureType = [(NSString *)val lowercaseString];
-            if (enclosureType.length) {
-               if ([enclosureType rangeOfString:@"image/"].location != NSNotFound) {
-                  id url = nil;
-                  if ((url = dict[@"url"]) && [url isKindOfClass : [NSString class]])
-                     return (NSString *)dict[@"url"];
-               }
-            }
-         }
-      }
-   }
-   
-   return nil;
-}
-
-}
 
 @implementation NewsTableViewController {
    NSMutableArray *allArticles;
@@ -669,21 +609,22 @@ NSString *ImageURLFromEnclosures(MWFeedItem *article)
             if (!body)
                body = article.summary;
          
-            NSString *urlString = CernAPP::FirstImageURLFromHTMLString(body);
+            NSString *urlString = CernAPP::FindUnescapedImageURLStringInHTMLString(body);
             if (!urlString)
-               urlString = CernAPP::ImageURLFromEnclosures(article);
+               urlString = CernAPP::FindImageURLStringInEnclosures(article);
          
             if (urlString) {
                KeyVal * const newThumbnail = [[KeyVal alloc] init];
                newThumbnail.key = indexPath;
-               newThumbnail.val = CernAPP::Details::GetThumbnailURL(urlString);
+               newThumbnail.val = CernAPP::Details::GetThumbnailURLString(urlString);
                [pairs addObject : newThumbnail];
             }
          }
       }
          
       if (pairs.count) {
-         ThumbnailDownloader * const pageDownloader = [[ThumbnailDownloader alloc] initWithItems : pairs sizeLimit : 500000 downscaleToSize : 150.f];
+         ThumbnailDownloader * const pageDownloader = [[ThumbnailDownloader alloc] initWithItems : pairs
+                                                       sizeLimit : 500000 downscaleToSize : 150.f];
          [rangeDownloaders addObject : pageDownloader];
          pageDownloader.delegate = self;
          [pageDownloader startDownload];

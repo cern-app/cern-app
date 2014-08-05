@@ -11,7 +11,6 @@
 
 #import "ArticleDetailViewController.h"
 #import "ECSlidingViewController.h"
-#import "NewsTableViewController.h"
 #import "NewsFeedViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "MenuViewController.h"
@@ -28,6 +27,7 @@
 //TODO: instead of TwitterAPI.h must be Details.h
 #import "TwitterAPI.h"
 
+#import "URLHelpers.h"
 #import "MWFeedItem.h"
 #import "FeedCache.h"
 #import "FlipView.h"
@@ -387,14 +387,14 @@
          if (!body)
             body = article.summary;
          
-         NSString *urlString = CernAPP::FirstImageURLFromHTMLString(body);
+         NSString *urlString = CernAPP::FindImageURLStringInHTMLString(body);
          if (!urlString)//Now we have some feeds, which contain RSS enclosure with images for entries.
-            urlString = CernAPP::ImageURLFromEnclosures(article);
+            urlString = CernAPP::FindImageURLStringInEnclosures(article);
 
          if (urlString) {
             KeyVal * const newThumbnail = [[KeyVal alloc] init];
             newThumbnail.key = [NSIndexPath indexPathForRow : i inSection : currPage.pageNumber];
-            newThumbnail.val = CernAPP::Details::GetThumbnailURL(urlString);
+            newThumbnail.val = CernAPP::Details::GetThumbnailURLString(urlString);
             [thumbnails addObject : newThumbnail];
          }
       } else if (![currPage tileHasThumbnail : i - range.location]) {
@@ -409,7 +409,8 @@
    }
    
    if (thumbnails.count) {
-      ThumbnailDownloader * const newDownloader = [[ThumbnailDownloader alloc] initWithItems : thumbnails sizeLimit : 500000  downscaleToSize : 200.f];
+      ThumbnailDownloader * const newDownloader = [[ThumbnailDownloader alloc] initWithItems : thumbnails
+                                                   sizeLimit : 500000  downscaleToSize : 200.f];
       [downloaders setObject : newDownloader forKey : key];
       newDownloader.pageNumber = currPage.pageNumber;
       newDownloader.delegate = self;

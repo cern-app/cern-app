@@ -18,6 +18,7 @@
 #import "Reachability.h"
 #import "DeviceCheck.h"
 #import "MWFeedItem.h"
+#import "URLHelpers.h"
 
 #import "TwitterAPI.h"
 
@@ -246,9 +247,9 @@
          body = article.summary;
       
       if (body) {
-         if (NSString *urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
-            if ((urlString = CernAPP::Details::GetThumbnailURL(urlString))) {
-               downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+         if (NSString * const urlString = CernAPP::FindUnescapedImageURLStringInHTMLString(body)) {
+            if (NSURL * const url = CernAPP::Details::GetThumbnailURL(urlString)) {
+               downloader = [[ImageDownloader alloc] initWithURL : url];
                downloader.indexPathInTableView = indexPath;
                downloader.delegate = self;
                //

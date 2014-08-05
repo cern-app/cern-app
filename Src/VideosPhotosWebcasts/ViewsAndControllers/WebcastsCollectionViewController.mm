@@ -4,7 +4,6 @@
 
 #import "WebcastsCollectionViewController.h"
 #import "ECSlidingViewController.h"
-#import "NewsTableViewController.h"
 #import "HUDRefreshProtocol.h"
 #import "MenuViewController.h"
 #import "VideoThumbnailCell.h"
@@ -13,6 +12,7 @@
 #import "Reachability.h"
 #import "DeviceCheck.h"
 #import "AppDelegate.h"
+#import "URLHelpers.h"
 
 using CernAPP::NetworkStatus;
 
@@ -559,17 +559,19 @@ using CernAPP::NetworkStatus;
       
       if (!downloaders[indexPath]) {
          if (feedItem.summary) {//TODO: verify and confirm where do we have a thumbnail link.
-            if (NSString *urlString = CernAPP::FirstImageURLFromHTMLString(feedItem.summary)) {
+            if (NSString *urlString = CernAPP::FindImageURLStringInHTMLString(feedItem.summary)) {
                if ([urlString hasPrefix : @"//"])
                   urlString = [@"http:" stringByAppendingString : urlString];
                //We need this key to later be able identify a collection view, and indexPath.seciton is always 0 here, since
                //all 3 our views have 1 section.
-               NSIndexPath * const newKey = [NSIndexPath indexPathForRow : indexPath.row inSection : NSInteger(i)];
-               ImageDownloader * const newDownloader = [[ImageDownloader alloc] initWithURLString : urlString];
-               [downloaders setObject : newDownloader forKey : newKey];
-               newDownloader.indexPathInTableView = newKey;
-               newDownloader.delegate = self;
-               [newDownloader startDownload];
+               if (NSURL * const url = [NSURL URLWithString : urlString]) {
+                  NSIndexPath * const newKey = [NSIndexPath indexPathForRow : indexPath.row inSection : NSInteger(i)];
+                  ImageDownloader * const newDownloader = [[ImageDownloader alloc] initWithURL : url];
+                  [downloaders setObject : newDownloader forKey : newKey];
+                  newDownloader.indexPathInTableView = newKey;
+                  newDownloader.delegate = self;
+                  [newDownloader startDownload];
+               }
             }
          }
       }
@@ -693,7 +695,7 @@ using CernAPP::NetworkStatus;
          if (feedItem.image)
             continue;
          
-         NSString *urlString = CernAPP::FirstImageURLFromHTMLString(feedItem.summary);
+         NSString *urlString = CernAPP::FindImageURLStringInHTMLString(feedItem.summary);
          if (!urlString)
             continue;
 
@@ -703,8 +705,12 @@ using CernAPP::NetworkStatus;
          NSIndexPath * const newKey = [NSIndexPath indexPathForRow : j inSection : NSInteger(pageIndex)];
          if (imageDownloaders[pageIndex][newKey])
             continue;
+
+         NSURL * const url = [NSURL URLWithString : urlString];
+         if (!url)
+            continue;
          
-         ImageDownloader * const newDownloader = [[ImageDownloader alloc] initWithURLString : urlString];
+         ImageDownloader * const newDownloader = [[ImageDownloader alloc] initWithURL : url];
          newDownloader.delegate = self;
          newDownloader.indexPathInTableView = newKey;
          [imageDownloaders[pageIndex] setObject : newDownloader forKey : newKey];

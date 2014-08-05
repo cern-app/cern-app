@@ -39,9 +39,16 @@ inline NSString *OauthTokenSecret()
 namespace Details {
 
 //________________________________________________________________________________________
+inline NSString *GetThumbnailURLString(NSString *imageURL)
+{
+   //Noop.
+   return imageURL;
+}
+
+//________________________________________________________________________________________
 inline NSString *GetThumbnailURL(NSString *imageURL)
 {
-   //That's a dummy version which does nothing at all.
+   //Noop.
    return imageURL;
 }
 

@@ -43,12 +43,3 @@
 @property (nonatomic) NSUInteger apnItems;
 //
 @end
-
-@class MWFeedItem;
-
-namespace CernAPP {
-
-NSString *FirstImageURLFromHTMLString(NSString *htmlString);
-NSString *ImageURLFromEnclosures(MWFeedItem *article);
-
-}

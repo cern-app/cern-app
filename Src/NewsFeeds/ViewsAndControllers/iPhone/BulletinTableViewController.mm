@@ -18,8 +18,10 @@
 #import "ApplicationErrors.h"
 #import "DeviceCheck.h"
 #import "AppDelegate.h"
+#import "URLHelpers.h"
 #import "GUIHelpers.h"
 #import "FeedCache.h"
+
 
 //Should be PrivateAPI.h or something like this.
 #import "TwitterAPI.h"
@@ -359,9 +361,9 @@
             body = article.summary;
          
          if (body) {
-            if (NSString *urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
-               if ((urlString = CernAPP::Details::GetThumbnailURL(urlString))) {
-                  downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+            if (NSString *urlString = CernAPP::FindUnescapedImageURLStringInHTMLString(body)) {
+               if (NSURL *url = CernAPP::Details::GetThumbnailURL(urlString)) {
+                  downloader = [[ImageDownloader alloc] initWithURL : url];
                   downloader.indexPathInTableView = indexPath;
                   //
                   downloader.dataSizeLimit = 500000;

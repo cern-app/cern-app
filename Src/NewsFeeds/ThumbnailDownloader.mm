@@ -50,11 +50,13 @@ enum class ThumbnailDownloadStage : unsigned char {
          
          NSIndexPath * const indexPath = (NSIndexPath *)item.key;
          
-         ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURLString : (NSString *)item.val];
-         if (!downloader) {
+         NSURL * const thumbnailURL = [NSURL URLWithString : (NSString *)item.val];
+         if (!thumbnailURL) {//Invalid URL string (were escaped already at one level up though) ?
             NSLog(@"initWithItems:, no downloader for %@", (NSString *)item.val);
             continue;
          }
+         
+         ImageDownloader * const downloader = [[ImageDownloader alloc] initWithURL : thumbnailURL];
          //
          downloader.dataSizeLimit = sizeLimit;
          //

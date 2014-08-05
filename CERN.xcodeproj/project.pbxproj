@@ -253,6 +253,7 @@
 		E1F7B68D156EDC7C0092367F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1F7B68C156EDC7C0092367F /* Foundation.framework */; };
 		E1F7B68F156EDC7C0092367F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1F7B68E156EDC7C0092367F /* CoreGraphics.framework */; };
 		E1FFFC2B15A651B40093462B /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1FFFC2A15A651B40093462B /* MediaPlayer.framework */; };
+		FE91AD1719911ABA002E867D /* URLHelpers.mm in Sources */ = {isa = PBXBuildFile; fileRef = FE91AD1619911ABA002E867D /* URLHelpers.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -630,6 +631,8 @@
 		E1F7B68E156EDC7C0092367F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		E1F7B6B6156EDC7D0092367F /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		E1FFFC2A15A651B40093462B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		FE91AD1519911ABA002E867D /* URLHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLHelpers.h; sourceTree = "<group>"; };
+		FE91AD1619911ABA002E867D /* URLHelpers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = URLHelpers.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1137,6 +1140,8 @@
 				70E69AC3170EE81F00384523 /* FeedCache.h */,
 				7034C63B178DB81D00711D87 /* MemUtils.h */,
 				7034C63C178DB81D00711D87 /* MemUtils.mm */,
+				FE91AD1519911ABA002E867D /* URLHelpers.h */,
+				FE91AD1619911ABA002E867D /* URLHelpers.mm */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -1637,6 +1642,7 @@
 				707B13F4169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.mm in Sources */,
 				707B13F5169AF69300180E02 /* NSString+HTML.m in Sources */,
 				707B13F6169AF69300180E02 /* Reachability.mm in Sources */,
+				FE91AD1719911ABA002E867D /* URLHelpers.mm in Sources */,
 				707B13F7169AF69300180E02 /* UIImage+SquareScaledImage.m in Sources */,
 				70B5E7BB180BD79900ACD47D /* SettingsNavigationController.mm in Sources */,
 				707B13FA169AF6AE00180E02 /* StoryboardIdentifiers.mm in Sources */,

@@ -46,27 +46,6 @@ bool ImageIsNonProportional(const CGSize &imageSize)
 @synthesize delegate, indexPathInTableView, image, dataSizeLimit, downscaleToSize;
 
 //________________________________________________________________________________________
-- (id) initWithURLString : (NSString *) urlString
-{
-   assert(urlString != nil && "initWithURLString:, parameter 'url' is nil");
-   
-   if (self = [super init]) {
-      url = [NSURL URLWithString : urlString];
-      if (!url)
-         return nil;//Funny, what will ARC do?
-
-      imageData = nil;
-      imageConnection = nil;
-      delayImageCreation = NO;
-      
-      dataSizeLimit = 0;
-      downscaleToSize = 0.f;
-   }
-   
-   return self;
-}
-
-//________________________________________________________________________________________
 - (id) initWithURL : (NSURL *) anUrl
 {
    assert(anUrl != nil && "initWithURL:, parameter 'url' is nil");
@@ -78,6 +57,7 @@ bool ImageIsNonProportional(const CGSize &imageSize)
       delayImageCreation = NO;
       
       dataSizeLimit = 0;
+      downscaleToSize = 0.f;
    }
    
    return self;

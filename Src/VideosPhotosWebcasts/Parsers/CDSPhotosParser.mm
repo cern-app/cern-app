@@ -159,10 +159,12 @@ NSString *LargeIconImageType()
       }
       
       if (!thumbnailUrl)//The last try.
-         thumbnailUrl = CernAPP::Details::GetThumbnailURL(imageUrl);
+         thumbnailUrl = CernAPP::Details::GetThumbnailURLString(imageUrl);
       //Uff.
       if (!thumbnailUrl)
          thumbnailUrl = imageUrl;
+
+      
 
       [newAlbum addImageData : @{CernAPP::iPadImageUrl : [NSURL URLWithString : [[imageUrl stringByTrimmingCharactersInSet : charSet]
                                                                                  stringByAddingPercentEscapesUsingEncoding : NSUTF8StringEncoding]],

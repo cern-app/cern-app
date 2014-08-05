@@ -3,12 +3,12 @@
 #import "BulletinIssueViewController.h"
 #import "BulletinTableViewController.h"
 #import "BulletinFeedViewController.h"
-#import "NewsTableViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "BulletinIssueTileView.h"
 #import "BulletinPageView.h"
 #import "AppDelegate.h"
 #import "MWFeedItem.h"
+#import "URLHelpers.h"
 #import "FeedCache.h"
 #import "FlipView.h"
 #import "APNUtils.h"
@@ -151,8 +151,8 @@
          if (!body)
             body = article.summary;
          
-         if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
-            downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+         if (NSURL * const url = CernAPP::FindImageURLInHTMLString(body)) {
+            downloader = [[ImageDownloader alloc] initWithURL : url];
             downloader.dataSizeLimit = 1000000;
             const NSUInteger indices[] = {currPage.pageNumber, i, articleIndex};
             downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
@@ -310,8 +310,8 @@
          if (!body)
             body = nextArticle.summary;
          
-         if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
-            downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+         if (NSURL * const url = CernAPP::FindImageURLInHTMLString(body)) {
+            downloader = [[ImageDownloader alloc] initWithURL : url];
             downloader.dataSizeLimit = 1000000;
             const NSUInteger indices[] = {pageIndex, tileIndex, i};
             downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
@@ -369,8 +369,8 @@
             if (!body)
                body = nextArticle.summary;
          
-            if (NSString * const urlString = CernAPP::FirstImageURLFromHTMLString(body)) {
-               downloader = [[ImageDownloader alloc] initWithURLString : urlString];
+            if (NSURL * const url = CernAPP::FindImageURLInHTMLString(body)) {
+               downloader = [[ImageDownloader alloc] initWithURL : url];
                downloader.dataSizeLimit = 1000000;
                const NSUInteger indices[] = {pageIndex, tileIndex, i};
                downloader.indexPathInTableView = [[NSIndexPath alloc] initWithIndexes : indices length : 3];
