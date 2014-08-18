@@ -46,10 +46,10 @@ inline NSString *GetThumbnailURLString(NSString *imageURL)
 }
 
 //________________________________________________________________________________________
-inline NSString *GetThumbnailURL(NSString *imageURL)
+inline NSURL *GetThumbnailURL(NSString *imageURL)
 {
    //Noop.
-   return imageURL;
+   return [NSURL URLWithString: imageURL];
 }
 
 //________________________________________________________________________________________
