@@ -123,11 +123,23 @@
 					<key>Image</key>
 					<string>twitbird.png</string>
 					<key>Name</key>
-					<string>CERN Twitter</string>
+					<string>CERN on Twitter</string>
 					<key>Url</key>
 					<string>screen_name=CERN</string>
 					<key>Category name</key>
 					<string>Tweet</string>
+				</dict>
+				<dict>
+					<key>ItemID</key>
+					<integer>19</integer>
+					<key>Category name</key>
+					<string>Feed</string>
+					<key>Image</key>
+					<string>youtube.png</string>
+					<key>Url</key>
+					<string>https://www.youtube.com/rss/user/CERNTV/feed.rss</string>
+					<key>Name</key>
+					<string>CERN on YouTube</string>
 				</dict>
 			</array>
 			<key>Name</key>

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4192C4DC19A249C900EDA872 /* youtube.png in Resources */ = {isa = PBXBuildFile; fileRef = 4192C4DB19A249C900EDA872 /* youtube.png */; };
 		41B3D9C816B12D6000AF4463 /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B3D9BC16B12D6000AF4463 /* MWCaptionView.m */; };
 		41B3D9C916B12D6000AF4463 /* MWPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B3D9BE16B12D6000AF4463 /* MWPhoto.m */; };
 		41B3D9CA16B12D6000AF4463 /* MWPhotoBrowser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41B3D9C016B12D6000AF4463 /* MWPhotoBrowser.mm */; };
@@ -258,6 +259,7 @@
 
 /* Begin PBXFileReference section */
 		411D362316BADC57008CF20B /* Readability-sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Readability-sample.h"; sourceTree = "<group>"; };
+		4192C4DB19A249C900EDA872 /* youtube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube.png; sourceTree = "<group>"; };
 		41B3D9BB16B12D6000AF4463 /* MWCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCaptionView.h; sourceTree = "<group>"; };
 		41B3D9BC16B12D6000AF4463 /* MWCaptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWCaptionView.m; sourceTree = "<group>"; };
 		41B3D9BD16B12D6000AF4463 /* MWPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWPhoto.h; sourceTree = "<group>"; };
@@ -1015,6 +1017,7 @@
 		707B136D169AEA4700180E02 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				4192C4DB19A249C900EDA872 /* youtube.png */,
 				7046261017BD163400343C13 /* press_release.png */,
 				709A4AE417B3DB7700266374 /* twitbird.png */,
 				70B22F0416F9DCAA007D88EF /* action_blue.png */,
@@ -1475,6 +1478,7 @@
 				41E618341614CEB700BAA7D4 /* C7.png in Resources */,
 				41E618351614CEB700BAA7D4 /* C8.png in Resources */,
 				41E618361614CEB700BAA7D4 /* C9.png in Resources */,
+				4192C4DC19A249C900EDA872 /* youtube.png in Resources */,
 				41E618371614CEB700BAA7D4 /* CJ.png in Resources */,
 				41E618381614CEB700BAA7D4 /* CK.png in Resources */,
 				41E618391614CEB700BAA7D4 /* CQ.png in Resources */,
@@ -1826,8 +1830,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "AAA00E52-8929-44E2-898B-AD13E013E0F5";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AAA00E52-8929-44E2-898B-AD13E013E0F5";
+				PROVISIONING_PROFILE = "ae2a8c28-0dcd-4df7-94bf-90d015550a29";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ae2a8c28-0dcd-4df7-94bf-90d015550a29";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1857,8 +1861,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "AAA00E52-8929-44E2-898B-AD13E013E0F5";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "AAA00E52-8929-44E2-898B-AD13E013E0F5";
+				PROVISIONING_PROFILE = "ae2a8c28-0dcd-4df7-94bf-90d015550a29";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ae2a8c28-0dcd-4df7-94bf-90d015550a29";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
