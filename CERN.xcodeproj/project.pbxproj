@@ -91,6 +91,7 @@
 		41E6188E1614CF7000BAA7D4 /* StaticInformation.plist in Resources */ = {isa = PBXBuildFile; fileRef = 41E6188D1614CF7000BAA7D4 /* StaticInformation.plist */; };
 		41E618901614CFAB00BAA7D4 /* ArticleCSS.css in Resources */ = {isa = PBXBuildFile; fileRef = 41E6188F1614CFAB00BAA7D4 /* ArticleCSS.css */; };
 		41E618941614CFB500BAA7D4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 41E618921614CFB500BAA7D4 /* InfoPlist.strings */; };
+		41FD73C219A41189001DB16E /* openlab.png in Resources */ = {isa = PBXBuildFile; fileRef = 41FD73C119A41189001DB16E /* openlab.png */; };
 		7004A14516CBB7FA0097435D /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7004A14316CBB7FA0097435D /* Model.xcdatamodeld */; };
 		7004A14716CBB8E60097435D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7004A14616CBB8E60097435D /* CoreData.framework */; };
 		70086231169B56F2001C7BB5 /* MenuItemViews.mm in Sources */ = {isa = PBXBuildFile; fileRef = 70086230169B56F2001C7BB5 /* MenuItemViews.mm */; };
@@ -372,6 +373,7 @@
 		41E6188D1614CF7000BAA7D4 /* StaticInformation.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = StaticInformation.plist; sourceTree = "<group>"; };
 		41E6188F1614CFAB00BAA7D4 /* ArticleCSS.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = ArticleCSS.css; sourceTree = "<group>"; };
 		41E618931614CFB500BAA7D4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
+		41FD73C119A41189001DB16E /* openlab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = openlab.png; sourceTree = "<group>"; };
 		7004A14416CBB7FA0097435D /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		7004A14616CBB8E60097435D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		7008622F169B56F2001C7BB5 /* MenuItemViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuItemViews.h; sourceTree = "<group>"; };
@@ -1017,6 +1019,7 @@
 		707B136D169AEA4700180E02 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				41FD73C119A41189001DB16E /* openlab.png */,
 				4192C4DB19A249C900EDA872 /* youtube.png */,
 				7046261017BD163400343C13 /* press_release.png */,
 				709A4AE417B3DB7700266374 /* twitbird.png */,
@@ -1532,6 +1535,7 @@
 				41CE55B71616073F00F477AD /* D3.png in Resources */,
 				41CE55B91616074A00F477AD /* D4.png in Resources */,
 				703FD35C161DDB4F00B8BB8C /* PTS75F.ttf in Resources */,
+				41FD73C219A41189001DB16E /* openlab.png in Resources */,
 				41C0659416271ED1000DC176 /* iTunesArtwork in Resources */,
 				700F547916396A130082B89E /* CERNLive.plist in Resources */,
 				70600A18169AF9B300F9E833 /* about.png in Resources */,

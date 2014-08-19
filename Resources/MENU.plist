@@ -141,6 +141,18 @@
 					<key>Name</key>
 					<string>CERN on YouTube</string>
 				</dict>
+				<dict>
+					<key>ItemID</key>
+					<integer>20</integer>
+					<key>Category name</key>
+					<string>Feed</string>
+					<key>Image</key>
+					<string>openlab.png</string>
+					<key>Url</key>
+					<string>http://openlab.web.cern.ch/feeds/news/rss.xml</string>
+					<key>Name</key>
+					<string>CERN openlab</string>
+				</dict>
 			</array>
 			<key>Name</key>
 			<string>News</string>
