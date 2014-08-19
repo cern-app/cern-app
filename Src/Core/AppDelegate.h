@@ -4,7 +4,6 @@
 namespace CernAPP {
 
 enum class TwitterFeedShowOption : char {
-   notSet,
    externalView,
    builtinView
 };

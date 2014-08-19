@@ -84,8 +84,7 @@ NSString * const apnKeyFormat = @"apn%lu";
              opt == NSInteger(CernAPP::TwitterFeedShowOption::externalView)) &&
              "application:didFinishLaunchingWithOptions:, unexpected twitter option");
       tweetOption = CernAPP::TwitterFeedShowOption(opt);
-   } else
-      tweetOption = CernAPP::TwitterFeedShowOption::notSet;
+   }
    
    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
    /*   const unsigned cacheSizeMemory = 4 * 1024 * 1024; // 4MB

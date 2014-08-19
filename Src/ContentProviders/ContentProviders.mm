@@ -202,40 +202,18 @@ UIViewController *FindController(UIView *view)
       
       AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 
-      if (appDelegate.tweetOption == TwitterFeedShowOption::notSet) {
-         //We open a twitter feed the first time or we had invalid (nil) twitterUrl before.
-         if (twitterUrl && [[UIApplication sharedApplication] canOpenURL : twitterUrl]) {
-            NSString * const message = [NSString stringWithFormat : @"Do you want to use an external application to open %@?"
-                                                                     " (you can change this option in the 'Settings')", feedName];
-            
-            ActionSheetWithController *dialog = nil;
-            
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-               dialog = [[ActionSheetWithController alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
-                                                                                              destructiveButtonTitle : @"No, show in a built-in view"
-                                                                                                   otherButtonTitles : @"Yes", nil];
-            } else {
-               dialog = [[ActionSheetWithController alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Yes"
-                                                                                              destructiveButtonTitle : @"No, show in a built-in view"
-                                                                                                   otherButtonTitles : nil];
-            }
-            
-            dialog.controller = controller;
-            [dialog showInView : controller.view];
-            return;
-         }
-      }
-
       if (appDelegate.tweetOption == TwitterFeedShowOption::externalView) {
          //The previous time user selected "use an external application".
-         if(![[UIApplication sharedApplication] openURL : twitterUrl])
+         if(![[UIApplication sharedApplication] openURL : twitterUrl]) {
             CernAPP::ShowErrorAlert(@"Failed to open twitter app", @"Close");
-         return;
+            appDelegate.tweetOption = TwitterFeedShowOption::builtinView;
+         } else
+            return;
       }
 
       NSString * const name = TwitterUserName(feed);
       assert(name != nil && "loadControllerTo:, can not extract twitter user name from invalid get command");
-      //Either notSet (twitterUrl is nil or we can not open Url in an external app), or builtinView.
+      //Either we can not open Url in an external app, or builtinView.
       navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
                                                                          TwitterViewControllerID];
       assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
@@ -293,68 +271,6 @@ UIViewController *FindController(UIView *view)
       controller.slidingViewController.topViewController.view.frame = frame;
       [controller.slidingViewController resetTopView];
    }];
-}
-
-#pragma mark - Action sheet delegate, open tweet in an external application or in built-in view.
-
-//____________________________________________________________________________________________________
-- (void) actionSheet : (UIActionSheet *) actionSheet didDismissWithButtonIndex : (NSInteger) buttonIndex
-{
-   using namespace CernAPP;
-
-   assert(buttonIndex >= 0 && "actionSheet:didDisimssWithButtonIndex:, button index must be non-negative");
-
-   assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
-          "actionSheet:didDisimssWithButtonIndex:, application delegate has a wrong type");
-   AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-
-   bool externalApp = false;
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-      externalApp = buttonIndex != actionSheet.destructiveButtonIndex;
-   else
-      externalApp = buttonIndex ==actionSheet.cancelButtonIndex;
-
-   if (externalApp) {
-      appDelegate.tweetOption = TwitterFeedShowOption::externalView;
-      
-      if(![[UIApplication sharedApplication] openURL : twitterUrl])
-         CernAPP::ShowErrorAlert(@"actionSheet:didDisimssWithButtonIndex:, error: Failed to open twitter app", @"Close");
-   } else {
-      assert([actionSheet isKindOfClass : [ActionSheetWithController class]] &&
-             "actionSheet:didDismissWithButtonIndex:, parameter 'actionSheet' is either nil or has a wrong type");
-      UIViewController * const controller = ((ActionSheetWithController *)actionSheet).controller;      
-      assert(controller != nil && "actionSheet:didDisimssWithButtonIndex:, controller not found");
-
-      appDelegate.tweetOption = CernAPP::TwitterFeedShowOption::builtinView;
-
-
-      MenuNavigationController * const navController =
-                        (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
-                                                     TwitterViewControllerID];
-      assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
-             "loadControllerTo:, top view controller is either nil or has a wrong type");
-      TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
-      tvc.navigationItem.title = feedName;
-      
-      NSString * const tweetName = TwitterUserName(feed);
-      assert(tweetName != nil && "actionSheet:didDisimssWithButtonIndex:, can not extract twitter user name from invalid get command");
-      [tvc setTwitterUserName : tweetName];
-      
-      if (controller.slidingViewController.topViewController)
-         CancelConnections(controller.slidingViewController.topViewController);
-
-      [controller.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete:^{
-         CGRect frame = controller.slidingViewController.topViewController.view.frame;
-         controller.slidingViewController.topViewController = navController;
-         controller.slidingViewController.topViewController.view.frame = frame;
-         [controller.slidingViewController resetTopView];
-      }];
-   }
-   
-   [[NSUserDefaults standardUserDefaults] setObject : [NSNumber numberWithInteger : NSInteger(appDelegate.tweetOption)]
-                                             forKey : CernAPP::tweetViewKey];
-   [[NSUserDefaults standardUserDefaults] synchronize];
-
 }
 
 @end
