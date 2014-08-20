@@ -516,7 +516,7 @@
    if (feedItem.title && feedCacheID)
       viewController.articleID = [feedCacheID stringByAppendingString : feedItem.title];
 
-   viewController.canUseReadability = !(CernAPP::SkipReadabilityProcessing(feedItem.link));
+   viewController.canUseReadability = !CernAPP::SkipReadabilityProcessing(feedItem.link);
    [self.navigationController pushViewController : viewController animated : YES];
 
    [tableView deselectRowAtIndexPath : indexPath animated : NO];
