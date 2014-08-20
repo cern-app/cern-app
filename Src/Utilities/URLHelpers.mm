@@ -114,7 +114,7 @@ bool SkipReadabilityProcessing(NSString *url)
 {
     //An ad-hoc solution to avoid "cleaning" some pages.
     //TODO: Add other type of links to exclude or find a better solution :)
-    return [url hasPrefix:@"http://www.youtube.com/watch?"];
+   return [url hasPrefix: @"http://www.youtube.com/watch?"] || [url hasPrefix: @"http://jobs.web.cern.ch/"];
 }
 
 }
