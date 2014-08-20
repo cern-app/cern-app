@@ -13,4 +13,6 @@ NSString *FindUnescapedImageURLStringInEnclosures(MWFeedItem *article);
 NSString *FindImageURLStringInEnclosures(MWFeedItem *article);
 NSURL *FindImageURLInEnclosures(MWFeedItem *article);
 
+bool SkipReadabilityProcessing(NSString *url);
+
 }

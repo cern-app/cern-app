@@ -519,7 +519,7 @@
    if (feedItem.title && feedCacheID)
       viewController.articleID = [feedCacheID stringByAppendingString : feedItem.title];
 
-   viewController.canUseReadability = YES;
+   viewController.canUseReadability = !CernAPP::SkipReadabilityProcessing(feedItem.link);
    [self.navigationController pushViewController : viewController animated : YES];
 }
 

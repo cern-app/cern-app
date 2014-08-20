@@ -109,4 +109,12 @@ NSURL *FindImageURLInEnclosures(MWFeedItem *article)
    return nil;
 }
 
+//________________________________________________________________________________________
+bool SkipReadabilityProcessing(NSString *url)
+{
+    //An ad-hoc solution to avoid "cleaning" some pages.
+    //TODO: Add other type of links to exclude or find a better solution :)
+    return [url hasPrefix:@"http://www.youtube.com/watch?"];
+}
+
 }
