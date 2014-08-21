@@ -39,6 +39,19 @@
 
 @end
 
+@interface PageProvider : NSObject<ContentProvider>
+
+- (id) initWithDictionary : (NSDictionary *) info;
+
+@property (nonatomic, retain) NSString *categoryName;
+@property (nonatomic) NSUInteger providerID;
+
+- (UIImage *) categoryImage;
+
+- (void) loadControllerTo : (UIViewController *) controller;
+
+@end
+
 @interface PhotoSetProvider : NSObject<ContentProvider>
 
 - (id) initWithDictionary : (NSDictionary *) info;

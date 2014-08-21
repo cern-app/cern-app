@@ -57,7 +57,7 @@ NSDictionary *LoadOfflineMenuPlist(NSString * plistName)
       plist = [NSDictionary dictionaryWithContentsOfFile : path];
       assert(plist != nil && "loadOfflineMenuPlists, no dictionary or 'FILENAME.plist' found");
    }
-   
+
    return plist;
 }
 
@@ -66,7 +66,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    assert(plist != nil && "WriteOfflineMenuPlist, parameter 'plist' is nil");
    assert(plistName != nil && "WriteOfflineMenuPlist, parameter 'plistName' is nil");
-   
+
    NSArray * const paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
    if (paths.count) {
       NSString * const dir = (NSString *)paths[0];
@@ -81,18 +81,18 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    NSMutableArray *menuItems;
    MenuItemView *selectedItemView;
    NSUInteger apnSelectedFeed;
-   
+
    BOOL inAnimation;
    __weak MenuItemsGroup *newOpen;
-   
+
    NSMutableArray *liveData;
-   
+
    NSURLConnection *connection;
    NSMutableData *menuData;
-   
+
    NSDictionary *menuPlist;
    NSDictionary *livePlist;
-   
+
    MenuUpdateStage updateStage;
 }
 
@@ -100,14 +100,14 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 - (UIImage *) loadItemImage : (NSDictionary *) desc
 {
    assert(desc != nil && "loadItemImage:, parameter 'desc' is nil");
-   
+
    if (id objBase = desc[@"Image name"]) {
       assert([objBase isKindOfClass : [NSString class]] &&
              "loadItemImage:, 'Image name' must be a NSString");
-      
+
       return [UIImage imageNamed : (NSString *)objBase];
    }
-   
+
    return nil;
 }
 
@@ -120,10 +120,10 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(desc != nil && "setStateForGroup:from:, parameter 'desc' is nil");
 
    MenuItemsGroup * const group = (MenuItemsGroup *)menuItems[groupIndex];
-   
+
    assert([desc[@"Expanded"] isKindOfClass : [NSNumber class]] &&
           "setStateForGroup:from:, 'Expanded' is not found or has a wrong type");
-   
+
    const NSInteger val = [(NSNumber *)desc[@"Expanded"] integerValue];
    assert(val >= 0 && val <= 2 && "setStateForGroup:from:, 'Expanded' can have a vlue only 0, 1 or 2");
 
@@ -148,7 +148,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(items != nil && "addMenuGroup:withImage:forItems:, parameter 'items' is nil");
 
    MenuItemsGroup * const group = [[MenuItemsGroup alloc] initWithTitle : groupName image : groupImage items : items];
-   
+
    for (NSObject<MenuItemProtocol> *menuItem in items) {
       if ([menuItem isKindOfClass : [MenuItemsGroup class]]) {
          MenuItemsGroup *const nestedGroup = (MenuItemsGroup *)menuItem;
@@ -156,10 +156,10 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          nestedGroup.collapsed = YES;//By default, nested sub-menu is closed.
       }
    }
-   
+
    [group addMenuItemViewInto : scrollView controller : self];
    [menuItems addObject : group];
-   
+
    for (NSObject<MenuItemProtocol> *menuItem in items) {
       if ([menuItem isKindOfClass : [MenuItemsGroup class]]) {
          MenuItemsGroup *const nestedGroup = (MenuItemsGroup *)menuItem;
@@ -181,16 +181,39 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    assert(desc != nil && "loadFeed:into:, parameter 'desc' is nil");
    assert(items != nil && "loadFeed:into:, parameter 'items' is nil");
-   
+
    assert([desc[@"Category name"] isKindOfClass : [NSString class]] &&
           "loadFeed:into:storeIDBase:, 'Category name' not found or has a wrong type");
-   
+
    NSString * const categoryName = (NSString *)desc[@"Category name"];
 
    if (![categoryName isEqualToString : @"Feed"] && ![categoryName isEqualToString : @"Tweet"])
       return NO;
 
    FeedProvider * const provider = [[FeedProvider alloc] initWith : desc];
+   MenuItem * const newItem = [[MenuItem alloc] initWithContentProvider : provider];
+   [items addObject : newItem];
+
+   return YES;
+}
+
+//________________________________________________________________________________________
+- (BOOL) loadPage : (NSDictionary *) desc into : (NSMutableArray *) items
+{
+   //This can be both the top-level and a nested item.
+
+   assert(desc != nil && "loadPage:into:, parameter 'desc' is nil");
+   assert(items != nil && "loadPage:into:, parameter 'items' is nil");
+
+   assert([desc[@"Category name"] isKindOfClass : [NSString class]] &&
+          "loadPAge:into:storeIDBase:, 'Category name' not found or has a wrong type");
+
+   NSString * const categoryName = (NSString *)desc[@"Category name"];
+
+   if (![categoryName isEqualToString : @"Page"])
+      return NO;
+
+   PageProvider * const provider = [[PageProvider alloc] initWithDictionary : desc];
    MenuItem * const newItem = [[MenuItem alloc] initWithContentProvider : provider];
    [items addObject : newItem];
 
@@ -206,14 +229,14 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(items != nil && "loadBulletin:into:, parameter 'items' is nil");
    assert([desc[@"Category name"] isKindOfClass : [NSString class]] &&
           "loadBulletin:into:, 'Category name' not found or has a wrong type");
-   
+
    if (![(NSString *)desc[@"Category name"] isEqualToString : @"Bulletin"])
       return NO;
 
    BulletinProvider * const provider = [[BulletinProvider alloc] initWithDictionary : desc];
    MenuItem * const menuItem = [[MenuItem alloc] initWithContentProvider : provider];
    [items addObject : menuItem];
-   
+
    return YES;
 }
 
@@ -221,7 +244,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 - (BOOL) loadPhotoSet : (NSDictionary *) desc into : (NSMutableArray *) items
 {
    //Both a top-level and a nested item.
-   
+
    //This is an 'ad-hoc' provider (it does a lot of special work to find
    //images in our quite  special sources).
 
@@ -229,7 +252,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(items != nil && "loadPhotoSet:into:, parameter 'items' is nil");
    assert([desc[@"Category name"] isKindOfClass : [NSString class]] &&
           "loadPhotoSet:into:, 'Category name' is nil or has a wrong type");
-   
+
    if (![(NSString *)desc[@"Category name"] isEqualToString : @"PhotoSet"])
       return NO;
 
@@ -244,7 +267,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 - (BOOL) loadVideoSet : (NSDictionary *) desc into : (NSMutableArray *) items
 {
    //Both the top-level and nested item.
-   
+
    //This is an 'ad-hoc' content provider (it does a lot of special worn
    //to extract video from our quite special source).
    //That's why the provider is 'LatestVideosProvider'.
@@ -253,10 +276,10 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(items != nil && "loadVideoSet:into:, parameter 'items' is nil");
    assert([desc[@"Category name"] isKindOfClass : [NSString class]] &&
           "loadVideoSet:into:, 'Category name' not found or has a wrong type");
-   
+
    if (![(NSString *)desc[@"Category name"] isEqualToString : @"VideoSet"])
       return NO;
-   
+
    LatestVideosProvider * const provider = [[LatestVideosProvider alloc] initWithDictionary : desc];
    MenuItem * const menuItem = [[MenuItem alloc] initWithContentProvider : provider];
    [items addObject : menuItem];
@@ -269,20 +292,20 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    assert(desc != nil && "loadSpecialItem:into:, parameter 'desc' is nil");
    assert(items != nil && "loadSpecialItem:into:, parameter 'items' is nil");
-   
+
    assert([desc[@"Category name"] isKindOfClass : [NSString class]] &&
           "loadSpecialItem:into:, 'Category name' not found or has a wrong type");
-   
+
    NSString * const catName = (NSString *)desc[@"Category name"];
-   
+
    if ([catName isEqualToString : @"ModalViewItem"] || [catName isEqualToString : @"NavigationViewItem"]) {
       NSObject<ContentProvider> *provider = nil;
-      
+
       if ([catName isEqualToString : @"ModalViewItem"])
          provider = [[ModalViewProvider alloc] initWithDictionary : desc];
       else
          provider = [[NavigationViewProvider alloc] initWithDictionary : desc];
-      
+
       MenuItem * const menuItem = [[MenuItem alloc] initWithContentProvider : provider];
       [items addObject : menuItem];
       [menuItem addMenuItemViewInto : scrollView controller : self];
@@ -291,7 +314,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
       return YES;
    } //Something else special.
-   
+
    return NO;
 }
 
@@ -301,18 +324,18 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    //Can be top-level only.
 
    assert(desc != nil && "loadSeparator:, parameter 'desc' is nil");
-   
+
    id objBase = desc[@"Category name"];
    assert(objBase != nil && [objBase isKindOfClass : [NSString class]] &&
           "loadSeparator:, 'Category name' either not found or has a wrong type");
-   
+
    if ([(NSString *)objBase isEqualToString : @"Separator"]) {
       MenuSeparator * const separator = [[MenuSeparator alloc] init];
       [separator addMenuItemViewInto : scrollView controller : self];
       [menuItems addObject : separator];
       return YES;
    }
-   
+
    return NO;
 }
 
@@ -329,19 +352,19 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    //This is a "TOP-level" menu group.
    //This menu group can contain only simple, non-group items.
-   
+
    assert(scrollView != nil && "loadMenuGroup:, scrollView is not loaded yet!");
    assert(desc != nil && "loadMenuGroup:, parameter 'desc' is nil");
    assert([desc[@"Category name"] isKindOfClass : [NSString class]] &&
           "loadMenuGroup:, 'Category Name' not found or has a wrong type");
-   
+
    if (![(NSString *)desc[@"Category name"] isEqualToString : @"Menu group"])
       return NO;
-   
+
    //Find a section name, it's a required property.
    assert([desc[@"Name"] isKindOfClass : [NSString class]] &&
           "loadMenuGroup:, 'Name' is not found, or has a wrong type");
-   
+
    NSString * const sectionName = (NSString *)desc[@"Name"];
    //Now, we need an array of either feeds or tweets.
    if (desc[@"Items"]) {
@@ -354,26 +377,29 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          for (id info in plistItems) {
             assert([info isKindOfClass : [NSDictionary class]] &&
                    "loadMenuGroup:, item info must be a dictionary");
-            
+
             NSDictionary * const itemInfo = (NSDictionary *)info;
             //Now, we try to initialize correct content provider,
             //using item's 'Category name':
             if ([self loadFeed : itemInfo into : groupItems])
                continue;
-            
+
+            if ([self loadPage : itemInfo into : groupItems])
+               continue;
+
             if ([self loadBulletin : itemInfo into : groupItems])
                continue;
-            
+
             if ([self loadPhotoSet : itemInfo into : groupItems])
                continue;
-            
+
             if ([self loadVideoSet : itemInfo into : groupItems])
                continue;
-            
+
             if ([self loadSpecialItem : itemInfo into : groupItems])
                continue;
          }
-         
+
          [self addMenuGroup : sectionName withImage : [self loadItemImage : desc] forItems : groupItems];
          [self setStateForGroup : menuItems.count - 1 from : desc];
       }
@@ -388,16 +414,16 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    //This is 'ad-hoc' solution, it's based on an old CERNLive.plist from app. v.1
    //and the code to read this plist and create content providers.
-   
+
    //LIVE is a top-level menu-group with (probably) nested menu-groups.
 
    assert(desc != nil && "loadLIVESection:, parameter 'desc' is nil");
-   
+
    id objBase = desc[@"Category name"];
    assert(objBase != nil && "loadLIVESection:, 'Category Name' not found");
    assert([objBase isKindOfClass : [NSString class]] &&
           "loadLIVESection:, 'Category Name' must have a NSString type");
-   
+
    NSString * const catName = (NSString *)objBase;
    if (![catName isEqualToString : @"LIVE"])
       return NO;
@@ -413,23 +439,23 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    //Ad hoc menu items.
    //They are not part of StaticInformation.plist - added 1.5 years later and have nothing
    //to do with 'off-line information about CERN".
-   
+
    assert(menuGroup != nil && "addAnimation:, parameter 'menuGroup' is nil");
-   
+
    NSMutableArray * const subMenu = [[NSMutableArray alloc] init];
 
-   
+
    NSDictionary *itemData = @{@"Name" : @"Introduction", @"links" :
    @{@"medium" : @"http://cernapp.cern.ch/intro.mp4"}};
    ModalViewVideoProvider * provider = [[ModalViewVideoProvider alloc] initWithDictionary : itemData];
    [subMenu addObject : [[MenuItem alloc] initWithContentProvider : provider]];
-   
+
    itemData = @{@"Name" : @"Acceleration network", @"links" :
    @{@"medium" : @"http://cernapp.cern.ch/accnet_med.mp4",
    @"high" : @"http://cernapp.cern.ch/accnet_high.mp4"}};
    provider = [[ModalViewVideoProvider alloc] initWithDictionary : itemData];
    [subMenu addObject : [[MenuItem alloc] initWithContentProvider : provider]];
-   
+
    MenuItemsGroup * const newGroup = [[MenuItemsGroup alloc] initWithTitle:@"3D animations" image : nil items : subMenu];
    [menuGroup addObject : newGroup];
 }
@@ -445,7 +471,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    id objBase = desc[@"Category name"];
    assert([objBase isKindOfClass : [NSString class]] &&
           "loadStaticInfo:, 'Category name' either not found or has a wrong type");
-   
+
    if (![(NSString *)objBase isEqualToString : @"StaticInfo"])
       return NO;
 
@@ -457,7 +483,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert([objBase isKindOfClass : [NSArray class]] && "loadStaticInfo:, 'Root' not found or has a wrong type");
    //We have an array of dictionaries.
    NSArray * const entries = (NSArray *)objBase;
-   
+
    if (entries.count) {
       //Items for a new group.
       NSMutableArray * const items = [[NSMutableArray alloc] init];
@@ -474,7 +500,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          //Again, this must be an array of dictionaries.
          assert([staticInfo[0] isKindOfClass : [NSDictionary class]] &&
                 "loadStaticInfo:, 'Items' must be an array of dictionaries");
-         
+
          //Now we check, what do we have inside.
          NSDictionary * const firstItem = (NSDictionary *)staticInfo[0];
          if (firstItem[@"Items"]) {
@@ -487,7 +513,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
                MenuItem * const newItem = [[MenuItem alloc] initWithContentProvider : provider];
                [subMenu addObject : newItem];
-              
+
             }
 
             assert([itemDict[@"Title"] isKindOfClass : [NSString class]] &&
@@ -501,11 +527,11 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
             [items addObject : newItem];
          }
       }
-      
+
       [self addMenuGroup : @"About CERN" withImage : [self loadItemImage : desc] forItems : items];
       [self setStateForGroup : menuItems.count - 1 from : desc];
    }
-   
+
    return YES;
 }
 
@@ -524,13 +550,13 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
             whRatio = currRatio;
       }
    }
-   
+
    CGSize imageHint = {};
    if (whRatio) {
       imageHint.width = CernAPP::groupMenuItemImageHeight * whRatio;
       imageHint.height = CernAPP::groupMenuItemImageHeight;
    }
-   
+
    for (NSObject<MenuItemProtocol> *menuItem in menuItems) {
       //indent == 0.f - these are top-level menu items.
       [menuItem setIndent : 0.f imageHint : imageHint];
@@ -549,21 +575,21 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       [menuItems removeAllObjects];
    } else
       menuItems = [[NSMutableArray alloc] init];
-   
+
    selectedItemView = nil;
 
    id objBase = menuPlist[@"Menu Contents"];
    assert(objBase != nil && "loadMenuContents, object for the key 'Menu Contents was not found'");
    assert([objBase isKindOfClass : [NSArray class]] &&
           "loadMenuContents, menu contents must be of a NSArray type");
-          
+
    NSArray * const menuContents = (NSArray *)objBase;
    assert(menuContents.count != 0 && "loadMenuContents, menu contents array is empty");
-   
+
    for (id entryBase in menuContents) {
       assert([entryBase isKindOfClass : [NSDictionary class]] &&
              "loadMenuContents, NSDictionary expected for menu item(s)");
-      
+
       //Menu-groups:
       if ([self loadMenuGroup : (NSDictionary *) entryBase])
          continue;
@@ -585,7 +611,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          continue;
       //Webcasts.
    }
-   
+
    [self setMenuGeometryHints];
 }
 
@@ -594,7 +620,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    CGRect currentFrame = {0.f, 0.f, scrollView.frame.size.width};
    CGFloat totalHeight = 0.f;
-   
+
    for (NSObject<MenuItemProtocol> *item in menuItems) {
       const CGFloat add = [item layoutItemViewWithHint : currentFrame];
       totalHeight += add;
@@ -638,10 +664,10 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       if (id sz = [defaults objectForKey : @"GUIFontSize"]) {
          assert([sz isKindOfClass : [NSNumber class]] && "defaultsChanged:, GUIFontSize has a wrong type");
          const CGFloat newFontSize = [(NSNumber *)sz floatValue];
-         
+
          for (NSObject<MenuItemProtocol> * item in menuItems)
             [item setLabelFontSize : newFontSize];
-         
+
          [self layoutMenuResetOffset : NO resetContentSize : NO];
       }
    }
@@ -651,28 +677,28 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 - (void) viewDidLoad
 {
    [super viewDidLoad];
-   
+
    [self.slidingViewController setAnchorRightRevealAmount : 280.f];
    self.slidingViewController.underLeftWidthLayout = ECFullWidth;
-   
+
    //We additionally setup a table view here.
    using CernAPP::menuBackgroundColor;
    scrollView.backgroundColor = [UIColor colorWithRed : menuBackgroundColor[0] green : menuBackgroundColor[1]
                                          blue : menuBackgroundColor[2] alpha : 1.f];
    scrollView.showsHorizontalScrollIndicator = NO;
    scrollView.showsVerticalScrollIndicator = NO;
-   
+
    selectedItemView = nil;
 
    menuPlist = LoadOfflineMenuPlist(@"MENU");
    livePlist = LoadOfflineMenuPlist(@"CERNLive");
    [self loadMenuContents];
-   
+
    //Settings modifications.
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
-   
+
    //TODO: We also have to subscribe for push notifications here - the 'MENU.plist' on a server can be updated.
-   [self updateMenuFromServer];
+   // [self updateMenuFromServer];
 }
 
 //________________________________________________________________________________________
@@ -701,14 +727,14 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    //Return YES if an action is required from the content provider
    //(either a new menu item was selected, or menu item for
    //a modal view was (re)selected).
-   
+
    if (apnSelectedFeed && selectedItemView == view) {
       //It's a special case we could not foresee a year ago,
       //hence this ugliness :)
       apnSelectedFeed = 0;
       return YES;
    }
-   
+
    apnSelectedFeed = 0;
 
    if (selectedItemView != view || [view isModalViewItem]) {
@@ -729,7 +755,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
       return NO;
    }
-   
+
 }
 
 //________________________________________________________________________________________
@@ -739,7 +765,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    if (inAnimation)
       return;
-   
+
    MenuItemsGroup * const group = view.menuItemsGroup;
    newOpen = nil;
 
@@ -773,13 +799,13 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                   }
                }
             }
-            
+
             break;
          }
       }
    } else
       newOpen = group.parentGroup;//We have to focus on group's parent group.
-   
+
    [self animateMenuForItem : group];
 }
 
@@ -790,9 +816,9 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    //and if it's going to disappear - from 1.f to 0.f.
    //Also, I have to animate small triangle, which
    //shows group's state (expanded/collapsed).
-   
+
    assert(group != nil && "setAlphaAndVisibilityForGroup:, parameter 'group' is nil");
-   
+
    if (group.containerView.hidden) {
       if (!group.collapsed) {
          group.containerView.hidden = NO;
@@ -827,7 +853,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    }
 
    scrollView.contentSize = CGSizeMake(scrollView.frame.size.width, totalHeight);
-   
+
    CGRect frameToShow = CGRectMake(0.f, 0.f, scrollView.frame.size.width, CernAPP::GroupMenuItemHeight());
 
    if (newOpen != nil) {
@@ -835,7 +861,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          frameToShow = newOpen.containerView.frame;
       else
          frameToShow = newOpen.parentGroup.containerView.frame;
-      
+
       frameToShow.origin.y -= CernAPP::GroupMenuItemHeight();
       frameToShow.size.height += CernAPP::GroupMenuItemHeight();
    }
@@ -898,7 +924,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(feeds != nil && "readNewsFeeds:, parameter 'feeds' is nil");
 
    bool result = false;
-   
+
    for (id info in feeds) {
       assert([info isKindOfClass : [NSDictionary class]] && "readNewsFeed, feed info must be a dictionary");
       NSDictionary * const feedInfo = (NSDictionary *)info;
@@ -906,7 +932,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       [liveData addObject : provider];
       result = true;
    }
-   
+
    return result;
 }
 
@@ -919,7 +945,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert(base != nil && [base isKindOfClass : [NSString class]] && "readNews:, string key 'Category name' was not found");
 
    bool result = false;
-   
+
    NSString *catName = (NSString *)base;
    if ([catName isEqualToString : @"News"]) {
       if ((base = [dataEntry objectForKey : @"Feeds"])) {
@@ -932,7 +958,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          result |= [self readLIVENewsFeeds : (NSArray *)base];
       }
    }
-   
+
    return result;
 }
 
@@ -946,10 +972,10 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
              "readLIVEImages:, object for 'Images' key must be of NSArray type");
       NSArray *images = (NSArray *)dataEntry[@"Images"];
       assert(images.count && "readLIVEImages, array of images is empty");
-      
+
       LiveEventsProvider * const provider = [[LiveEventsProvider alloc] initWith : images forExperiment : experiment];
       [liveData addObject : provider];
-      
+
       if (dataEntry[@"Category name"]) {
          assert([dataEntry[@"Category name"] isKindOfClass : [NSString class]] &&
                 "readLIVEImages, 'Category Name' for the data entry is not of NSString type");
@@ -958,7 +984,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
       return true;
    }
-   
+
    return false;
 }
 
@@ -971,13 +997,13 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
           "readLIVEData:, 'Root' not found or has a wrong type");
 
    NSArray * const liveItems = (NSArray *)livePlist[@"Root"];
-   
+
    NSMutableArray * const menuGroups = [[NSMutableArray alloc] init];
 
    for (id obj in liveItems) {
       assert([obj isKindOfClass : [NSDictionary class]] &&
              "readLIVEData:, NSDictionary was expected");
-      
+
       NSDictionary * const itemData = (NSDictionary *)obj;
       assert([itemData[@"ExperimentName"] isKindOfClass:[NSString class]] &&
              "readLIVEData:, 'ExperimentName' not found or has a wrong type");
@@ -988,27 +1014,27 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       assert([base isKindOfClass : [NSArray class]] && "readLIVEData:, 'Data' not found or has a wrong type");
 
       NSArray * const dataSource = (NSArray *)base;
-   
+
       liveData = [[NSMutableArray alloc] init];
       for (id arrayItem in dataSource) {
          assert([arrayItem isKindOfClass : [NSDictionary class]] && "readLIVEData:, array of dictionaries expected");
          NSDictionary * const data = (NSDictionary *)arrayItem;
-         
+
          if ([self readLIVENews : data])
             continue;
-         
+
          if ([self readLIVEImages : data experiment : experiment])
             continue;
-         
+
          //someting else can be here.
       }
-      
+
       NSMutableArray * const liveMenuItems = [[NSMutableArray alloc] init];
       for (NSObject<ContentProvider> *provider in liveData) {
          MenuItem * newItem = [[MenuItem alloc] initWithContentProvider : provider];
          [liveMenuItems addObject : newItem];
       }
-      
+
       if (experiment == CernAPP::LHCExperiment::ALICE) {
          //We do not have real live events for ALICE, we just have a set
          //of good looking images :)
@@ -1017,11 +1043,11 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
          MenuItem * const newItem = [[MenuItem alloc] initWithContentProvider : edProvider];
          [liveMenuItems addObject : newItem];
       }
-      
+
       MenuItemsGroup * newGroup = [[MenuItemsGroup alloc] initWithTitle : experimentName image : nil items : liveMenuItems];
       [menuGroups addObject : newGroup];
    }
-   
+
    [self addMenuGroup : @"LIVE" withImage : [self loadItemImage : desc] forItems : menuGroups];
    [self setStateForGroup : menuItems.count - 1 from : desc];
 }
@@ -1033,7 +1059,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    if (updateStage != MenuUpdateStage::none) {
       //In principle, this can happen: server in future will be sending
       //update notifications, and if we are already updating ...
-      
+
       //TODO: this should be checked and tested.
       [self performSelector : @selector(updateMenuFromServer) withObject : nil afterDelay : 5.f];
       return;
@@ -1041,13 +1067,13 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    menuData = [[NSMutableData alloc] init];
    updateStage = MenuUpdateStage::menuPlistUpdate;
-   
+
    //Use a timeout different from the default one: it's possible, that the app started because a push notification
    //received. In this case, we have to wait until menu reloaded (or failed to reload). Make this time shorter - 10 seconds.
    NSMutableURLRequest * const request = [NSMutableURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/MENU.plist"]
                                           cachePolicy : NSURLRequestReloadIgnoringLocalCacheData
                                           timeoutInterval : 10.];
-   
+
    connection = [[NSURLConnection alloc] initWithRequest : request delegate : self];
 }
 
@@ -1055,17 +1081,17 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 - (void) updateMenuLIVEFromServer
 {
    assert(updateStage == MenuUpdateStage::menuPlistUpdate && "updateMenuLIVEFromServer, wrong stage");
-   
+
    menuData = [[NSMutableData alloc] init];
 
    updateStage = MenuUpdateStage::livePlistUpdate;
-   
+
    //Use a timeout different from the default one: it's possible, that the app started because a push notification
-   //received. In this case, we have to wait until menu reloaded (or failed to reload). Make this time shorter - 10 seconds.   
+   //received. In this case, we have to wait until menu reloaded (or failed to reload). Make this time shorter - 10 seconds.
    NSMutableURLRequest * const request = [NSMutableURLRequest requestWithURL : [NSURL URLWithString : @"http://cernapp.cern.ch/CERNLive.plist"]
                                           cachePolicy : NSURLRequestReloadIgnoringLocalCacheData
                                           timeoutInterval : 10.];
-   
+
    connection = [[NSURLConnection alloc] initWithRequest : request delegate : self];
 }
 
@@ -1080,7 +1106,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       NSLog(@"imageDownloader, error: connection:didReceiveData:, data from unknown connection");
       return;
    }
-   
+
    [menuData appendData : data];
 }
 
@@ -1095,7 +1121,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
       NSLog(@"imageDownloader, error: connection:didFaileWithError:, unknown connection");
       return;
    }
-   
+
    menuData = nil;
    connection = nil;//Can I do this??? (I'm in a callback function now)
    updateStage = MenuUpdateStage::none;
@@ -1106,7 +1132,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    assert(aConnection != nil && "connectionDidFinishLoading:, parameter 'aConnection' is nil");
    assert(updateStage != MenuUpdateStage::none && "connectionDidFinishLoading:, wrong stage");
-   
+
    if (connection != aConnection) {
       NSLog(@"imageDownloader, error: connectionDidFinishLoading:, unknown connection");
       return;
@@ -1117,7 +1143,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    NSError *err = nil;
    NSPropertyListFormat format = NSPropertyListXMLFormat_v1_0;
    id obj = nil;
-   
+
    if (menuData.length)
       obj = [NSPropertyListSerialization propertyListWithData : menuData options : NSPropertyListImmutable format : &format error : &err];
 
@@ -1155,7 +1181,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    else {
       [self loadMenuContents];
       [self layoutMenuResetOffset : YES resetContentSize : YES];
-      
+
       if (apnSelectedFeed) {
          //Re-select the previously selected item.
          if (NSObject<MenuItemProtocol> * const found = [self findUpdatedItem : apnSelectedFeed]) {
@@ -1176,12 +1202,12 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    using CernAPP::apnFeedKey;
 
    assert(feedID > 0 && "findUpdatedItem:, parameter 'feedID' is invalid");
-   
+
    for (NSObject<MenuItemProtocol> * item in menuItems) {
       if (NSObject<MenuItemProtocol> * const found = [item findItemForID : (NSUInteger)feedID])
          return found;
    }
-   
+
    return nil;
 }
 
@@ -1190,7 +1216,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    assert(nItems != 0 && "removeNotifications:forID:, parameter 'nItems' is invalid");
    assert(itemID != 0 && "removeNotifications:forID:, parameter 'itemID' is invalid");
-   
+
    for (NSObject<MenuItemProtocol> *item in menuItems) {
       if ([item resetAPNHint : 0 forID : itemID])
          break;
@@ -1212,29 +1238,29 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    using CernAPP::apnHashKey;
    using CernAPP::apnFeedKey;
-   
+
    //Check, if this 'new item' in apn is actually new.
    assert(apnDict != nil && "itemCached:, parameter 'apnDict' is nil");
    assert(apnDict[apnHashKey] != nil && "itemCached:, no sha1 hash found");
    assert([apnDict[apnHashKey] isKindOfClass : [NSString class]] &&
           "itemCached:, hash has a wrong type");
    NSString * const sha1 = (NSString *)apnDict[apnHashKey];
-   
+
    assert(apnDict[apnFeedKey] != nil && "itemCached:, no feed ID found");
-   
+
    const NSInteger feedID = [(NSString *)apnDict[apnFeedKey] integerValue];
    if (feedID > 0) {
       for (NSObject<MenuItemProtocol> *item in menuItems) {
          if (NSObject<MenuItemProtocol> * const found = [item findItemForID : feedID]) {
             if (![found respondsToSelector : @selector(contentProvider)])
                return false;
-            
+
             NSObject<ContentProvider> * const provider =
                (NSObject<ContentProvider> *)[found performSelector : @selector(contentProvider) withObject : nil];
 
             if (!provider || ![provider respondsToSelector : @selector(feedCacheID)])
                return false;
-   
+
             NSString * const feedCacheID = (NSString *)[provider performSelector : @selector(feedCacheID) withObject : nil];
             if (feedCacheID) {
                assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
@@ -1242,7 +1268,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                if (NSObject * const cache = [(AppDelegate *)[UIApplication sharedApplication].delegate cacheForKey : feedCacheID])
                   return CernAPP::FindItem(sha1, cache);
             }
-            
+
             return false;
          }
       }
@@ -1272,7 +1298,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    assert([[UIApplication sharedApplication].delegate isKindOfClass : [AppDelegate class]] &&
           "checkPushNotifications, application delegate has a wrong type");
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-   
+
    if (NSDictionary * const apn = appDelegate.APNdictionary) {
       if (apn[apnHashKey] && apn[apnFeedKey]) {
          assert([apn[apnHashKey] isKindOfClass : [NSString class]] && "checkPushNotifications, sha1 has a wrong type");
@@ -1286,7 +1312,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
                return;
             }
-         
+
             NSString * message = @"News!";
             if (apn[@"aps"]) {
                //Find a title for an action sheet.
@@ -1299,7 +1325,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
                   message = (NSString *)dict[@"alert"];
                }
             }
-            
+
             UIActionSheet *dialog = nil;
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                dialog = [[UIActionSheet alloc] initWithTitle : message delegate : self cancelButtonTitle : @"Cancel"
@@ -1350,7 +1376,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    assert(appDelegate.APNdictionary != nil && "loadNewArticleFromAPN, APNDictionary is nil");
    NSDictionary * const apn = appDelegate.APNdictionary;
-   
+
    assert(apn[apnHashKey] != nil && "loadNewArticleFromAPN, sha hash not found");
    assert([apn[apnHashKey] isKindOfClass : [NSString class]] &&
           "loadNewArticleFromAPN, sha hash has a wrong type");
@@ -1407,7 +1433,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
             if ([item resetAPNHint : 0 forID : feedID])
                break;
          }
-         
+
          if ((selectedItemView = newSelected.itemView)) {
             apnSelectedFeed = feedID;
             selectedItemView.isSelected = YES;

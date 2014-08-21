@@ -264,6 +264,16 @@
 					<key>Name</key>
 					<string>Jobs</string>
 				</dict>
+				<dict>
+					<key>Category name</key>
+					<string>Page</string>
+					<key>Image</key>
+					<string>press_release.png</string>
+					<key>Url</key>
+					<string>https://m.cern.ch/</string>
+					<key>Name</key>
+					<string>Directory</string>
+				</dict>
 			</array>
 			<key>Expanded</key>
 			<integer>0</integer>
