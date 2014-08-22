@@ -1395,8 +1395,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 
    assert(storyboard != nil && "loadNewArticleFromAPN, storyboard is nil");
 
-   MenuNavigationController * const top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
-                                                                       CernAPP::ArticleDetailStandaloneControllerID];
+   MenuNavigationController * const top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailStandaloneControllerID];
    assert([top.topViewController isKindOfClass : [ArticleDetailViewController class]] &&
           "loadNewArticleFromAPN, top view controller is either nil or has a wrong type");
    [(ArticleDetailViewController *)top.topViewController setSha1Link : sha1];

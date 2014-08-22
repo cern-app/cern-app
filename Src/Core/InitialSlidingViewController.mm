@@ -141,8 +141,7 @@
 
    assert(storyboard != nil && "iniAPNViewController:, storyboard is nil");
 
-   MenuNavigationController * const top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier :
-                                                                       CernAPP::ArticleDetailStandaloneControllerID];
+   MenuNavigationController * const top = (MenuNavigationController *)[storyboard instantiateViewControllerWithIdentifier : CernAPP::ArticleDetailStandaloneControllerID];
    assert([top.topViewController isKindOfClass : [ArticleDetailViewController class]] &&
           "viewDidLoad:, top view controller is either nil or has a wrong type");
    [(ArticleDetailViewController *)top.topViewController setSha1Link : sha1Link];

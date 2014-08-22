@@ -6,6 +6,7 @@
 #import "StaticInfoScrollViewController.h"
 #import "VideosCollectionViewController.h"
 #import "StaticInfoTileViewController.h"
+#import "ArticleDetailViewController.h"
 #import "BulletinTableViewController.h"
 #import "TwitterTableViewController.h"
 #import "BulletinFeedViewController.h"
@@ -214,8 +215,7 @@ UIViewController *FindController(UIView *view)
       NSString * const name = TwitterUserName(feed);
       assert(name != nil && "loadControllerTo:, can not extract twitter user name from invalid get command");
       //Either we can not open Url in an external app, or builtinView.
-      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
-                                                                         TwitterViewControllerID];
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : TwitterViewControllerID];
       assert([navController.topViewController isKindOfClass : [TwitterTableViewController class]] &&
              "loadControllerTo:, top view controller is either nil or has a wrong type");
       TwitterTableViewController * const tvc = (TwitterTableViewController *)navController.topViewController;
@@ -324,8 +324,28 @@ UIViewController *FindController(UIView *view)
 - (void) loadControllerTo : (UIViewController *) controller
 {
    assert(controller != nil && "loadControllerTo:, parameter 'controller' is nil");
-
+   
    using namespace CernAPP;
+   
+   MenuNavigationController * const navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : ArticleDetailStandaloneControllerID];
+   assert([navController.topViewController isKindOfClass : [ArticleDetailViewController class]] &&
+          "loadControllerTo, top view controller is either nil or has a wrong type");
+   ArticleDetailViewController * const topController = (ArticleDetailViewController *)navController.topViewController;
+   
+   // get info from MENU.plist
+   [topController setLink: (NSString *)info[@"Url"] title: @"Mobile Web"];
+   topController.navigationItem.title = categoryName;
+   
+   if (controller.slidingViewController.topViewController)
+      CancelConnections(controller.slidingViewController.topViewController);
+   
+   [controller.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete : ^ {
+      CGRect frame = controller.slidingViewController.topViewController.view.frame;
+      controller.slidingViewController.topViewController = navController;
+      controller.slidingViewController.topViewController.view.frame = frame;
+      [controller.slidingViewController resetTopView];
+   }];
+
    /*
    MenuNavigationController *navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotoCollectionsViewControllerID];
    assert([navController.topViewController isKindOfClass : [PhotoCollectionsViewController class]] &&
