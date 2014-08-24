@@ -10,6 +10,7 @@
 
 #import "MWCaptionView.h"
 #import "MWPhoto.h"
+#import "NSString+StringSizeWithFont.h"
 
 static const CGFloat labelPadding = 10;
 
@@ -37,7 +38,7 @@ static const CGFloat labelPadding = 10;
 - (CGSize)sizeThatFits:(CGSize)size {
     CGFloat maxHeight = 9999;
     if (_label.numberOfLines > 0) maxHeight = _label.font.leading*_label.numberOfLines;
-    CGSize textSize = [_label.text sizeWithFont:_label.font 
+    CGSize textSize = [_label.text sizeWithFont7:_label.font
                               constrainedToSize:CGSizeMake(size.width - labelPadding*2, maxHeight)
                                   lineBreakMode:_label.lineBreakMode];
     return CGSizeMake(size.width, textSize.height + labelPadding * 2);

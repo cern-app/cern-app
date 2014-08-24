@@ -12,6 +12,7 @@
 
 #import <CoreText/CoreText.h>
 
+#import "NSString+StringSizeWithFont.h"
 #import "ArticleDetailViewController.h"
 #import "StoryboardIdentifiers.h"
 #import "PictureButtonView.h"
@@ -456,7 +457,7 @@ CGPathRef CreateTextPath(FeedItemTileView *view)
 {
    const CGFloat hugeH = 1000.f;
    const CGSize viewSize = self.frame.size;
-   const CGSize dateSize = [infoLabel.text sizeWithFont : infoLabel.font constrainedToSize : CGSizeMake(viewSize.width / 2, hugeH)];
+   const CGSize dateSize = [infoLabel.text sizeWithFont7 : infoLabel.font constrainedToSize : CGSizeMake(viewSize.width / 2, hugeH)];
    const CGFloat y = footerY * viewSize.height + (1 - footerY) * viewSize.height * 0.5 - dateSize.height / 2;
    infoLabel.frame = CGRectMake(wideImageMargin * viewSize.width, y, dateSize.width, dateSize.height);
    

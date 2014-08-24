@@ -1,6 +1,7 @@
 //Author: Timur Pocheptsov.
 //Developed for CERN app.
 
+#import "NSString+StringSizeWithFont.h"
 #import "NewsTableViewCell.h"
 #import "NSString+HTML.h"
 #import "MWFeedItem.h"
@@ -40,7 +41,7 @@ CGFloat HeihgtForLinesWithFont(UIFont *font, unsigned nLines)
    const CGFloat hugeH = 2000.f;
 
    //Estimate one line height first.
-   const CGSize fontSizes = [@"ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" sizeWithFont : font constrainedToSize:CGSizeMake(hugeW, hugeH)];
+   const CGSize fontSizes = [@"ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" sizeWithFont7 : font constrainedToSize:CGSizeMake(hugeW, hugeH)];
    
    //Create a test string;
    NSMutableString * const testString = [[NSMutableString alloc] init];
@@ -49,9 +50,9 @@ CGFloat HeihgtForLinesWithFont(UIFont *font, unsigned nLines)
    
    //Now, size for one line.
    //hugeW and 4 are some hardcoded constants which should definitely work always :)
-   const CGSize oneLineSize = [testString sizeWithFont : font constrainedToSize:CGSizeMake(hugeW, fontSizes.height + 4)];
+   const CGSize oneLineSize = [testString sizeWithFont7 : font constrainedToSize:CGSizeMake(hugeW, fontSizes.height + 4)];
    //Now, that I have oneLineSize.width, I can use it again in a constraint:
-   const CGSize twoLineSize = [testString sizeWithFont : font constrainedToSize: CGSizeMake(oneLineSize.width / nLines, hugeH) lineBreakMode : NSLineBreakByWordWrapping];
+   const CGSize twoLineSize = [testString sizeWithFont7 : font constrainedToSize: CGSizeMake(oneLineSize.width / nLines, hugeH) lineBreakMode : NSLineBreakByWordWrapping];
 
    return twoLineSize.height;
 }
@@ -89,7 +90,7 @@ TextGeometry PlaceText(NSString *text, CGFloat fixedWidth, NSString *fontName)
    assert(font14 != nil && "PlaceText, font initializationi failed");
 
    const CGFloat twoLineHeight14 = HeihgtForLinesWithFont(font14, 2);  
-   const CGSize estimateSize14 = [text sizeWithFont : font14 constrainedToSize : CGSizeMake(fixedWidth, hugeH) lineBreakMode : NSLineBreakByWordWrapping];
+   const CGSize estimateSize14 = [text sizeWithFont7 : font14 constrainedToSize : CGSizeMake(fixedWidth, hugeH) lineBreakMode : NSLineBreakByWordWrapping];
    
    //Text fits one or two lines?
    if (estimateSize14.height < twoLineHeight14 * 0.75)
@@ -101,7 +102,7 @@ TextGeometry PlaceText(NSString *text, CGFloat fixedWidth, NSString *fontName)
    UIFont * const font12 = [UIFont fontWithName : fontName size : 12.f];
    const CGFloat twoLineHeight12 = HeihgtForLinesWithFont(font12, 2);
    
-   const CGSize estimateSize12 = [text sizeWithFont : font12 constrainedToSize : CGSizeMake(fixedWidth, hugeH) lineBreakMode : NSLineBreakByWordWrapping];
+   const CGSize estimateSize12 = [text sizeWithFont7 : font12 constrainedToSize : CGSizeMake(fixedWidth, hugeH) lineBreakMode : NSLineBreakByWordWrapping];
    
    //We force text into two lines maximum.
    if (estimateSize12.height < twoLineHeight12 * 0.75)

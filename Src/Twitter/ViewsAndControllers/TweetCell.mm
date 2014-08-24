@@ -3,6 +3,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#import "NSString+StringSizeWithFont.h"
 #import "TwitterTableViewController.h"
 #import "DeviceCheck.h"
 #import "MWFeedItem.h"
@@ -221,7 +222,7 @@ const CGFloat largeSizeVMargin = 0.05f;
       titleLabel.frame = CGRectMake(frame.origin.x + w * largeSizeHMargin, frame.origin.y + 0.2f * h,
                                     w - 2 * w * largeSizeHMargin, h * 0.6f);
       
-      const CGSize dateTextSize = [dateLabel.text sizeWithFont : dateLabel.font];
+      const CGSize dateTextSize = [dateLabel.text sizeWithFont7 : dateLabel.font];
       dateLabel.frame = CGRectMake(frame.origin.x + w - dateTextSize.width * 1.1f, frame.origin.y,
                                    dateTextSize.width * 1.1f, 0.2f * h);
       
@@ -240,7 +241,7 @@ const CGFloat largeSizeVMargin = 0.05f;
       titleLabel.numberOfLines = 2;
       titleLabel.frame = CGRectMake(frame.origin.x + w * largeSizeHMargin, frame.origin.y + h,
                                     w - 2 * w * largeSizeHMargin, h);
-      const CGSize dateTextSize = [dateLabel.text sizeWithFont : dateLabel.font];
+      const CGSize dateTextSize = [dateLabel.text sizeWithFont7 : dateLabel.font];
       dateLabel.frame = CGRectMake(frame.origin.x + frame.size.width - dateTextSize.width * 1.1f,
                                    frame.origin.y, dateTextSize.width * 1.1f, h);
    }

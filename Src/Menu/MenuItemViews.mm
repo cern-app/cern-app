@@ -11,6 +11,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#import "NSString+StringSizeWithFont.h"
 #import "MenuViewController.h"
 #import "MenuItemViews.h"
 #import "DeviceCheck.h"
@@ -42,7 +43,7 @@ namespace {
 std::pair<CGFloat, CGFloat> TextMetrics(UILabel *label)
 {
    assert(label != nil && "TextHeight, parameter 'label' is nil");
-   const CGSize lineBounds = [label.text sizeWithFont : label.font];
+   const CGSize lineBounds = [label.text sizeWithFont7 : label.font];
 
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
       return std::make_pair(lineBounds.height, lineBounds.height);

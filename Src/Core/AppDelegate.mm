@@ -96,7 +96,18 @@ NSString * const apnKeyFormat = @"apn%lu";
    //APN.
    mode = RequestType::none;
 
-   [[UIApplication sharedApplication] registerForRemoteNotificationTypes : UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+#ifdef __IPHONE_8_0
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_8_0
+   UIUserNotificationSettings *uins = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeSound |    UIUserNotificationTypeAlert categories: nil];
+   [[UIApplication sharedApplication] registerUserNotificationSettings: uins];
+   // enable APN (registerForRemoteNotifications) in didRegisterUserNotificationSettings
+#else
+   [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+#endif
+#else
+   [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
+#endif
+
    //TODO: this should go away - in the nearest future all the data will be removed from the payload.
    if (!APNdictionary)
       APNdictionary = (NSDictionary *)[launchOptions objectForKey : UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -284,6 +295,19 @@ NSString * const apnKeyFormat = @"apn%lu";
       }
    }
 }
+
+#ifdef __IPHONE_8_0
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_8_0
+//________________________________________________________________________________________
+- (void) application: (UIApplication*) application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+   // only if user allows notifications register for remote notifications
+   if (notificationSettings.types)
+      [application registerForRemoteNotifications];
+   //NSLog(@"didRegisterNotificationSettings %lu\n", (unsigned long)notificationSettings.types);
+}
+#endif
+#endif
 
 //________________________________________________________________________________________
 - (void) application : (UIApplication*) application didRegisterForRemoteNotificationsWithDeviceToken : (NSData*) deviceToken

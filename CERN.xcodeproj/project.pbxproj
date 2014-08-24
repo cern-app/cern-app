@@ -28,6 +28,7 @@
 		41B3D9F916B12D9000AF4463 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B3D9F716B12D9000AF4463 /* MBProgressHUD.m */; };
 		41B3DA0016B12DA100AF4463 /* ECSlidingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41B3D9FD16B12DA100AF4463 /* ECSlidingViewController.mm */; };
 		41B3DA0116B12DA100AF4463 /* UIImage+ImageWithUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B3D9FF16B12DA100AF4463 /* UIImage+ImageWithUIView.m */; };
+		41BE0D2C19AA06AF0076EFCE /* NSString+StringSizeWithFont.m in Sources */ = {isa = PBXBuildFile; fileRef = 41BE0D2B19AA06AF0076EFCE /* NSString+StringSizeWithFont.m */; };
 		41C0659416271ED1000DC176 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 41C0659316271ED1000DC176 /* iTunesArtwork */; };
 		41C346A617FC594F007492CA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 41C346A517FC594F007492CA /* Images.xcassets */; };
 		41CE55B71616073F00F477AD /* D3.png in Resources */ = {isa = PBXBuildFile; fileRef = 41CE55B61616073F00F477AD /* D3.png */; };
@@ -310,6 +311,8 @@
 		41BBD0E61615ADC60057EDE2 /* CERN.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = CERN.plist; path = ../CERN.plist; sourceTree = "<group>"; };
 		41BBD0E71615AEC70057EDE2 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		41BBD0E81615AED20057EDE2 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		41BE0D2919AA000D0076EFCE /* NSString+StringSizeWithFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+StringSizeWithFont.h"; sourceTree = "<group>"; };
+		41BE0D2B19AA06AF0076EFCE /* NSString+StringSizeWithFont.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+StringSizeWithFont.m"; sourceTree = "<group>"; };
 		41C0659316271ED1000DC176 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		41C346A517FC594F007492CA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = CERN/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		41CE55B61616073F00F477AD /* D3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = D3.png; sourceTree = "<group>"; };
@@ -1132,6 +1135,8 @@
 				707B13E7169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.h */,
 				707B13E8169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.mm */,
 				707B13E9169AF69300180E02 /* NSString+HTML.h */,
+				41BE0D2919AA000D0076EFCE /* NSString+StringSizeWithFont.h */,
+				41BE0D2B19AA06AF0076EFCE /* NSString+StringSizeWithFont.m */,
 				707B13EA169AF69300180E02 /* NSString+HTML.m */,
 				707B13EB169AF69300180E02 /* Reachability.h */,
 				707B13EC169AF69300180E02 /* Reachability.mm */,
@@ -1671,6 +1676,7 @@
 				41B3D9E816B12D6E00AF4463 /* UIButton+WebCache.m in Sources */,
 				41B3D9E916B12D6E00AF4463 /* UIImageView+WebCache.m in Sources */,
 				41B3D9F216B12D8000AF4463 /* MWFeedInfo.m in Sources */,
+				41BE0D2C19AA06AF0076EFCE /* NSString+StringSizeWithFont.m in Sources */,
 				41B3D9F316B12D8000AF4463 /* MWFeedItem.m in Sources */,
 				707B03D418339E8C00443448 /* ConnectionController.mm in Sources */,
 				41B3D9F416B12D8000AF4463 /* MWFeedParser.m in Sources */,
@@ -1834,8 +1840,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ae2a8c28-0dcd-4df7-94bf-90d015550a29";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ae2a8c28-0dcd-4df7-94bf-90d015550a29";
+				PROVISIONING_PROFILE = "b7510e07-3868-46b0-9f8e-1652955a4939";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "b7510e07-3868-46b0-9f8e-1652955a4939";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1865,8 +1871,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ae2a8c28-0dcd-4df7-94bf-90d015550a29";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ae2a8c28-0dcd-4df7-94bf-90d015550a29";
+				PROVISIONING_PROFILE = "b7510e07-3868-46b0-9f8e-1652955a4939";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "b7510e07-3868-46b0-9f8e-1652955a4939";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";

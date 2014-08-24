@@ -9,6 +9,7 @@
 #import <algorithm>
 #import <cassert>
 
+#import "NSString+StringSizeWithFont.h"
 #import "StaticInfoTileView.h"
 #import "DeviceCheck.h"
 
@@ -118,7 +119,7 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
                                               w / 2 - hGap * w - w * tileMargin, h * titleHeight);
          titleLabel.frame = titleFrame;
          //Text.
-         const CGSize descriptionSize = [textLabel.text sizeWithFont : textLabel.font constrainedToSize : CGSizeMake(titleFrame.size.width, CGFLOAT_MAX)];
+         const CGSize descriptionSize = [textLabel.text sizeWithFont7 : textLabel.font constrainedToSize : CGSizeMake(titleFrame.size.width, CGFLOAT_MAX)];
          const CGRect textFrame = CGRectMake(titleFrame.origin.x, titleFrame.origin.y + titleFrame.size.height, titleFrame.size.width,
                                              std::min(imageFrame.size.height - titleFrame.size.height, descriptionSize.height));
          textLabel.frame = textFrame;
@@ -128,7 +129,7 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
          titleLabel.frame = titleFrame;
          //Text.
          //Text.
-         const CGSize descriptionSize = [textLabel.text sizeWithFont : textLabel.font constrainedToSize : CGSizeMake(titleFrame.size.width, CGFLOAT_MAX)];
+         const CGSize descriptionSize = [textLabel.text sizeWithFont7 : textLabel.font constrainedToSize : CGSizeMake(titleFrame.size.width, CGFLOAT_MAX)];
          const CGRect textFrame = CGRectMake(titleFrame.origin.x, titleFrame.origin.y + titleFrame.size.height, titleFrame.size.width,
                                              std::min(h - 2 * h * tileMargin - h * titleHeight, descriptionSize.height));
          textLabel.frame = textFrame;
@@ -145,7 +146,7 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
          const CGRect titleFrame = CGRectMake(imageFrame.origin.x, imageFrame.origin.y + imageFrame.size.height, imageFrame.size.width, h * titleHeight);
          titleLabel.frame = titleFrame;
          //Text.
-         const CGSize descriptionSize = [textLabel.text sizeWithFont : textLabel.font constrainedToSize : CGSizeMake(titleFrame.size.width, CGFLOAT_MAX)];
+         const CGSize descriptionSize = [textLabel.text sizeWithFont7 : textLabel.font constrainedToSize : CGSizeMake(titleFrame.size.width, CGFLOAT_MAX)];
          const CGRect textFrame = CGRectMake(imageFrame.origin.x, titleFrame.origin.y + titleFrame.size.height,
                                              imageFrame.size.width, std::min(imageFrame.size.height - titleFrame.size.height, descriptionSize.height));
          textLabel.frame = textFrame;
@@ -155,7 +156,7 @@ const CGFloat hGap = 0.05f;//if tile's w > h, gap between image and text.
          const CGRect titleFrame = CGRectMake(tileMargin * w, tileMargin * h, w - 2 * w * tileMargin, h * titleHeight);
          titleLabel.frame = titleFrame;
          //Text.
-         const CGSize descriptionSize = [textLabel.text sizeWithFont : textLabel.font constrainedToSize : CGSizeMake(titleFrame.size.width, CGFLOAT_MAX)];
+         const CGSize descriptionSize = [textLabel.text sizeWithFont7 : textLabel.font constrainedToSize : CGSizeMake(titleFrame.size.width, CGFLOAT_MAX)];
          const CGRect textFrame = CGRectMake(titleFrame.origin.x, titleFrame.origin.y + titleFrame.size.height, titleFrame.size.width,
                                              std::min((h - 2 * tileMargin * h) / 2 - titleFrame.size.height, descriptionSize.height));
          textLabel.frame = textFrame;

@@ -1,5 +1,6 @@
 #import <algorithm>
 
+#import "NSString+StringSizeWithFont.h"
 #import "PhotoCollectionsViewController.h"
 #import "ECSlidingViewController.h"
 #import "PhotoAlbumFooterView.h"
@@ -366,7 +367,7 @@ enum class AnimationState : unsigned char {
 
       const CGFloat hugeH = 2000.f;
       const CGRect frame = albumCollectionView.frame;
-      const CGSize textSize = [selectedAlbum.title sizeWithFont : albumDescriptionCustomFont
+      const CGSize textSize = [selectedAlbum.title sizeWithFont7 : albumDescriptionCustomFont
                                constrainedToSize : CGSizeMake(frame.size.width, hugeH)];
 
       return textSize;

@@ -424,10 +424,18 @@
       [weekData addObject : firstArticle];
    
       NSCalendar * const calendar = [NSCalendar currentCalendar];
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
+      const NSUInteger requiredComponents = NSWeekOfYearCalendarUnit | NSYearCalendarUnit;
+#else
       const NSUInteger requiredComponents = NSWeekCalendarUnit | NSYearCalendarUnit;
+#endif
 
       NSDateComponents *dateComponents = [calendar components : requiredComponents fromDate : firstArticle.date];
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
+      NSInteger currentWeek = dateComponents.weekOfYear;
+#else
       NSInteger currentWeek = dateComponents.week;
+#endif
       NSInteger currentYear = dateComponents.year;
    
       for (NSUInteger i = 1, e = articles.count; i < e; ++i) {

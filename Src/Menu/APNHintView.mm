@@ -1,5 +1,6 @@
 #import <cassert>
 
+#import "NSString+StringSizeWithFont.h"
 #import "DeviceCheck.h"
 #import "APNHintView.h"
 
@@ -43,14 +44,18 @@
    [[UIColor redColor] setFill];
    [internalCircle fill];
 
-   const CGSize textSize = [text sizeWithFont : customFont];
+   const CGSize textSize = [text sizeWithFont7 : customFont];
    
    const CGFloat shift = CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") ? 0. : [customFont descender] / 2;
    const CGRect textRect = CGRectMake(rect.size.width / 2 - textSize.width / 2,
                                       rect.size.height / 2 - textSize.height / 2 - shift,
                                       textSize.width, textSize.height);
    [[UIColor whiteColor] set];
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
+   [text drawInRect : textRect withAttributes: @{NSFontAttributeName: customFont}];
+#else
    [text drawInRect : textRect withFont : customFont];
+#endif
 }
 
 //________________________________________________________________________________________

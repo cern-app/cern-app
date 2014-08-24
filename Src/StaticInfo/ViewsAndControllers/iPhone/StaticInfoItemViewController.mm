@@ -10,6 +10,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#import "NSString+StringSizeWithFont.h"
 #import "StaticInfoItemViewController.h"
 #import "DeviceCheck.h"
 
@@ -66,13 +67,13 @@
    NSString * const title = (NSString *)[staticInfo objectForKey : @"Title"];
    titleLabel.text = title;
 
-   const CGSize titleSize = [title sizeWithFont : titleLabel.font constrainedToSize : CGSizeMake(titleLabel.frame.size.width, CGFLOAT_MAX)];
+   const CGSize titleSize = [title sizeWithFont7 : titleLabel.font constrainedToSize : CGSizeMake(titleLabel.frame.size.width, CGFLOAT_MAX)];
 
    assert([[staticInfo objectForKey : @"Description"] isKindOfClass : [NSString class]] &&
           "setAndPositionInformation, 'Description' is either not found or has a wrong type");
    
    NSString * const description = (NSString *)[self.staticInfo objectForKey : @"Description"];
-   const CGSize descriptionSize = [description sizeWithFont : descriptionLabel.font constrainedToSize : CGSizeMake(descriptionLabel.frame.size.width, CGFLOAT_MAX)];
+   const CGSize descriptionSize = [description sizeWithFont7 : descriptionLabel.font constrainedToSize : CGSizeMake(descriptionLabel.frame.size.width, CGFLOAT_MAX)];
 
    titleLabel.frame = CGRectMake(titleLabel.frame.origin.x, imageView.frame.size.height + 8.f, titleLabel.frame.size.width, titleSize.height);
    // Set the description label and resize it accordingly, and also position it right below the image view
