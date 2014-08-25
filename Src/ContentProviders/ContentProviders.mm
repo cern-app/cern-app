@@ -243,8 +243,7 @@ UIViewController *FindController(UIView *view)
       if (filters)
          [nt setFilters : filters];
    } else {
-      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier :
-                                                                         FeedTileViewControllerID];
+      navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : FeedTileViewControllerID];
       assert([navController.topViewController isKindOfClass : [NewsFeedViewController class]] &&
              "loadControllerTo:, top view controller is either nil or has a wrong type");
       NewsFeedViewController * const nt = (NewsFeedViewController *)navController.topViewController;
@@ -295,10 +294,10 @@ UIViewController *FindController(UIView *view)
              "initWithDictionary:, 'Name' is not found or has a wrong type");
       categoryName = (NSString *)anInfo[@"Name"];
 
-      if (anInfo[@"Image name"]) {
-         assert([anInfo[@"Image name"] isKindOfClass : [NSString class]] &&
-                "initWithDictionary:, 'Image name' is nil or has a wrong type");
-         categoryImage = [UIImage imageNamed : (NSString *)anInfo[@"Image name"]];
+      if (anInfo[@"Image"]) {
+         assert([anInfo[@"Image"] isKindOfClass : [NSString class]] &&
+                "initWithDictionary:, 'Image' is nil or has a wrong type");
+         categoryImage = [UIImage imageNamed : (NSString *)anInfo[@"Image"]];
       }
 
       info = anInfo;
@@ -327,13 +326,13 @@ UIViewController *FindController(UIView *view)
    
    using namespace CernAPP;
    
-   MenuNavigationController * const navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : ArticleDetailStandaloneControllerID];
+   MenuNavigationController *navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : ArticleDetailStandaloneControllerID];
    assert([navController.topViewController isKindOfClass : [ArticleDetailViewController class]] &&
           "loadControllerTo, top view controller is either nil or has a wrong type");
-   ArticleDetailViewController * const topController = (ArticleDetailViewController *)navController.topViewController;
+   ArticleDetailViewController *topController = (ArticleDetailViewController *)navController.topViewController;
    
    // get info from MENU.plist
-   [topController setLink: (NSString *)info[@"Url"] title: @"Mobile Web"];
+   [topController setLink: (NSString *)info[@"Url"] title: info[@"Name"]];
    topController.navigationItem.title = categoryName;
    
    if (controller.slidingViewController.topViewController)
@@ -345,31 +344,6 @@ UIViewController *FindController(UIView *view)
       controller.slidingViewController.topViewController.view.frame = frame;
       [controller.slidingViewController resetTopView];
    }];
-
-   /*
-   MenuNavigationController *navController = (MenuNavigationController *)[controller.storyboard instantiateViewControllerWithIdentifier : PhotoCollectionsViewControllerID];
-   assert([navController.topViewController isKindOfClass : [PhotoCollectionsViewController class]] &&
-          "loadControllerTo:, top view controller is either nil or has a wrong type");
-
-   PhotoCollectionsViewController * const topController = (PhotoCollectionsViewController *)navController.topViewController;
-   if (providerID)
-      topController.cacheID = [NSString stringWithFormat:@"%@%lu", self.categoryName, (unsigned long)providerID];
-   else
-      topController.cacheID = self.categoryName;
-
-   [topController setURLString : (NSString *)info[@"Url"]];
-   topController.navigationItem.title = categoryName;
-
-   if (controller.slidingViewController.topViewController)
-      CancelConnections(controller.slidingViewController.topViewController);
-
-   [controller.slidingViewController anchorTopViewOffScreenTo : ECRight animations : nil onComplete:^{
-      CGRect frame = controller.slidingViewController.topViewController.view.frame;
-      controller.slidingViewController.topViewController = navController;
-      controller.slidingViewController.topViewController.view.frame = frame;
-      [controller.slidingViewController resetTopView];
-   }];
-   */
 }
 
 @end

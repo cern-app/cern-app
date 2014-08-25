@@ -249,6 +249,16 @@
 			<key>Items</key>
 			<array>
 				<dict>
+					<key>Category name</key>
+					<string>Page</string>
+					<key>Image</key>
+					<string>press_release.png</string>
+					<key>Url</key>
+					<string>http://m.cern.ch/</string>
+					<key>Name</key>
+					<string>Mobile web</string>
+				</dict>
+				<dict>
 					<key>ItemID</key>
 					<integer>11</integer>
 					<key>Filters</key>
@@ -263,16 +273,6 @@
 					<string>https://ert.cern.ch/browse_www/wd_portal_rss.rss?p_hostname=ert.cern.ch</string>
 					<key>Name</key>
 					<string>Jobs</string>
-				</dict>
-				<dict>
-					<key>Category name</key>
-					<string>Page</string>
-					<key>Image</key>
-					<string>press_release.png</string>
-					<key>Url</key>
-					<string>http://m.cern.ch/</string>
-					<key>Name</key>
-					<string>Directory</string>
 				</dict>
 			</array>
 			<key>Expanded</key>
