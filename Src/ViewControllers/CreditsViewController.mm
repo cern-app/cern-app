@@ -133,7 +133,7 @@ CGFloat LicenseFontSize()
    NSString *build = (NSString *)[[[NSBundle mainBundle] infoDictionary] objectForKey : @"CFBundleVersion"];
    if (!build)//Can this ever happen???
       build = @"unknown";
-   version = [NSString stringWithFormat:@"\tCERN.app: v. %@, build: %@\n", version, build];
+   version = [NSString stringWithFormat:@"\tCERN.app version: %@ (b%@)\n", version, build];
    NSAttributedString * const versionInfo = [[NSAttributedString alloc] initWithString : version];
    const NSRange versionInfoRange = NSMakeRange(captionRange.location + captionRange.length, versionInfo.length);
    
@@ -171,8 +171,9 @@ CGFloat LicenseFontSize()
 {
    NSAttributedString * const caption = [[NSAttributedString alloc] initWithString : @"\nReadability:\n\n"];
    const NSRange captionRange = NSMakeRange(text.length, caption.length);
-   NSAttributedString * const readabilityInfo = [[NSAttributedString alloc] initWithString : @"\"READABILITY turns any web page into a clean view for "
-                                                                                 "reading now or later on your computer, smartphone, or tablet.\" - "];
+   NSAttributedString * const readabilityInfo = [[NSAttributedString alloc] initWithString :
+                                                 @"\"READABILITY turns any web page into a clean view for "
+                                                 "reading now or later on your computer, smartphone, or tablet.\" - "];
    const NSRange infoRange = NSMakeRange(captionRange.location + captionRange.length, readabilityInfo.length);
    NSAttributedString * const readabilityLink = [[NSAttributedString alloc] initWithString : @"www.readability.com\n"];
    const NSRange linkRange = NSMakeRange(infoRange.location + infoRange.length, readabilityLink.length);
