@@ -1358,10 +1358,10 @@
 		70C884AA173958FA001D98D0 /* NewsFeeds */ = {
 			isa = PBXGroup;
 			children = (
-				706877761765CB2C00A22123 /* Parsers */,
-				70A562A7173A35C300145FEC /* ViewsAndControllers */,
 				706EB8BB175E1F7800493B04 /* ThumbnailDownloader.h */,
 				706EB8BA175E1F7800493B04 /* ThumbnailDownloader.mm */,
+				706877761765CB2C00A22123 /* Parsers */,
+				70A562A7173A35C300145FEC /* ViewsAndControllers */,
 			);
 			path = NewsFeeds;
 			sourceTree = "<group>";
@@ -1431,6 +1431,7 @@
 				E1F7B682156EDC7C0092367F /* Sources */,
 				E1F7B683156EDC7C0092367F /* Frameworks */,
 				E1F7B684156EDC7C0092367F /* Resources */,
+				4161D4A119AC9B8900444CBB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1626,6 +1627,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "tokens=$SRCROOT/Src/Utilities/Readability-tokens.h\nsample=$SRCROOT/Src/Utilities/Readability-sample.h\nout=$DERIVED_FILE_DIR/Readability.h\n\nif [ x${ACTION} = \"xbuild\" ]; then\n   echo \"Checking for Readability tokens header: $tokens\"\n   if test -f $tokens; then\n      cp $tokens $out\n      echo \"Found header with Readability tokens\"\n   else\n      cp $sample $out\n      echo \"No Readability tokens header found, ask developers for decryption password\"\n   fi\nfi\n\ntwitterTokens=$SRCROOT/Src/Utilities/Twitter-tokens.h\ntwitterSample=$SRCROOT/Src/Utilities/Twitter-sample.h\nout=$DERIVED_FILE_DIR/TwitterAPI.h\n\nif [ x${ACTION} = \"xbuild\" ]; then\n   echo \"Checking for Twitter tokens header: $twitterTokens\"\n   if test -f $twitterTokens; then\n      cp $twitterTokens $out\n      echo \"Found header with Twitter tokens\"\n   else\n      cp $twitterSample $out\n      echo \"No Twitter tokens header found, ask developers for decryption password\"\n   fi\nfi\n\nexit 0\n";
+		};
+		4161D4A119AC9B8900444CBB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "version=`/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"${INFOPLIST_FILE}\"`\nbuild=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${INFOPLIST_FILE}\"`\n/usr/libexec/PlistBuddy \"${CONFIGURATION_BUILD_DIR}/${FULL_PRODUCT_NAME}/Settings.bundle/Root.plist\" -c \"set PreferenceSpecifiers:7:DefaultValue ${version} (b$build)\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
