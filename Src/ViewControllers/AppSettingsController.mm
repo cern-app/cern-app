@@ -25,7 +25,8 @@ using CernAPP::TwitterFeedShowOption;
       if (id sz = [defaults objectForKey : @"HTMLBodyFontSize"]) {
          assert([sz isKindOfClass : [NSNumber class]] && "defaultsChanged:, HTMLBodyFontSize has a wrong type");
          [rdbFontSizeSlider setValue : [(NSNumber *)sz floatValue]];
-      } else if ((sz = [defaults objectForKey:@"GUIFontSize"])) {
+      }
+      if (id sz = [defaults objectForKey:@"GUIFontSize"]) {
          assert([sz isKindOfClass : [NSNumber class]] && "defaultsChanged:, GUIFontSize has a wrong type");
          [guiFontSizeSlider setValue : [(NSNumber *)sz floatValue]];
       }
@@ -67,10 +68,10 @@ using CernAPP::TwitterFeedShowOption;
       assert([[UIApplication sharedApplication].delegate isKindOfClass:[AppDelegate class]] &&
              "viewDidLoad, application delegate has a wrong type");
       AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-      twitterSwitch.on = appDelegate.tweetOption == TwitterFeedShowOption::externalView ? YES : NO;
+      twitterSwitch.on = appDelegate.tweetOption == TwitterFeedShowOption::builtinView ? YES : NO;
       
-      if (![[UIApplication sharedApplication] canOpenURL : [NSURL URLWithString : @"twitter://"]])
-         twitterSettingsView.hidden = YES;//Well, no need in this option, no external app to open tweets.
+      //if (![[UIApplication sharedApplication] canOpenURL : [NSURL URLWithString : @"twitter://"]])
+      //   twitterSettingsView.hidden = YES;//Well, no need in this option, no external app to open tweets.
    }
    
    //Read defaults for the sliders.
@@ -131,8 +132,8 @@ using CernAPP::TwitterFeedShowOption;
 
    AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
    
-   sender.isOn ? appDelegate.tweetOption = TwitterFeedShowOption::externalView :
-                 appDelegate.tweetOption = TwitterFeedShowOption::builtinView;
+   sender.isOn ? appDelegate.tweetOption = TwitterFeedShowOption::builtinView :
+                 appDelegate.tweetOption = TwitterFeedShowOption::externalView;
    
 
    [[NSUserDefaults standardUserDefaults] setObject : [NSNumber numberWithInteger : NSInteger(appDelegate.tweetOption)]
