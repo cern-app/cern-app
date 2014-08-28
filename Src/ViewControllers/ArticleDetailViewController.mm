@@ -131,7 +131,7 @@ CGFloat DefaultHTMLBodyFontSize()
    //Some number in a range [0, 20]
 
    NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
-   if (id sz = [defaults objectForKey:@"HTMLBodyFontSize"]) {
+   if (id sz = [defaults objectForKey : CernAPP::htmlBodyFontSizeKey]) {
       assert([sz isKindOfClass : [NSNumber class]] && "DefaultHTMLBodyFontSize, dictionary expected");
       return [(NSNumber *)sz floatValue];
    }
@@ -238,8 +238,8 @@ const NSUInteger fontIncreaseStep = 4;
    //Defaults for the article are the font size in a readability view.
    if ([notification.object isKindOfClass : [NSUserDefaults class]]) {
       NSUserDefaults * const defaults = (NSUserDefaults *)notification.object;
-      if (id sz = [defaults objectForKey : @"HTMLBodyFontSize"]) {
-         assert([sz isKindOfClass : [NSNumber class]] && "defaultsChanged:, GUIFontSize has a wrong type");
+      if (id sz = [defaults objectForKey : CernAPP::htmlBodyFontSizeKey]) {
+         assert([sz isKindOfClass : [NSNumber class]] && "defaultsChanged:, HTMLBodyFontSize has a wrong type");
 
          const NSUInteger newZoom = NSUInteger([(NSNumber *)sz floatValue]) / fontIncreaseStep;
          if (newZoom != zoomLevel) {
@@ -804,7 +804,7 @@ const NSUInteger fontIncreaseStep = 4;
 
    ++zoomLevel;
    
-   [[NSUserDefaults standardUserDefaults] setFloat : CGFloat(zoomLevel * fontIncreaseStep) forKey : @"HTMLBodyFontSize"];
+   [[NSUserDefaults standardUserDefaults] setFloat : CGFloat(zoomLevel * fontIncreaseStep) forKey : CernAPP::htmlBodyFontSizeKey];
    [[NSUserDefaults standardUserDefaults] synchronize];
 
    [self changeTextSize];   
@@ -823,7 +823,7 @@ const NSUInteger fontIncreaseStep = 4;
    
    --zoomLevel;
    
-   [[NSUserDefaults standardUserDefaults] setFloat : zoomLevel * fontIncreaseStep forKey : @"HTMLBodyFontSize"];
+   [[NSUserDefaults standardUserDefaults] setFloat : zoomLevel * fontIncreaseStep forKey : CernAPP::htmlBodyFontSizeKey];
    [[NSUserDefaults standardUserDefaults] synchronize];
    
    [self changeTextSize];

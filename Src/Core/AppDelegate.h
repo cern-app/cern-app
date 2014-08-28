@@ -8,7 +8,10 @@ enum class TwitterFeedShowOption : char {
    builtinView
 };
 
+extern NSString * const guiFontSizeKey;
+extern NSString * const htmlBodyFontSizeKey;
 extern NSString * const tweetViewKey;
+
 NSDate *GetCurrentGMT();
 
 }

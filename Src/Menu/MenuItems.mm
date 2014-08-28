@@ -8,6 +8,7 @@
 #import "StoryboardIdentifiers.h"
 #import "MenuViewController.h"
 #import "MenuItemViews.h"
+#import "AppDelegate.h"
 #import "GUIHelpers.h"
 #import "MenuItems.h"
 
@@ -25,7 +26,7 @@ CGFloat DefaultGUIFontSize()
    const CGFloat add = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1.5f : 0.f;
 
    NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
-   if (id sz = [defaults objectForKey:@"GUIFontSize"]) {
+   if (id sz = [defaults objectForKey:CernAPP::guiFontSizeKey]) {
       assert([sz isKindOfClass : [NSNumber class]] && "DefaultGUIFontSize, 'GUIFontSize' has a wrong type");
       return [(NSNumber *)sz floatValue] + add;
    }

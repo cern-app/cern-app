@@ -661,7 +661,7 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 {
    if ([notification.object isKindOfClass : [NSUserDefaults class]]) {
       NSUserDefaults * const defaults = (NSUserDefaults *)notification.object;
-      if (id sz = [defaults objectForKey : @"GUIFontSize"]) {
+      if (id sz = [defaults objectForKey : CernAPP::guiFontSizeKey]) {
          assert([sz isKindOfClass : [NSNumber class]] && "defaultsChanged:, GUIFontSize has a wrong type");
          const CGFloat newFontSize = [(NSNumber *)sz floatValue];
 

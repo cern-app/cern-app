@@ -22,11 +22,11 @@ using CernAPP::TwitterFeedShowOption;
 {
     if ([notification.object isKindOfClass : [NSUserDefaults class]]) {
       NSUserDefaults * const defaults = (NSUserDefaults *)notification.object;
-      if (id sz = [defaults objectForKey : @"HTMLBodyFontSize"]) {
+       if (id sz = [defaults objectForKey : CernAPP::htmlBodyFontSizeKey]) {
          assert([sz isKindOfClass : [NSNumber class]] && "defaultsChanged:, HTMLBodyFontSize has a wrong type");
          [rdbFontSizeSlider setValue : [(NSNumber *)sz floatValue]];
       }
-      if (id sz = [defaults objectForKey:@"GUIFontSize"]) {
+       if (id sz = [defaults objectForKey : CernAPP::guiFontSizeKey]) {
          assert([sz isKindOfClass : [NSNumber class]] && "defaultsChanged:, GUIFontSize has a wrong type");
          [guiFontSizeSlider setValue : [(NSNumber *)sz floatValue]];
       }
@@ -53,8 +53,8 @@ using CernAPP::TwitterFeedShowOption;
 - (void) viewDidLoad
 {
    [super viewDidLoad];
+   
 	// Do any additional setup after loading the view.
-   //set group views.
    guiSettingsView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent : 0.5f];
    guiSettingsView.layer.cornerRadius = 10.f;
    
@@ -70,18 +70,18 @@ using CernAPP::TwitterFeedShowOption;
       AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
       twitterSwitch.on = appDelegate.tweetOption == TwitterFeedShowOption::builtinView ? YES : NO;
       
-      //if (![[UIApplication sharedApplication] canOpenURL : [NSURL URLWithString : @"twitter://"]])
-      //   twitterSettingsView.hidden = YES;//Well, no need in this option, no external app to open tweets.
+      if (![[UIApplication sharedApplication] canOpenURL : [NSURL URLWithString : @"twitter://"]])
+         twitterSettingsView.hidden = YES;   //Well, no need in this option, no external app to open tweets.
    }
    
    //Read defaults for the sliders.
    NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
-   if (id sz = [defaults objectForKey : @"GUIFontSize"]) {
+   if (id sz = [defaults objectForKey : CernAPP::guiFontSizeKey]) {
       assert([sz isKindOfClass : [NSNumber class]] && "viewDidLoad, 'GUIFontSize' has a wrong type");
       [guiFontSizeSlider setValue : [(NSNumber *)sz floatValue]];
    }
 
-   if (id sz = [defaults objectForKey : @"HTMLBodyFontSize"]) {
+   if (id sz = [defaults objectForKey : CernAPP::htmlBodyFontSizeKey]) {
       assert([sz isKindOfClass : [NSNumber class]] && "viewDidLoad, 'HTMLBodyFontSize' has a wrong type");
       [rdbFontSizeSlider setValue : [(NSNumber *)sz floatValue]];
    }
@@ -109,7 +109,7 @@ using CernAPP::TwitterFeedShowOption;
 {
    assert(sender != nil && "guiFontSizeChanged:, parameter 'sender' is nil");
 
-   [[NSUserDefaults standardUserDefaults] setFloat : sender.value forKey : @"GUIFontSize"];
+   [[NSUserDefaults standardUserDefaults] setFloat : sender.value forKey : CernAPP::guiFontSizeKey];
    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -118,7 +118,7 @@ using CernAPP::TwitterFeedShowOption;
 {
    assert(sender != nil && "htmlFontSizeChanged:, parameter 'sender' is nil");
    
-   [[NSUserDefaults standardUserDefaults] setFloat : sender.value forKey : @"HTMLBodyFontSize"];
+   [[NSUserDefaults standardUserDefaults] setFloat : sender.value forKey : CernAPP::htmlBodyFontSizeKey];
    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
