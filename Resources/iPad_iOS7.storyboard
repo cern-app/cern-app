@@ -658,7 +658,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use internal Twitter viewer:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X8E-oM-SdO">
-                                        <rect key="frame" x="31" y="52" width="284" height="27"/>
+                                        <rect key="frame" x="31" y="46" width="284" height="27"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="27" id="A7r-o8-MjY"/>
@@ -685,7 +685,7 @@
                                     <constraint firstItem="X8E-oM-SdO" firstAttribute="leading" secondItem="tsm-xr-qo7" secondAttribute="leading" constant="31" id="OR4-vj-G1K"/>
                                     <constraint firstAttribute="trailing" secondItem="X8E-oM-SdO" secondAttribute="trailing" constant="423" id="Sam-qD-Q3V"/>
                                     <constraint firstItem="zUv-kP-8Ow" firstAttribute="leading" secondItem="tsm-xr-qo7" secondAttribute="leading" constant="507" id="odN-Uk-qdW"/>
-                                    <constraint firstItem="X8E-oM-SdO" firstAttribute="top" secondItem="tsm-xr-qo7" secondAttribute="top" constant="52" id="rEq-g3-yt3"/>
+                                    <constraint firstItem="X8E-oM-SdO" firstAttribute="top" secondItem="tsm-xr-qo7" secondAttribute="top" constant="46" id="rEq-g3-yt3"/>
                                 </constraints>
                             </view>
                         </subviews>
