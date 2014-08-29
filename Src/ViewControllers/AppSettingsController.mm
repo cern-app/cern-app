@@ -20,16 +20,16 @@ using CernAPP::TwitterFeedShowOption;
 //________________________________________________________________________________________
 - (void) defaultsChanged : (NSNotification *) notification
 {
-    if ([notification.object isKindOfClass : [NSUserDefaults class]]) {
+   if ([notification.object isKindOfClass : [NSUserDefaults class]]) {
       NSUserDefaults * const defaults = (NSUserDefaults *)notification.object;
-       if (id sz = [defaults objectForKey : CernAPP::htmlBodyFontSizeKey]) {
-         assert([sz isKindOfClass : [NSNumber class]] && "defaultsChanged:, HTMLBodyFontSize has a wrong type");
-         [rdbFontSizeSlider setValue : [(NSNumber *)sz floatValue]];
-      }
-       if (id sz = [defaults objectForKey : CernAPP::guiFontSizeKey]) {
-         assert([sz isKindOfClass : [NSNumber class]] && "defaultsChanged:, GUIFontSize has a wrong type");
-         [guiFontSizeSlider setValue : [(NSNumber *)sz floatValue]];
-      }
+      float sz = [defaults floatForKey : CernAPP::htmlBodyFontSizeKey];
+      [rdbFontSizeSlider setValue : sz];
+
+      sz = [defaults floatForKey : CernAPP::guiFontSizeKey];
+      [guiFontSizeSlider setValue : sz];
+
+      AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+      twitterSwitch.on = BOOL(appDelegate.tweetOption);
    }
 }
 
@@ -61,31 +61,29 @@ using CernAPP::TwitterFeedShowOption;
    rdbSettingsView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent : 0.5f];
    rdbSettingsView.layer.cornerRadius = 10.f;
    
-   if (twitterSettingsView) {
-      twitterSettingsView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent : 0.5f];
-      twitterSettingsView.layer.cornerRadius = 10.f;
-      
-      assert([[UIApplication sharedApplication].delegate isKindOfClass:[AppDelegate class]] &&
-             "viewDidLoad, application delegate has a wrong type");
-      AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-      twitterSwitch.on = appDelegate.tweetOption == TwitterFeedShowOption::builtinView ? YES : NO;
-      
-      if (![[UIApplication sharedApplication] canOpenURL : [NSURL URLWithString : @"twitter://"]])
-         twitterSettingsView.hidden = YES;   //Well, no need in this option, no external app to open tweets.
-   }
-   
-   //Read defaults for the sliders.
+   twitterSettingsView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent : 0.5f];
+   twitterSettingsView.layer.cornerRadius = 10.f;
+
    NSUserDefaults * const defaults = [NSUserDefaults standardUserDefaults];
-   if (id sz = [defaults objectForKey : CernAPP::guiFontSizeKey]) {
-      assert([sz isKindOfClass : [NSNumber class]] && "viewDidLoad, 'GUIFontSize' has a wrong type");
-      [guiFontSizeSlider setValue : [(NSNumber *)sz floatValue]];
+
+   //Read defaults for the sliders.
+   float sz = [defaults floatForKey : CernAPP::guiFontSizeKey];
+   [guiFontSizeSlider setValue : sz];
+
+   sz = [defaults floatForKey : CernAPP::htmlBodyFontSizeKey];
+   [rdbFontSizeSlider setValue : sz];
+
+   BOOL twopt = [defaults boolForKey: CernAPP::tweetViewKey];
+   twitterSwitch.on = twopt;
+
+   if (![[UIApplication sharedApplication] canOpenURL : [NSURL URLWithString : @"twitter://"]]) {
+      twitterSettingsView.hidden = YES;   //no need in this option, no external app to open tweets
+      AppDelegate * const appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+      appDelegate.tweetOption = TwitterFeedShowOption::builtinView;
+      [defaults setBool: BOOL(appDelegate.tweetOption) forKey : CernAPP::tweetViewKey];
+      [defaults synchronize];
    }
 
-   if (id sz = [defaults objectForKey : CernAPP::htmlBodyFontSizeKey]) {
-      assert([sz isKindOfClass : [NSNumber class]] && "viewDidLoad, 'HTMLBodyFontSize' has a wrong type");
-      [rdbFontSizeSlider setValue : [(NSNumber *)sz floatValue]];
-   }
-   
    [[NSNotificationCenter defaultCenter] addObserver : self selector : @selector(defaultsChanged:) name : NSUserDefaultsDidChangeNotification object : nil];
 }
 
@@ -134,10 +132,8 @@ using CernAPP::TwitterFeedShowOption;
    
    sender.isOn ? appDelegate.tweetOption = TwitterFeedShowOption::builtinView :
                  appDelegate.tweetOption = TwitterFeedShowOption::externalView;
-   
 
-   [[NSUserDefaults standardUserDefaults] setObject : [NSNumber numberWithInteger : NSInteger(appDelegate.tweetOption)]
-                                             forKey : CernAPP::tweetViewKey];
+   [[NSUserDefaults standardUserDefaults] setBool : BOOL(appDelegate.tweetOption) forKey : CernAPP::tweetViewKey];
    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

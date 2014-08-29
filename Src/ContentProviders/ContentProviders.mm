@@ -210,6 +210,8 @@ UIViewController *FindController(UIView *view)
 
          CernAPP::ShowErrorAlert(@"Failed to open twitter app", @"Close");
          appDelegate.tweetOption = TwitterFeedShowOption::builtinView;
+         [[NSUserDefaults standardUserDefaults] setBool: BOOL(appDelegate.tweetOption) forKey : CernAPP::tweetViewKey];
+         [[NSUserDefaults standardUserDefaults] synchronize];
       }
 
       NSString * const name = TwitterUserName(feed);
