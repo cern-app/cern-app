@@ -72,15 +72,6 @@ CGFloat LicenseFontSize()
    [self addVersionInfo];
    [self addDevelopersInfo];
    [self addReadabilityInfo];
-   
-   [self addComponentInfo : @"\nECSlidingViewController:" licenseFile : @"ECSlidingViewControllerLicense" author : @"Michael Enriquez"];
-   [self addComponentInfo : @"\nMWFeedParser:" licenseFile : @"MWFeedParserLicense" author : @"Michael Waterfall"];
-   [self addComponentInfo : @"\nMWPhotoBrowser:" licenseFile : @"MWPhotoBrowserLicense" author : @"Michael Waterfall"];
-   [self addComponentInfo : @"\nMBProgressHUD:" licenseFile : @"MBProgressHUDLicense" author : @"Matej Bukovinski"];
-   [self addComponentInfo : @"\nSDWebImage:" licenseFile : @"SDWebImageLicense" author : @"Olivier Poitrey"];
-   [self addComponentInfo : @"\nGlyphsPro (v.1):" licenseFile : @"glyphspro_1_license" author : @"Joseph Wain"];
-   [self addComponentInfo : @"\nGlyphsPro (v.4):" licenseFile : @"glyphspro_4_license" author : @"Joseph Wain"];
-   [self addIconsInfo];
 
    textView.attributedText = text;
 }
@@ -188,64 +179,6 @@ CGFloat LicenseFontSize()
    [self setFont : textFont color : [UIColor blackColor] forRange : infoRange];
 
    [text addAttribute : NSForegroundColorAttributeName value : [UIColor blueColor] range : linkRange];
-}
-
-//________________________________________________________________________________________
-- (void) addIconsInfo
-{
-   NSAttributedString * const caption = [[NSAttributedString alloc] initWithString : @"\nSocial networks' icons:\n\n"];
-   const NSRange captionRange = NSMakeRange(text.length, caption.length);
-   NSAttributedString * const link = [[NSAttributedString alloc] initWithString : @"Author: http://www.deleket.com/index.html\n"];
-   const NSRange linkRange = NSMakeRange(captionRange.location + captionRange.length + 8, link.length - 8);
-   NSAttributedString * const info = [[NSAttributedString alloc] initWithString : @"License: http://creativecommons.org/licenses/by-nc-nd/3.0/legalcode"];
-   const NSRange infoRange = NSMakeRange(linkRange.location + linkRange.length + 9, info.length - 9);//+9 -9 == not to include 'License: '
-   
-   [text appendAttributedString : caption];
-   [text appendAttributedString : link];
-   [text appendAttributedString : info];
-   
-   [self setCaptionAttribute : captionRange];
-   [text addAttribute : NSForegroundColorAttributeName value : [UIColor blueColor] range : linkRange];
-   [text addAttribute : NSForegroundColorAttributeName value : [UIColor blueColor] range : infoRange];
-   if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-      UIFont * const textFont = [UIFont fontWithName : @"Helvetica" size : GenericTextFontSize()];
-      [text addAttribute : NSFontAttributeName value : textFont range : linkRange];
-      [text addAttribute : NSFontAttributeName value : textFont range : infoRange];
-   }
-
-}
-
-//________________________________________________________________________________________
-- (void) addComponentInfo : (NSString *) componentName licenseFile : (NSString *) fileName author : (NSString *) author
-{
-   assert(fileName != nil && "addComponentInfo:author:, parameter 'fileName' is nil");
-   assert(author != nil && "addComponentInfo:author:, parameter 'author' is nil");
-
-   NSAttributedString * const caption = [[NSAttributedString alloc] initWithString : componentName];
-   const NSRange captionRange = NSMakeRange(text.length, caption.length);
-   NSAttributedString * const authorInfo = [[NSAttributedString alloc] initWithString : [NSString stringWithFormat:@"\n\nAuthor: %@\n\n", author]];
-   const NSRange infoRange = NSMakeRange(captionRange.location + captionRange.length, authorInfo.length);
-   
-   [text appendAttributedString : caption];
-   [text appendAttributedString : authorInfo];
-
-   [self setCaptionAttribute : captionRange];
-   
-   UIFont * const textFont = [UIFont fontWithName : @"Helvetica" size : GenericTextFontSize()];
-   [self setFont : textFont color : [UIColor blackColor] forRange : infoRange];
-
-   if (NSString * const filePath = [[NSBundle mainBundle] pathForResource : fileName ofType : @"txt"]) {
-      NSError *error = nil;
-      NSMutableString * const licenseText = [NSMutableString stringWithContentsOfURL : [NSURL fileURLWithPath : filePath] encoding : NSUTF8StringEncoding error : &error];
-      if (!error) {
-         [licenseText appendString : @"\n"];
-         [text appendAttributedString : [[NSAttributedString alloc] initWithString : licenseText]];
-         const NSRange licRange = NSMakeRange(infoRange.location + infoRange.length, licenseText.length);
-         
-         UIFont * const licFont = [UIFont fontWithName : @"Courier" size : LicenseFontSize()];
-         [self setFont:licFont color:[UIColor blackColor] forRange:licRange];
-      }
-   }
 }
 
 #pragma mark - Interface orientation change.
