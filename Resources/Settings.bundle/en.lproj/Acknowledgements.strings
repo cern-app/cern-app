@@ -1,0 +1,48 @@
+"ECSlidingViewControllerLicense" = "ECSlidingViewController";
+"ECSlidingViewControllerLicense2" = "Copyright (C) 2012 EdgeCase";
+"ECSlidingViewControllerLicense3" = "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:";
+"ECSlidingViewControllerLicense4" = "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.";
+"ECSlidingViewControllerLicense5" = "THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+"MBProgressHUDLicense" = "MBProgressHUD";
+"MBProgressHUDLicense2" = "Copyright (c) 2011 Matej Bukovinski";
+"MBProgressHUDLicense3" = "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:";
+"MBProgressHUDLicense4" = "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.";
+"MBProgressHUDLicense5" = "THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+"MWFeedParserLicense" = "MWFeedParser";
+"MWFeedParserLicense2" = "Copyright (c) 2010 Michael Waterfall";
+"MWFeedParserLicense3" = "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:";
+"MWFeedParserLicense4" = "1. The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.";
+"MWFeedParserLicense5" = "2. This Software cannot be used to archive or collect data such as (but not limited to) that of events, news, experiences and activities, for the purpose of any concept relating to diary/journal keeping.";
+"MWFeedParserLicense6" = "THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+"MWPhotoBrowserLicense" = "MWPhotoBrowser";
+"MWPhotoBrowserLicense2" = "Copyright (c) 2010 Michael Waterfall";
+"MWPhotoBrowserLicense3" = "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:";
+"MWPhotoBrowserLicense4" = "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.";
+"MWPhotoBrowserLicense5" = "THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+"SDWebImageLicense" = "SDWebImage";
+"SDWebImageLicense2" = "Copyright (c) 2009 Olivier Poitrey <rs@dailymotion.com>";
+"SDWebImageLicense3" = "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:";
+"SDWebImageLicense4" = "The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.";
+"SDWebImageLicense5" = "THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+"glyphspro_1_license" = "GLYPHISH PRO v3 - 400 ICONS";
+"glyphspro_1_license2" = "Created by Joseph Wain, 2010 – 2011Web: http://glyphish.com or http://penandthink.comTwitter: @glyphish or @jpwain";
+"glyphspro_1_license3" = "----------";
+"glyphspro_1_license4" = "Thanks for supporting Glyphish!";
+"glyphspro_1_license5" = "LICENSE:You're free to use these icons for commercial and non-commercial purposes, for yourself, your company and your clients, and to edit, remix and otherwise modify them without attribution. You may not sell or redistribute the icons themselves as icons. Additionally, you may not use them in a way that encourages downstream distribution -- this means no templates or skins or theme kits or similar uses. (The person using the theme or template might not know where the icons came from and thus wouldn't be following the license.) The icons may not be used in any form of 'app builder' tools of any kind.";
+"glyphspro_1_license6" = "ATTRIBUTION:None required for use by you, your company, your clients. But if you'd like to spread the word by linking to Glyphish from your website, blogpost, Twitter or wherever, your kind words are much appreciated.";
+"glyphspro_1_license7" = "QUESTIONS, COMMENTS:Contact me via glyphish.com.";
+"glyphspro_4_license" = "GLYPHISH PRO v4 - 200 GREAT ICONS";
+"glyphspro_4_license2" = "Created by Joseph Wain, 2010 – 2012Web: http://www.glyphish.com or http://www.penandthink.comTwitter: @glyphish or @jpwain";
+"glyphspro_4_license3" = "----------";
+"glyphspro_4_license4" = "Thanks for supporting Glyphish!";
+"glyphspro_4_license5" = "LICENSE:";
+"glyphspro_4_license6" = "You're free to use these icons for commercial and non-commercial purposes, for yourself, your company and your clients, and to edit, remix and otherwise modify them without attribution.";
+"glyphspro_4_license7" = "You may not sell or redistribute the icons themselves as icons.";
+"glyphspro_4_license8" = "You may not use the icons in a way that encourages downstream distribution. This means no templates or skins or theme kits or similar uses. (The person using the theme or template might not know where the icons came from and thus wouldn't be following the license.)";
+"glyphspro_4_license9" = "The icons may not be used in any form of 'easy app builder' tools or websites.";
+"glyphspro_4_license10" = "The icons may not be redistributed under any other license without expressed written permission.";
+"glyphspro_4_license11" = "ATTRIBUTION:";
+"glyphspro_4_license12" = "None required for use by you, your company, your clients. But if you'd like to spread the word by linking to Glyphish from your website, blogpost, Twitter or wherever, your kind words are much appreciated.";
+"glyphspro_4_license13" = "QUESTIONS, COMMENTS, HELP:";
+"glyphspro_4_license14" = "Send a message via http://www.glyphish.com.";
+"glyphspro_4_license15" = "Follow @glyphish on Twitter for updates and more.";

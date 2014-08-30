@@ -58,9 +58,11 @@
 		</dict>
 		<dict>
 			<key>Title</key>
-			<string>About</string>
+			<string>About2</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
+			<key>FooterText</key>
+			<string>Copyright © 2013-2014 CERN. All rights reserved. </string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
@@ -71,6 +73,22 @@
 			<string>Version</string>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+			<key>Title</key>
+			<string>License Agreement</string>
+			<key>File</key>
+			<string>LICENSE</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+			<key>Title</key>
+			<string>Acknowledgements</string>
+			<key>File</key>
+			<string>Acknowledgements</string>
 		</dict>
 	</array>
 	<key>StringsTable</key>

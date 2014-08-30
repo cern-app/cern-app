@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		418F860D19B261A300398A36 /* ack.pl in Resources */ = {isa = PBXBuildFile; fileRef = 418F860B19B261A300398A36 /* ack.pl */; };
+		418F860E19B261A300398A36 /* SDWebImageLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 418F860C19B261A300398A36 /* SDWebImageLicense.txt */; };
+		418F861519B268F600398A36 /* ECSlidingViewControllerLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 418F860F19B268F600398A36 /* ECSlidingViewControllerLicense.txt */; };
+		418F861619B268F600398A36 /* glyphspro_1_license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 418F861019B268F600398A36 /* glyphspro_1_license.txt */; };
+		418F861719B268F600398A36 /* glyphspro_4_license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 418F861119B268F600398A36 /* glyphspro_4_license.txt */; };
+		418F861819B268F600398A36 /* MBProgressHUDLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 418F861219B268F600398A36 /* MBProgressHUDLicense.txt */; };
+		418F861919B268F600398A36 /* MWFeedParserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 418F861319B268F600398A36 /* MWFeedParserLicense.txt */; };
+		418F861A19B268F600398A36 /* MWPhotoBrowserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 418F861419B268F600398A36 /* MWPhotoBrowserLicense.txt */; };
 		4192C4DC19A249C900EDA872 /* youtube.png in Resources */ = {isa = PBXBuildFile; fileRef = 4192C4DB19A249C900EDA872 /* youtube.png */; };
 		41B3D9C816B12D6000AF4463 /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B3D9BC16B12D6000AF4463 /* MWCaptionView.m */; };
 		41B3D9C916B12D6000AF4463 /* MWPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B3D9BE16B12D6000AF4463 /* MWPhoto.m */; };
@@ -261,6 +269,14 @@
 
 /* Begin PBXFileReference section */
 		411D362316BADC57008CF20B /* Readability-sample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Readability-sample.h"; sourceTree = "<group>"; };
+		418F860B19B261A300398A36 /* ack.pl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.perl; path = ack.pl; sourceTree = "<group>"; };
+		418F860C19B261A300398A36 /* SDWebImageLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SDWebImageLicense.txt; sourceTree = "<group>"; };
+		418F860F19B268F600398A36 /* ECSlidingViewControllerLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ECSlidingViewControllerLicense.txt; sourceTree = "<group>"; };
+		418F861019B268F600398A36 /* glyphspro_1_license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glyphspro_1_license.txt; sourceTree = "<group>"; };
+		418F861119B268F600398A36 /* glyphspro_4_license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glyphspro_4_license.txt; sourceTree = "<group>"; };
+		418F861219B268F600398A36 /* MBProgressHUDLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MBProgressHUDLicense.txt; sourceTree = "<group>"; };
+		418F861319B268F600398A36 /* MWFeedParserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWFeedParserLicense.txt; sourceTree = "<group>"; };
+		418F861419B268F600398A36 /* MWPhotoBrowserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWPhotoBrowserLicense.txt; sourceTree = "<group>"; };
 		4192C4DB19A249C900EDA872 /* youtube.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = youtube.png; sourceTree = "<group>"; };
 		41B3D9BB16B12D6000AF4463 /* MWCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCaptionView.h; sourceTree = "<group>"; };
 		41B3D9BC16B12D6000AF4463 /* MWCaptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWCaptionView.m; sourceTree = "<group>"; };
@@ -666,6 +682,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		418F860A19B261A300398A36 /* Licenses */ = {
+			isa = PBXGroup;
+			children = (
+				418F860B19B261A300398A36 /* ack.pl */,
+				418F860F19B268F600398A36 /* ECSlidingViewControllerLicense.txt */,
+				418F861019B268F600398A36 /* glyphspro_1_license.txt */,
+				418F861119B268F600398A36 /* glyphspro_4_license.txt */,
+				418F861219B268F600398A36 /* MBProgressHUDLicense.txt */,
+				418F861319B268F600398A36 /* MWFeedParserLicense.txt */,
+				418F861419B268F600398A36 /* MWPhotoBrowserLicense.txt */,
+				418F860C19B261A300398A36 /* SDWebImageLicense.txt */,
+			);
+			path = Licenses;
+			sourceTree = "<group>";
+		};
 		41B3D9BA16B12D6000AF4463 /* MWPhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
@@ -761,6 +792,7 @@
 				41C346A517FC594F007492CA /* Images.xcassets */,
 				703FD35A161DDB2F00B8BB8C /* Fonts */,
 				41E617C41614CEB700BAA7D4 /* Images */,
+				418F860A19B261A300398A36 /* Licenses */,
 				41E618911614CFB500BAA7D4 /* en.lproj */,
 				41E2490019A3C74500DABFB7 /* Settings.bundle */,
 				41E618291614CEB700BAA7D4 /* MWPhotoBrowser.bundle */,
@@ -1498,6 +1530,7 @@
 				41E6183E1614CEB700BAA7D4 /* D7.png in Resources */,
 				41E6183F1614CEB700BAA7D4 /* D8.png in Resources */,
 				41E618401614CEB700BAA7D4 /* D9.png in Resources */,
+				418F861A19B268F600398A36 /* MWPhotoBrowserLicense.txt in Resources */,
 				41E618411614CEB700BAA7D4 /* DA.png in Resources */,
 				41E618421614CEB700BAA7D4 /* DJ.png in Resources */,
 				41E618431614CEB700BAA7D4 /* DK.png in Resources */,
@@ -1505,7 +1538,9 @@
 				41E618451614CEB700BAA7D4 /* H10.png in Resources */,
 				41E618461614CEB700BAA7D4 /* H2.png in Resources */,
 				41E618471614CEB700BAA7D4 /* H3.png in Resources */,
+				418F861919B268F600398A36 /* MWFeedParserLicense.txt in Resources */,
 				41E618481614CEB700BAA7D4 /* H4.png in Resources */,
+				418F861519B268F600398A36 /* ECSlidingViewControllerLicense.txt in Resources */,
 				41E618491614CEB700BAA7D4 /* H5.png in Resources */,
 				41E6184A1614CEB700BAA7D4 /* H6.png in Resources */,
 				41E6184B1614CEB700BAA7D4 /* H7.png in Resources */,
@@ -1532,6 +1567,7 @@
 				41E6185F1614CEB800BAA7D4 /* SQ.png in Resources */,
 				41E618601614CEB800BAA7D4 /* cernLogo.png in Resources */,
 				41E618631614CEB800BAA7D4 /* grayTexture.png in Resources */,
+				418F861619B268F600398A36 /* glyphspro_1_license.txt in Resources */,
 				41E6188A1614CEB800BAA7D4 /* iPad.storyboard in Resources */,
 				41E6188B1614CEB800BAA7D4 /* iPhone.storyboard in Resources */,
 				41E6188C1614CEB800BAA7D4 /* MWPhotoBrowser.bundle in Resources */,
@@ -1547,6 +1583,7 @@
 				70600A18169AF9B300F9E833 /* about.png in Resources */,
 				41C346A617FC594F007492CA /* Images.xcassets in Resources */,
 				70600A1A169AF9B300F9E833 /* arrow.png in Resources */,
+				418F861819B268F600398A36 /* MBProgressHUDLicense.txt in Resources */,
 				70600A1B169AF9B300F9E833 /* bulletin.png in Resources */,
 				70600A1D169AF9B300F9E833 /* jobs.png in Resources */,
 				70600A1F169AF9B300F9E833 /* latestPhotos.png in Resources */,
@@ -1577,6 +1614,7 @@
 				7049BBBC16B078060045834E /* photos_videos.png in Resources */,
 				7049BBBF16B081340045834E /* more.png in Resources */,
 				7049BBC116B0836C0045834E /* photos.png in Resources */,
+				418F860E19B261A300398A36 /* SDWebImageLicense.txt in Resources */,
 				41B3D9E216B12D6E00AF4463 /* LICENSE in Resources */,
 				70221E4416B1722B007AE923 /* videos.png in Resources */,
 				70B7878D16B951B100048CC9 /* zoomin.png in Resources */,
@@ -1601,10 +1639,12 @@
 				70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */,
 				70E69AC1170EC2D700384523 /* ArticleiPadCSS.css in Resources */,
 				703ED51E17957D3700F37E0C /* flip_left.png in Resources */,
+				418F861719B268F600398A36 /* glyphspro_4_license.txt in Resources */,
 				703ED51F17957D3700F37E0C /* flip_right.png in Resources */,
 				709A4AE517B3DB7700266374 /* twitbird.png in Resources */,
 				70817FB417E20A4700DCD387 /* iPad_iOS7.storyboard in Resources */,
 				7046261117BD163400343C13 /* press_release.png in Resources */,
+				418F860D19B261A300398A36 /* ack.pl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
