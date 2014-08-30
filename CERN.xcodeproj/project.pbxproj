@@ -109,11 +109,6 @@
 		700AF65116B9932500194E16 /* action.png in Resources */ = {isa = PBXBuildFile; fileRef = 700AF65016B9932500194E16 /* action.png */; };
 		700B978416AEB03D0006EAD3 /* ImageDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 700B978316AEB03D0006EAD3 /* ImageDownloader.mm */; };
 		700F547916396A130082B89E /* CERNLive.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700F547816396A130082B89E /* CERNLive.plist */; };
-		701AE0FA16D26765003F6533 /* MBProgressHUDLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE0F916D26765003F6533 /* MBProgressHUDLicense.txt */; };
-		701AE0FC16D267E4003F6533 /* SDWebImageLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE0FB16D267E4003F6533 /* SDWebImageLicense.txt */; };
-		701AE0FE16D268DF003F6533 /* ECSlidingViewControllerLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE0FD16D268DF003F6533 /* ECSlidingViewControllerLicense.txt */; };
-		701AE10016D26A87003F6533 /* glyphspro_1_license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE0FF16D26A87003F6533 /* glyphspro_1_license.txt */; };
-		701AE10216D26AEE003F6533 /* glyphspro_4_license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 701AE10116D26AEE003F6533 /* glyphspro_4_license.txt */; };
 		70221E4416B1722B007AE923 /* videos.png in Resources */ = {isa = PBXBuildFile; fileRef = 70221E4316B1722B007AE923 /* videos.png */; };
 		702A4B7C1678E4D7005EBD1B /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 702A4B7B1678E4D7005EBD1B /* SystemConfiguration.framework */; };
 		7034C63D178DB81D00711D87 /* MemUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7034C63C178DB81D00711D87 /* MemUtils.mm */; };
@@ -165,8 +160,6 @@
 		706A401E1754FBE000FD8685 /* CreditsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A401C1754FBE000FD8685 /* CreditsViewController.mm */; };
 		706A40231754FD0A00FD8685 /* EventDisplayViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706A40221754FD0A00FD8685 /* EventDisplayViewController.mm */; };
 		706EB8BC175E1F7800493B04 /* ThumbnailDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 706EB8BA175E1F7800493B04 /* ThumbnailDownloader.mm */; };
-		70767DC716CE8F4D00164516 /* MWFeedParserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */; };
-		70767DC916CE922D00164516 /* MWPhotoBrowserLicense.txt in Resources */ = {isa = PBXBuildFile; fileRef = 70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */; };
 		707720331761F23E001FE45F /* WebcastsCollectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707720311761F23E001FE45F /* WebcastsCollectionViewController.mm */; };
 		707B03D418339E8C00443448 /* ConnectionController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B03D318339E8C00443448 /* ConnectionController.mm */; };
 		707B03D71833AD7D00443448 /* APNUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 707B03D51833AD7D00443448 /* APNUtils.mm */; };
@@ -403,11 +396,6 @@
 		700B978216AEB03D0006EAD3 /* ImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDownloader.h; sourceTree = "<group>"; };
 		700B978316AEB03D0006EAD3 /* ImageDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ImageDownloader.mm; sourceTree = "<group>"; };
 		700F547816396A130082B89E /* CERNLive.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CERNLive.plist; sourceTree = "<group>"; };
-		701AE0F916D26765003F6533 /* MBProgressHUDLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MBProgressHUDLicense.txt; sourceTree = "<group>"; };
-		701AE0FB16D267E4003F6533 /* SDWebImageLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SDWebImageLicense.txt; sourceTree = "<group>"; };
-		701AE0FD16D268DF003F6533 /* ECSlidingViewControllerLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ECSlidingViewControllerLicense.txt; sourceTree = "<group>"; };
-		701AE0FF16D26A87003F6533 /* glyphspro_1_license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glyphspro_1_license.txt; sourceTree = "<group>"; };
-		701AE10116D26AEE003F6533 /* glyphspro_4_license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glyphspro_4_license.txt; sourceTree = "<group>"; };
 		70221E4316B1722B007AE923 /* videos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = videos.png; sourceTree = "<group>"; };
 		702A4B7B1678E4D7005EBD1B /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7034C63B178DB81D00711D87 /* MemUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemUtils.h; sourceTree = "<group>"; };
@@ -488,8 +476,6 @@
 		706EB8BA175E1F7800493B04 /* ThumbnailDownloader.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ThumbnailDownloader.mm; sourceTree = "<group>"; };
 		706EB8BB175E1F7800493B04 /* ThumbnailDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThumbnailDownloader.h; sourceTree = "<group>"; };
 		7072B3271713F72F00515DA8 /* TiledPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiledPage.h; sourceTree = "<group>"; };
-		70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWFeedParserLicense.txt; sourceTree = "<group>"; };
-		70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MWPhotoBrowserLicense.txt; sourceTree = "<group>"; };
 		707720311761F23E001FE45F /* WebcastsCollectionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WebcastsCollectionViewController.mm; sourceTree = "<group>"; };
 		707720321761F23E001FE45F /* WebcastsCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcastsCollectionViewController.h; sourceTree = "<group>"; };
 		707B03D318339E8C00443448 /* ConnectionController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ConnectionController.mm; sourceTree = "<group>"; };
@@ -805,13 +791,6 @@
 				41E6188D1614CF7000BAA7D4 /* StaticInformation.plist */,
 				700F547816396A130082B89E /* CERNLive.plist */,
 				41BBD0E81615AED20057EDE2 /* LICENSE */,
-				701AE10116D26AEE003F6533 /* glyphspro_4_license.txt */,
-				701AE0FF16D26A87003F6533 /* glyphspro_1_license.txt */,
-				701AE0FD16D268DF003F6533 /* ECSlidingViewControllerLicense.txt */,
-				701AE0FB16D267E4003F6533 /* SDWebImageLicense.txt */,
-				701AE0F916D26765003F6533 /* MBProgressHUDLicense.txt */,
-				70767DC616CE8F4D00164516 /* MWFeedParserLicense.txt */,
-				70767DC816CE922D00164516 /* MWPhotoBrowserLicense.txt */,
 				41BBD0E71615AEC70057EDE2 /* README.md */,
 				7054DEEB169AFD7A00B025C7 /* MENU.plist */,
 				41BBD0E61615ADC60057EDE2 /* CERN.plist */,
@@ -1629,13 +1608,6 @@
 				700A3FB016CD3CEF0063B1B2 /* settings.png in Resources */,
 				70FDADCE16CE604200933383 /* cern_info.png in Resources */,
 				70FDADD016CE615600933383 /* credits.png in Resources */,
-				70767DC716CE8F4D00164516 /* MWFeedParserLicense.txt in Resources */,
-				70767DC916CE922D00164516 /* MWPhotoBrowserLicense.txt in Resources */,
-				701AE0FA16D26765003F6533 /* MBProgressHUDLicense.txt in Resources */,
-				701AE0FC16D267E4003F6533 /* SDWebImageLicense.txt in Resources */,
-				701AE0FE16D268DF003F6533 /* ECSlidingViewControllerLicense.txt in Resources */,
-				701AE10016D26A87003F6533 /* glyphspro_1_license.txt in Resources */,
-				701AE10216D26AEE003F6533 /* glyphspro_4_license.txt in Resources */,
 				70B22F0516F9DCAC007D88EF /* action_blue.png in Resources */,
 				70E69AC1170EC2D700384523 /* ArticleiPadCSS.css in Resources */,
 				703ED51E17957D3700F37E0C /* flip_left.png in Resources */,
