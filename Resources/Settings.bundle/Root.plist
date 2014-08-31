@@ -58,11 +58,11 @@
 		</dict>
 		<dict>
 			<key>Title</key>
-			<string>About2</string>
+			<string>About</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>FooterText</key>
-			<string>Copyright © 2013-2014 CERN. All rights reserved. </string>
+			<string>Copyright © 2012-2014 CERN. All rights reserved. </string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
@@ -80,7 +80,7 @@
 			<key>Title</key>
 			<string>License Agreement</string>
 			<key>File</key>
-			<string>LICENSE</string>
+			<string>License</string>
 		</dict>
 		<dict>
 			<key>Type</key>
