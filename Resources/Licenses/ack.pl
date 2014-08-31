@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 #
-# Concatenate all files ending in *.txt in the current directory together and create
-# the Acknowledgements files for in the Settings.bundle. Run again whenever a new
-# license file is added.
+# Concatenate all files ending in *.txt in the current directory together
+# and create the Acknowledgements files for in the Settings.bundle.
+# Run again whenever a new license file is added or one of the files changes.
 #
 use strict;
 
