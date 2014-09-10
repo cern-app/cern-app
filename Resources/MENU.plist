@@ -99,7 +99,7 @@
 					<key>ItemID</key>
 					<integer>8</integer>
 					<key>Url</key>
-					<string>http://cdsweb.cern.ch/rss?p=980__a%3ABULLETINNEWS%20or%20980__a%3ABULLETINNEWSDRAFT&amp;ln=en</string>
+					<string>http://cdsweb.cern.ch/rss?ln=en&amp;cc=News%20Articles</string>
 					<key>Name</key>
 					<string>Bulletin</string>
 					<key>Category name</key>
