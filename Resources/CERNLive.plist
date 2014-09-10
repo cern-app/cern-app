@@ -107,6 +107,14 @@
 							<key>Name</key>
 							<string>ATLAS Blog</string>
 						</dict>
+						<dict>
+							<key>ItemID</key>
+							<integer>16</integer>
+							<key>Url</key>
+							<string>http://atlas-physics-updates.web.cern.ch/atlas-physics-updates/feed/</string>
+							<key>Name</key>
+							<string>ATLAS Briefings</string>
+						</dict>
 					</array>
 					<key>Tweets</key>
 					<array>
