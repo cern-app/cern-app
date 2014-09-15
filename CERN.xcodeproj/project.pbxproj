@@ -277,7 +277,6 @@
 		41B3D9C516B12D6000AF4463 /* MWTapDetectingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWTapDetectingView.m; sourceTree = "<group>"; };
 		41B3D9C616B12D6000AF4463 /* MWZoomingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWZoomingScrollView.h; sourceTree = "<group>"; };
 		41B3D9C716B12D6000AF4463 /* MWZoomingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWZoomingScrollView.m; sourceTree = "<group>"; };
-		41B3D9CF16B12D6E00AF4463 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		41B3D9D016B12D6E00AF4463 /* SDImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCache.h; sourceTree = "<group>"; };
 		41B3D9D116B12D6E00AF4463 /* SDImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDImageCache.m; sourceTree = "<group>"; };
 		41B3D9D216B12D6E00AF4463 /* SDImageCacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDImageCacheDelegate.h; sourceTree = "<group>"; };
@@ -704,7 +703,6 @@
 			isa = PBXGroup;
 			children = (
 				70501E4016B6E674002C0F48 /* README.md */,
-				41B3D9CF16B12D6E00AF4463 /* LICENSE */,
 				41B3D9D016B12D6E00AF4463 /* SDImageCache.h */,
 				41B3D9D116B12D6E00AF4463 /* SDImageCache.m */,
 				41B3D9D216B12D6E00AF4463 /* SDImageCacheDelegate.h */,
@@ -918,8 +916,8 @@
 		705185B717561E4E00CE9EB8 /* ViewsAndControllers */ = {
 			isa = PBXGroup;
 			children = (
-				70BC655D1770BF3700358CD1 /* TwitterTableViewController.mm */,
 				70BC655E1770BF3700358CD1 /* TwitterTableViewController.h */,
+				70BC655D1770BF3700358CD1 /* TwitterTableViewController.mm */,
 				70BC655F1770BF3700358CD1 /* TweetCell.h */,
 				70BC65601770BF3700358CD1 /* TweetCell.mm */,
 				70BC65611770BF3700358CD1 /* TwitterTableView.h */,
@@ -940,10 +938,10 @@
 		7069F76016C14D6D006BC78B /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				70A67A45185F70EB0079839E /* CAPPPageControl.mm */,
 				70A67A46185F70EB0079839E /* CAPPPageControl.h */,
-				70A67A40185F70A40079839E /* CAPPPageView.mm */,
+				70A67A45185F70EB0079839E /* CAPPPageControl.mm */,
 				70A67A41185F70A40079839E /* CAPPPageView.h */,
+				70A67A40185F70A40079839E /* CAPPPageView.mm */,
 				70D98B2916F786D8003C42E7 /* SlideScrollView.h */,
 				70D98B2A16F786D8003C42E7 /* SlideScrollView.mm */,
 				7069F76116C14D6D006BC78B /* OverlayView.h */,
@@ -1081,8 +1079,8 @@
 		707B1378169AEB6300180E02 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				707B137E169AEC4700180E02 /* InitialSlidingViewController.mm */,
 				707B137F169AEC4700180E02 /* InitialSlidingViewController.h */,
+				707B137E169AEC4700180E02 /* InitialSlidingViewController.mm */,
 				707B1379169AEB6300180E02 /* AppDelegate.h */,
 				707B137A169AEB6300180E02 /* AppDelegate.mm */,
 				707B137B169AEB6300180E02 /* main.mm */,
@@ -1095,8 +1093,8 @@
 			children = (
 				7054AC8A17DF256A00FF7A60 /* APNHintView.h */,
 				7054AC8B17DF256A00FF7A60 /* APNHintView.mm */,
-				70CC55ED169EF80500292332 /* MenuNavigationController.mm */,
 				70CC55EE169EF80600292332 /* MenuNavigationController.h */,
+				70CC55ED169EF80500292332 /* MenuNavigationController.mm */,
 				7008622F169B56F2001C7BB5 /* MenuItemViews.h */,
 				70086230169B56F2001C7BB5 /* MenuItemViews.mm */,
 				707B1389169AECE800180E02 /* MenuItems.h */,
@@ -1121,8 +1119,8 @@
 		707B139D169AF07D00180E02 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				707B03D51833AD7D00443448 /* APNUtils.mm */,
 				707B03D61833AD7D00443448 /* APNUtils.h */,
+				707B03D51833AD7D00443448 /* APNUtils.mm */,
 				70BC655C1770A92800358CD1 /* Twitter-sample.h */,
 				700B978216AEB03D0006EAD3 /* ImageDownloader.h */,
 				700B978316AEB03D0006EAD3 /* ImageDownloader.mm */,
@@ -1141,9 +1139,9 @@
 				707B13E7169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.h */,
 				707B13E8169AF69300180E02 /* NSDateFormatter+DateFromStringOfUnknownFormat.mm */,
 				707B13E9169AF69300180E02 /* NSString+HTML.h */,
+				707B13EA169AF69300180E02 /* NSString+HTML.m */,
 				41BE0D2919AA000D0076EFCE /* NSString+StringSizeWithFont.h */,
 				41BE0D2B19AA06AF0076EFCE /* NSString+StringSizeWithFont.m */,
-				707B13EA169AF69300180E02 /* NSString+HTML.m */,
 				707B13EB169AF69300180E02 /* Reachability.h */,
 				707B13EC169AF69300180E02 /* Reachability.mm */,
 				411D362316BADC57008CF20B /* Readability-sample.h */,
@@ -1153,8 +1151,8 @@
 				707B13AC169AF1E500180E02 /* ApplicationErrors.mm */,
 				707B139E169AF07D00180E02 /* GUIHelpers.h */,
 				707B139F169AF07D00180E02 /* GUIHelpers.mm */,
-				70E69AC2170EE81F00384523 /* FeedCache.mm */,
 				70E69AC3170EE81F00384523 /* FeedCache.h */,
+				70E69AC2170EE81F00384523 /* FeedCache.mm */,
 				7034C63B178DB81D00711D87 /* MemUtils.h */,
 				7034C63C178DB81D00711D87 /* MemUtils.mm */,
 				FE91AD1519911ABA002E867D /* URLHelpers.h */,
@@ -1275,12 +1273,12 @@
 		70A562DA173A37AA00145FEC /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				706A401C1754FBE000FD8685 /* CreditsViewController.mm */,
 				706A401D1754FBE000FD8685 /* CreditsViewController.h */,
+				706A401C1754FBE000FD8685 /* CreditsViewController.mm */,
 				706A40191754FB9E00FD8685 /* ArticleDetailViewController.h */,
 				706A401A1754FB9E00FD8685 /* ArticleDetailViewController.mm */,
-				706A40161754FB6200FD8685 /* AppSettingsController.mm */,
 				706A40171754FB6200FD8685 /* AppSettingsController.h */,
+				706A40161754FB6200FD8685 /* AppSettingsController.mm */,
 				70B5E7B9180BD79900ACD47D /* SettingsNavigationController.h */,
 				70B5E7BA180BD79900ACD47D /* SettingsNavigationController.mm */,
 				70A562DB173A37AA00145FEC /* iPad */,
@@ -1375,12 +1373,12 @@
 		70FB8552172987CD00F7CCBD /* FlipAnimation */ = {
 			isa = PBXGroup;
 			children = (
-				70C728441732C6E200992077 /* FlipView.mm */,
 				70C728451732C6E200992077 /* FlipView.h */,
-				70FB8554172987E500F7CCBD /* AnimationDelegate.mm */,
+				70C728441732C6E200992077 /* FlipView.mm */,
 				70FB8555172987E500F7CCBD /* AnimationDelegate.h */,
-				70FB8556172987E500F7CCBD /* AnimationFrame.mm */,
+				70FB8554172987E500F7CCBD /* AnimationDelegate.mm */,
 				70FB8557172987E500F7CCBD /* AnimationFrame.h */,
+				70FB8556172987E500F7CCBD /* AnimationFrame.mm */,
 			);
 			name = FlipAnimation;
 			path = Src/ThirdParty/FlipAnimation;
