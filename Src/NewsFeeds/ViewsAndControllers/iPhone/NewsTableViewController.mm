@@ -234,11 +234,7 @@
    //controller is poped from the navigation stack.
 
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
-#ifdef __IPHONE_7_0
       [self.slidingViewController.panGesture requireGestureRecognizerToFail:self.tableView.panGestureRecognizer];
-#endif
-      if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0"))
-         [self.slidingViewController.panGesture requireGestureRecognizerToFail:self.tableView.panGestureRecognizer];
    }
 
    if (firstViewDidAppear) {

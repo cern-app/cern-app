@@ -86,9 +86,8 @@
    }
    
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
-#ifdef __IPHONE_7_0
-      self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-#endif
+      self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+      self.navigationController.interactivePopGestureRecognizer.delegate = self;
       [self.slidingViewController.panGesture requireGestureRecognizerToFail:self.tableView.panGestureRecognizer];
    }
 }

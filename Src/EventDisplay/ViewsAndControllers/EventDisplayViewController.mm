@@ -179,9 +179,7 @@ using CernAPP::NetworkStatus;
    //called only once.
    
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0") && scrollView) {
-#ifdef __IPHONE_7_0
       self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-#endif
    }
    
    if (numPages > 1)
