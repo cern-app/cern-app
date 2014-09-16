@@ -86,9 +86,7 @@
    }
    
    if (CernAPP::SystemVersionGreaterThanOrEqualTo(@"7.0")) {
-      self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-      self.navigationController.interactivePopGestureRecognizer.delegate = self;
-      [self.slidingViewController.panGesture requireGestureRecognizerToFail:self.tableView.panGestureRecognizer];
+      self.navigationController.interactivePopGestureRecognizer.enabled = NO;
    }
 }
 
