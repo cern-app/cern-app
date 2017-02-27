@@ -382,7 +382,7 @@ using CernAPP::NetworkStatus;
 //________________________________________________________________________________________
 - (NSString *) timeAgoStringFromDate : (NSDate *) date
 {
-   const int secondsAgo = abs([date timeIntervalSinceNow]);
+   const int secondsAgo = (int)fabs([date timeIntervalSinceNow]);
    NSString *dateString = nil;
 
    if (secondsAgo < 60 * 60) {

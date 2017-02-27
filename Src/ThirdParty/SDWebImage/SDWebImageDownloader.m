@@ -143,12 +143,6 @@ NSString *const SDWebImageDownloadStopNotification = @"SDWebImageDownloadStopNot
 {
     [imageData appendData:data];
 
-    if (CGImageSourceCreateImageAtIndex == NULL)
-    {
-        // ImageIO isn't present in iOS < 4
-        self.progressive = NO;
-    }
-
     if (self.progressive && expectedSize > 0 && [delegate respondsToSelector:@selector(imageDownloader:didUpdatePartialImage:)])
     {
         // The following code is from http://www.cocoaintheshell.com/2011/05/progressive-images-download-imageio/

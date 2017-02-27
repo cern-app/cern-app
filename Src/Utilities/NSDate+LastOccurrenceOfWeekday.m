@@ -14,7 +14,7 @@
 {
    NSCalendar *calendar = [NSCalendar currentCalendar];
    //calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-   NSDateComponents *components = [calendar components : NSWeekdayCalendarUnit fromDate : self];
+   NSDateComponents *components = [calendar components : NSCalendarUnitWeekday fromDate : self];
 
    
    const long startingWeekday = components.weekday;
@@ -25,7 +25,7 @@
 
 - (NSDate *)midnight
 {
-   NSDateComponents *components = [[NSCalendar currentCalendar] components : NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit fromDate:self];
+   NSDateComponents *components = [[NSCalendar currentCalendar] components : NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:self];
    components.hour = 0;
    components.minute = 0;
    components.second = 0;

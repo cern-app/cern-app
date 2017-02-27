@@ -229,6 +229,8 @@ TextGeometry PlaceText(NSString *text, CGFloat fixedWidth, NSString *fontName)
 //________________________________________________________________________________________
 - (void) awakeFromNib
 {
+   [super awakeFromNib];
+
    [self setImageView];
    [self setTextLabels];
    self.selectionStyle = UITableViewCellSelectionStyleGray;

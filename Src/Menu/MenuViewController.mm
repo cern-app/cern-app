@@ -644,6 +644,8 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
 //________________________________________________________________________________________
 - (void) awakeFromNib
 {
+   [super awakeFromNib];
+
    inAnimation = NO;
    newOpen = nil;
    updateStage = MenuUpdateStage::none;

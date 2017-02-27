@@ -635,7 +635,7 @@ const NSUInteger nAutoAnimationSteps = 10;
             // provide inertia to panning gesture
             flipAnimator.sequenceType = SequenceType::controlled;
             if (![self shouldSkipAnimationFrame : recognizer]) {
-               const CGFloat value = sqrtf(fabsf([recognizer velocityInView : self.view].x))/10.0f;
+               const CGFloat value = sqrt(fabs([recognizer velocityInView : self.view].x))/10.0;
                [flipAnimator endStateWithSpeed : value];
             } else {
                [flipAnimator endStateWithSpeed : 1.f];

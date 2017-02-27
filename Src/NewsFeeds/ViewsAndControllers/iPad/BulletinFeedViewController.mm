@@ -425,7 +425,7 @@
    
       NSCalendar * const calendar = [NSCalendar currentCalendar];
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
-      const NSUInteger requiredComponents = NSWeekOfYearCalendarUnit | NSYearCalendarUnit;
+      const NSUInteger requiredComponents = NSCalendarUnitWeekOfYear | NSCalendarUnitYear;
 #else
       const NSUInteger requiredComponents = NSWeekCalendarUnit | NSYearCalendarUnit;
 #endif
@@ -442,9 +442,9 @@
          MWFeedItem * const article = (MWFeedItem *)articles[i];
          dateComponents = [calendar components : requiredComponents fromDate : article.date];
 
-         if (dateComponents.year != currentYear || dateComponents.week != currentWeek) {
+         if (dateComponents.year != currentYear || dateComponents.weekOfYear != currentWeek) {
             [dataItems addObject : weekData];
-            currentWeek = dateComponents.week;
+            currentWeek = dateComponents.weekOfYear;
             currentYear = dateComponents.year;
             weekData = [[NSMutableArray alloc] init];
          }

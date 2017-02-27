@@ -243,7 +243,7 @@
    
    NSCalendar * const calendar = [NSCalendar currentCalendar];
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_7_0
-   const NSUInteger requiredComponents = NSWeekOfYearCalendarUnit | NSYearCalendarUnit;
+   const NSUInteger requiredComponents = NSCalendarUnitWeekOfYear | NSCalendarUnitYear;
 #else
    const NSUInteger requiredComponents = NSWeekCalendarUnit | NSYearCalendarUnit;
 #endif
@@ -514,7 +514,7 @@ NSString *BulletinTitleForWeek(NSArray *articles)
    dateFormatter.dateStyle = NSDateFormatterMediumStyle;
 
    //Weekday of the article's date
-   NSDateComponents * const dateComponents = [[NSCalendar currentCalendar] components : NSWeekdayCalendarUnit fromDate : latestArticle.date];
+   NSDateComponents * const dateComponents = [[NSCalendar currentCalendar] components : NSCalendarUnitWeekday fromDate : latestArticle.date];
 
    NSString *issueDateString = nil;
    if (dateComponents.weekday > 1) {

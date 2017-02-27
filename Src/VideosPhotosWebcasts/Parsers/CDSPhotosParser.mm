@@ -212,7 +212,7 @@ NSString *LargeIconImageType()
 
    if (NSString * const dateString = (NSString *)datafield[CernAPP::CDScodeDate]) {
       NSDate * const date = [dateFormatter dateFromStringOfUnknownFormat : dateString];
-      if (date);//Not using the date at the moment.
+      if (date) { } //Not using the date at the moment.
    }
 }
 

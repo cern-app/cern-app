@@ -2,6 +2,7 @@
 
 #import <MediaPlayer/MediaPlayer.h>
 
+#import "WebcastsCollectionViewController.h"
 #import "PhotoCollectionsViewController.h"
 #import "StaticInfoScrollViewController.h"
 #import "VideosCollectionViewController.h"

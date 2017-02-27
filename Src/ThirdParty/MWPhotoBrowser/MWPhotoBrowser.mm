@@ -160,7 +160,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 {
    if (self = [super init]) {
       // Defaults
-      self.wantsFullScreenLayout = YES;
+      self.edgesForExtendedLayout = UIRectEdgeNone;
       self.hidesBottomBarWhenPushed = YES;
       _photoCount = NSNotFound;
       _currentPageIndex = 0;
@@ -179,7 +179,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
                                             name : MWPHOTO_LOADING_DID_END_NOTIFICATION
                                             object : nil];
    }
-    return self;
+   return self;
 }
 
 //________________________________________________________________________________________
@@ -252,11 +252,11 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
    [self.view addSubview : _pagingScrollView];
 
    // Toolbar
-   _toolbar = [[UIToolbar alloc] initWithFrame : [self frameForToolbarAtOrientation : self.interfaceOrientation]];
+   _toolbar = [[UIToolbar alloc] initWithFrame : [self frameForToolbarAtOrientation : [[UIApplication sharedApplication] statusBarOrientation]]];
    _toolbar.tintColor = nil;
    if ([[UIToolbar class] respondsToSelector : @selector(appearance)]) {
       [_toolbar setBackgroundImage : nil forToolbarPosition : UIToolbarPositionAny barMetrics : UIBarMetricsDefault];
-      [_toolbar setBackgroundImage : nil forToolbarPosition : UIToolbarPositionAny barMetrics : UIBarMetricsLandscapePhone];
+      [_toolbar setBackgroundImage : nil forToolbarPosition : UIToolbarPositionAny barMetrics : UIBarMetricsCompact];
    }
 
    _toolbar.barStyle = NavigationBarStyle();
@@ -320,9 +320,9 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
       // Set appearance
       if ([UIBarButtonItem respondsToSelector:@selector(appearance)]) {
          [doneButton setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-         [doneButton setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+         [doneButton setBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsCompact];
          [doneButton setBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
-         [doneButton setBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsLandscapePhone];
+         [doneButton setBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsCompact];
          [doneButton setTitleTextAttributes:[NSDictionary dictionary] forState:UIControlStateNormal];
          [doneButton setTitleTextAttributes:[NSDictionary dictionary] forState:UIControlStateHighlighted];
       }
@@ -336,9 +336,9 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
       // Appearance
       if ([UIBarButtonItem respondsToSelector:@selector(appearance)]) {
          [newBackButton setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-         [newBackButton setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsLandscapePhone];
+         [newBackButton setBackButtonBackgroundImage:nil forState:UIControlStateNormal barMetrics:UIBarMetricsCompact];
          [newBackButton setBackButtonBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsDefault];
-         [newBackButton setBackButtonBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsLandscapePhone];
+         [newBackButton setBackButtonBackgroundImage:nil forState:UIControlStateHighlighted barMetrics:UIBarMetricsCompact];
          [newBackButton setTitleTextAttributes:[NSDictionary dictionary] forState:UIControlStateNormal];
          [newBackButton setTitleTextAttributes:[NSDictionary dictionary] forState:UIControlStateHighlighted];
       }
@@ -384,7 +384,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
    // Status bar
    if (self.wantsFullScreenLayout && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
       _previousStatusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
-      [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:animated];
+      [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
    }
 
    // Navigation bar appearance
@@ -445,7 +445,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 
    if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
       [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-      [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsLandscapePhone];
+      [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsCompact];
    }
 }
 
@@ -457,7 +457,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
    _previousNavBarStyle = self.navigationController.navigationBar.barStyle;
    if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
       self.navigationBarBackgroundImageDefault = [self.navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault];
-      self.navigationBarBackgroundImageLandscapePhone = [self.navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsLandscapePhone];
+      self.navigationBarBackgroundImageLandscapePhone = [self.navigationController.navigationBar backgroundImageForBarMetrics:UIBarMetricsCompact];
    }
 }
 
@@ -469,7 +469,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
       self.navigationController.navigationBar.barStyle = _previousNavBarStyle;
       if ([[UINavigationBar class] respondsToSelector:@selector(appearance)]) {
          [self.navigationController.navigationBar setBackgroundImage:_navigationBarBackgroundImageDefault forBarMetrics:UIBarMetricsDefault];
-         [self.navigationController.navigationBar setBackgroundImage:_navigationBarBackgroundImageLandscapePhone forBarMetrics:UIBarMetricsLandscapePhone];
+         [self.navigationController.navigationBar setBackgroundImage:_navigationBarBackgroundImageLandscapePhone forBarMetrics:UIBarMetricsCompact];
       }
       // Restore back button if we need to
       if (_previousViewControllerBackButton) {
@@ -493,7 +493,7 @@ navigationBarBackgroundImageLandscapePhone = _navigationBarBackgroundImageLandsc
 	_performingLayout = YES;
 
 	// Toolbar
-	_toolbar.frame = [self frameForToolbarAtOrientation:self.interfaceOrientation];
+	_toolbar.frame = [self frameForToolbarAtOrientation : [[UIApplication sharedApplication] statusBarOrientation]];
 
 	// Remember index
 	NSUInteger indexPriorToLayout = _currentPageIndex;
