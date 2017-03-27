@@ -61,19 +61,6 @@ NSURL *TwitterURL(NSString *feed)
    return nil;
 }
 
-//________________________________________________________________________________________
-UIViewController *FindController(UIView *view)
-{
-   assert(view != nil && "FindController, parameter 'view' is nil");
-   id nextResponder = [view nextResponder];
-   if ([nextResponder isKindOfClass : [UIViewController class]])
-      return (UIViewController *)nextResponder;
-   else if ([nextResponder isKindOfClass : [UIView class]])
-      return FindController((UIView *)nextResponder);
-
-   return nil;
-}
-
 }
 
 @interface ActionSheetWithController : UIActionSheet

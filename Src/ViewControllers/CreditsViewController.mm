@@ -25,11 +25,6 @@ CGFloat GenericTextFontSize()
    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 14.f : 24.f;
 }
 
-CGFloat LicenseFontSize()
-{
-   return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? 8.f : 18.f;
-}
-
 }
 
 @implementation CreditsViewController {

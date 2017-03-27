@@ -18,21 +18,12 @@
 #import "APNHintView.h"
 #import "GUIHelpers.h"
 
-//Menu GUI constants.
-//It's a C++, all these constants have
-//internal linkage without any 'static',
-//and no need for unnamed namespace.
 const CGFloat groupMenuItemFontSize = 17.f;
 const CGFloat childMenuItemFontSize = 13.f;
 const CGSize menuTextShadowOffset = CGSizeMake(2.f, 2.f);
 const CGFloat discloseTriangleSize = 14.f;
 const CGFloat groupMenuItemLeftMargin = 80.f;
 const CGFloat itemImageMargin = 2.f;
-
-const CGFloat groupMenuFillColor[][4] = {{0.247f, 0.29f, 0.36f, 1.f}, {0.242f, 0.258f, 0.321f, 1.f}};
-const CGFloat frameTopLineColor[] = {0.258f, 0.278f, 0.33f};
-const CGFloat frameBottomLineColor[] = {0.165f, 0.18f, 0.227f};
-
 const CGFloat groupTextColor[] = {0.615f, 0.635f, 0.69f};
 
 using CernAPP::ItemStyle;
@@ -49,27 +40,6 @@ std::pair<CGFloat, CGFloat> TextMetrics(UILabel *label)
       return std::make_pair(lineBounds.height, lineBounds.height);
    
    return std::make_pair(lineBounds.height - label.font.descender, lineBounds.height);
-}
-
-//________________________________________________________________________________________
-void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
-{
-   assert(ctx != nullptr && "DrawFrame, parameter 'ctx' is null");
-
-   CGContextSetAllowsAntialiasing(ctx, false);
-   //Bright line at the top.
-   CGContextSetRGBStrokeColor(ctx, frameTopLineColor[0] + rgbShift, frameTopLineColor[1] + rgbShift, frameTopLineColor[2] + rgbShift, 1.f);
-   CGContextMoveToPoint(ctx, 0.f, 1.f);
-   CGContextAddLineToPoint(ctx, rect.size.width, 1.f);
-   CGContextStrokePath(ctx);
-   
-   //Dark line at the bottom.
-   CGContextSetRGBStrokeColor(ctx, frameBottomLineColor[0] + rgbShift, frameBottomLineColor[1] + rgbShift, frameBottomLineColor[2] + rgbShift, 1.f);
-   CGContextMoveToPoint(ctx, 0.f, rect.size.height);
-   CGContextAddLineToPoint(ctx, rect.size.width, rect.size.height);
-   CGContextStrokePath(ctx);
-   
-   CGContextSetAllowsAntialiasing(ctx, true);
 }
 
 }
@@ -133,11 +103,6 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
          apnView = [[APNHintView alloc] initWithFrame : CGRect()];
          [self addSubview : apnView];
          apnView.hidden = YES;
-         
-         apnView.layer.shadowColor = [UIColor blackColor].CGColor;
-         //apnView.layer.shouldRasterize = YES;
-         apnView.layer.shadowOffset = CGSizeMake(3.5f, 3.5f);
-         apnView.layer.shadowOpacity = 0.7f;
       }
       
       isSelected = NO;
@@ -150,20 +115,17 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 - (void) drawRect : (CGRect) rect
 {
    CGContextRef ctx = UIGraphicsGetCurrentContext();
-   
-   //For a separator - simply fill a rectangle with a gradient.
-   if (itemStyle == ItemStyle::separator) {
-      CernAPP::GradientFillRect(ctx, rect, groupMenuFillColor[0]);
-   } else {   
-      if (!isSelected) {
-         using CernAPP::childMenuFillColor;
-         CGContextSetRGBFillColor(ctx, childMenuFillColor[0], childMenuFillColor[1], childMenuFillColor[2], 1.f);
-         CGContextFillRect(ctx, rect);
-         
-         DrawFrame(ctx, rect, 0.f);
-      } else
-         CernAPP::GradientFillRect(ctx, rect, CernAPP::menuItemHighlightColor[0]);
-   }
+   assert(ctx && "drawRect, invalid graphical context");
+   const CGFloat *fillColor = isSelected ? CernAPP::menuItemHighlightColor : CernAPP::menuColor;
+   CGContextSetRGBFillColor(ctx, fillColor[0], fillColor[1], fillColor[2], 1.f);
+   CGContextFillRect(ctx, rect);
+   //Draw a line at the bottom:
+   using CernAPP::childTextColor;
+   CGContextSetRGBStrokeColor(ctx, childTextColor[0], childTextColor[1], childTextColor[2], 0.1f);
+   CGContextSetLineWidth(ctx, 0.5);
+   CGContextMoveToPoint(ctx, itemLabel.frame.origin.x * 1.1, rect.size.height - 1);
+   CGContextAddLineToPoint(ctx, rect.size.width, rect.size.height - 1);
+   CGContextStrokePath(ctx);
 }
 
 //________________________________________________________________________________________
@@ -326,26 +288,8 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
       
       if (groupItem.parentGroup) //Nested group.
          discloseImageView = [[UIImageView alloc] initWithImage : [UIImage imageNamed : @"disclose_child.png"]];
-      else {
-         //Unfortunately, these nice smooth shadows are very expensive, even
-         //if rasterized (we want our interface to rotate and this
-         //rotation is jerky because of shadows).
-         
-         /*
-         //Seems to be expensive even on iPad.
-         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            itemLabel.layer.shadowColor = [UIColor blackColor].CGColor;
-            itemLabel.layer.shadowOffset = menuTextShadowOffset;
-            itemLabel.layer.shadowOpacity = menuTextShadowAlpha;
-            
-            //Many thanks to tc: http://stackoverflow.com/questions/6395139/i-have-bad-performance-on-using-shadow-effect
-            itemLabel.layer.shouldRasterize = YES;
-            itemLabel.layer.rasterizationScale = 2.f;
-         }
-         */
-
+      else
          discloseImageView = [[UIImageView alloc] initWithImage : [UIImage imageNamed : @"disclose.png"]];
-      }
 
       discloseImageView.clipsToBounds = YES;
       discloseImageView.contentMode = UIViewContentModeScaleAspectFill;
@@ -361,11 +305,6 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
       apnView = [[APNHintView alloc] initWithFrame : CGRect()];
       [self addSubview : apnView];
       apnView.hidden = YES;
-      
-      apnView.layer.shadowColor = [UIColor blackColor].CGColor;
-      //apnView.layer.shouldRasterize = YES;
-      apnView.layer.shadowOffset = CGSizeMake(2.5f, 2.5f);
-      apnView.layer.shadowOpacity = 0.7f;
    }
    
    return self;
@@ -374,24 +313,18 @@ void DrawFrame(CGContextRef ctx, const CGRect &rect, CGFloat rgbShift)
 //________________________________________________________________________________________
 - (void) drawRect : (CGRect) rect
 {
+   using CernAPP::menuColor;
    CGContextRef ctx = UIGraphicsGetCurrentContext();
-
-   if (groupItem.parentGroup) {
-      //We have a different look & fill for a nested group:
-      //it looks like a child menu item, but with a disclose arrow
-      //and with a shifted image (if any) and title.
-      using CernAPP::childMenuFillColor;
-      CGContextSetRGBFillColor(ctx, childMenuFillColor[0], childMenuFillColor[1], childMenuFillColor[2], 1.f);
-      CGContextFillRect(ctx, rect);
-      DrawFrame(ctx, rect, 0.f);
-   } else {
-      CernAPP::GradientFillRect(ctx, rect, groupMenuFillColor[0]);
-      //Dark line at the bottom.
-      CGContextSetRGBStrokeColor(ctx, frameBottomLineColor[0], frameBottomLineColor[1], frameBottomLineColor[2], 1.f);
-      CGContextMoveToPoint(ctx, 0.f, rect.size.height);
-      CGContextAddLineToPoint(ctx, rect.size.width, rect.size.height);
-      CGContextStrokePath(ctx);
-   }
+   assert(ctx && "drawRect, invalid graphical context");
+   CGContextSetRGBFillColor(ctx, menuColor[0], menuColor[1], menuColor[2], 1.f);
+   CGContextFillRect(ctx, rect);
+   //Draw a line at the bottom:
+   using CernAPP::childTextColor;
+   CGContextSetRGBStrokeColor(ctx, childTextColor[0], childTextColor[1], childTextColor[2], 0.1f);
+   CGContextSetLineWidth(ctx, 0.5);
+   CGContextMoveToPoint(ctx, itemLabel.frame.origin.x * 1.1, rect.size.height - 1);
+   CGContextAddLineToPoint(ctx, rect.size.width, rect.size.height - 1);
+   CGContextStrokePath(ctx);
 }
 
 //________________________________________________________________________________________

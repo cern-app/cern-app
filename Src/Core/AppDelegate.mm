@@ -1,3 +1,5 @@
+#import <UserNotifications/UserNotifications.h>
+
 #import "InitialSlidingViewController.h"
 #import "MenuViewController.h"
 #import "DeviceCheck.h"
@@ -95,21 +97,19 @@ NSString * const apnKeyFormat = @"apn%lu";
    //APN.
    mode = RequestType::none;
 
-#ifdef __IPHONE_8_0
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_8_0
-   UIUserNotificationSettings *uins = [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeSound |    UIUserNotificationTypeAlert categories: nil];
-   [[UIApplication sharedApplication] registerUserNotificationSettings: uins];
-   // enable APN (registerForRemoteNotifications) in didRegisterUserNotificationSettings
-#else
-   [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
-#endif
-#else
-   [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert];
-#endif
+   UNUserNotificationCenter *unCenter = [UNUserNotificationCenter currentNotificationCenter];
+   [unCenter requestAuthorizationWithOptions : UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound
+    completionHandler : ^(BOOL granted, NSError * _Nullable error) {
+        if (granted)
+            [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }];
 
-   //TODO: this should go away - in the nearest future all the data will be removed from the payload.
+   // TODO: I do not remember why I have this if statement (should it be unconditional?)
    if (!APNdictionary)
       APNdictionary = (NSDictionary *)[launchOptions objectForKey : UIApplicationLaunchOptionsRemoteNotificationKey];
+
+   // Clear a badge + remove notifications from the notification center.
+   [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 
    return YES;
 }
@@ -295,19 +295,6 @@ NSString * const apnKeyFormat = @"apn%lu";
    }
 }
 
-#ifdef __IPHONE_8_0
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_8_0
-//________________________________________________________________________________________
-- (void) application: (UIApplication*) application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
-{
-   // only if user allows notifications register for remote notifications
-   if (notificationSettings.types)
-      [application registerForRemoteNotifications];
-   //NSLog(@"didRegisterNotificationSettings %lu\n", (unsigned long)notificationSettings.types);
-}
-#endif
-#endif
-
 //________________________________________________________________________________________
 - (void) application : (UIApplication*) application didRegisterForRemoteNotificationsWithDeviceToken : (NSData*) deviceToken
 {
@@ -325,12 +312,12 @@ NSString * const apnKeyFormat = @"apn%lu";
    newAPNToken = [deviceToken description];
    newAPNToken  = [newAPNToken  stringByTrimmingCharactersInSet : [NSCharacterSet characterSetWithCharactersInString : @"<>"]];
    newAPNToken  = [newAPNToken  stringByReplacingOccurrencesOfString : @" " withString : @""];
-   
+
    if (oldToken && [oldToken isEqualToString : newAPNToken]) {
       newAPNToken = nil;
       return;
    }
-   //
+
    NSString * const request = !oldToken ? GetAPNRegisterDeviceTokenRequest(newAPNToken) :
                                           GetAPNUpdateDeviceTokenRequest(oldToken, newAPNToken);
    if (request) {

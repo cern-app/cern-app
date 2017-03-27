@@ -684,9 +684,9 @@ void WriteOfflineMenuPlist(NSDictionary *plist, NSString *plistName)
    self.slidingViewController.underLeftWidthLayout = ECFullWidth;
 
    //We additionally setup a table view here.
-   using CernAPP::menuBackgroundColor;
-   scrollView.backgroundColor = [UIColor colorWithRed : menuBackgroundColor[0] green : menuBackgroundColor[1]
-                                         blue : menuBackgroundColor[2] alpha : 1.f];
+   using CernAPP::menuColor;
+   scrollView.backgroundColor = [UIColor colorWithRed : menuColor[0] green : menuColor[1]
+                                         blue : menuColor[2] alpha : 1.f];
    scrollView.showsHorizontalScrollIndicator = NO;
    scrollView.showsVerticalScrollIndicator = NO;
 

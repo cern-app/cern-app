@@ -143,7 +143,9 @@ const NSUInteger fontIncreaseStep = 4;
 
 }
 
-
+@interface ArticleDetailViewController(FixedQualifiers)
+- (void) webView : (UIWebView *) webView didFailLoadWithError : (nullable NSError *) error;
+@end
 
 @implementation ArticleDetailViewController {
    NSString *articleLink;
@@ -177,6 +179,8 @@ const NSUInteger fontIncreaseStep = 4;
    
    BOOL isInTransition;
 }
+
+
 
 @synthesize rdbView, pageView, containerView, rdbCache, articleID, title, canUseReadability;
 

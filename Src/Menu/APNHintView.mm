@@ -16,8 +16,6 @@
 {
    if (self = [super initWithFrame : frame]) {
       self.backgroundColor = [UIColor clearColor];
-      self.opaque = NO;
-      
       customFont = [UIFont fontWithName : @"PTSans-Bold" size : 10.f];
       assert(customFont != nil && "initWithFrame:, failed to create a custom font");
       
