@@ -96,13 +96,14 @@ NSString * const apnKeyFormat = @"apn%lu";
    
    //APN.
    mode = RequestType::none;
-
+#ifndef TARGET_IPHONE_SIMULATOR
    UNUserNotificationCenter *unCenter = [UNUserNotificationCenter currentNotificationCenter];
    [unCenter requestAuthorizationWithOptions : UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound
     completionHandler : ^(BOOL granted, NSError * _Nullable error) {
         if (granted)
             [[UIApplication sharedApplication] registerForRemoteNotifications];
     }];
+#endif
 
    // TODO: I do not remember why I have this if statement (should it be unconditional?)
    if (!APNdictionary)
